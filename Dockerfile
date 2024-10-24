@@ -1,11 +1,11 @@
-# Use the official Node.js image as a base
-FROM node:20-alpine
+# Use Debian-based Node.js image
+FROM node:20-slim
 
 # Create and change to the app directory
 WORKDIR /app
 
-# Install Git and other dependencies
-RUN apk add --no-cache git
+# Install Git
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
 # Clone the repository
 RUN git clone https://github.com/jimchen2/jimchen.me .
