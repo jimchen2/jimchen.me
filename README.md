@@ -20,7 +20,7 @@ npm i && npm run build
 cd out
 # create copies of html without extensions to serve
 find . -type f -name "*.html" -exec sh -c 'cp "$1" "${1%.html}"' sh {} \;
-rclone sync . s3:jimchen.me --transfers 100 -P
+rclone sync . s3:jimchen.me --transfers 100 -P  --header-upload "Content-Type: text/html"
 ```
 
 ## `next.config.mjs`
