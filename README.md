@@ -17,6 +17,7 @@ npm i && npm run build
 ## Sync S3
 
 ```
+cd out
 rclone sync . s3:jimchen.me --transfers 100 -P
 ```
 
