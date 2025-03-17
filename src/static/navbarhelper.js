@@ -1,6 +1,6 @@
 'use client'; 
 
-import { useGlobalColorScheme } from '../../config/global'; 
+import { useGlobalColorScheme } from '../config/global'; 
 
 function NavbarHelper() {
   const { colors } = useGlobalColorScheme();

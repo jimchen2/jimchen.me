@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ColorSchemeProvider, useGlobalColorScheme } from "../config/global.js";
-import NavBar from "../static/navbar/navbar";
+import NavBar from "../static/navbar.js";
 import Footer from "../static/footer";
 import { PostVisitInfo } from "../static/visitinfo.js";
 
