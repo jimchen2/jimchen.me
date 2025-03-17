@@ -1,27 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useRouter } from "next/router";
 import Axios from "axios";
 import parse from "html-react-parser";
-import backendurl from "../config/config";
 
 function SingleBlogEmbed() {
-  const [blog, setBlog] = useState(null); // Changed to null initial state
-  const { language, type, title } = useParams();
+  const [blog, setBlog] = useState(null);
+  const router = useRouter();
+  const { language, type, title } = router.query;
 
   useEffect(() => {
+    if (!language || !type || !title) {
+      return;
+    }
+
     // Encode all parameters
     const encodedLanguage = encodeURIComponent(language);
     const encodedType = encodeURIComponent(type);
     const encodedTitle = encodeURIComponent(title);
 
-    Axios.get(`${backendurl}/blog/${encodedLanguage}/${encodedType}/${encodedTitle}`)
+    Axios.get(`/api/blog/${encodedLanguage}/${encodedType}/${encodedTitle}`)
       .then((response) => {
         setBlog(response.data);
       })
       .catch((error) => console.error("Error fetching blog data:", error));
 
     // Set up the print after delay
-    const printAfterDelay = setTimeout(() => window.print(), 1500);
+    const printAfterDelay = setTimeout(() => window.print(), 3000);
     return () => clearTimeout(printAfterDelay);
   }, [language, type, title]);
 

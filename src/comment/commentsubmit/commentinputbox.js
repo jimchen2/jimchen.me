@@ -4,7 +4,7 @@ import SubmitComment from "./submitcomment";
 import { useGlobalColorScheme } from "@/config/global";
 import { useComments } from "../commentscontext";
 
-function CommentInputBox({  commentuuid, bloguuid, blogname }) {
+function CommentInputBox({ commentuuid, bloguuid, blogname }) {
   const { triggerUpdate } = useComments();
 
   const { colors } = useGlobalColorScheme();
@@ -18,13 +18,7 @@ function CommentInputBox({  commentuuid, bloguuid, blogname }) {
   const handleFocus = (setFocusStyle) => {
     setFocusStyle({
       borderColor: colors.color_blue_2,
-      boxShadow: `0 0 0 0.2rem rgba(${parseInt(
-        colors.color_blue_2.slice(1, 3),
-        16
-      )}, ${parseInt(colors.color_blue_2.slice(3, 5), 16)}, ${parseInt(
-        colors.color_blue_2.slice(5, 7),
-        16
-      )}, 0.25)`,
+      boxShadow: `0 0 0 0.2rem rgba(${parseInt(colors.color_blue_2.slice(1, 3), 16)}, ${parseInt(colors.color_blue_2.slice(3, 5), 16)}, ${parseInt(colors.color_blue_2.slice(5, 7), 16)}, 0.25)`,
     });
   };
 
@@ -50,6 +44,7 @@ function CommentInputBox({  commentuuid, bloguuid, blogname }) {
       console.error("Error submitting comment:", error);
     }
   };
+
   const submitButtonStyle = {
     fontSize: "1rem",
     color: colors.color_blue_2,
@@ -59,8 +54,15 @@ function CommentInputBox({  commentuuid, bloguuid, blogname }) {
     transition: "background-color 0.3s",
   };
 
-  const inputStyle = {
+  // Separate styles for each input
+  const usernameInputStyle = {
     ...focusStyleUsername,
+    backgroundColor: colors.color_white,
+    color: colors.color_black,
+  };
+
+  const messageInputStyle = {
+    ...focusStyleMessage,
     backgroundColor: colors.color_white,
     color: colors.color_black,
   };
@@ -96,7 +98,7 @@ function CommentInputBox({  commentuuid, bloguuid, blogname }) {
                 <Form.Label>Name (Optional)</Form.Label>
                 <Form.Control
                   className="custom-placeholder"
-                  style={inputStyle}
+                  style={usernameInputStyle}
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -109,7 +111,7 @@ function CommentInputBox({  commentuuid, bloguuid, blogname }) {
                 <Form.Label>Message</Form.Label>
                 <Form.Control
                   className="custom-placeholder"
-                  style={{ ...inputStyle, ...focusStyleMessage }}
+                  style={messageInputStyle}
                   as="textarea"
                   rows={3}
                   value={message}
@@ -121,11 +123,7 @@ function CommentInputBox({  commentuuid, bloguuid, blogname }) {
                   onBlur={() => handleBlur(setFocusStyleMessage)}
                 />
               </Form.Group>
-              <Button
-                variant="outline-primary"
-                style={submitButtonStyle}
-                type="submit"
-              >
+              <Button variant="outline-primary" style={submitButtonStyle} type="submit">
                 Comment
               </Button>
             </Form>
