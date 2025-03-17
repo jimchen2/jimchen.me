@@ -2,9 +2,9 @@
 
 import React from "react";
 import { Card, Container, Row, Col, Badge } from "react-bootstrap";
-import { useGlobalColorScheme } from "../config/global";
+import { useGlobalColorScheme } from "@/config/global";
 
-const JimChenBio = () => {
+const Bio = () => {
   const { colors } = useGlobalColorScheme();
 
   return (
@@ -72,4 +72,4 @@ const JimChenBio = () => {
   );
 };
 
-export default JimChenBio;
+export default Bio;
