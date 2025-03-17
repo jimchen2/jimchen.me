@@ -14,7 +14,7 @@ export default async function handler(req, res) {
       site_url: "https://jimchen.me",
       language: "en",
       pubDate: new Date(),
-      image_url: 'https://cdn.jimchen.me/87b658f1670b156212b695df197cce92/jimchen.me.png',
+      image_url: 'https://jimchen.me/jimchen.me.png',
     });
 
     const blogs = await Blog.find()
