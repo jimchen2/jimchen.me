@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
+    "js-cookie": "^3.0.5",
     "moment-timezone": "^0.5.47",
     "mongoose": "^8.12.1",
     "next": "15.2.2",
