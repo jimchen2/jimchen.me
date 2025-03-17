@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import GetComments from "./getcomments";
-import CommentInputBox from "../commentsubmit/commentinputbox";
+import CommentInputBox from "./commentsubmit/commentinputbox";
 import { paddingtop } from "../config/global";
 import { CommentsProvider } from "./commentscontext";
 

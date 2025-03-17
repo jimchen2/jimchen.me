@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import { getIpAddress } from "../../config/global.js";
-import { useGlobalColorScheme } from "../../config/global.js";
+import { getIpAddress, useGlobalColorScheme } from "@/config/global.js";
 
 function BlogLikeButton({ bloguuid, like }) {
   const { colors } = useGlobalColorScheme();
@@ -49,9 +48,7 @@ function BlogLikeButton({ bloguuid, like }) {
 
     const isLiked = liked; // If already liked, this will be true, indicating we want to remove the like
     const newLikes = isLiked ? likes - 1 : likes + 1; // Adjust the likes count accordingly
-    const patchUrl = `/api/blogtogglelike?uuid=${encodeURIComponent(
-      bloguuid
-    )}`;
+    const patchUrl = `/api/blogtogglelike?uuid=${encodeURIComponent(bloguuid)}`;
 
     try {
       console.log(`Sending PATCH request to: ${patchUrl}`);

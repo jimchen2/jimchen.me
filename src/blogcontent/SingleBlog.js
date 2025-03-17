@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { NavLink } from "next/link";
+import Link from "next/link";
 import { MathJaxContext } from "better-react-mathjax";
 import parse from "html-react-parser";
-
 import { SideNav } from "./sidebar/sidebar";
 import { useGlobalColorScheme } from "../config/global";
-
-
 import { calculateBlogPadding } from "./SingleBlogPaddingHelper";
 import BlogLikeButtonHelper from "./likebutton/bloglikebuttonhelper";
 import CodeBlock from "./CodeBlock";
@@ -19,8 +16,8 @@ const BlogHeader = ({ date, language, type, title, colors }) => (
       <small className="text" style={{ color: colors.color_black }}>
         {date}
       </small>
-      <NavLink
-        to={`/embed/${language}/${type}/${title}`}
+      <Link
+        href={`/embed/${language}/${type}/${title}`}
         className="small"
         target="_blank"
         rel="noopener noreferrer"
@@ -30,7 +27,7 @@ const BlogHeader = ({ date, language, type, title, colors }) => (
         }}
       >
         Save as PDF
-      </NavLink>
+      </Link>
     </div>
   </div>
 );
