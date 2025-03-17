@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps, router }) {
     PostVisitInfo();
   }, []);
 
-  const isEmbedPage = router.pathname.startsWith('/embed');
+  const isEmbedPage = router.pathname.startsWith("/embed");
 
   return (
     <ColorSchemeProvider>

@@ -1,4 +1,4 @@
-'use client'; 
+"use client";
 
 import React from "react";
 import { Card, Container, Row, Col, Badge } from "react-bootstrap";
@@ -59,9 +59,8 @@ const Bio = () => {
               <div className="border-top mt-4 pt-4" style={{ borderColor: colors.color_gray }}>
                 <h5 style={{ color: colors.color_blue_2 }}>About Me</h5>
                 <p>
-                  A technology enthusiast specializing in Cloudflare and Digital Ocean infrastructure, 
-                  with interests in language learning. I focus on building efficient, 
-                  secure, and scalable systems using modern cloud technologies.
+                  A technology enthusiast specializing in Cloudflare and Digital Ocean infrastructure, with interests in language learning. I focus on building efficient, secure, and scalable systems
+                  using modern cloud technologies.
                 </p>
               </div>
             </Col>

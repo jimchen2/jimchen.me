@@ -8,19 +8,19 @@ const ICON_SIZE = 35;
 const socialLinks = [
   {
     href: "https://github.com/jimchen2",
-    imgSrc: "https://jimchen.me/github-icon.png",
+    imgSrc: "./github-icon.png",
   },
   {
     href: "https://archive.org/details/@jimchen4214",
-    imgSrc: "https://jimchen.me/internetarchive.png",
+    imgSrc: "./internetarchive.png",
   },
   {
     href: "https://jimchen.me/qq.jpg",
-    imgSrc: "https://jimchen.me/qq-removebg-preview.png",
+    imgSrc: "./qq-removebg-preview.png",
   },
   {
     href: "https://jimchen.me/w.JPG",
-    imgSrc: "https://jimchen.me/wechat-icon.png",
+    imgSrc: "./wechat-icon.png",
   },
 ];
 
@@ -59,7 +59,7 @@ function Footer() {
         Source{externalLinkIcon}
       </a>
       ,<span style={{ margin: "2px" }}></span>
-      <a href="https://jimchen.me/api/rss" style={linkStyle}>
+      <a href="./api/rss" style={linkStyle}>
         RSS{externalLinkIcon}
       </a>
     </div>
