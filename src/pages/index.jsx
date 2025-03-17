@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Blog from "../blogpreview/BlogPreviewPage"; // Import the presentational component
+import Blog from "../blogpreview/BlogPreviewPage"; 
 
 function BlogPreview() {
   const [data, setData] = useState([]); // Initialize with empty array
@@ -67,7 +67,7 @@ function BlogPreview() {
   };
   
   const totalPosts = data.length;
-  console.log(totalPosts);
+  // console.log(totalPosts);
 
   return (
     <Blog

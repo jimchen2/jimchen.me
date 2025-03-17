@@ -1,4 +1,4 @@
-"use client"; // Add this at the top since we're using hooks
+"use client"; 
 
 import React from "react";
 import { Container, Card, Row, Col } from "react-bootstrap";
