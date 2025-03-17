@@ -1,36 +1,43 @@
-"use client"; 
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Blog from "../blogpreview/BlogPreviewPage"; 
+import Blog from "../blogpreview/BlogPreviewPage";
 
-function BlogPreview() {
-  const [data, setData] = useState([]); // Initialize with empty array
-  const [filteredData, setFilteredData] = useState([]); // Initialize with empty array
-  const [postTypes, setPostTypes] = useState([]);
+export async function getServerSideProps() {
+  try {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_SITE}/api/blogpreview`);
+    const previews = response.data.previews || [];
+    const postTypes = response.data.postTypes || [];
+
+    return {
+      props: {
+        initialData: previews,
+        initialPostTypes: postTypes,
+      },
+    };
+  } catch (err) {
+    console.error("Error fetching blog preview data:", err);
+    return {
+      props: {
+        initialData: [],
+        initialPostTypes: [],
+      },
+    };
+  }
+}
+
+function BlogPreview({ initialData, initialPostTypes }) {
+  // Client-side state still needed for filtering interactions
+  const [data] = useState(initialData);
+  const [filteredData, setFilteredData] = useState(initialData);
+  const [postTypes] = useState(initialPostTypes);
   const [selectedTypes, setSelectedTypes] = useState([]);
 
+  // Only run filtering logic on client-side
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`api/blogpreview`);
-        if (response.data && response.data.previews) {
-          setData(response.data.previews);
-          setFilteredData(response.data.previews);
-        }
-        if (response.data && response.data.postTypes) {
-          setPostTypes(response.data.postTypes);
-        }
-        setSelectedTypes([]);
-      } catch (err) {
-        setData([]);
-        setFilteredData([]);
-        setPostTypes([]);
-      }
-    };
-
-    fetchData();
-  }, []);
+    if (selectedTypes.length > 0) {
+      filterPostsByTypes(selectedTypes);
+    }
+  }, [selectedTypes]);
 
   const handleSelectionChange = (selected) => {
     setSelectedTypes(selected);
@@ -62,22 +69,17 @@ function BlogPreview() {
   };
 
   const filterPostsByTypes = (selected) => {
-    const filtered = data.filter((post) => selected.includes(post.type));
-    setFilteredData(filtered);
+    if (selected.length === 0) {
+      setFilteredData(data);
+    } else {
+      const filtered = data.filter((post) => selected.includes(post.type));
+      setFilteredData(filtered);
+    }
   };
-  
-  const totalPosts = data.length;
-  // console.log(totalPosts);
 
-  return (
-    <Blog
-      data={filteredData}
-      postTypes={postTypes}
-      selectedTypes={selectedTypes}
-      onSelectionChange={handleSelectionChange}
-      totalPosts={totalPosts}
-    />
-  );
+  const totalPosts = data.length;
+
+  return <Blog data={filteredData} postTypes={postTypes} selectedTypes={selectedTypes} onSelectionChange={handleSelectionChange} totalPosts={totalPosts} />;
 }
 
 export default BlogPreview;

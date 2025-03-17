@@ -1,11 +1,19 @@
-"use client";
-
 import React from "react";
 import { Card, Container, Row, Col, Badge } from "react-bootstrap";
 import { useGlobalColorScheme } from "@/config/global";
 
+const defaultColors = {
+  color_white: "#ffffff",
+  color_light_gray: "#f8f9fa",
+  color_gray: "#dee2e6",
+  color_black: "#000000",
+  color_blue_2: "#007bff",
+};
+
 const Bio = () => {
-  const { colors } = useGlobalColorScheme();
+  // Use the hook; it should either work with SSR or provide defaults
+  const { colors: schemeColors } = useGlobalColorScheme() || { colors: defaultColors };
+  const colors = schemeColors || defaultColors; // Fallback for SSR
 
   return (
     <Container className="py-5" style={{ backgroundColor: colors.color_white }}>

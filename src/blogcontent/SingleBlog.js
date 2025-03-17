@@ -5,10 +5,31 @@ import { MathJaxContext } from "better-react-mathjax";
 import parse from "html-react-parser";
 import { SideNav } from "./sidebar/sidebar";
 import { useGlobalColorScheme } from "../config/global";
-import { calculateBlogPadding } from "./SingleBlogPaddingHelper";
 import BlogLikeButtonHelper from "./likebutton/bloglikebuttonhelper";
 import CodeBlock from "./CodeBlock";
 import { generateCommonStyles, generateThemeStyles, generateAdditionalStyles } from "./stylesHelper";
+
+// Default padding values for server-side rendering
+function calculateBlogPadding(windowWidth = null) {
+  const basePaddingTop = 30;
+
+  // Default padding values based on screen size
+  const getPaddingValues = (width) => {
+    if (width >= 1200) return { left: 10, right: 20 };
+    if (width >= 600) return { left: 10, right: 10 };
+    return { left: 5, right: 5 };
+  };
+
+  // Use provided windowWidth or fallback to a default (e.g., 1200 for SSR)
+  const width = windowWidth || 1200; // Default width for SSR
+  const padding = getPaddingValues(width);
+
+  return {
+    paddingTop: `${basePaddingTop}px`,
+    paddingLeft: `${padding.left}%`,
+    paddingRight: `${padding.right}%`,
+  };
+}
 
 const BlogHeader = ({ date, language, type, title, colors }) => (
   <div className="blog-header mb-3">
@@ -40,30 +61,45 @@ const BlogTitle = ({ title, colors }) => (
 
 function SingleBlog({ date, text, title, language, type, bloguuid }) {
   const { colors } = useGlobalColorScheme();
-  const [paddingStyles, setPaddingStyles] = useState(calculateBlogPadding());
+  const [paddingStyles, setPaddingStyles] = useState(calculateBlogPadding()); // Default for SSR
 
   useEffect(() => {
-    const handleResize = () => setPaddingStyles(calculateBlogPadding());
+    // Only runs on the client-side
+    const handleResize = () => {
+      setPaddingStyles(calculateBlogPadding(window.innerWidth));
+    };
+
+    // Set initial padding on mount
+    setPaddingStyles(calculateBlogPadding(window.innerWidth));
+
+    // Add resize listener
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const processedText = text.replace(/<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs, (match, language, codeWithLang, codeWithoutLang) => {
-    const code = codeWithLang || codeWithoutLang;
-    const langClass = language ? language : "";
-    return `<codeblock language="${langClass}" code="${code.replace(/"/g, "&quot;")}"></codeblock>`;
-  });
+  const processedText = text.replace(
+    /<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs,
+    (match, language, codeWithLang, codeWithoutLang) => {
+      const code = codeWithLang || codeWithoutLang;
+      const langClass = language ? language : "";
+      return `<codeblock language="${langClass}" code="${code.replace(/"/g, "")}"></codeblock>`;
+    }
+  );
 
   const elements = parse(processedText, {
     replace: (domNode) => {
       if (domNode.name === "codeblock") {
         const { language, code } = domNode.attribs;
-        return <CodeBlock language={language} code={code.replace(/&quot;/g, '"')} />;
+        return <CodeBlock language={language} code={code.replace(/"/g, '"')} />;
       }
     },
   });
 
-  const styles = [generateCommonStyles(colors), generateThemeStyles(colors), generateAdditionalStyles(colors)].join(" ");
+  const styles = [
+    generateCommonStyles(colors),
+    generateThemeStyles(colors),
+    generateAdditionalStyles(colors),
+  ].join(" ");
 
   return (
     <Container fluid className="pb-3">
@@ -83,7 +119,13 @@ function SingleBlog({ date, text, title, language, type, bloguuid }) {
           }}
         >
           <div className="mb-4">
-            <BlogHeader date={date} language={language} type={type} title={title} colors={colors} />
+            <BlogHeader
+              date={date}
+              language={language}
+              type={type}
+              title={title}
+              colors={colors}
+            />
             <BlogTitle title={title} colors={colors} />
             <MathJaxContext>
               <div className="blog-content">

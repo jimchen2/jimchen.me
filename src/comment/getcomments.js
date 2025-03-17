@@ -14,7 +14,7 @@ const GetComments = ({ showName, bloguuid, paddl = 30, paddr = 30 }) => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `/api/comment/?bloguuid=${bloguuid}`
+          `${process.env.NEXT_PUBLIC_SITE}/api/comment/?bloguuid=${bloguuid}`
         );
         setData(response.data);
       } catch (err) {

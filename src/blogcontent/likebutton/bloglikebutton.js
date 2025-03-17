@@ -48,7 +48,7 @@ function BlogLikeButton({ bloguuid, like }) {
 
     const isLiked = liked; // If already liked, this will be true, indicating we want to remove the like
     const newLikes = isLiked ? likes - 1 : likes + 1; // Adjust the likes count accordingly
-    const patchUrl = `/api/blogtogglelike?uuid=${encodeURIComponent(bloguuid)}`;
+    const patchUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blogtogglelike?uuid=${encodeURIComponent(bloguuid)}`;
 
     try {
       console.log(`Sending PATCH request to: ${patchUrl}`);

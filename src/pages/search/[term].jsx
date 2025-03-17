@@ -14,7 +14,7 @@ function Search() {
     if (term) {
       const fetchData = async () => {
         try {
-          const response = await axios.get(`/api/search?query=${term}`);
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_SITE}/api/search?query=${term}`);
           // Extract the data
           let sortedData = response.data;
           // Convert the date strings to Date objects and then sort them
