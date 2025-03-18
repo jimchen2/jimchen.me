@@ -1,7 +1,10 @@
-import moment from "moment-timezone";
 import Comment from "@/backend_utils/models/comment.model";
+import dbConnect from "@/backend_utils/db/mongoose"; // Adjusted path to your dbConnect file
 
 export default async function handler(req, res) {
+  // Ensure database connection is established
+  await dbConnect();
+
   // Handle GET requests
   if (req.method === "GET") {
     const { bloguuid } = req.query;
@@ -12,11 +15,8 @@ export default async function handler(req, res) {
         query.blog = bloguuid;
       }
 
-      let comments = await Comment.find(query);
-
-      comments.sort((a, b) => {
-        return moment(b.date, "ddd MMM DD YYYY HH:mm:ss").valueOf() - moment(a.date, "ddd MMM DD YYYY HH:mm:ss").valueOf();
-      });
+      // Fetch comments and sort by date (descending) directly in the query
+      let comments = await Comment.find(query).sort({ date: -1 });
 
       res.status(200).json(comments);
     } catch (err) {
