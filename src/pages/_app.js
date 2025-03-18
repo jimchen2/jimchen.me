@@ -3,11 +3,21 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { ColorSchemeProvider, useGlobalColorScheme } from "../config/global.js";
 import NavBar from "../static/navbar.js";
 import Footer from "../static/footer";
-import { PostVisitInfo } from "../static/visitinfo.js";
+import axios from "axios";
+import { setIpAddress } from "../config/global.js";
 
 function MyApp({ Component, pageProps, router }) {
   useEffect(() => {
-    PostVisitInfo();
+    const fetchIpInfo = async () => {
+      try {
+        const userResponse = await axios.get("https://ipapi.co/json");
+        if (userResponse?.data?.ip) {
+          setIpAddress(userResponse.data.ip);
+        }
+      } catch (error) {}
+    };
+
+    fetchIpInfo();
   }, []);
 
   const isEmbedPage = router.pathname.startsWith("/embed");
