@@ -21,8 +21,9 @@ class MyDocument extends Document {
           <meta property="og:image" content="https://jimchen.me/og-image.jpg" />
 
           <meta name="yandex-verification" content="f8271f9a26d335e8" />
-
-          {/* Favicon */}
+          <meta name="google-site-verification" content="qPhK3i_YnrDKpavnD90hQjDbS4u1QhqWDuTamAa8RDk" />
+          
+    {/* Favicon */}
           <link rel="icon" type="image/x-icon" href="/favicon.ico" />
           <meta name="theme-color" content="#000000" />
         </Head>
