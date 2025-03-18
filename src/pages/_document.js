@@ -20,6 +20,8 @@ class MyDocument extends Document {
           <meta property="og:url" content="https://jimchen.me" />
           <meta property="og:image" content="https://jimchen.me/og-image.jpg" />
 
+          <meta name="yandex-verification" content="f8271f9a26d335e8" />
+
           {/* Favicon */}
           <link rel="icon" type="image/x-icon" href="/favicon.ico" />
           <meta name="theme-color" content="#000000" />
