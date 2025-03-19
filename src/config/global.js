@@ -34,6 +34,34 @@ const defaultColors = {
   dark: false,
 };
 
+
+export const toggleTheme = (colors, updateColor) => {
+  if (colors.dark === false && colors.color_light_gray === "#fffcfc") {
+    updateColor("color_white", "#1a1a1a");
+    updateColor("color_black", "#ffffff");
+    updateColor("color_blue", "#00ff00");
+    updateColor("color_light_gray", "#333333");
+    updateColor("color_gray", "#282828");
+    updateColor("grayscale", false);
+    updateColor("dark", true);
+  } else if (colors.dark === true) {
+    updateColor("color_white", "#FFF0F5");
+    updateColor("color_black", "#8A2BE2");
+    updateColor("color_blue", "#FF1493");
+    updateColor("color_light_gray", "#FFD1DC");
+    updateColor("color_gray", "#FFC0CB");
+    updateColor("grayscale", false);
+    updateColor("dark", false);
+  } else {
+    updateColor("color_white", "#ffffff");
+    updateColor("color_black", "#000000");
+    updateColor("color_blue", "#000000");
+    updateColor("color_light_gray", "#fffcfc");
+    updateColor("color_gray", "#d0d4dc");
+    updateColor("grayscale", false);
+    updateColor("dark", false);
+  }
+};
 export const useColorScheme = () => {
   // Initialize with null to indicate loading state
   const [colors, setColors] = useState(null);
