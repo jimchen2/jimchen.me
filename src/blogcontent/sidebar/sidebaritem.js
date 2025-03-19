@@ -49,7 +49,7 @@ export const useAddItemToNavbar = (setActiveKey) => {
                 paddingLeft: "1rem",
                 textDecoration: "none",
                 cursor: "pointer",
-                color: colors.color_blue_2,
+                color: colors.color_blue,
                 backgroundColor: colors.color_white,
                 wordWrap: "break-word",
                 whiteSpace: "normal",

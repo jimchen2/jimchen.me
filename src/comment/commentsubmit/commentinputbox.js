@@ -17,8 +17,8 @@ function CommentInputBox({ commentuuid, bloguuid, blogname }) {
 
   const handleFocus = (setFocusStyle) => {
     setFocusStyle({
-      borderColor: colors.color_blue_2,
-      boxShadow: `0 0 0 0.2rem rgba(${parseInt(colors.color_blue_2.slice(1, 3), 16)}, ${parseInt(colors.color_blue_2.slice(3, 5), 16)}, ${parseInt(colors.color_blue_2.slice(5, 7), 16)}, 0.25)`,
+      borderColor: colors.color_blue,
+      boxShadow: `0 0 0 0.2rem rgba(${parseInt(colors.color_blue.slice(1, 3), 16)}, ${parseInt(colors.color_blue.slice(3, 5), 16)}, ${parseInt(colors.color_blue.slice(5, 7), 16)}, 0.25)`,
     });
   };
 
@@ -47,9 +47,9 @@ function CommentInputBox({ commentuuid, bloguuid, blogname }) {
 
   const submitButtonStyle = {
     fontSize: "1rem",
-    color: colors.color_blue_2,
+    color: colors.color_blue,
     backgroundColor: colors.color_white,
-    borderColor: colors.color_blue_2,
+    borderColor: colors.color_blue,
     padding: "3px 9px",
     transition: "background-color 0.3s",
   };
@@ -81,11 +81,11 @@ function CommentInputBox({ commentuuid, bloguuid, blogname }) {
             color: ${colors.color_black}; // Placeholder color
           }
           .btn-outline-primary {
-            color: ${colors.color_blue_2};
-            border-color: ${colors.color_blue_2};
+            color: ${colors.color_blue};
+            border-color: ${colors.color_blue};
           }
           .btn-outline-primary:hover {
-            background-color: ${colors.color_blue_2};
+            background-color: ${colors.color_blue};
             color: ${colors.color_white};
           }
         `}

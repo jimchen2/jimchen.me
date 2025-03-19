@@ -37,7 +37,7 @@ const Bio = () => {
         <Card.Body className="p-4" style={{ color: colors.color_black }}>
           <Row className="g-4">
             <Col md={6} xs={12}>
-              <h5 className="fw-semibold mb-3" style={{ color: colors.color_blue_2 }}>
+              <h5 className="fw-semibold mb-3" style={{ color: colors.color_blue }}>
                 Cloud Computing
               </h5>
               <div className="d-flex flex-wrap gap-2 mb-3">
@@ -46,7 +46,7 @@ const Bio = () => {
                     key={skill}
                     className="px-3 py-2"
                     style={{
-                      backgroundColor: colors.color_blue_2,
+                      backgroundColor: colors.color_blue,
                       color: colors.color_white,
                       borderRadius: "20px",
                       fontSize: "0.9rem",
@@ -62,7 +62,7 @@ const Bio = () => {
             </Col>
 
             <Col md={6} xs={12}>
-              <h5 className="fw-semibold mb-3" style={{ color: colors.color_blue_2 }}>
+              <h5 className="fw-semibold mb-3" style={{ color: colors.color_blue }}>
                 Language Learning
               </h5>
               <p className="mb-2">Active language learner through:</p>
@@ -75,7 +75,7 @@ const Bio = () => {
                 ))}
               </ul>
 
-              <h5 className="fw-semibold mt-4 mb-3" style={{ color: colors.color_blue_2 }}>
+              <h5 className="fw-semibold mt-4 mb-3" style={{ color: colors.color_blue }}>
                 Technical Skills
               </h5>
               <ul className="list-unstyled">
@@ -95,7 +95,7 @@ const Bio = () => {
                   borderTop: `1px solid ${colors.color_gray}`,
                 }}
               >
-                <h5 className="fw-semibold mb-3" style={{ color: colors.color_blue_2 }}>
+                <h5 className="fw-semibold mb-3" style={{ color: colors.color_blue }}>
                   About Me
                 </h5>
                 <p className="lh-lg" style={{ opacity: 0.9 }}>

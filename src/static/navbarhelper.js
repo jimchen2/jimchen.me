@@ -12,12 +12,12 @@ function NavbarHelper() {
         }
         .custom-search-button {
           background-color: ${colors.color_white};
-          color: ${colors.color_blue_2};
+          color: ${colors.color_blue};
         }
         .custom-search-button:hover {
-          background-color: ${colors.color_blue_2};
+          background-color: ${colors.color_blue};
           color: ${colors.color_white};
-          border-color: ${colors.color_blue_2};
+          border-color: ${colors.color_blue};
         }
         .custom-placeholder::placeholder {
           color: ${colors.color_black};

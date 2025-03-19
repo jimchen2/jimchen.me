@@ -14,12 +14,12 @@ const ToggleButtonGroupComponent = ({
 }) => {
   const buttonStyle = (type) => ({
     backgroundColor: selectedTypes.includes(type)
-      ? colors.color_blue_2
+      ? colors.color_blue
       : colors.color_white,
     color: selectedTypes.includes(type)
       ? colors.color_white
-      : colors.color_blue_2,
-    borderColor: colors.color_blue_2,
+      : colors.color_blue,
+    borderColor: colors.color_blue,
     top: `${paddingtop}px`,
     flexShrink: 0,
     flexGrow: 0,

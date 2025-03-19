@@ -19,7 +19,7 @@ export function CustomToggle({ children, eventKey, hasChildren, setActiveKey, is
     scrollToElementWithOffset(eventKey, -paddingtop + 15);
   };
 
-  const activeStyle = isActive ? { backgroundColor: colors.color_blue_2, color: colors.color_white } : { backgroundColor: colors.color_white, color: colors.color_blue_2 };
+  const activeStyle = isActive ? { backgroundColor: colors.color_blue, color: colors.color_white } : { backgroundColor: colors.color_white, color: colors.color_blue };
 
   return (
     <Card.Header onClick={onClick} style={{ cursor: "pointer", ...activeStyle }}>

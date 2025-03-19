@@ -10,9 +10,9 @@ function CommentReplyButton({ id, blog, onReplyClick }) {
 
   const buttonStyle = {
     fontSize: "0.75rem",
-    color: colors.color_blue_2,
+    color: colors.color_blue,
     backgroundColor: colors.color_white,
-    borderColor: colors.color_blue_2,
+    borderColor: colors.color_blue,
     padding: "2px 6px",
     margin: "5px",
     transition: "background-color 0.3s",

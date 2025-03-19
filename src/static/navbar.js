@@ -25,7 +25,7 @@ function NavBar() {
     if (colors.dark === false && colors.color_light_gray === "#fffcfc") {
       updateColor("color_white", "#1a1a1a");
       updateColor("color_black", "#ffffff");
-      updateColor("color_blue_2", "#00ff00");
+      updateColor("color_blue", "#00ff00");
       updateColor("color_light_gray", "#333333");
       updateColor("color_gray", "#282828");
       updateColor("grayscale", false);
@@ -33,7 +33,7 @@ function NavBar() {
     } else if (colors.dark === true) {
       updateColor("color_white", "#FFF0F5"); // Lavender Blush (light background)
       updateColor("color_black", "#8A2BE2"); // Indigo (text color)
-      updateColor("color_blue_2", "#FF1493"); // Hot Pink
+      updateColor("color_blue", "#FF1493"); // Hot Pink
       updateColor("color_light_gray", "#FFD1DC"); // Pastel Pink
       updateColor("color_gray", "#FFC0CB"); // Pink (lighter gray)
       updateColor("grayscale", false);
@@ -41,7 +41,7 @@ function NavBar() {
     } else {
       updateColor("color_white", "#ffffff");
       updateColor("color_black", "#000000");
-      updateColor("color_blue_2", "#000000");
+      updateColor("color_blue", "#000000");
       updateColor("color_light_gray", "#fffcfc");
       updateColor("color_gray", "#d0d4dc");
       updateColor("grayscale", false);

@@ -62,9 +62,9 @@ function CommentLikeButton({ commentuuid, like }) {
 
   const baseStyle = {
     fontSize: "0.75rem",
-    color: colors.color_blue_2,
+    color: colors.color_blue,
     backgroundColor: colors.color_white,
-    borderColor: colors.color_blue_2,
+    borderColor: colors.color_blue,
     padding: "2px 6px",
     margin: "5px",
     transition: "background-color 0.3s, color 0.3s",
@@ -72,7 +72,7 @@ function CommentLikeButton({ commentuuid, like }) {
 
   const likedButtonStyle = {
     ...baseStyle,
-    backgroundColor: colors.color_blue_2,
+    backgroundColor: colors.color_blue,
     color: colors.color_white,
   };
 

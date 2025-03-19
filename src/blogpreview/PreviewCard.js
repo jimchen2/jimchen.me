@@ -56,7 +56,7 @@ function PreviewCard(props) {
                     style={{
                       fontSize: "0.8rem",
                       fontWeight: "bold",
-                      color: colors.color_blue_2,
+                      color: colors.color_blue,
                     }}
                   >
                     {props.date}
@@ -65,7 +65,7 @@ function PreviewCard(props) {
                     style={{
                       fontSize: "1.1rem",
                       fontWeight: "bold",
-                      color: colors.color_blue_2,
+                      color: colors.color_blue,
                       textTransform: "uppercase",
                     }}
                   >

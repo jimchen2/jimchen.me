@@ -44,7 +44,7 @@ const BlogHeader = ({ date, language, type, title, colors }) => (
         rel="noopener noreferrer"
         style={{
           textDecoration: "underline",
-          color: colors.color_blue_2,
+          color: colors.color_blue,
         }}
       >
         Save as PDF
@@ -55,7 +55,7 @@ const BlogHeader = ({ date, language, type, title, colors }) => (
 
 const BlogTitle = ({ title, colors }) => (
   <h2 className="mb-4">
-    <div style={{ color: colors.color_blue_2 }}>{title.split("-").join(" ")}</div>
+    <div style={{ color: colors.color_blue }}>{title.split("-").join(" ")}</div>
   </h2>
 );
 

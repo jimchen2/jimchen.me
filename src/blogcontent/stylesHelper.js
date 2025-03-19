@@ -66,9 +66,9 @@ export function generateAdditionalStyles(colors) {
     .blog-content img { max-width: 100%; height: auto; border-radius: 8px; }
     .blog-content iframe { width: 80%; border: none; }
     .blog-content a { color: ${
-      colors.color_blue_2
+      colors.color_blue
     }; text-decoration: none; border-bottom: 2px solid ${
-    colors.color_blue_2
+    colors.color_blue
   }; transition: color 0.3s ease, border-bottom-color 0.3s ease; }
     .blog-content p { color: ${colors.color_black}; margin-bottom: 1.5em; }
     ${colors.grayscale ? ".blog-content { filter: grayscale(100%); }" : ""}

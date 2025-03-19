@@ -27,7 +27,7 @@ export let paddingtop = 80;
 const defaultColors = {
   color_white: "#ffffff",
   color_black: "#000000",
-  color_blue_2: "#000000", // Dark blue
+  color_blue: "#000000", // Dark blue
   color_light_gray: "#fffcfc", // Light gray
   color_gray: "#d0d4dc", // Dark gray
   grayscale: false,
