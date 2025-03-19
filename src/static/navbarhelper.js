@@ -13,7 +13,6 @@ function NavbarHelper() {
         .custom-search-button {
           background-color: ${colors.color_white};
           color: ${colors.color_blue_2};
-          border-color: ${colors.color_blue_1};
         }
         .custom-search-button:hover {
           background-color: ${colors.color_blue_2};

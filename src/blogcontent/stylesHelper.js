@@ -70,9 +70,6 @@ export function generateAdditionalStyles(colors) {
     }; text-decoration: none; border-bottom: 2px solid ${
     colors.color_blue_2
   }; transition: color 0.3s ease, border-bottom-color 0.3s ease; }
-    .blog-content a:hover { color: ${
-      colors.color_blue_1
-    }; border-bottom-color: ${colors.color_blue_1}; }
     .blog-content p { color: ${colors.color_black}; margin-bottom: 1.5em; }
     ${colors.grayscale ? ".blog-content { filter: grayscale(100%); }" : ""}
 

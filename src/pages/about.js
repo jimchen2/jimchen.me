@@ -2,72 +2,104 @@ import React from "react";
 import { Card, Container, Row, Col, Badge } from "react-bootstrap";
 import { useGlobalColorScheme } from "@/config/global";
 
-const defaultColors = {
-  color_white: "#ffffff",
-  color_light_gray: "#f8f9fa",
-  color_gray: "#dee2e6",
-  color_black: "#000000",
-  color_blue_2: "#007bff",
-};
-
 const Bio = () => {
-  // Use the hook; it should either work with SSR or provide defaults
-  const { colors: schemeColors } = useGlobalColorScheme() || { colors: defaultColors };
-  const colors = schemeColors || defaultColors; // Fallback for SSR
+  const { colors } = useGlobalColorScheme();
 
   return (
-    <Container className="py-5" style={{ backgroundColor: colors.color_white }}>
-      <br />
-      <br />
-      <Card className="shadow" style={{ backgroundColor: colors.color_light_gray }}>
-        <Card.Header style={{ backgroundColor: colors.color_gray, color: colors.color_black }}>
-          <h2 className="mb-0">Jim Chen</h2>
+    <Container
+      fluid
+      className="py-5"
+      style={{
+        backgroundColor: colors.color_white,
+        minHeight: "100vh",
+      }}
+    >
+      <Card
+        className="shadow-lg mx-auto"
+        style={{
+          maxWidth: "900px",
+          backgroundColor: colors.color_light_gray,
+          border: "none",
+          borderRadius: "15px",
+        }}
+      >
+        <Card.Header
+          className="text-center py-4"
+          style={{
+            backgroundColor: colors.color_gray,
+            color: colors.color_black,
+            borderRadius: "15px 15px 0 0",
+          }}
+        >
+          <h2 className="mb-0 fw-bold">Jim Chen</h2>
         </Card.Header>
 
-        <Card.Body style={{ color: colors.color_black }}>
-          <Row>
-            <Col md={6}>
-              <h5 style={{ color: colors.color_blue_2 }}>Cloud Computing</h5>
-              <div className="mb-3">
-                <Badge bg="info" className="me-2 mb-2" style={{ backgroundColor: colors.color_blue_2 }}>
-                  Cloudflare
-                </Badge>
-                <Badge bg="info" className="me-2 mb-2" style={{ backgroundColor: colors.color_blue_2 }}>
-                  Digital Ocean
-                </Badge>
-                <Badge bg="info" className="me-2 mb-2" style={{ backgroundColor: colors.color_blue_2 }}>
-                  React-Bootstrap
-                </Badge>
-                <small className="d-block mt-2" style={{ color: colors.color_black }}>
-                  Experienced with Cloudflare CDN and Digital Ocean cloud infrastructure
-                </small>
+        <Card.Body className="p-4" style={{ color: colors.color_black }}>
+          <Row className="g-4">
+            <Col md={6} xs={12}>
+              <h5 className="fw-semibold mb-3" style={{ color: colors.color_blue_2 }}>
+                Cloud Computing
+              </h5>
+              <div className="d-flex flex-wrap gap-2 mb-3">
+                {["Cloudflare", "Digital Ocean", "React-Bootstrap", "Next.js"].map((skill) => (
+                  <Badge
+                    key={skill}
+                    className="px-3 py-2"
+                    style={{
+                      backgroundColor: colors.color_blue_2,
+                      color: colors.color_white,
+                      borderRadius: "20px",
+                      fontSize: "0.9rem",
+                    }}
+                  >
+                    {skill}
+                  </Badge>
+                ))}
               </div>
+              <small className="d-block" style={{ color: colors.color_black, opacity: 0.8 }}>
+                Experienced with Cloudflare CDN and Digital Ocean cloud infrastructure
+              </small>
             </Col>
 
-            <Col md={6}>
-              <h5 style={{ color: colors.color_blue_2 }}>Language Learning</h5>
-              <p>Active language learner through:</p>
-              <ul>
-                <li>Video content in different languages</li>
-                <li>Engaging with different softwares and websites</li>
-                <li>International media consumption</li>
+            <Col md={6} xs={12}>
+              <h5 className="fw-semibold mb-3" style={{ color: colors.color_blue_2 }}>
+                Language Learning
+              </h5>
+              <p className="mb-2">Active language learner through:</p>
+              <ul className="list-unstyled">
+                {["Video content in different languages", "Engaging with various software and websites", "International media consumption"].map((item) => (
+                  <li key={item} className="mb-1">
+                    <span className="me-2">•</span>
+                    {item}
+                  </li>
+                ))}
               </ul>
 
-              <h5 style={{ color: colors.color_blue_2 }} className="mt-4">
+              <h5 className="fw-semibold mt-4 mb-3" style={{ color: colors.color_blue_2 }}>
                 Technical Skills
               </h5>
               <ul className="list-unstyled">
-                <li>🔸 Cloud Infrastructure (Cloudflare & Digital Ocean)</li>
-                <li>🔸 Operating Systems</li>
-                <li>🔸 Python Programming</li>
+                {["Cloud Infrastructure (Cloudflare & Digital Ocean)", "Operating Systems", "Python Programming"].map((skill) => (
+                  <li key={skill} className="mb-1">
+                    <span className="me-2">🔸</span>
+                    {skill}
+                  </li>
+                ))}
               </ul>
             </Col>
 
             <Col xs={12}>
-              <div className="border-top mt-4 pt-4" style={{ borderColor: colors.color_gray }}>
-                <h5 style={{ color: colors.color_blue_2 }}>About Me</h5>
-                <p>
-                  A technology enthusiast specializing in Cloudflare and Digital Ocean infrastructure, with interests in language learning. I focus on building efficient, secure, and scalable systems
+              <div
+                className="mt-4 pt-4"
+                style={{
+                  borderTop: `1px solid ${colors.color_gray}`,
+                }}
+              >
+                <h5 className="fw-semibold mb-3" style={{ color: colors.color_blue_2 }}>
+                  About Me
+                </h5>
+                <p className="lh-lg" style={{ opacity: 0.9 }}>
+                  A technology enthusiast specializing in Cloudflare and Digital Ocean infrastructure, with a passion for language learning. I focus on building efficient, secure, and scalable systems
                   using modern cloud technologies.
                 </p>
               </div>
