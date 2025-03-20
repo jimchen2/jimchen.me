@@ -13,8 +13,8 @@ const blogSchema = new Schema(
       default: "",
     },
     date: {
-      type: String,  // Note: Consider using Date type instead of String if you're storing dates
-      default: "",
+      type: Date,  // Changed from String to Date
+      default: Date.now,  // Optional: sets current date/time as default
     },
     type: {
       type: String,

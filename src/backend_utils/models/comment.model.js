@@ -18,7 +18,7 @@ const commentSchema = new Schema({
     default: ""
   },
   date: {
-    type: Date,  // Changed to Date type for better handling
+    type: Date,  
     default: () => moment().tz("Asia/Shanghai").toDate()  // Converted to Date object
   },
   pointer: {

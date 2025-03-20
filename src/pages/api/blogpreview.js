@@ -14,9 +14,17 @@ export default async function handler(req, res) {
       const typeCounts = {};
 
       blogs.forEach(blog => {
+        const dateObj = new Date(blog.date);
+        const formattedDate = dateObj.toLocaleDateString('en-US', {
+          month: 'short',
+          day: '2-digit',
+          year: 'numeric'
+        });
+
         const preview = {
           ...blog.toObject(),
-          body: blog.body.substring(0, 200)
+          body: blog.body.substring(0, 200),
+          date: formattedDate
         };
         previews.push(preview);
         typeCounts[blog.type] = (typeCounts[blog.type] || 0) + 1;
