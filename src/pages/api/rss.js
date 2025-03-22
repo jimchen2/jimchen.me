@@ -33,7 +33,6 @@ export default async function handler(req, res) {
       });
     });
 
-    res.setHeader('Cache-Control', 'public, max-age=86400');
     res.setHeader('Content-Type', 'application/xml');
     res.status(200).send(feed.xml());
 

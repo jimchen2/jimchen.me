@@ -34,7 +34,6 @@ export default async function handler(req, res) {
         .map(([type, count]) => ({ type, count }))
         .sort((a, b) => b.count - a.count);
 
-      res.setHeader('Cache-Control', 'public, max-age=604800');
       res.json({
         previews,
         postTypes

@@ -1,6 +1,6 @@
 // pages/api/search.js
-import Blog from '../../backend_utils/models/blog.model';
-import dbConnect from '../../backend_utils/db/mongoose';
+import Blog from "../../backend_utils/models/blog.model";
+import dbConnect from "../../backend_utils/db/mongoose";
 
 function escapeRegex(text) {
   return text.replace(/[-[$${}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -16,11 +16,10 @@ function getRelevantSnippet(body, searchTerm, isTitleMatch) {
     return body.substring(start, end);
   }
 }
-
 export default async function handler(req, res) {
   await dbConnect();
 
-  if (req.method === 'GET') {
+  if (req.method === "GET") {
     let { query } = req.query;
     if (!query) {
       return res.status(400).json({ message: "A search query is required." });
@@ -37,31 +36,37 @@ export default async function handler(req, res) {
           const isBodyMatch = regex.test(blog.body);
           const snippet = getRelevantSnippet(blog.body, query, isTitleMatch);
 
+          // Format the date consistently with the preview handler
+          const formattedDate = blog.date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "2-digit",
+            year: "numeric",
+          });
+
           return {
             ...blog.toObject(),
             body: snippet,
+            date: formattedDate,
             isTitleMatch,
             isBodyMatch,
-            randomTieBreaker: Math.random()
+            randomTieBreaker: Math.random(),
           };
         })
         .filter((blog) => blog.isTitleMatch || blog.isBodyMatch)
         .sort((a, b) => {
-          if (a.date !== b.date) {
-            return new Date(b.date) - new Date(a.date); // Ensure Date objects for comparison
-          }
-          return b.randomTieBreaker - a.randomTieBreaker;
+          // Since date is already a Date object in the schema, we can compare directly
+          return b.date - a.date || b.randomTieBreaker - a.randomTieBreaker;
         });
 
       res.json(matches);
     } catch (err) {
-      res.status(500).json({ 
-        message: "Error searching for blog entries", 
-        error: err.message 
+      res.status(500).json({
+        message: "Error searching for blog entries",
+        error: err.message,
       });
     }
   } else {
-    res.setHeader('Allow', ['GET']);
+    res.setHeader("Allow", ["GET"]);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
