@@ -17,8 +17,23 @@ export default async function handler(req, res) {
 
       // Fetch comments and sort by date (descending) directly in the query
       let comments = await Comment.find(query).sort({ date: -1 });
+      const commentsWithFormattedDate = comments.map((comment) => {
+        const formattedDateTime = comment.date.toLocaleString("en-US", {
+          month: "short",
+          day: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        });
 
-      res.status(200).json(comments);
+        return {
+          ...comment._doc,
+          date: formattedDateTime,
+        };
+      });
+
+      res.status(200).json(commentsWithFormattedDate);
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: "Error fetching comments" });
