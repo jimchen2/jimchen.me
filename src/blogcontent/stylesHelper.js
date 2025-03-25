@@ -88,6 +88,21 @@ export function generateAdditionalStyles(colors) {
   border-radius: 8px;
 }
 
+/* Video styles */
+.blog-content video {
+  max-width: 80%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto 1.5em;
+}
+
+/* Video wrapper for better responsiveness */
+.blog-content .video-wrapper {
+  position: relative;
+  width: 80%;
+  margin: 0 auto 1.5em;
+}
 /* Hide figcaption or other caption elements */
 .blog-content figcaption {
   display: none;
@@ -126,7 +141,7 @@ export function generateAdditionalStyles(colors) {
       top: 10px;
       right: 60px;
       padding: 5px 10px;
-      background-color: ${colors.color_green || "#28a745"};
+      background-color: ${colors.color_blue || "#28a745"};
       color: #ffffff;
       border-radius: 4px;
     }
