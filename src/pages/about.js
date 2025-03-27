@@ -1,107 +1,151 @@
 import React from "react";
-import { Card, Container, Row, Col, Badge } from "react-bootstrap";
+import { Card, Container, Row, Col } from "react-bootstrap";
 import { useGlobalColorScheme } from "@/config/global";
+import { FaUser, FaDesktop, FaServer } from "react-icons/fa";
 
 const Bio = () => {
   const { colors } = useGlobalColorScheme();
 
+  // Style for info items
+  const infoItemStyle = {
+    display: "flex",
+    marginBottom: "0.25rem",
+  };
+
+  const infoLabelStyle = {
+    fontWeight: "bold",
+    minWidth: "120px",
+    paddingRight: "0.5rem",
+  };
+
   return (
-    <Container
-      fluid
-      className="py-5"
-      style={{
-        backgroundColor: colors.color_white,
-        minHeight: "100vh",
-      }}
-    >
+    <Container fluid className="py-3">
+      <br />
+      <br />
+      <br />
+      <br />
+
       <Card
-        className="shadow-lg mx-auto"
+        className="mx-auto"
         style={{
-          maxWidth: "900px",
-          backgroundColor: colors.color_light_gray,
+          maxWidth: "800px",
+          backgroundColor: colors.color_white,
+          color: colors.color_black,
           border: "none",
-          borderRadius: "15px",
+          borderRadius: "12px",
         }}
       >
-        <Card.Header
-          className="text-center py-4"
-          style={{
-            backgroundColor: colors.color_gray,
-            color: colors.color_black,
-            borderRadius: "15px 15px 0 0",
-          }}
-        >
-          <h2 className="mb-0 fw-bold">Jim Chen</h2>
-        </Card.Header>
+        <Card.Body className="p-3">
+          <h4 className="mb-3 text-center">Jim Chen</h4>
 
-        <Card.Body className="p-4" style={{ color: colors.color_black }}>
-          <Row className="g-4">
+          <Row className="g-3">
             <Col md={6} xs={12}>
-              <h5 className="fw-semibold mb-3" style={{ color: colors.color_blue }}>
-                Cloud Computing
-              </h5>
-              <div className="d-flex flex-wrap gap-2 mb-3">
-                {["Cloudflare", "Digital Ocean", "React-Bootstrap", "Next.js"].map((skill) => (
-                  <Badge
-                    key={skill}
-                    className="px-3 py-2"
-                    style={{
-                      backgroundColor: colors.color_blue,
-                      color: colors.color_white,
-                      borderRadius: "20px",
-                      fontSize: "0.9rem",
-                    }}
-                  >
-                    {skill}
-                  </Badge>
-                ))}
-              </div>
-              <small className="d-block" style={{ color: colors.color_black, opacity: 0.8 }}>
-                Experienced with Cloudflare CDN and Digital Ocean cloud infrastructure
-              </small>
-            </Col>
-
-            <Col md={6} xs={12}>
-              <h5 className="fw-semibold mb-3" style={{ color: colors.color_blue }}>
-                Language Learning
-              </h5>
-              <p className="mb-2">Active language learner through:</p>
-              <ul className="list-unstyled">
-                {["Video content in different languages", "Engaging with various software and websites", "International media consumption"].map((item) => (
-                  <li key={item} className="mb-1">
-                    <span className="me-2">•</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
-              <h5 className="fw-semibold mt-4 mb-3" style={{ color: colors.color_blue }}>
-                Technical Skills
-              </h5>
-              <ul className="list-unstyled">
-                {["Cloud Infrastructure (Cloudflare & Digital Ocean)", "Operating Systems", "Python Programming"].map((skill) => (
-                  <li key={skill} className="mb-1">
-                    <span className="me-2">🔸</span>
-                    {skill}
-                  </li>
-                ))}
-              </ul>
-            </Col>
-
-            <Col xs={12}>
-              <div
-                className="mt-4 pt-4"
-                style={{
-                  borderTop: `1px solid ${colors.color_gray}`,
-                }}
-              >
-                <h5 className="fw-semibold mb-3" style={{ color: colors.color_blue }}>
-                  About Me
+              <div className="mb-3">
+                <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
+                  <FaUser className="me-2" size="0.9em" /> Personal Information
                 </h5>
-                <p className="lh-lg" style={{ opacity: 0.9 }}>
-                  A technology enthusiast specializing in Cloudflare and Digital Ocean infrastructure, with a passion for language learning. I focus on building efficient, secure, and scalable systems
-                  using modern cloud technologies.
-                </p>
+
+                <div className="small">
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Birth:</div>
+                    <div>March 23, 2005</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Location:</div>
+                    <div>Shanghai</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Pronouns:</div>
+                    <div>he/him</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Languages:</div>
+                    <div>Chinese, English</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
+                  <FaServer className="me-2" size="0.9em" /> Stack
+                </h5>
+
+                <div className="small">
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Framework:</div>
+                    <div>React + Next.js</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Frontend:</div>
+                    <div>React-Boostrap</div>
+                  </div>
+
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Database:</div>
+                    <div>MongoDB</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Domain:</div>
+                    <div>Cloudflare</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Hosting:</div>
+                    <div>Vercel</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>VPS:</div>
+                    <div>DigitalOcean</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Object Storage:</div>
+                    <div>Cloudflare R2</div>
+                  </div>
+                </div>
+              </div>
+            </Col>
+
+            <Col md={6} xs={12}>
+              <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
+                <FaDesktop className="me-2" size="0.9em" /> Computer Setup
+              </h5>
+
+              <div className="small">
+                <div style={infoItemStyle}>
+                  <div style={infoLabelStyle}>OS:</div>
+                  <div>Fedora 41 x86_64</div>
+                </div>
+                <div style={infoItemStyle}>
+                  <div style={infoLabelStyle}>Host:</div>
+                  <div>ThinkPad P16s Gen 2</div>
+                </div>
+                <div style={infoItemStyle}>
+                  <div style={infoLabelStyle}>Kernel:</div>
+                  <div>6.13.6-200.fc41.x86_64</div>
+                </div>
+                <div style={infoItemStyle}>
+                  <div style={infoLabelStyle}>Shell:</div>
+                  <div>fish 3.7.0</div>
+                </div>
+                <div style={infoItemStyle}>
+                  <div style={infoLabelStyle}>DE:</div>
+                  <div>GNOME 47.4</div>
+                </div>
+                <div style={infoItemStyle}>
+                  <div style={infoLabelStyle}>Terminal:</div>
+                  <div>mate-terminal</div>
+                </div>
+                <div style={infoItemStyle}>
+                  <div style={infoLabelStyle}>CPU:</div>
+                  <div>Ryzen 7 PRO 7840U</div>
+                </div>
+                <div style={infoItemStyle}>
+                  <div style={infoLabelStyle}>Wallpaper:</div>
+                  <div>
+                    <a href="https://cdn.jimchen.me/09128349328u40982mu30948m24u23984mu2983mu4/IMG_1005.JPEG" target="_blank" rel="noopener noreferrer">
+                      IMG_1005.JPEG
+                    </a>
+                  </div>
+                </div>
               </div>
             </Col>
           </Row>
