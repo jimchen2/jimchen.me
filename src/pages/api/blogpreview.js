@@ -45,7 +45,7 @@ async function refreshCacheInBackground(cacheKey, fetchFn) {
     if (!client) return;
 
     const freshData = await fetchFn();
-    await client.setEx(cacheKey, 24 * 60 * 60 * 60, JSON.stringify(freshData));
+    await client.setEx(cacheKey, 24 * 60 * 60 * 100, JSON.stringify(freshData));
   } catch (err) {}
 }
 
@@ -60,7 +60,7 @@ async function getFromCacheOrFetch(cacheKey, fetchFn) {
     const cachedData = await client.get(cacheKey);
     if (cachedData) {
       const ttl = await client.ttl(cacheKey);
-      if (ttl < 24 * 60 * 60 * 30) {
+      if (ttl < 24 * 60 * 60 * 99) {
         setImmediate(() => refreshCacheInBackground(cacheKey, fetchFn));
       }
       return JSON.parse(cachedData);
@@ -68,7 +68,7 @@ async function getFromCacheOrFetch(cacheKey, fetchFn) {
 
     // If cache is expired or missing, fetch fresh data immediately for this request
     const data = await fetchFn();
-    await client.setEx(cacheKey, 24 * 60 * 60 * 60, JSON.stringify(data));
+    await client.setEx(cacheKey, 24 * 60 * 60 * 100, JSON.stringify(data));
     return data;
   } catch (err) {
     console.error("Redis error:", err);
