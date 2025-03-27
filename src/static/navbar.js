@@ -22,10 +22,14 @@ function NavBar() {
     router.push(`/search/${searchTerm}`);
   };
 
-  // Create a handler that passes colors and updateColor to toggleTheme
   const handleToggleTheme = () => {
     toggleTheme(colors, updateColor);
   };
+  const externalLinkIcon = (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style={{ verticalAlign: "middle", marginLeft: "0px" }}>
+      <path d="M14 3h7v7h-2V6.41L10.41 15 9 13.59 17.59 5H14V3zM5 5h4v2H5v12h12v-4h2v4c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2z" />
+    </svg>
+  );
 
   return (
     <>
@@ -57,9 +61,11 @@ function NavBar() {
               <Nav.Link as={Link} href="/comments" style={{ color: colors.color_black }}>
                 Comments
               </Nav.Link>
-              {/* Updated to use the handler */}
               <Nav.Link onClick={handleToggleTheme} style={{ color: colors.color_black }}>
                 Theme
+              </Nav.Link>
+              <Nav.Link as={Link} href="https://feed.jimchen.me" style={{ color: colors.color_black }} target="_blank" rel="noopener noreferrer">
+                FreshRSS{externalLinkIcon}
               </Nav.Link>
             </Nav>
             <Form className="d-flex" onSubmit={handleSearchSubmit}>
