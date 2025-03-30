@@ -246,6 +246,9 @@ const Bio = () => {
                       config and wallpaper
                     </a>
                   </div>
+                  <br/>
+                  <br/>
+                  <br/>
                 </div>
               </Row>
             </Col>
