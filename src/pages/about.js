@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Container, Row, Col } from "react-bootstrap";
 import { useGlobalColorScheme } from "@/config/global";
-import { FaUser, FaDesktop, FaServer } from "react-icons/fa";
+import { FaUser, FaLaptop, FaServer, FaMobileAlt, FaChrome } from "react-icons/fa";
 
 const Bio = () => {
   const { colors } = useGlobalColorScheme();
@@ -16,6 +16,12 @@ const Bio = () => {
     fontWeight: "bold",
     minWidth: "120px",
     paddingRight: "0.5rem",
+  };
+
+  // Common icon style
+  const iconStyle = {
+    marginRight: "0.5rem",
+    fontSize: "1.1rem",
   };
 
   return (
@@ -42,7 +48,7 @@ const Bio = () => {
               <Row>
                 <div className="mb-3">
                   <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
-                    <FaUser className="me-2" size="0.9em" /> Personal Information
+                    <FaUser style={iconStyle} /> Personal Information
                   </h5>
                   <div className="small">
                     <div style={infoItemStyle}>
@@ -72,7 +78,7 @@ const Bio = () => {
               <Row>
                 <div>
                   <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
-                    <FaServer className="me-2" size="0.9em" /> Stack
+                    <FaServer style={iconStyle} /> Stack
                   </h5>
 
                   <div className="small">
@@ -125,7 +131,7 @@ const Bio = () => {
               <Row>
                 <div>
                   <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
-                    <FaServer className="me-2" size="0.9em" /> Browser
+                    <FaChrome style={iconStyle} /> Browser
                   </h5>
 
                   <div className="small">
@@ -159,7 +165,7 @@ const Bio = () => {
             <Col md={6} xs={12}>
               <Row>
                 <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
-                  <FaDesktop className="me-2" size="0.9em" /> Computer
+                  <FaLaptop style={iconStyle} /> Computer
                 </h5>
 
                 <div className="small">
@@ -219,7 +225,7 @@ const Bio = () => {
 
               <Row>
                 <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
-                  <FaDesktop className="me-2" size="0.9em" /> Smartphone
+                  <FaMobileAlt style={iconStyle} /> Smartphone
                 </h5>
                 <div className="small">
                   <div style={infoItemStyle}>
