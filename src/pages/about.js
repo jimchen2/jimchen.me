@@ -37,116 +37,207 @@ const Bio = () => {
       >
         <Card.Body className="p-3">
           <h4 className="mb-3 text-center">Jim Chen</h4>
-
-          <Row className="g-3">
+          <Row>
             <Col md={6} xs={12}>
-              <div className="mb-3">
-                <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
-                  <FaUser className="me-2" size="0.9em" /> Personal Information
-                </h5>
-
-                <div className="small">
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Birth:</div>
-                    <div>March 23, 2005</div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Location:</div>
-                    <div>Shanghai</div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Pronouns:</div>
-                    <div>he/him</div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Languages:</div>
-                    <div>Chinese, English</div>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
-                  <FaServer className="me-2" size="0.9em" /> Stack
-                </h5>
-
-                <div className="small">
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Framework:</div>
-                    <div>React + Next.js</div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Frontend:</div>
-                    <div>React-Boostrap</div>
-                  </div>
-
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Database:</div>
-                    <div>MongoDB</div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Domain:</div>
-                    <div>Cloudflare</div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Hosting:</div>
-                    <div>Vercel</div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>VPS:</div>
-                    <div>DigitalOcean</div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Object Storage:</div>
-                    <div>Cloudflare R2</div>
+              <Row>
+                <div className="mb-3">
+                  <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
+                    <FaUser className="me-2" size="0.9em" /> Personal Information
+                  </h5>
+                  <div className="small">
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Birth:</div>
+                      <div>March 23, 2005</div>
+                    </div>
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Hometown:</div>
+                      <div>Shanghai</div>
+                    </div>
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Pronouns:</div>
+                      <div>He/Him</div>
+                    </div>
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Languages:</div>
+                      <div>Chinese, English</div>
+                    </div>
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Nationality:</div>
+                      <div>Chinese</div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Row>
+
+              <Row>
+                <div>
+                  <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
+                    <FaServer className="me-2" size="0.9em" /> Stack
+                  </h5>
+
+                  <div className="small">
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Framework:</div>
+                      <div>React + Next.js</div>
+                    </div>
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Frontend:</div>
+                      <div>React-Boostrap</div>
+                    </div>
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Database:</div>
+                      <a href="https://www.mongodb.com/" target="_blank" rel="noopener noreferrer">
+                        MongoDB
+                      </a>
+                      <span style={{ width: 5 }}>, </span>
+                      <a href="https://redis.io/" target="_blank" rel="noopener noreferrer">
+                        Vercel
+                      </a>
+                    </div>
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Domain:</div>
+                      <div>Cloudflare</div>
+                    </div>
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Blog Hosting:</div>
+                      <div>Vercel</div>
+                    </div>
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>VPS:</div>
+                      <div>DigitalOcean (paid)</div>
+                    </div>
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Object Storage:</div>
+                      <div>Cloudflare R2 (paid)</div>
+                    </div>
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Proxy:</div>
+                      <div>Nexitally (paid)</div>
+                    </div>{" "}
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>LLM:</div>
+                      <div>Openrouter (paid)</div>
+                    </div>
+                  </div>
+                </div>
+              </Row>
+
+              <Row>
+                <div>
+                  <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
+                    <FaServer className="me-2" size="0.9em" /> Browser
+                  </h5>
+
+                  <div className="small">
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Extensions:</div>
+                      <div>Ublock Origin, Violentmonkey</div>
+                    </div>
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Policies:</div>
+                      <div>
+                        <a href="https://cdn.jimchen.me/d2e18f4893ef9a61fe5944720259e119/policies.json" target="_blank" rel="noopener noreferrer">
+                          <div>policies.json</div>
+                        </a>
+                      </div>
+                    </div>
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Userscripts:</div>
+                      <a href="https://github.com/ilyhalight/voice-over-translation" target="_blank" rel="noopener noreferrer">
+                        <div>VoT</div>
+                      </a>
+                      <span style={{ width: 5 }}>, </span>
+                      <a href="https://github.com/jimchen2/userscripts" target="_blank" rel="noopener noreferrer">
+                        <div>my userscripts</div>
+                      </a>
+                      <span style={{ width: 5 }}>, </span>
+                    </div>
+                  </div>
+                </div>
+              </Row>
             </Col>
-
             <Col md={6} xs={12}>
-              <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
-                <FaDesktop className="me-2" size="0.9em" /> Computer Setup
-              </h5>
+              <Row>
+                <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
+                  <FaDesktop className="me-2" size="0.9em" /> Computer
+                </h5>
 
-              <div className="small">
-                <div style={infoItemStyle}>
-                  <div style={infoLabelStyle}>OS:</div>
-                  <div>Fedora 41 x86_64</div>
-                </div>
-                <div style={infoItemStyle}>
-                  <div style={infoLabelStyle}>Host:</div>
-                  <div>ThinkPad P16s Gen 2</div>
-                </div>
-                <div style={infoItemStyle}>
-                  <div style={infoLabelStyle}>Kernel:</div>
-                  <div>6.13.6-200.fc41.x86_64</div>
-                </div>
-                <div style={infoItemStyle}>
-                  <div style={infoLabelStyle}>Shell:</div>
-                  <div>fish 3.7.0</div>
-                </div>
-                <div style={infoItemStyle}>
-                  <div style={infoLabelStyle}>DE:</div>
-                  <div>GNOME 47.4</div>
-                </div>
-                <div style={infoItemStyle}>
-                  <div style={infoLabelStyle}>Terminal:</div>
-                  <div>mate-terminal</div>
-                </div>
-                <div style={infoItemStyle}>
-                  <div style={infoLabelStyle}>CPU:</div>
-                  <div>Ryzen 7 PRO 7840U</div>
-                </div>
-                <div style={infoItemStyle}>
-                  <div style={infoLabelStyle}>Wallpaper:</div>
-                  <div>
+                <div className="small">
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Device:</div>
+                    <div>ThinkPad P16s Gen 2</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>OS:</div>
+                    <div>Fedora 41 x86_64</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>CPU:</div>
+                    <div>Ryzen 7 PRO 7840U</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Shell:</div>
+                    <div>fish 3.7.0</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>DE:</div>
+                    <div>GNOME 47.4</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Theme:</div>
                     <a href="https://cdn.jimchen.me/09128349328u40982mu30948m24u23984mu2983mu4/IMG_1005.JPEG" target="_blank" rel="noopener noreferrer">
-                      IMG_1005.JPEG
+                      <div>Wallpaper</div>
+                    </a>
+                    <span style={{ width: 5 }}>, </span>
+                    <a href="https://cdn.jimchen.me/96c5f4bc0a3766eff967cb508b1d0cab/dconf-settings.txt" target="_blank" rel="noopener noreferrer">
+                      <div>dconf-settings</div>
+                    </a>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Input:</div>
+                    <div>
+                      en, ru, zh
+                      <span style={{ width: 5 }}>, </span>
+                      <a href="https://github.com/jimchen2/german-keyboard" target="_blank" rel="noopener noreferrer">
+                        de
+                      </a>
+                    </div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Apps:</div>
+                    <div>Settings, Nautilus, Mate Terminal, VSCode, Chrome, Clash </div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Folder Structure:</div>
+                    <div>
+                      <code> Code/ Downloads/ Pictures/ </code>
+                      <br /> in <code>Code/</code>:<code> blog/ mlenv/</code>
+                    </div>
+                  </div>
+                </div>
+              </Row>
+
+              <Row>
+                <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
+                  <FaDesktop className="me-2" size="0.9em" /> Smartphone
+                </h5>
+                <div className="small">
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Device:</div>
+                    Redmi Note 13
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Apps:</div>
+                    <div>Hiddify(per-app proxy), Lawnchair , Gboard, Yandex Browser(extensions), LibreOffice Viewer, VLC</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Lawnchair:</div>
+                    <a href="https://cdn.jimchen.me/3e0cd3b5edb6aae256abf6d46c9fbdfb/file..lawnchairbackup" target="_blank" rel="noopener noreferrer">
+                      config and wallpaper
                     </a>
                   </div>
                 </div>
-              </div>
+              </Row>
             </Col>
           </Row>
         </Card.Body>

@@ -3,20 +3,25 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import { useGlobalColorScheme } from "../config/global.js";
 import Image from "next/image"; // Add this import
-import Link from 'next/link';
+import Link from "next/link";
 
 const ICON_SIZE = 35;
 
 const socialLinks = [
   {
     href: "https://github.com/jimchen2",
-    imgSrc: "/github-icon.png", // Change to absolute path
-    alt: "GitHub", // Add alt text
+    imgSrc: "/github-icon.png",
+    alt: "GitHub",
   },
   {
     href: "https://archive.org/details/@jimchen4214",
     imgSrc: "/internetarchive.png",
     alt: "Internet Archive",
+  },
+  {
+    href: "https://jimchen.me/email.png",
+    imgSrc: "/email-icon.png",
+    alt: "Email",
   },
   {
     href: "https://jimchen.me/qq.jpg",
