@@ -97,7 +97,7 @@ const Bio = () => {
                       </a>
                       <span style={{ width: 5 }}>, </span>
                       <a href="https://redis.io/" target="_blank" rel="noopener noreferrer">
-                        Vercel
+                        Redis
                       </a>
                     </div>
                     <div style={infoItemStyle}>
@@ -119,10 +119,14 @@ const Bio = () => {
                     <div style={infoItemStyle}>
                       <div style={infoLabelStyle}>Proxy:</div>
                       <div>Nexitally (paid)</div>
-                    </div>{" "}
+                    </div>
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>GPU:</div>
+                      <div>Vast.ai (paid)</div>
+                    </div>
                     <div style={infoItemStyle}>
                       <div style={infoLabelStyle}>LLM:</div>
-                      <div>Openrouter (paid)</div>
+                      <div>OpenRouter (paid)</div>
                     </div>
                   </div>
                 </div>
