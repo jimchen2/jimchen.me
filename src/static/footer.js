@@ -2,36 +2,43 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import { useGlobalColorScheme } from "../config/global.js";
-import Image from "next/image"; // Add this import
 import Link from "next/link";
-
-const ICON_SIZE = 35;
-
+import { FaGithub } from "react-icons/fa";
+import { SiInternetarchive } from "react-icons/si";
+import { MdEmail } from "react-icons/md";
+import { FaQq } from "react-icons/fa";
+import { FaWeixin } from "react-icons/fa";
+import { FaTelegram } from "react-icons/fa";
 const socialLinks = [
   {
     href: "https://github.com/jimchen2",
-    imgSrc: "/github-icon.png",
+    Icon: FaGithub,
     alt: "GitHub",
   },
   {
     href: "https://archive.org/details/@jimchen4214",
-    imgSrc: "/internetarchive.png",
+    Icon: SiInternetarchive,
     alt: "Internet Archive",
   },
   {
-    href: "https://jimchen.me/email.png",
-    imgSrc: "/email-icon.png",
+    href: "https://cdn.jimchen.me/1d460c338efc24b84334f46f56159d30/email.png",
+    Icon: MdEmail,
     alt: "Email",
   },
   {
-    href: "https://jimchen.me/qq.jpg",
-    imgSrc: "/qq-removebg-preview.png",
+    href: "https://cdn.jimchen.me/1d460c338efc24b84334f46f56159d30/qq.jpg",
+    Icon: FaQq,
     alt: "QQ",
   },
   {
-    href: "https://jimchen.me/w.JPG",
-    imgSrc: "/wechat-icon.png",
+    href: "https://cdn.jimchen.me/1d460c338efc24b84334f46f56159d30/w.jpg",
+    Icon: FaWeixin,
     alt: "WeChat",
+  },
+  {
+    href: "https://cdn.jimchen.me/1d460c338efc24b84334f46f56159d30/telegram.jpg",
+    Icon: FaTelegram,
+    alt: "Telegram",
   },
 ];
 
@@ -43,9 +50,11 @@ function Footer() {
     textDecoration: "underline",
   };
 
-  const imageStyle = {
-    height: ICON_SIZE,
+  const iconStyle = {
+    fontSize: 30,
+    color: colors.color_black,
     filter: colors.grayscale ? "grayscale(100%)" : "none",
+    margin: "3",
   };
 
   const externalLinkIcon = (
@@ -72,17 +81,17 @@ function Footer() {
     <Navbar fixed="bottom" expand="lg" style={{ backgroundColor: colors.color_gray, fontSize: "15px" }}>
       <Container style={{ height: "100%" }}>
         <CopyrightSection year={year} linkStyle={linkStyle} />
-        <IconLinks imageStyle={imageStyle} linkStyle={linkStyle} />
+        <IconLinks iconStyle={iconStyle} linkStyle={linkStyle} />
       </Container>
     </Navbar>
   );
 }
 
-const IconLinks = ({ imageStyle, linkStyle }) => (
+const IconLinks = ({ iconStyle, linkStyle }) => (
   <div className="justify-content-end">
     {socialLinks.map((link) => (
       <a key={link.href} href={link.href} style={linkStyle}>
-        <Image src={link.imgSrc} alt={link.alt} width={ICON_SIZE} height={ICON_SIZE} style={imageStyle} />
+        <link.Icon style={iconStyle} title={link.alt} />
       </a>
     ))}
   </div>

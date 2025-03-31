@@ -14,7 +14,6 @@
     "bootstrap": "^5.3.3",
     "html-react-parser": "^5.2.2",
     "js-cookie": "^3.0.5",
-    "moment-timezone": "^0.5.47",
     "mongoose": "^8.12.1",
     "next": "^15.2.4",
     "react": "^19.0.0",
@@ -22,7 +21,6 @@
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
     "redis": "^4.7.0",
-    "rss": "^1.2.2",
-    "styled-components": "^6.1.15"
+    "rss": "^1.2.2"
   }
 }

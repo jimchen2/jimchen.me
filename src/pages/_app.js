@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Head from "next/head"; // Import Head from next/head
+import Head from "next/head"; 
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ColorSchemeProvider, useGlobalColorScheme } from "../config/global.js";
 import NavBar from "../static/navbar.js";
