@@ -51,10 +51,10 @@ function Footer() {
   };
 
   const iconStyle = {
-    fontSize: 30,
+    fontSize: 25,
     color: colors.color_black,
     filter: colors.grayscale ? "grayscale(100%)" : "none",
-    margin: "3",
+    margin: "5",
   };
 
   const externalLinkIcon = (
@@ -78,7 +78,7 @@ function Footer() {
   );
 
   return (
-    <Navbar fixed="bottom" expand="lg" style={{ backgroundColor: colors.color_gray, fontSize: "15px" }}>
+    <Navbar fixed="bottom" expand="lg" style={{ backgroundColor: colors.color_gray, fontSize: "16px" }}>
       <Container style={{ height: "100%" }}>
         <CopyrightSection year={year} linkStyle={linkStyle} />
         <IconLinks iconStyle={iconStyle} linkStyle={linkStyle} />
