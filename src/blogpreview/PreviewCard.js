@@ -30,7 +30,7 @@ function PreviewCard(props) {
       <Row className="justify-content-center">
         <Col md={10} lg={8}>
           <Card
-            className="shadow border-0 rounded"
+            className="shadow border-1 rounded-3"
             style={{
               backgroundColor: colors.color_white,
             }}
