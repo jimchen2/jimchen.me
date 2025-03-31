@@ -1,9 +1,26 @@
-import Blog from "../../backend_utils/models/blog.model";
-import dbConnect from "../../backend_utils/db/mongoose";
-import { initializeRedis } from "@/backend_utils/db/redis";
+import dbConnect from "@/backend_utils/db/mongoose";
+import { fetchBlogPreviews } from "./cron/refresh-redis";
 
+async function getCachedPaginationInfo(count = 10) {
+  const client = await initializeRedis();
+
+  if (client) {
+    const cachedTotalPages = await client.get("blog_total_pages");
+    const cachedTotalBlogs = await client.get("blog_total_count");
+
+    if (cachedTotalPages && cachedTotalBlogs) {
+      return {
+        totalPages: parseInt(cachedTotalPages),
+        totalBlogs: parseInt(cachedTotalBlogs),
+      };
+    }
+  }
+  return calculateAndCachePagination(count);
+}
 async function getFromCacheOrFetch(cacheKey, fetchFn) {
   const client = await initializeRedis();
+  if (!client) return await fetchFn();
+
   const cachedData = await client.get(cacheKey);
   if (cachedData) {
     return JSON.parse(cachedData);
@@ -13,7 +30,6 @@ async function getFromCacheOrFetch(cacheKey, fetchFn) {
   await client.setEx(cacheKey, 365 * 24 * 60 * 60, JSON.stringify(data));
   return data;
 }
-
 // Main API handler
 export default async function handler(req, res) {
   await dbConnect();
@@ -23,17 +39,24 @@ export default async function handler(req, res) {
       const start = parseInt(req.query.start) || 0;
       const count = parseInt(req.query.count) || 10;
 
-      const fetchBlogData = async () => {
-        const blogs = await Blog.find().sort({ date: -1 }).skip(start).limit(count).collation({ locale: "en_US", numericOrdering: true });
-        const previewPromises = blogs.map((blog) => processBlog(blog));
-        return Promise.all(previewPromises);
-      };
-
       const cacheKey = `blog_previews:start=${start}&count=${count}`;
-      const data = await getFromCacheOrFetch(cacheKey, fetchBlogData);
+      const blogPreviews = await getFromCacheOrFetch(cacheKey, () => fetchBlogPreviews(start, count));
 
-      res.json(data);
+      // Get pagination info
+      const { totalPages, totalBlogs } = await getCachedPaginationInfo(count);
+
+      // Return blog previews along with pagination metadata
+      res.json({
+        data: blogPreviews,
+        pagination: {
+          totalPages,
+          currentPage: Math.floor(start / count) + 1,
+          pageSize: count,
+          totalItems: totalBlogs || null,
+        },
+      });
     } catch (err) {
+      console.error("Error in blog preview API:", err);
       res.status(500).json({ message: "Error fetching blog previews", error: err.message });
     }
   } else {
