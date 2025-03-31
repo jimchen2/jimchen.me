@@ -25,7 +25,7 @@ export function CustomToggle({ children, eventKey, hasChildren, setActiveKey, is
     <Card.Header onClick={onClick} style={{ cursor: "pointer", ...activeStyle }}>
       <span
         style={{
-          fontWeight: "bold",
+          fontWeight: 500,
           textDecoration: "none",
           wordWrap: "break-word", // Add this line
           whiteSpace: "normal", // And this line

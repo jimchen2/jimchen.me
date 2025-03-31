@@ -41,7 +41,6 @@ function PreviewCard(props) {
                   <span
                     style={{
                       fontSize: "0.8rem",
-                      fontWeight: "bold",
                       color: colors.color_blue,
                     }}
                   >
@@ -49,15 +48,12 @@ function PreviewCard(props) {
                   </span>
                   <span
                     style={{
-                      fontSize: "1.1rem",
-                      fontWeight: "bold",
+                      fontSize: "1.0rem",
                       color: colors.color_blue,
-                      textTransform: "uppercase",
                     }}
                   >
                     {props.type}
                   </span>
-                  
                 </div>
                 <Link
                   href={`/${props.language}/${props.type}/${props.title}`}
@@ -66,17 +62,17 @@ function PreviewCard(props) {
                     color: colors.color_black,
                   }}
                 >
-                  <h3
-                    className="mt-2"
+                  <div
                     style={{
-                      fontWeight: "bold",
                       transition: "text-decoration 0.3s ease",
+                      fontSize: "1.5rem",
                     }}
-                    onMouseEnter={(e) => e.target.style.textDecoration = "underline"}
-                    onMouseLeave={(e) => e.target.style.textDecoration = "none"}
+                    className="title"
+                    onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
+                    onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
                   >
                     {props.title.split("-").join(" ")}
-                  </h3>
+                  </div>
                 </Link>
               </Card.Title>
               <Card.Text

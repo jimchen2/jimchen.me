@@ -7,13 +7,13 @@ import { SideNav } from "./sidebar/sidebar";
 import { useGlobalColorScheme } from "../config/global";
 import BlogLikeButtonHelper from "./likebutton/bloglikebuttonhelper";
 import CodeBlock from "./CodeBlock";
-import { generateCommonStyles, generateThemeStyles, generateAdditionalStyles } from "./stylesHelper";
+import { generateStyles } from "./stylesHelper";
 
 // Default padding values for server-side rendering
 function calculateBlogPadding(windowWidth = null) {
   const basePaddingTop = 30;
 
-  // Default padding values based on screen size
+  // Default padding values based on screen sizef
   const getPaddingValues = (width) => {
     if (width >= 1200) return { left: 10, right: 20 };
     if (width >= 600) return { left: 10, right: 10 };
@@ -77,14 +77,11 @@ function SingleBlog({ date, text, title, language, type, bloguuid }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const processedText = text.replace(
-    /<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs,
-    (match, language, codeWithLang, codeWithoutLang) => {
-      const code = codeWithLang || codeWithoutLang;
-      const langClass = language ? language : "";
-      return `<codeblock language="${langClass}" code="${code.replace(/"/g, "")}"></codeblock>`;
-    }
-  );
+  const processedText = text.replace(/<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs, (match, language, codeWithLang, codeWithoutLang) => {
+    const code = codeWithLang || codeWithoutLang;
+    const langClass = language ? language : "";
+    return `<codeblock language="${langClass}" code="${code.replace(/"/g, "")}"></codeblock>`;
+  });
 
   const elements = parse(processedText, {
     replace: (domNode) => {
@@ -95,11 +92,7 @@ function SingleBlog({ date, text, title, language, type, bloguuid }) {
     },
   });
 
-  const styles = [
-    generateCommonStyles(colors),
-    generateThemeStyles(colors),
-    generateAdditionalStyles(colors),
-  ].join(" ");
+  const styles = [generateStyles(colors)].join(" ");
 
   return (
     <Container fluid className="pb-3">
@@ -119,13 +112,7 @@ function SingleBlog({ date, text, title, language, type, bloguuid }) {
           }}
         >
           <div className="mb-4">
-            <BlogHeader
-              date={date}
-              language={language}
-              type={type}
-              title={title}
-              colors={colors}
-            />
+            <BlogHeader date={date} language={language} type={type} title={title} colors={colors} />
             <BlogTitle title={title} colors={colors} />
             <MathJaxContext>
               <div className="blog-content">

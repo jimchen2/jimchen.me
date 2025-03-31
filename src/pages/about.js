@@ -13,7 +13,6 @@ const Bio = () => {
   };
 
   const infoLabelStyle = {
-    fontWeight: "bold",
     minWidth: "120px",
     paddingRight: "0.5rem",
   };

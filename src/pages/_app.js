@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Head from "next/head";
 import "bootstrap/dist/css/bootstrap.min.css";
+import '../styles/globals.css'  
 import { ColorSchemeProvider, useGlobalColorScheme } from "../config/global.js";
 import NavBar from "../static/navbar.js";
 import Footer from "../static/footer";
