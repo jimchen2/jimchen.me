@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Container, Row, Col } from "react-bootstrap";
 import { useGlobalColorScheme } from "@/config/global";
-import { FaUser, FaLaptop, FaServer, FaMobileAlt, FaChrome } from "react-icons/fa";
+import { FaUser, FaLaptop, FaServer, FaMobileAlt, FaChrome, FaGlobe } from "react-icons/fa";
 
 const Bio = () => {
   const { colors } = useGlobalColorScheme();
@@ -26,8 +26,6 @@ const Bio = () => {
 
   return (
     <Container fluid className="py-3">
-      <br />
-      <br />
       <br />
       <br />
 
@@ -83,14 +81,6 @@ const Bio = () => {
 
                   <div className="small">
                     <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Framework:</div>
-                      <div>React + Next.js</div>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Frontend:</div>
-                      <div>React-Boostrap</div>
-                    </div>
-                    <div style={infoItemStyle}>
                       <div style={infoLabelStyle}>Database:</div>
                       <a href="https://www.mongodb.com/" target="_blank" rel="noopener noreferrer">
                         MongoDB
@@ -131,36 +121,39 @@ const Bio = () => {
                   </div>
                 </div>
               </Row>
-
               <Row>
-                <div>
-                  <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
-                    <FaChrome style={iconStyle} /> Browser
-                  </h5>
+                <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
+                  <FaGlobe style={iconStyle} /> Blog History
+                </h5>
 
-                  <div className="small">
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Extensions:</div>
-                      <div>Ublock Origin, Violentmonkey</div>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Policies:</div>
-                      <div>
-                        <a href="https://cdn.jimchen.me/d2e18f4893ef9a61fe5944720259e119/policies.json" target="_blank" rel="noopener noreferrer">
-                          <div>policies.json</div>
-                        </a>
-                      </div>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Userscripts:</div>
-                      <a href="https://github.com/ilyhalight/voice-over-translation" target="_blank" rel="noopener noreferrer">
-                        <div>VoT</div>
+                <div className="small">
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>2018.3:</div>WeChat public account.
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>2022.9:</div>
+                    <div>I moved to Wix.</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>2023.2:</div>
+                    <div>
+                      I used
+                      <span style={{ width: 5 }}> </span>
+                      <a href="https://jimchen.me/en/web/How-to-Build-a-Personal-Website" target="_blank" rel="noopener noreferrer">
+                        Github Page.
                       </a>
-                      <span style={{ width: 5 }}>, </span>
-                      <a href="https://github.com/jimchen2/userscripts" target="_blank" rel="noopener noreferrer">
-                        <div>my userscripts</div>
-                      </a>
-                      <span style={{ width: 5 }}>, </span>
+                    </div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>2023.6:</div>
+                    <a href="https://jimchen.me/en/web/MERN-Stack-Conclusion" target="_blank" rel="noopener noreferrer">
+                      <div>MERN stack+React Bootstrap.</div>
+                    </a>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>2025.2:</div>
+                    <div>
+                      Change to <code>Next.js</code> and add SSR.
                     </div>
                   </div>
                 </div>
@@ -246,9 +239,38 @@ const Bio = () => {
                       config and wallpaper
                     </a>
                   </div>
-                  <br/>
-                  <br/>
-                  <br/>
+                </div>
+              </Row>
+              <Row>
+                <div>
+                  <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
+                    <FaChrome style={iconStyle} /> Browser
+                  </h5>
+                  <div className="small">
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Extensions:</div>
+                      <div>Ublock Origin, Violentmonkey</div>
+                    </div>
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Policies:</div>
+                      <div>
+                        <a href="https://cdn.jimchen.me/d2e18f4893ef9a61fe5944720259e119/policies.json" target="_blank" rel="noopener noreferrer">
+                          <div>policies.json</div>
+                        </a>
+                      </div>
+                    </div>
+                    <div style={infoItemStyle}>
+                      <div style={infoLabelStyle}>Userscripts:</div>
+                      <a href="https://github.com/ilyhalight/voice-over-translation" target="_blank" rel="noopener noreferrer">
+                        <div>VoT</div>
+                      </a>
+                      <span style={{ width: 5 }}>, </span>
+                      <a href="https://github.com/jimchen2/userscripts" target="_blank" rel="noopener noreferrer">
+                        <div>my userscripts</div>
+                      </a>
+                      <span style={{ width: 5 }}>, </span>
+                    </div>
+                  </div>
                 </div>
               </Row>
             </Col>

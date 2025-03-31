@@ -29,6 +29,7 @@ const ToggleButtonGroupComponent = ({ currentType, postTypeArray, paddingtop }) 
     flexShrink: 0,
     flexGrow: 0,
     padding: "0.5rem 0.7rem",
+    marginLeft: "-3px",
     borderRadius: "0rem",
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
     transition: "background-color 0.3s, color 0.3s",
@@ -42,24 +43,25 @@ const ToggleButtonGroupComponent = ({ currentType, postTypeArray, paddingtop }) 
       router.push(`/?type=${type}`);
     }
   };
+
   const totalPostsCount = postTypeArray.reduce((sum, { count }) => sum + count, 0);
+  const sortedPostTypeArray = [...postTypeArray].sort((a, b) => b.count - a.count);
 
   return (
     <div
       style={{
         display: "flex",
         flexWrap: "wrap",
-        marginBottom: "2rem",
-        paddingRight: "15%",
-        paddingLeft: "15%",
+        paddingRight: "10%",
+        paddingLeft: "10%",
       }}
       type="checkbox"
     >
       <button onClick={() => handleButtonClick("all")} style={buttonStyle("all")}>
         all ({totalPostsCount})
       </button>
-      {postTypeArray.map(({ type, count }) => (
-        <button key={type} onClick={() => handleButtonClick(type)} style={{ ...buttonStyle(type), borderLeft: "none" }}>
+      {sortedPostTypeArray.map(({ type, count }) => (
+        <button key={type} onClick={() => handleButtonClick(type)} style={{ ...buttonStyle(type) }}>
           {type} ({count})
         </button>
       ))}
