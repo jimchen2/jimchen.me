@@ -1,7 +1,8 @@
 import React from "react";
 import PreviewCard from "./PreviewCard.js";
+import Pagination from "@/pagination/Pagination.js";
 
-function BlogPreviewPage({ data }) {
+function BlogPreviewPage({ data, pagination }) {
   const containerStyle = {
     minHeight: "100vh",
   };
@@ -15,12 +16,32 @@ function BlogPreviewPage({ data }) {
   return (
     <div style={containerStyle}>
       <div style={{ ...contentStyle, paddingBottom: "2rem" }}>
-        <div ></div>
-        {data.map((post, index) => (
-          <div key={index}>
-            <PreviewCard title={post.title} text={post.body} date={post.date} type={post.type} language={post.language} />
+        <div style={{ marginTop: "2rem" }}></div>
+        {data && data.length > 0 ? (
+          data.map((post, index) => (
+            <div key={index}>
+              <PreviewCard 
+                title={post.title} 
+                text={post.body} 
+                date={post.date} 
+                type={post.type} 
+                language={post.language} 
+              />
+            </div>
+          ))
+        ) : (
+          <div style={{ textAlign: 'center', margin: '5rem 0' }}>
+            No blog posts available.
           </div>
-        ))}
+        )}
+        
+        {pagination && (
+          <Pagination 
+            currentPage={pagination.currentPage} 
+            totalPages={pagination.totalPages} 
+          />
+        )}
+        
         <div style={{ marginBottom: "5rem" }}></div>
       </div>
     </div>

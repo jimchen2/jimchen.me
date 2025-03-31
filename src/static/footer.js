@@ -9,6 +9,7 @@ import { MdEmail } from "react-icons/md";
 import { FaQq } from "react-icons/fa";
 import { FaWeixin } from "react-icons/fa";
 import { FaTelegram } from "react-icons/fa";
+
 const socialLinks = [
   {
     href: "https://github.com/jimchen2",
@@ -66,9 +67,9 @@ function Footer() {
   const CopyrightSection = ({ year, linkStyle }) => (
     <div>
       <span style={{ color: colors.color_black }}>Copyright © Jim Chen {year}</span>,<span style={{ margin: "2px" }}></span>
-      <a href="https://github.com/jimchen2/jimchen.me" style={linkStyle}>
+      <Link href="https://github.com/jimchen2/jimchen.me" style={linkStyle}>
         Source{externalLinkIcon}
-      </a>
+      </Link>
       ,<span style={{ margin: "2px" }}></span>
       <Link href={`${process.env.NEXT_PUBLIC_SITE}/api/rss`} style={linkStyle}>
         {" "}
@@ -90,9 +91,9 @@ function Footer() {
 const IconLinks = ({ iconStyle, linkStyle }) => (
   <div className="justify-content-end">
     {socialLinks.map((link) => (
-      <a key={link.href} href={link.href} style={linkStyle}>
+      <Link key={link.href} href={link.href} style={linkStyle}>
         <link.Icon style={iconStyle} title={link.alt} />
-      </a>
+      </Link>
     ))}
   </div>
 );

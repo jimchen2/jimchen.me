@@ -31,7 +31,7 @@ function AppContent({ Component, pageProps, isEmbedPage }) {
 // Separate function to fetch IP asynchronously
 const fetchIpInfo = async () => {
   try {
-    const response = await axios.get("/api/get-ip"); // Call your API route
+    const response = await axios.get("/api/get-ip"); 
     if (response?.data?.ip) {
       setIpAddress(response.data.ip);
     }
