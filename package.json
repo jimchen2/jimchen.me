@@ -1,0 +1,21 @@
+{
+  "name": "my-next-bootstrap-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "moment-timezone": "^0.5.47",
+    "mongoose": "^8.12.1",
+    "next": "15.2.2",
+    "react": "^19.0.0",
+    "react-bootstrap": "^2.10.9",
+    "react-dom": "^19.0.0",
+    "rss": "^1.2.2"
+  }
+}
