@@ -1,4 +1,4 @@
-"use client"; // Add this for Next.js client component
+"use client"; 
 
 import React from "react";
 import ToggleButton from "react-bootstrap/ToggleButton";

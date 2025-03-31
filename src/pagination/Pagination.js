@@ -2,9 +2,27 @@ import React from "react";
 import Link from "next/link";
 import { Pagination as BSPagination } from "react-bootstrap";
 import { useGlobalColorScheme } from "../config/global.js";
+import { useRouter } from "next/router";
 
 const Pagination = ({ currentPage, totalPages, basePath = "/page" }) => {
   const { colors } = useGlobalColorScheme();
+  const router = useRouter();
+  
+  // Extract query parameters from current URL
+  const { query } = router;
+  const currentQuery = { ...query };
+  
+  // Remove the page number from query if it exists
+  delete currentQuery.page;
+
+  // Function to generate URL with preserved query params
+  const getPageUrl = (pageNum) => {
+    const queryString = Object.entries(currentQuery)
+      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+      .join('&');
+    
+    return `${basePath}/${pageNum}${queryString ? `?${queryString}` : ''}`;
+  };
 
   const pageNumbers = [];
   pageNumbers.push(1);
@@ -47,7 +65,7 @@ const Pagination = ({ currentPage, totalPages, basePath = "/page" }) => {
   return (
     <BSPagination className="justify-content-center my-4" style={paginationStyles}>
       {currentPage > 1 && (
-        <Link href={`${basePath}/${currentPage - 1}`} passHref legacyBehavior>
+        <Link href={getPageUrl(currentPage - 1)} passHref legacyBehavior>
           <BSPagination.Prev as="a">&lt; Prev</BSPagination.Prev>
         </Link>
       )}
@@ -58,7 +76,7 @@ const Pagination = ({ currentPage, totalPages, basePath = "/page" }) => {
         }
 
         return (
-          <Link key={page} href={`${basePath}/${page}`} passHref legacyBehavior>
+          <Link key={page} href={getPageUrl(page)} passHref legacyBehavior>
             <BSPagination.Item as="a" active={page === currentPage}>
               {page}
             </BSPagination.Item>
@@ -67,7 +85,7 @@ const Pagination = ({ currentPage, totalPages, basePath = "/page" }) => {
       })}
 
       {currentPage < totalPages && (
-        <Link href={`${basePath}/${currentPage + 1}`} passHref legacyBehavior>
+        <Link href={getPageUrl(currentPage + 1)} passHref legacyBehavior>
           <BSPagination.Next as="a">Next &gt;</BSPagination.Next>
         </Link>
       )}

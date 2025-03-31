@@ -4,4 +4,4 @@ export async function getServerSideProps(context) {
   return getBlogPageServerSideProps({ ...context, params: { page: '1' } });
 }
 
-export default BlogPage;
+export default BlogPage;  
