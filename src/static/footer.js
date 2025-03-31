@@ -49,6 +49,7 @@ function Footer() {
 
   const linkStyle = {
     textDecoration: "underline",
+    color: colors.color_black,
   };
 
   const iconStyle = {
@@ -82,16 +83,16 @@ function Footer() {
     <Navbar fixed="bottom" expand="lg" style={{ backgroundColor: colors.color_gray, fontSize: "16px" }}>
       <Container style={{ height: "100%" }}>
         <CopyrightSection year={year} linkStyle={linkStyle} />
-        <IconLinks iconStyle={iconStyle} linkStyle={linkStyle} />
+        <IconLinks iconStyle={iconStyle} />
       </Container>
     </Navbar>
   );
 }
 
-const IconLinks = ({ iconStyle, linkStyle }) => (
+const IconLinks = ({ iconStyle }) => (
   <div className="justify-content-end">
     {socialLinks.map((link) => (
-      <Link key={link.href} href={link.href} style={linkStyle}>
+      <Link key={link.href} href={link.href}>
         <link.Icon style={iconStyle} title={link.alt} />
       </Link>
     ))}
