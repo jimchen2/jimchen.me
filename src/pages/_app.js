@@ -66,7 +66,6 @@ function MyApp({ Component, pageProps, router }) {
         <meta name="google-site-verification" content="qPhK3i_YnrDKpavnD90hQjDbS4u1QhqWDuTamAa8RDk" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <meta name="theme-color" content="#000000" />
-        <html lang="en" />
       </Head>
       <AppContent Component={Component} pageProps={pageProps} isEmbedPage={isEmbedPage} />
     </ColorSchemeProvider>
