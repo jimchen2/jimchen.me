@@ -33,6 +33,8 @@ function calculateBlogPadding(windowWidth = null) {
 
 const BlogHeader = ({ date, language, type, title, colors }) => (
   <div className="blog-header mb-3">
+      <br/>
+
     <div className="d-flex justify-content-between align-items-center">
       <small className="text" style={{ color: colors.color_black }}>
         {date}
