@@ -1,6 +1,6 @@
 import dbConnect from "@/backend_utils/db/mongoose";
-import { fetchBlogPreviews } from "./cron/refresh-redis";
 import { initializeRedis } from "@/backend_utils/db/redis";
+import { fetchBlogPreviews } from "./cron/refresh-redis";
 
 async function getCachedPaginationInfo(count = 10) {
   const client = await initializeRedis();
