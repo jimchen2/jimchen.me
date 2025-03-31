@@ -1,8 +1,10 @@
 import React from "react";
 import PreviewCard from "./PreviewCard.js";
 import Pagination from "@/pagination/Pagination.js";
+import ToggleButtonGroupComponent from "./ToggleButtonGroupComponent.js";
+import { paddingtop } from "@/config/global.js";
 
-function BlogPreviewPage({ data, pagination }) {
+function BlogPreviewPage({ currentType, data, pagination, postTypeArray }) {
   const containerStyle = {
     minHeight: "100vh",
   };
@@ -19,6 +21,7 @@ function BlogPreviewPage({ data, pagination }) {
       <br />
       <br />
       <div style={{ ...contentStyle, paddingBottom: "2rem" }}>
+        <ToggleButtonGroupComponent currentType={currentType} postTypeArray={postTypeArray} paddingtop={paddingtop} />
         <div style={{ marginTop: "2rem" }}></div>
         {data && data.length > 0 ? (
           data.map((post, index) => (

@@ -57,6 +57,7 @@ function PreviewCard(props) {
                   >
                     {props.type}
                   </span>
+                  
                 </div>
                 <Link
                   href={`/${props.language}/${props.type}/${props.title}`}

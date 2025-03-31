@@ -1,24 +1,29 @@
-"use client"; 
+"use client";
 
-import React from "react";
-import ToggleButton from "react-bootstrap/ToggleButton";
-import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
+import React, { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useGlobalColorScheme } from "../config/global";
 
-const ToggleButtonGroupComponent = ({
-  selectedTypes,
-  onSelectionChange,
-  postTypes,
-  totalPosts,
-  colors,
-  paddingtop,
-}) => {
+const ToggleButtonGroupComponent = ({ currentType, postTypeArray, paddingtop }) => {
+  const { colors } = useGlobalColorScheme();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const [activeType, setActiveType] = useState(currentType || "all" || (postTypeArray.length > 0 ? postTypeArray[0].type : ""));
+
+  // Update activeType when URL changes
+  useEffect(() => {
+    const typeFromUrl = searchParams.get("type");
+    if (typeFromUrl && postTypeArray.some((pt) => pt.type === typeFromUrl)) {
+      setActiveType(typeFromUrl);
+    } else if (!typeFromUrl) {
+      setActiveType("all");
+    }
+  }, [searchParams, postTypeArray]);
+
   const buttonStyle = (type) => ({
-    backgroundColor: selectedTypes.includes(type)
-      ? colors.color_blue
-      : colors.color_white,
-    color: selectedTypes.includes(type)
-      ? colors.color_white
-      : colors.color_blue,
+    backgroundColor: activeType === type ? colors.color_blue : colors.color_white,
+    color: activeType === type ? colors.color_white : colors.color_blue,
     borderColor: colors.color_blue,
     top: `${paddingtop}px`,
     flexShrink: 0,
@@ -29,8 +34,18 @@ const ToggleButtonGroupComponent = ({
     transition: "background-color 0.3s, color 0.3s",
   });
 
+  const handleButtonClick = (type) => {
+    setActiveType(type);
+    if (type === "all") {
+      router.push("/");
+    } else {
+      router.push(`/?type=${type}`);
+    }
+  };
+  const totalPostsCount = postTypeArray.reduce((sum, { count }) => sum + count, 0);
+
   return (
-    <ToggleButtonGroup
+    <div
       style={{
         display: "flex",
         flexWrap: "wrap",
@@ -39,29 +54,16 @@ const ToggleButtonGroupComponent = ({
         paddingLeft: "15%",
       }}
       type="checkbox"
-      value={selectedTypes}
-      onChange={onSelectionChange}
     >
-      <ToggleButton
-        key="all"
-        id="tbg-btn-all"
-        value="all"
-        style={buttonStyle("all")}
-      >
-        {`all (${totalPosts})`}
-      </ToggleButton>
-
-      {postTypes.map(({ type, count }) => (
-        <ToggleButton
-          key={type}
-          id={`tbg-btn-${type}`}
-          value={type}
-          style={buttonStyle(type)}
-        >
+      <button onClick={() => handleButtonClick("all")} style={buttonStyle("all")}>
+        all ({totalPostsCount})
+      </button>
+      {postTypeArray.map(({ type, count }) => (
+        <button key={type} onClick={() => handleButtonClick(type)} style={{ ...buttonStyle(type), borderLeft: "none" }}>
           {type} ({count})
-        </ToggleButton>
+        </button>
       ))}
-    </ToggleButtonGroup>
+    </div>
   );
 };
 
