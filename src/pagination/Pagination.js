@@ -28,8 +28,8 @@ const Pagination = ({ currentPage, totalPages, basePath = "/page" }) => {
   pageNumbers.push(1);
 
   // Calculate range of pages to show
-  let startPage = Math.max(2, currentPage - 2);
-  let endPage = Math.min(totalPages - 1, currentPage + 2);
+  let startPage = Math.max(2, currentPage - 1);
+  let endPage = Math.min(totalPages - 1, currentPage + 1);
 
   // Add ellipsis after first page if needed
   if (startPage > 2) {
@@ -66,7 +66,7 @@ const Pagination = ({ currentPage, totalPages, basePath = "/page" }) => {
     <BSPagination className="justify-content-center my-4" style={paginationStyles}>
       {currentPage > 1 && (
         <Link href={getPageUrl(currentPage - 1)} passHref legacyBehavior>
-          <BSPagination.Prev as="a">&lt; Prev</BSPagination.Prev>
+          <BSPagination.Prev as="a">&lt;</BSPagination.Prev>
         </Link>
       )}
 
@@ -86,7 +86,7 @@ const Pagination = ({ currentPage, totalPages, basePath = "/page" }) => {
 
       {currentPage < totalPages && (
         <Link href={getPageUrl(currentPage + 1)} passHref legacyBehavior>
-          <BSPagination.Next as="a">Next &gt;</BSPagination.Next>
+          <BSPagination.Next as="a"> &gt;</BSPagination.Next>
         </Link>
       )}
     </BSPagination>
