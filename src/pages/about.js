@@ -275,6 +275,10 @@ const Bio = () => {
                       <a href="https://github.com/jimchen2/userscripts" target="_blank" rel="noopener noreferrer">
                         <div>my userscripts</div>
                       </a>
+                      <span style={{ width: 5 }}>, </span>
+                      <a href="https://github.com/jimchen2/youtube-dual-subtitles" target="_blank" rel="noopener noreferrer">
+                        <div>YouTube dual subtitles</div>
+                      </a>
                       <br />
                       <br />
                       <br />
