@@ -229,8 +229,8 @@ const Bio = () => {
                     Redmi Note 13
                   </div>
                   <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Apps:</div>
-                    <div>Hiddify (per-app proxy), Yandex Browser (extensions)</div>
+                    <div style={infoLabelStyle}>Internet:</div>
+                    <div>Hiddify (per-app proxy), Yandex Browser</div>
                   </div>
                   <div style={infoItemStyle}>
                     <div style={infoLabelStyle}>Input:</div>
@@ -268,17 +268,19 @@ const Bio = () => {
                     </div>
                     <div style={infoItemStyle}>
                       <div style={infoLabelStyle}>Userscripts:</div>
+                      <div>
                       <a href="https://github.com/ilyhalight/voice-over-translation" target="_blank" rel="noopener noreferrer">
-                        <div>VoT</div>
+                        VoT
                       </a>
                       <span style={{ width: 5 }}>, </span>
                       <a href="https://github.com/jimchen2/userscripts" target="_blank" rel="noopener noreferrer">
-                        <div>my userscripts</div>
+                        my userscripts
                       </a>
                       <span style={{ width: 5 }}>, </span>
                       <a href="https://github.com/jimchen2/youtube-dual-subtitles" target="_blank" rel="noopener noreferrer">
-                        <div>YouTube dual subtitles</div>
+                        YouTube subtitles
                       </a>
+                      </div>
                       <br />
                       <br />
                       <br />
