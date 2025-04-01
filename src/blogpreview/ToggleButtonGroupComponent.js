@@ -30,6 +30,7 @@ const ToggleButtonGroupComponent = ({ currentType, postTypeArray, paddingtop }) 
     flexGrow: 0,
     padding: "0.5rem 0.7rem",
     marginLeft: "-3px",
+    marginTop: "-3px",
     borderRadius: "0rem",
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
     transition: "background-color 0.3s, color 0.3s",

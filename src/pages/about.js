@@ -198,7 +198,7 @@ const Bio = () => {
                   <div style={infoItemStyle}>
                     <div style={infoLabelStyle}>Input:</div>
                     <div>
-                      en, ru, zh
+                      en, zh, ru
                       <span style={{ width: 5 }}>, </span>
                       <a href="https://github.com/jimchen2/german-keyboard" target="_blank" rel="noopener noreferrer">
                         de
@@ -230,12 +230,20 @@ const Bio = () => {
                   </div>
                   <div style={infoItemStyle}>
                     <div style={infoLabelStyle}>Apps:</div>
-                    <div>Hiddify(per-app proxy), Lawnchair , Gboard, Yandex Browser(extensions), LibreOffice Viewer, VLC</div>
+                    <div>Hiddify (per-app proxy), Yandex Browser (extensions)</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Input:</div>
+                    <div>Gboard (en, zh, ru, de)</div>
+                  </div>
+                  <div style={infoItemStyle}>
+                    <div style={infoLabelStyle}>Communiation:</div>
+                    <div>Telegram, WeChat, QQ, Thunderbird</div>
                   </div>
                   <div style={infoItemStyle}>
                     <div style={infoLabelStyle}>Lawnchair:</div>
                     <a href="https://cdn.jimchen.me/3e0cd3b5edb6aae256abf6d46c9fbdfb/file..lawnchairbackup" target="_blank" rel="noopener noreferrer">
-                      config and wallpaper
+                      Config and Wallpaper
                     </a>
                   </div>
                 </div>
@@ -267,10 +275,10 @@ const Bio = () => {
                       <a href="https://github.com/jimchen2/userscripts" target="_blank" rel="noopener noreferrer">
                         <div>my userscripts</div>
                       </a>
-                      <br/>
-                      <br/>
-                      <br/>
-                      <br/>
+                      <br />
+                      <br />
+                      <br />
+                      <br />
                     </div>
                   </div>
                 </div>
