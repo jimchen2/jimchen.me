@@ -73,7 +73,6 @@ function Footer() {
       </Link>
       ,<span style={{ margin: "2px" }}></span>
       <Link href={`${process.env.NEXT_PUBLIC_SITE}/api/rss`} style={linkStyle}>
-        {" "}
         RSS{externalLinkIcon}
       </Link>
     </div>
