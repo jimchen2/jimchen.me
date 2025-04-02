@@ -3,7 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import Link from "next/link";
 import { MathJaxContext } from "better-react-mathjax";
 import parse from "html-react-parser";
-import { SideNav } from "./sidebar/sidebar";
+import { SideNav } from "./sidebar";
 import { useGlobalColorScheme } from "../config/global";
 import BlogLikeButtonHelper from "./likebutton/bloglikebuttonhelper";
 import CodeBlock from "./CodeBlock";
