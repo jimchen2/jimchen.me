@@ -13,7 +13,28 @@ const scrollToElementWithOffset = (id, offset) => {
   }
 };
 
-function CustomToggle({ children, eventKey, hasChildren, setActiveKey, isActive }) {
+function addHashLinksToHeaders(colors) {
+  const headers = document.querySelectorAll("h2, h3");
+  headers.forEach((header) => {
+    const id = header.getAttribute("id");
+    if (!id || header.querySelector(".hash-link")) return;
+
+    const hashLink = document.createElement("a");
+    hashLink.className = "hash-link";
+    hashLink.innerHTML = " ¶";
+    hashLink.style.textDecoration = "none";
+    hashLink.setAttribute("href", `#${id}`);
+    hashLink.style.color = colors.color_black;
+
+    hashLink.onclick = (e) => {
+      e.preventDefault();
+      scrollToElementWithOffset(id, -paddingtop);
+    };
+
+    header.appendChild(hashLink);
+  });
+}
+function CustomToggle({ children, eventKey, setActiveKey, isActive }) {
   const { colors } = useGlobalColorScheme();
 
   const handleClick = () => {
@@ -72,7 +93,12 @@ const useAddItemToNavbar = (setActiveKey) => {
       const id = header.getAttribute("id");
       if (!id) return;
 
-      const formattedText = formatTextWithNewLines(header.textContent);
+      let originalText = header.textContent || "";
+      if (originalText.endsWith(" ¶")) {
+        originalText = originalText.slice(0, -2).trim();
+      }
+
+      const formattedText = formatTextWithNewLines(originalText);
       const isH2 = header.tagName === "H2";
 
       if (isH2) {
@@ -122,6 +148,9 @@ const useAddItemToNavbar = (setActiveKey) => {
       const parentItem = newTocItems.find((item) => item.key === initialHash || item.children.some((child) => child.key === `child-${initialHash}`));
       if (parentItem) setActiveKey(parentItem.key);
     }
+
+    // Add hash links to headers after TOC is built
+    addHashLinksToHeaders(colors);
   }, [setActiveKey, colors]);
 
   return tocItems;
@@ -131,6 +160,11 @@ const SideNav = () => {
   const [activeKey, setActiveKey] = useState(null);
   const { colors } = useGlobalColorScheme();
   const tocItems = useAddItemToNavbar(setActiveKey);
+
+  // Re-run hash link addition when content changes
+  useEffect(() => {
+    addHashLinksToHeaders();
+  }, [tocItems]);
 
   return (
     <Col

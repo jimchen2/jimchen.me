@@ -127,14 +127,14 @@ const Bio = () => {
 
                 <div className="small">
                   <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>2018.3:</div>WeChat public account.
+                    <div style={infoLabelStyle}>201803:</div>WeChat public account.
                   </div>
                   <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>2022.9:</div>
+                    <div style={infoLabelStyle}>202209:</div>
                     <div>I moved to Wix.</div>
                   </div>
                   <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>2023.2:</div>
+                    <div style={infoLabelStyle}>202302:</div>
                     <div>
                       I used
                       <span style={{ width: 5 }}> </span>
@@ -144,15 +144,18 @@ const Bio = () => {
                     </div>
                   </div>
                   <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>2023.6:</div>
+                    <div style={infoLabelStyle}>202306:</div>
                     <a href="https://jimchen.me/en/web/MERN-Stack-Conclusion" target="_blank" rel="noopener noreferrer">
                       <div>MERN stack+React Bootstrap.</div>
                     </a>
                   </div>
                   <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>2025.2:</div>
+                    <div style={infoLabelStyle}>202503:</div>
                     <div>
-                      Change to <code>Next.js</code> and add SSR.
+                      Moved to
+                      <a href="https://www.jimchen.me/en/web/Moving-My-Website-to-Next.js" target="_blank" rel="noopener noreferrer">
+                        <span> Next.js and add SSR.</span>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -269,17 +272,17 @@ const Bio = () => {
                     <div style={infoItemStyle}>
                       <div style={infoLabelStyle}>Userscripts:</div>
                       <div>
-                      <a href="https://github.com/ilyhalight/voice-over-translation" target="_blank" rel="noopener noreferrer">
-                        VoT
-                      </a>
-                      <span style={{ width: 5 }}>, </span>
-                      <a href="https://github.com/jimchen2/userscripts" target="_blank" rel="noopener noreferrer">
-                        my userscripts
-                      </a>
-                      <span style={{ width: 5 }}>, </span>
-                      <a href="https://github.com/jimchen2/youtube-dual-subtitles" target="_blank" rel="noopener noreferrer">
-                        YouTube subtitles
-                      </a>
+                        <a href="https://github.com/ilyhalight/voice-over-translation" target="_blank" rel="noopener noreferrer">
+                          VoT
+                        </a>
+                        <span style={{ width: 5 }}>, </span>
+                        <a href="https://github.com/jimchen2/userscripts" target="_blank" rel="noopener noreferrer">
+                          my userscripts
+                        </a>
+                        <span style={{ width: 5 }}>, </span>
+                        <a href="https://github.com/jimchen2/youtube-dual-subtitles" target="_blank" rel="noopener noreferrer">
+                          YouTube subtitles
+                        </a>
                       </div>
                       <br />
                       <br />
