@@ -25,38 +25,13 @@ function NavBar() {
     toggleTheme(colors, updateColor);
   };
   const externalLinkIcon = (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style={{ verticalAlign: "middle", marginLeft: "0px" }}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
       <path d="M14 3h7v7h-2V6.41L10.41 15 9 13.59 17.59 5H14V3zM5 5h4v2H5v12h12v-4h2v4c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2z" />
     </svg>
   );
 
   return (
     <>
-      <style type="text/css">
-        {`
-          .black-text {
-            color: ${colors.color_black};
-          }
-          .custom-search-button {
-            background-color: ${colors.color_white};
-            color: ${colors.color_blue};
-          }
-          .custom-search-button:hover {
-            background-color: ${colors.color_blue};
-            color: ${colors.color_white};
-            border-color: ${colors.color_blue};
-          }
-          .custom-placeholder::placeholder {
-            color: ${colors.color_black};
-          }
-          @media (min-width: 992px) { 
-            .navbar-brand-spacing {
-              margin-right: 10rem;
-            }
-          }
-        `}
-      </style>
-
       <Navbar
         expand="lg"
         fixed="top"
@@ -65,7 +40,7 @@ function NavBar() {
         }}
       >
         <Container>
-          <Navbar.Brand className="navbar-brand-spacing black-text">
+          <Navbar.Brand style={{ color: colors.color_black, marginRight: window.innerWidth >= 768 ? "10rem" : "" }}>
             <Nav.Link as={Link} href="/" style={{ color: colors.color_black }}>
               Jim Chen's Website
             </Nav.Link>
@@ -86,14 +61,14 @@ function NavBar() {
                 Theme
               </Nav.Link>
               <Nav.Link as={Link} href="https://feed.jimchen.me" style={{ color: colors.color_black }} target="_blank" rel="noopener noreferrer">
-                FreshRSS{externalLinkIcon}
+                <span style={{ display: "flex", alignItems: "center", gap: "0" }}>FreshRSS{externalLinkIcon}</span>
               </Nav.Link>
             </Nav>
             <Form className="d-flex" onSubmit={handleSearchSubmit}>
               <FormControl
                 type="search"
                 placeholder="Search"
-                className="me-2 custom-placeholder"
+                className="me-2"
                 aria-label="Search"
                 value={searchTerm}
                 onChange={handleSearchChange}
@@ -101,9 +76,22 @@ function NavBar() {
                   color: colors.color_black,
                   borderColor: colors.color_black,
                   backgroundColor: colors.color_white,
+                  "::placeholder": { color: colors.color_black },
                 }}
               />
-              <Button variant="outline-primary" type="submit" className="custom-search-button">
+              <Button
+                variant="outline-primary"
+                type="submit"
+                style={{
+                  backgroundColor: colors.color_white,
+                  color: colors.color_blue,
+                  ":hover": {
+                    backgroundColor: colors.color_blue,
+                    color: colors.color_white,
+                    borderColor: colors.color_blue,
+                  },
+                }}
+              >
                 Search
               </Button>
             </Form>

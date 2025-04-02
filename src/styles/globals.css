@@ -7,3 +7,7 @@ body {
 .title {
   font-family: "Nunito", sans-serif;
 }
+html {
+  scroll-padding-top: 70px;
+  scroll-behavior: smooth;
+}

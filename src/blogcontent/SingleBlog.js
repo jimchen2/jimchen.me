@@ -33,7 +33,7 @@ function calculateBlogPadding(windowWidth = null) {
 
 const BlogHeader = ({ date, language, type, title, colors }) => (
   <div className="blog-header mb-3">
-      <br/>
+    <br />
 
     <div className="d-flex justify-content-between align-items-center">
       <small className="text" style={{ color: colors.color_black }}>
@@ -98,7 +98,6 @@ function SingleBlog({ date, text, title, language, type, bloguuid }) {
 
   return (
     <Container fluid className="pb-3">
-      <div className="my-4" />
       <Row>
         <Col className="d-none d-lg-block">
           <SideNav />

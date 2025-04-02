@@ -22,7 +22,7 @@ const IPAddressModule = (() => {
 export const setIpAddress = IPAddressModule.setIpAddress;
 export const getIpAddress = IPAddressModule.getIpAddress;
 
-export let paddingtop = 80;
+export let paddingtop = 70;
 
 const defaultColors = {
   color_white: "#ffffff",
