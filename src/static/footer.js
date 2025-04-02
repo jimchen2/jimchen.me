@@ -67,19 +67,19 @@ function Footer() {
 
   const CopyrightSection = ({ year, linkStyle }) => (
     <div>
-      <span style={{ color: colors.color_black }}>Copyright © {year} Jim Chen, </span>
+      <span style={{ color: colors.color_black }}>Copyright © {year} Jim Chen,</span>
       <Link href="https://github.com/jimchen2/jimchen.me" style={linkStyle}>
-        Source{externalLinkIcon}
+        <span> Source{externalLinkIcon}</span>
       </Link>
-      ,<span style={{ margin: "2px" }}></span>
+      ,
       <Link href={`${process.env.NEXT_PUBLIC_SITE}/api/rss`} style={linkStyle}>
-        RSS{externalLinkIcon}
+        <span> RSS{externalLinkIcon}</span>
       </Link>
     </div>
   );
 
   return (
-    <Navbar fixed="bottom" expand="lg" style={{ backgroundColor: colors.color_gray }}>
+    <Navbar expand="lg" style={{ backgroundColor: colors.color_gray }}>
       <Container style={{ height: "100%" }}>
         <CopyrightSection year={year} linkStyle={linkStyle} />
         <IconLinks iconStyle={iconStyle} />

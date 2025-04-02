@@ -84,9 +84,9 @@ const Bio = () => {
                       <a href="https://www.mongodb.com/" target="_blank" rel="noopener noreferrer">
                         MongoDB
                       </a>
-                      <span style={{ width: 5 }}>, </span>
+                      ,
                       <a href="https://redis.io/" target="_blank" rel="noopener noreferrer">
-                        Redis
+                        <span>Redis</span>
                       </a>
                     </div>
                     <div style={infoItemStyle}>
@@ -137,9 +137,8 @@ const Bio = () => {
                     <div style={infoLabelStyle}>202302:</div>
                     <div>
                       I used
-                      <span style={{ width: 5 }}> </span>
                       <a href="https://jimchen.me/en/web/How-to-Build-a-Personal-Website" target="_blank" rel="noopener noreferrer">
-                        Github Page.
+                        <span> Github Page.</span>
                       </a>
                     </div>
                   </div>
@@ -192,19 +191,17 @@ const Bio = () => {
                     <div style={infoLabelStyle}>Theme:</div>
                     <a href="https://cdn.jimchen.me/09128349328u40982mu30948m24u23984mu2983mu4/IMG_1005.JPEG" target="_blank" rel="noopener noreferrer">
                       <div>Wallpaper</div>
-                    </a>
-                    <span style={{ width: 5 }}>, </span>
+                    </a>,
                     <a href="https://cdn.jimchen.me/96c5f4bc0a3766eff967cb508b1d0cab/dconf-settings.txt" target="_blank" rel="noopener noreferrer">
-                      <div>dconf-settings</div>
+                      <span> dconf-settings</span>
                     </a>
                   </div>
                   <div style={infoItemStyle}>
                     <div style={infoLabelStyle}>Input:</div>
                     <div>
-                      en, zh, ru
-                      <span style={{ width: 5 }}>, </span>
+                      en, zh, ru,
                       <a href="https://github.com/jimchen2/german-keyboard" target="_blank" rel="noopener noreferrer">
-                        de
+                        <span> de</span>
                       </a>
                     </div>
                   </div>
@@ -275,19 +272,15 @@ const Bio = () => {
                         <a href="https://github.com/ilyhalight/voice-over-translation" target="_blank" rel="noopener noreferrer">
                           VoT
                         </a>
-                        <span style={{ width: 5 }}>, </span>
+                        ,
                         <a href="https://github.com/jimchen2/userscripts" target="_blank" rel="noopener noreferrer">
-                          my userscripts
+                          <span> my userscripts</span>
                         </a>
-                        <span style={{ width: 5 }}>, </span>
+                        ,
                         <a href="https://github.com/jimchen2/youtube-dual-subtitles" target="_blank" rel="noopener noreferrer">
-                          YouTube subtitles
+                          <span> YouTube subtitles</span>
                         </a>
                       </div>
-                      <br />
-                      <br />
-                      <br />
-                      <br />
                     </div>
                   </div>
                 </div>

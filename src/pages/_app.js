@@ -1,19 +1,25 @@
 import React, { useEffect } from "react";
 import Head from "next/head";
 import "bootstrap/dist/css/bootstrap.min.css";
-import '../styles/globals.css'  
+import "../styles/globals.css";
 import { ColorSchemeProvider, useGlobalColorScheme } from "../config/global.js";
 import NavBar from "../static/navbar.js";
 import Footer from "../static/footer";
 import axios from "axios";
 import { setIpAddress } from "../config/global.js";
-
 function AppContent({ Component, pageProps, isEmbedPage }) {
   const { colors } = useGlobalColorScheme();
 
   const appStyle = {
     color: colors.color_black,
     backgroundColor: colors.color_white,
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "100vh", // This ensures the container takes at least the full viewport height
+  };
+
+  const mainContentStyle = {
+    flex: "1", // This makes the content area expand to fill available space
   };
 
   useEffect(() => {
@@ -23,7 +29,9 @@ function AppContent({ Component, pageProps, isEmbedPage }) {
   return (
     <div style={appStyle}>
       {!isEmbedPage && <NavBar />}
-      <Component {...pageProps} />
+      <main style={mainContentStyle}>
+        <Component {...pageProps} />
+      </main>
       {!isEmbedPage && <Footer />}
     </div>
   );
@@ -32,7 +40,7 @@ function AppContent({ Component, pageProps, isEmbedPage }) {
 // Separate function to fetch IP asynchronously
 const fetchIpInfo = async () => {
   try {
-    const response = await axios.get("/api/get-ip"); 
+    const response = await axios.get("/api/get-ip");
     if (response?.data?.ip) {
       setIpAddress(response.data.ip);
     }
