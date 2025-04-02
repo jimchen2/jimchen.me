@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Container, Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
-import NavbarHelper from "./navbarhelper";
 import { useGlobalColorScheme } from "../config/global";
 import { toggleTheme } from "../config/global";
 
@@ -33,9 +32,31 @@ function NavBar() {
 
   return (
     <>
-      <style type="text/css">{/* your styles */}</style>
+      <style type="text/css">
+        {`
+          .black-text {
+            color: ${colors.color_black};
+          }
+          .custom-search-button {
+            background-color: ${colors.color_white};
+            color: ${colors.color_blue};
+          }
+          .custom-search-button:hover {
+            background-color: ${colors.color_blue};
+            color: ${colors.color_white};
+            border-color: ${colors.color_blue};
+          }
+          .custom-placeholder::placeholder {
+            color: ${colors.color_black};
+          }
+          @media (min-width: 992px) { 
+            .navbar-brand-spacing {
+              margin-right: 10rem;
+            }
+          }
+        `}
+      </style>
 
-      <NavbarHelper />
       <Navbar
         expand="lg"
         fixed="top"

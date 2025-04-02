@@ -19,7 +19,7 @@ function CustomToggle({ children, eventKey, hasChildren, setActiveKey, isActive 
   const handleClick = () => {
     const newActiveKey = isActive ? null : eventKey;
     setActiveKey(newActiveKey);
-    scrollToElementWithOffset(eventKey, -paddingtop + 15);
+    scrollToElementWithOffset(eventKey, -paddingtop + 10);
   };
 
   const activeStyle = isActive ? { backgroundColor: colors.color_blue, color: colors.color_white } : { backgroundColor: colors.color_white, color: colors.color_blue };
@@ -96,7 +96,7 @@ const useAddItemToNavbar = (setActiveKey) => {
         parentItem.children.push(
           <div
             key={`child-${id}`}
-            onClick={() => scrollToElementWithOffset(id, -paddingtop + 15)}
+            onClick={() => scrollToElementWithOffset(id, -paddingtop + 10)}
             style={{
               paddingLeft: "1rem",
               cursor: "pointer",
@@ -118,7 +118,7 @@ const useAddItemToNavbar = (setActiveKey) => {
     // Handle initial URL hash
     const initialHash = window.location.hash.slice(1);
     if (initialHash) {
-      scrollToElementWithOffset(initialHash, -paddingtop + 15);
+      scrollToElementWithOffset(initialHash, -paddingtop + 10);
       const parentItem = newTocItems.find((item) => item.key === initialHash || item.children.some((child) => child.key === `child-${initialHash}`));
       if (parentItem) setActiveKey(parentItem.key);
     }
