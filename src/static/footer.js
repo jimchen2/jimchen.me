@@ -48,7 +48,7 @@ function Footer() {
   const year = new Date().getFullYear();
 
   const linkStyle = {
-    textDecoration: "underline",
+    textDecoration: "none",
     color: colors.color_black,
   };
 
