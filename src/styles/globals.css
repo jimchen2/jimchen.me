@@ -3,6 +3,7 @@ body {
   font-weight: 500;
   font-size: 15px;
   line-height: 1.6;
+  overflow-wrap: break-word;
 }
 .title {
   font-family: "Nunito", sans-serif;
@@ -11,3 +12,4 @@ html {
   scroll-padding-top: 70px;
   scroll-behavior: smooth;
 }
+

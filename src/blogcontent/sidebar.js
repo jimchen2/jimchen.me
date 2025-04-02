@@ -143,14 +143,43 @@ const useAddItemToNavbar = (setActiveKey) => {
 
     // Handle initial URL hash
     const initialHash = window.location.hash.slice(1);
+    let timeoutId = null; // To store the timeout ID for potential cleanup
+
     if (initialHash) {
-      scrollToElementWithOffset(initialHash, -paddingtop);
-      const parentItem = newTocItems.find((item) => item.key === initialHash || item.children.some((child) => child.key === `child-${initialHash}`));
-      if (parentItem) setActiveKey(parentItem.key);
+      // Use setTimeout to defer the scroll execution slightly
+      // This allows the browser more time to finalize layout, especially on mobile
+      timeoutId = setTimeout(() => {
+        // Re-check if the element exists *inside* the timeout, just in case DOM changed
+        const elementExists = document.getElementById(initialHash);
+        if (elementExists) {
+          scrollToElementWithOffset(initialHash, -paddingtop);
+
+          // Find the parent item based on the *generated* newTocItems in this effect run
+          // Important: Use newTocItems here, as tocItems state might not be updated yet
+          const parentItem = newTocItems.find(
+            (item) => item.key === initialHash || item.children.some((child) => child.id === initialHash) // Check child ID
+          );
+
+          if (parentItem) {
+            setActiveKey(parentItem.key);
+          }
+        } else {
+          console.warn(`Element with id '${initialHash}' not found after delay.`);
+        }
+      }, 150); // Start with 100-150ms, adjust if needed. Don't make it too long.
     }
 
-    // Add hash links to headers after TOC is built
+    // Add hash links to headers after TOC is built (can stay immediate)
     addHashLinksToHeaders(colors);
+
+    // Cleanup function for the effect
+    return () => {
+      // If a timeout was scheduled, clear it if the component unmounts before it fires
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+
   }, [setActiveKey, colors]);
 
   return tocItems;
