@@ -57,16 +57,8 @@ const Bio = () => {
                       <div>Shanghai</div>
                     </div>
                     <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Pronouns:</div>
-                      <div>He/Him</div>
-                    </div>
-                    <div style={infoItemStyle}>
                       <div style={infoLabelStyle}>Languages:</div>
                       <div>Chinese, English</div>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Nationality:</div>
-                      <div>Chinese</div>
                     </div>
                   </div>
                 </div>
