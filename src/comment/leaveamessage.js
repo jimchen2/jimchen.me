@@ -21,9 +21,8 @@ const Msg = ({ bloguuid, blogname }) => {
             <Col md={{ span: 8, offset: 2 }} style={{ paddingLeft: "15%", paddingRight: "15%" }}>
               <CommentInputBox commentuuid="-1" bloguuid={bloguuid} blogname={blogname} />
             </Col>
-            <Col md={{ span: 6, offset: 3 }}>{bloguuid === "0" ? <GetComments bloguuid={bloguuid} showName /> : <GetComments bloguuid={bloguuid} />}</Col>
-
-            <div style={{ marginBottom: `${paddingtop}px` }}></div>
+            <Col md={{ span: 6, offset: 3 }}>{bloguuid === "0" ? <GetComments bloguuid={bloguuid} showName /> : <GetComments bloguuid={bloguuid} />}
+            </Col>
           </>
         </Row>
       </Container>

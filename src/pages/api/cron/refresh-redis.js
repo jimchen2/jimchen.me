@@ -109,6 +109,18 @@ export default async function refreshBlogsCron(req, res) {
       }
     }
 
+    // Refresh blog types with counts
+    const client = await initializeRedis();
+    if (client) {
+      const typesWithCounts = await Promise.all(
+        blogTypes.map(async (type) => {
+          const count = await Blog.countDocuments({ type });
+          return { type, count };
+        })
+      );
+      await client.setEx("blog_types_with_counts", 365 * 24 * 60 * 60, JSON.stringify(typesWithCounts));
+    }
+
     await Promise.all(refreshPromises);
 
     res.status(200).json({

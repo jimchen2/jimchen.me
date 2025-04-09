@@ -60,9 +60,6 @@ function NavBar() {
               <Nav.Link onClick={handleToggleTheme} style={{ color: colors.color_black }}>
                 Theme
               </Nav.Link>
-              <Nav.Link as={Link} href="https://feed.jimchen.me" style={{ color: colors.color_black }} target="_blank" rel="noopener noreferrer">
-                <span style={{ display: "flex", alignItems: "center", gap: "0" }}>FreshRSS{externalLinkIcon}</span>
-              </Nav.Link>
             </Nav>
             <Form className="d-flex" onSubmit={handleSearchSubmit}>
               <FormControl

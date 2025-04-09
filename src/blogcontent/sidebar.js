@@ -87,7 +87,6 @@ const useAddItemToNavbar = (setActiveKey) => {
     const headers = Array.from(document.querySelectorAll("h2, h3"));
     let newTocItems = [];
     let lastH2Key = null;
-    let isFirstH2 = true;
 
     headers.forEach((header) => {
       const id = header.getAttribute("id");
@@ -102,10 +101,6 @@ const useAddItemToNavbar = (setActiveKey) => {
       const isH2 = header.tagName === "H2";
 
       if (isH2) {
-        if (isFirstH2) {
-          isFirstH2 = false;
-          return;
-        }
         lastH2Key = id;
         newTocItems.push({
           key: id,
@@ -118,69 +113,98 @@ const useAddItemToNavbar = (setActiveKey) => {
           hasChildren: false,
         });
       } else if (lastH2Key) {
+        // It's an H3 and we have a preceding H2
         const parentItem = newTocItems.find((item) => item.key === lastH2Key);
-        parentItem.children.push(
-          <div
-            key={`child-${id}`}
-            onClick={() => scrollToElementWithOffset(id, -paddingtop)}
-            style={{
-              paddingLeft: "1rem",
-              cursor: "pointer",
-              color: colors.color_blue,
-              backgroundColor: colors.color_white,
-              wordWrap: "break-word",
-              whiteSpace: "normal",
-            }}
-          >
-            {formattedText}
-          </div>
-        );
-        parentItem.hasChildren = true;
+        if (parentItem) {
+          parentItem.children.push(
+            <div
+              key={`child-${id}`}
+              id={`toc-child-${id}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                scrollToElementWithOffset(id, -paddingtop);
+              }}
+              style={{
+                paddingLeft: "1rem",
+                paddingTop: "0.5rem", // Add some spacing
+                paddingBottom: "0.5rem",
+                cursor: "pointer",
+                color: colors.color_blue,
+                backgroundColor: colors.color_white,
+                wordWrap: "break-word",
+                whiteSpace: "normal",
+                borderTop: `1px solid ${colors.color_light_gray || "#eee"}`, // Optional visual separator
+              }}
+              onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
+              onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
+            >
+              {formattedText}
+            </div>
+          );
+          parentItem.hasChildren = true;
+        } else {
+          console.warn(`Found H3 with id '${id}' but its parent H2 ('${lastH2Key}') wasn't found in tocItems. This shouldn't normally happen.`);
+        }
       }
     });
 
     setTocItems(newTocItems);
 
-    // Handle initial URL hash
+    // Handle initial URL hash (keep this logic)
     const initialHash = window.location.hash.slice(1);
-    let timeoutId = null; // To store the timeout ID for potential cleanup
+    let timeoutId = null;
 
     if (initialHash) {
-      // Use setTimeout to defer the scroll execution slightly
-      // This allows the browser more time to finalize layout, especially on mobile
       timeoutId = setTimeout(() => {
-        // Re-check if the element exists *inside* the timeout, just in case DOM changed
         const elementExists = document.getElementById(initialHash);
         if (elementExists) {
           scrollToElementWithOffset(initialHash, -paddingtop);
 
-          // Find the parent item based on the *generated* newTocItems in this effect run
-          // Important: Use newTocItems here, as tocItems state might not be updated yet
-          const parentItem = newTocItems.find(
-            (item) => item.key === initialHash || item.children.some((child) => child.id === initialHash) // Check child ID
-          );
+          // Find the *parent H2* key for the initial hash
+          let parentKeyToActivate = null;
+          const headerElement = document.getElementById(initialHash);
 
-          if (parentItem) {
-            setActiveKey(parentItem.key);
+          if (headerElement) {
+            if (headerElement.tagName === "H2") {
+              parentKeyToActivate = initialHash; // It's an H2 itself
+            } else if (headerElement.tagName === "H3") {
+              // Find the preceding H2 sibling
+              let previousElement = headerElement.previousElementSibling;
+              while (previousElement) {
+                if (previousElement.tagName === "H2" && previousElement.id) {
+                  parentKeyToActivate = previousElement.id;
+                  break;
+                }
+                if (previousElement.tagName === "H2" && !previousElement.id) {
+                  // Found an H2 without ID before finding one with ID, stop searching upwards for this H3
+                  break;
+                }
+                previousElement = previousElement.previousElementSibling;
+              }
+            }
+          }
+
+          if (parentKeyToActivate) {
+            setActiveKey(parentKeyToActivate);
+          } else {
+            // Optional: If it's an H3 without a clear parent H2 in the DOM structure before it,
+            // maybe don't activate any accordion item or log a warning.
+            console.warn(`Could not determine parent H2 for initial hash '#${initialHash}'`);
           }
         } else {
           console.warn(`Element with id '${initialHash}' not found after delay.`);
         }
-      }, 150); // Start with 100-150ms, adjust if needed. Don't make it too long.
+      }, 150);
     }
 
-    // Add hash links to headers after TOC is built (can stay immediate)
     addHashLinksToHeaders(colors);
 
-    // Cleanup function for the effect
     return () => {
-      // If a timeout was scheduled, clear it if the component unmounts before it fires
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
     };
-
-  }, [setActiveKey, colors]);
+  }, [setActiveKey, colors]); // Dependencies are likely correct
 
   return tocItems;
 };

@@ -4,7 +4,6 @@ import Navbar from "react-bootstrap/Navbar";
 import { useGlobalColorScheme } from "../config/global.js";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
-import { SiInternetarchive } from "react-icons/si";
 import { MdEmail } from "react-icons/md";
 import { FaQq } from "react-icons/fa";
 import { FaWeixin } from "react-icons/fa";
@@ -15,11 +14,6 @@ const socialLinks = [
     href: "https://github.com/jimchen2",
     Icon: FaGithub,
     alt: "GitHub",
-  },
-  {
-    href: "https://archive.org/details/@jimchen4214",
-    Icon: SiInternetarchive,
-    alt: "Internet Archive",
   },
   {
     href: "https://cdn.jimchen.me/1d460c338efc24b84334f46f56159d30/email.png",
@@ -37,7 +31,7 @@ const socialLinks = [
     alt: "WeChat",
   },
   {
-    href: "https://cdn.jimchen.me/1d460c338efc24b84334f46f56159d30/telegram.jpg",
+    href: "https://t.me/Jimchen4214",
     Icon: FaTelegram,
     alt: "Telegram",
   },
@@ -48,7 +42,7 @@ function Footer() {
   const year = new Date().getFullYear();
 
   const linkStyle = {
-    textDecoration: "underline",
+    textDecoration: "none",
     color: colors.color_black,
   };
 
@@ -67,20 +61,19 @@ function Footer() {
 
   const CopyrightSection = ({ year, linkStyle }) => (
     <div>
-      <span style={{ color: colors.color_black }}>Copyright © {year} Jim Chen, </span>
+      <span style={{ color: colors.color_black }}>Copyright © {year} Jim Chen,</span>
       <Link href="https://github.com/jimchen2/jimchen.me" style={linkStyle}>
-        Source{externalLinkIcon}
+        <span> Source{externalLinkIcon}</span>
       </Link>
-      ,<span style={{ margin: "2px" }}></span>
+      ,
       <Link href={`${process.env.NEXT_PUBLIC_SITE}/api/rss`} style={linkStyle}>
-        {" "}
-        RSS{externalLinkIcon}
+        <span> RSS{externalLinkIcon}</span>
       </Link>
     </div>
   );
 
   return (
-    <Navbar fixed="bottom" expand="lg" style={{ backgroundColor: colors.color_gray }}>
+    <Navbar expand="lg" style={{ backgroundColor: colors.color_gray }}>
       <Container style={{ height: "100%" }}>
         <CopyrightSection year={year} linkStyle={linkStyle} />
         <IconLinks iconStyle={iconStyle} />

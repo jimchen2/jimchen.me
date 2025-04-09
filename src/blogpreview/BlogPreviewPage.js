@@ -1,4 +1,4 @@
-import {React, useState, useEffect} from "react";
+import { React, useState, useEffect } from "react";
 import PreviewCard from "./PreviewCard.js";
 import Pagination from "@/pagination/Pagination.js";
 import { paddingtop, useGlobalColorScheme } from "@/config/global.js";
@@ -86,7 +86,7 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray }) {
       <br />
       <br />
       <br />
-      <div style={{ ...contentStyle, paddingBottom: "2rem" }}>
+      <div style={{ ...contentStyle}}>
         <ToggleButtonGroupComponent currentType={currentType} postTypeArray={postTypeArray} paddingtop={paddingtop} />
         <div style={{ marginTop: "2rem" }}></div>
         {data && data.length > 0 ? (
@@ -98,10 +98,7 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray }) {
         ) : (
           <div style={{ textAlign: "center", margin: "5rem 0" }}>No blog posts available.</div>
         )}
-
         {pagination && <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />}
-
-        <div style={{ marginBottom: "5rem" }}></div>
       </div>
     </div>
   );

@@ -4,6 +4,9 @@ body {
   font-size: 15px;
   line-height: 1.6;
   overflow-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 .title {
   font-family: "Nunito", sans-serif;
@@ -13,3 +16,9 @@ html {
   scroll-behavior: smooth;
 }
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
