@@ -42,7 +42,7 @@ function Search() {
       <br />
       <br />
       {data.map((post, index) => (
-        <PreviewCard key={index} title={post.title} text={post.body} date={post.date} type={post.type} bloguuid={post.uuid} language={post.language} searchTerm={term} />
+        <PreviewCard key={index} title={post.title} text={post.body} date={post.date} type={post.type} bloguuid={post.uuid} language={post.language} wordcount={post.word_count} searchTerm={term} />
       ))}
       <br />
       <br />{" "}

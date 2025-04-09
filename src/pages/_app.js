@@ -75,6 +75,14 @@ function MyApp({ Component, pageProps, router }) {
         <meta name="google-site-verification" content="qPhK3i_YnrDKpavnD90hQjDbS4u1QhqWDuTamAa8RDk" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <meta name="theme-color" content="#000000" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet" />
       </Head>
       <AppContent Component={Component} pageProps={pageProps} isEmbedPage={isEmbedPage} />
     </ColorSchemeProvider>

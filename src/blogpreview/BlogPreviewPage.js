@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 import PreviewCard from "./PreviewCard.js";
-import Pagination from "@/pagination/Pagination.js";
+import Pagination from "@/blogpreview/Pagination.js";
 import { paddingtop, useGlobalColorScheme } from "@/config/global.js";
 import { useSearchParams } from "next/navigation.js";
 import { useRouter } from "next/router.js";
@@ -92,7 +92,7 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray }) {
         {data && data.length > 0 ? (
           data.map((post, index) => (
             <div key={index}>
-              <PreviewCard title={post.title} text={post.body} date={post.date} type={post.type} language={post.language} />
+              <PreviewCard title={post.title} text={post.body} date={post.date} type={post.type} language={post.language} wordcount={post.word_count}/>
             </div>
           ))
         ) : (

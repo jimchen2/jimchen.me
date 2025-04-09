@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import SingleBlog from "@/blogcontent/SingleBlog";
+import SingleBlog from "@/blogcontent/singleBlog";
 import Msg from "@/comment/leaveamessage";
 
 function Blog({ blogs, language, type, error }) {
@@ -21,6 +21,7 @@ function Blog({ blogs, language, type, error }) {
         type={type} 
         bloguuid={blogs[0].uuid} 
         date={blogs[0].date} 
+        wordcount={blogs[0].word_count} 
       />
       <Msg bloguuid={blogs[0].uuid} blogname={blogs[0].title} />
     </div>

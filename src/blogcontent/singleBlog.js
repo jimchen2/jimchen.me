@@ -3,11 +3,11 @@ import { Container, Row, Col } from "react-bootstrap";
 import Link from "next/link";
 import { MathJaxContext } from "better-react-mathjax";
 import parse from "html-react-parser";
-import { SideNav } from "./sidebar";
+import { SideNav } from "./sideBar";
 import { useGlobalColorScheme } from "../config/global";
 import BlogLikeButtonHelper from "./likebutton/bloglikebuttonhelper";
-import CodeBlock from "./CodeBlock";
-import { generateStyles } from "./stylesHelper";
+import CodeBlock from "./codeBlock";
+import { generateStyles } from "../styles/blogstylesHelper";
 
 // Default padding values for server-side rendering
 function calculateBlogPadding(windowWidth = null) {
@@ -31,14 +31,16 @@ function calculateBlogPadding(windowWidth = null) {
   };
 }
 
-const BlogHeader = ({ date, language, type, title, colors }) => (
+const BlogHeader = ({ date, language, type, title, colors, wordcount }) => (
   <div className="blog-header mb-3">
     <br />
 
     <div className="d-flex justify-content-between align-items-center">
-      <small className="text" style={{ color: colors.color_black }}>
-        {date}
-      </small>
+      <div>
+        <small className="text" style={{ color: colors.color_black }}>
+          {date} • {wordcount} words
+        </small>
+      </div>
       <Link
         href={`/embed/${language}/${type}/${title}`}
         className="small"
@@ -61,7 +63,7 @@ const BlogTitle = ({ title, colors }) => (
   </h2>
 );
 
-function SingleBlog({ date, text, title, language, type, bloguuid }) {
+function SingleBlog({ date, text, title, language, type, bloguuid, wordcount }) {
   const { colors } = useGlobalColorScheme();
   const [paddingStyles, setPaddingStyles] = useState(calculateBlogPadding()); // Default for SSR
 
@@ -113,7 +115,7 @@ function SingleBlog({ date, text, title, language, type, bloguuid }) {
           }}
         >
           <div className="mb-4">
-            <BlogHeader date={date} language={language} type={type} title={title} colors={colors} />
+            <BlogHeader date={date} language={language} type={type} title={title} colors={colors} wordcount={wordcount}/>
             <BlogTitle title={title} colors={colors} />
             <MathJaxContext>
               <div className="blog-content">
