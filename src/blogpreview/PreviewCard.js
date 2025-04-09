@@ -90,7 +90,7 @@ function PreviewCard(props) {
                   color: colors.color_blue,
                 }}
               >
-                Wordcount: {props.wordcount}
+                Words: {props.wordcount}
               </div>
             </Card.Body>
           </Card>
