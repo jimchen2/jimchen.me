@@ -101,43 +101,6 @@ const Bio = () => {
                   </div>
                 </div>
               </Row>
-
-              <Row>
-                <div>
-                  <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center" style={{ fontSize: "1.25rem" }}>
-                    <FaDatabase style={iconStyle} /> Backup
-                  </h5>
-                  <div style={contentStyle}>
-                    <p>Backup monthly to Cloudflare R2 and Google Drive. Keep last 3 months and once a year.</p>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Services:</div>
-                      <div>
-                        CDN Bucket,{" "}
-                        <a href="https://github.com/settings/admin" target="_blank" rel="noopener noreferrer">
-                          Github
-                        </a>
-                      </div>
-                    </div>
-
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Communication:</div>
-                      <div>
-                        <a href="https://takeout.google.com/" target="_blank" rel="noopener noreferrer">
-                          Mail
-                        </a>
-                        ,{" "}
-                        <a href="https://github.com/LC044/WeChatMsg" target="_blank" rel="noopener noreferrer">
-                          WeChat
-                        </a>
-                        , QQ,{" "}
-                        <a href="https://telegram.org/blog/export-and-more" target="_blank" rel="noopener noreferrer">
-                          Telegram
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Row>
             </Col>
 
             <Col md={6} xs={12}>
