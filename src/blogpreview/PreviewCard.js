@@ -20,8 +20,7 @@ function PreviewCard(props) {
           {part}
         </span>
       ) : (
-        part
-      )
+        part)
     );
   };
 
@@ -85,6 +84,14 @@ function PreviewCard(props) {
               >
                 {getHighlightedText(props.text, searchTerm)}
               </Card.Text>
+              <div
+                style={{
+                  fontSize: "0.8rem",
+                  color: colors.color_blue,
+                }}
+              >
+                {props.wordcount} words
+              </div>
             </Card.Body>
           </Card>
         </Col>

@@ -13,8 +13,8 @@ const blogSchema = new Schema(
       default: "",
     },
     date: {
-      type: Date,  // Changed from String to Date
-      default: Date.now,  // Optional: sets current date/time as default
+      type: Date,  
+      default: Date.now,  
     },
     type: {
       type: String,
@@ -27,6 +27,9 @@ const blogSchema = new Schema(
     language: {
       type: String,
       default: "en",
+    },
+    word_count: {
+      type: Number,
     },
   },
   { versionKey: false }
