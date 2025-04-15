@@ -27,30 +27,42 @@ const SortButton = ({ currentSort, activeType }) => {
   });
 
   const handleSortClick = (sortValue) => {
-    if (activeType === "all") {
-      router.push(sortValue === "date_latest" ? "/" : `/?sort=${sortValue}`);
-    } else {
-      router.push(
-        `/?type=${activeType}${
-          sortValue === "date_latest" ? "" : `&sort=${sortValue}`
-        }`
-      );
+    const queryParams = {};
+
+    if (activeType !== "all") {
+      queryParams.type = activeType;
     }
+
+    if (sortValue !== "date_latest") {
+      queryParams.sort = sortValue;
+    }
+
+    router.push({
+      pathname: "/",
+      query: queryParams,
+    });
   };
 
   const getCurrentSortLabel = () => {
-    const sort = currentSort || "date_latest";
-    const sortOption = sortOptions.find((option) => option.value === sort);
+    const sortOption = sortOptions.find(
+      (option) => option.value === currentSort
+    );
     return sortOption ? sortOption.label : "Newest First";
   };
 
+  let dark = colors.color_black == "#ffffff" ? true : false;
+
   return (
-    <Dropdown className="align-self-end">
+    <Dropdown
+      data-bs-theme={dark ? "dark" : "light"}
+      className="align-self-end"
+    >
       <Dropdown.Toggle style={buttonStyle} id="dropdown-sort">
         Sort: {getCurrentSortLabel()}
       </Dropdown.Toggle>
 
-      <Dropdown.Menu>
+      <Dropdown.Menu className="no-padding-dropdown">
+        {" "}
         {sortOptions.map((option) => (
           <Dropdown.Item
             key={option.value}
