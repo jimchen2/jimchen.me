@@ -48,9 +48,6 @@ function NavBar() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" className="custom-toggler" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link as={Link} href="/about" style={{ color: colors.color_black }}>
-                About
-              </Nav.Link>
               <Nav.Link as={Link} href="/" style={{ color: colors.color_black }}>
                 Blog
               </Nav.Link>

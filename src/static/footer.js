@@ -16,17 +16,17 @@ const socialLinks = [
     alt: "GitHub",
   },
   {
-    href: "https://cdn.jimchen.me/1d460c338efc24b84334f46f56159d30/email.png",
+    href: "./email.png",
     Icon: MdEmail,
     alt: "Email",
   },
   {
-    href: "https://cdn.jimchen.me/1d460c338efc24b84334f46f56159d30/qq.jpg",
+    href: "./qq.jpg",
     Icon: FaQq,
     alt: "QQ",
   },
   {
-    href: "https://cdn.jimchen.me/1d460c338efc24b84334f46f56159d30/w.jpg",
+    href: "./weixin.jpg",
     Icon: FaWeixin,
     alt: "WeChat",
   },
