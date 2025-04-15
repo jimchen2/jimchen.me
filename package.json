@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "rclone copy google:media public/media --transfers 200 && next build",
+    "build": "curl https://rclone.org/install.sh | bash && rclone copy google:media public/media --transfers 200 && next build"
     "start": "next start",
     "lint": "next lint"
   },
