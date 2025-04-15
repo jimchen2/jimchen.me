@@ -6,14 +6,25 @@ import BlogPreviewPage from "@/blogpreview/BlogPreviewPage";
 export async function getServerSideProps(context) {
   const { page } = context.params || 1;
   const pageNumber = parseInt(page);
-  const { type } = context.query;
+  const { type, sort } = context.query; // Get the sort query parameter
 
   try {
     const start = (pageNumber - 1) * 10; // 10 items per page
-    const apiUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blogpreview?start=${start}&count=10${type ? `&type=${type}` : ""}`;
+    let apiUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blogpreview?start=${start}&count=10`;
+
+    if (type) {
+      apiUrl += `&type=${type}`;
+    }
+
+    if (sort) {
+      apiUrl += `&sort=${sort}`; // Append the sort parameter
+    }
 
     // Perform both fetches in parallel using Promise.all
-    const [blogResponse, typesResponse] = await Promise.all([axios.get(apiUrl), axios.get(`${process.env.NEXT_PUBLIC_SITE}/api/blogtypes`)]);
+    const [blogResponse, typesResponse] = await Promise.all([
+      axios.get(apiUrl),
+      axios.get(`${process.env.NEXT_PUBLIC_SITE}/api/blogtypes`),
+    ]);
 
     const data = blogResponse.data.data || [];
     const pagination = blogResponse.data.pagination || {};
@@ -21,9 +32,25 @@ export async function getServerSideProps(context) {
 
     // If requested page is beyond total pages, redirect to last page
     if (pageNumber > pagination.totalPages) {
+      let redirectUrl =
+        pagination.totalPages > 1 ? `/page/${pagination.totalPages}` : `/`;
+
+      // Preserve type and sort parameters during redirection
+      const queryParams = {};
+      if (type) queryParams.type = type;
+      if (sort) queryParams.sort = sort;
+
+      const queryString = Object.keys(queryParams)
+        .map((key) => `${key}=${queryParams[key]}`)
+        .join("&");
+
+      if (queryString) {
+        redirectUrl += `?${queryString}`;
+      }
+
       return {
         redirect: {
-          destination: pagination.totalPages > 1 ? `/page/${pagination.totalPages}${type ? `?type=${type}` : ""}` : `/${type ? `?type=${type}` : ""}`,
+          destination: redirectUrl,
           permanent: false,
         },
       };
@@ -35,6 +62,7 @@ export async function getServerSideProps(context) {
         pagination,
         type: type || null,
         postTypeArray,
+        sort: sort || null, // Pass the sort parameter to the component
       },
     };
   } catch (err) {
@@ -50,19 +78,28 @@ export async function getServerSideProps(context) {
         },
         type: type || null,
         postTypeArray: [],
+        sort: sort || null,
       },
     };
   }
 }
 
-function BlogPage({ data, pagination, type, postTypeArray }) {
+function BlogPage({ data, pagination, type, postTypeArray, sort }) {
   const router = useRouter();
 
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
 
-  return <BlogPreviewPage currentType={type} data={data} pagination={pagination} postTypeArray={postTypeArray} />;
+  return (
+    <BlogPreviewPage
+      currentType={type}
+      data={data}
+      pagination={pagination}
+      postTypeArray={postTypeArray}
+      sort={sort}
+    />
+  );
 }
 
 export default BlogPage;

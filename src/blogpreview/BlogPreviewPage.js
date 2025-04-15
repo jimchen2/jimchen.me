@@ -4,13 +4,22 @@ import Pagination from "@/blogpreview/Pagination.js";
 import { paddingtop, useGlobalColorScheme } from "@/config/global.js";
 import { useSearchParams } from "next/navigation.js";
 import { useRouter } from "next/router.js";
+import SortButton from "./SortButton.js"; // Import the new component
 
-const ToggleButtonGroupComponent = ({ currentType, postTypeArray, paddingtop }) => {
+const ToggleButtonGroupComponent = ({
+  currentType,
+  postTypeArray,
+  paddingtop,
+}) => {
   const { colors } = useGlobalColorScheme();
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [activeType, setActiveType] = useState(currentType || "all" || (postTypeArray.length > 0 ? postTypeArray[0].type : ""));
+  const [activeType, setActiveType] = useState(
+    currentType ||
+      "all" ||
+      (postTypeArray.length > 0 ? postTypeArray[0].type : "")
+  );
 
   useEffect(() => {
     const typeFromUrl = searchParams.get("type");
@@ -22,7 +31,8 @@ const ToggleButtonGroupComponent = ({ currentType, postTypeArray, paddingtop }) 
   }, [searchParams, postTypeArray]);
 
   const buttonStyle = (type) => ({
-    backgroundColor: activeType === type ? colors.color_blue : colors.color_white,
+    backgroundColor:
+      activeType === type ? colors.color_blue : colors.color_white,
     color: activeType === type ? colors.color_white : colors.color_blue,
     borderColor: colors.color_blue,
     top: `${paddingtop}px`,
@@ -38,39 +48,67 @@ const ToggleButtonGroupComponent = ({ currentType, postTypeArray, paddingtop }) 
 
   const handleButtonClick = (type) => {
     setActiveType(type);
+    const currentSort = searchParams.get("sort");
     if (type === "all") {
-      router.push("/");
+      router.push(currentSort ? `/?sort=${currentSort}` : "/");
     } else {
-      router.push(`/?type=${type}`);
+      router.push(`/?type=${type}${currentSort ? `&sort=${currentSort}` : ""}`);
     }
   };
 
-  const totalPostsCount = postTypeArray.reduce((sum, { count }) => sum + count, 0);
-  const sortedPostTypeArray = [...postTypeArray].sort((a, b) => b.count - a.count);
+  const totalPostsCount = postTypeArray.reduce(
+    (sum, { count }) => sum + count,
+    0
+  );
 
   return (
     <div
       style={{
         display: "flex",
-        flexWrap: "wrap",
+        flexDirection: "column",
         paddingRight: "10%",
         paddingLeft: "10%",
       }}
-      type="checkbox"
     >
-      <button onClick={() => handleButtonClick("all")} style={buttonStyle("all")}>
-        all ({totalPostsCount})
-      </button>
-      {sortedPostTypeArray.map(({ type, count }) => (
-        <button key={type} onClick={() => handleButtonClick(type)} style={{ ...buttonStyle(type) }}>
-          {type} ({count})
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+        }}
+        type="checkbox"
+      >
+        <button
+          onClick={() => handleButtonClick("all")}
+          style={buttonStyle("all")}
+        >
+          all ({totalPostsCount})
         </button>
-      ))}
+        {postTypeArray.map(({ type, count }) => (
+          <button
+            key={type}
+            onClick={() => handleButtonClick(type)}
+            style={{ ...buttonStyle(type) }}
+          >
+            {type} ({count})
+          </button>
+        ))}
+      </div>
+      <SortButton
+        style={{ backgroundColor: colors.color_white }}
+        currentSort={searchParams.get("sort") || "date_latest"}
+        activeType={activeType}
+      />
     </div>
   );
 };
 
-function BlogPreviewPage({ currentType, data, pagination, postTypeArray }) {
+function BlogPreviewPage({
+  currentType,
+  data,
+  pagination,
+  postTypeArray,
+  currentSort,
+}) {
   const containerStyle = {
     minHeight: "100vh",
   };
@@ -86,19 +124,37 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray }) {
       <br />
       <br />
       <br />
-      <div style={{ ...contentStyle}}>
-        <ToggleButtonGroupComponent currentType={currentType} postTypeArray={postTypeArray} paddingtop={paddingtop} />
+      <div style={{ ...contentStyle }}>
+        <ToggleButtonGroupComponent
+          currentType={currentType}
+          postTypeArray={postTypeArray}
+          paddingtop={paddingtop}
+        />
         <div style={{ marginTop: "2rem" }}></div>
         {data && data.length > 0 ? (
           data.map((post, index) => (
             <div key={index}>
-              <PreviewCard title={post.title} text={post.body} date={post.date} type={post.type} language={post.language} wordcount={post.word_count}/>
+              <PreviewCard
+                title={post.title}
+                text={post.body}
+                date={post.date}
+                type={post.type}
+                language={post.language}
+                wordcount={post.word_count}
+              />
             </div>
           ))
         ) : (
-          <div style={{ textAlign: "center", margin: "5rem 0" }}>No blog posts available.</div>
+          <div style={{ textAlign: "center", margin: "5rem 0" }}>
+            No blog posts available.
+          </div>
         )}
-        {pagination && <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />}
+        {pagination && (
+          <Pagination
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
+          />
+        )}
       </div>
     </div>
   );
