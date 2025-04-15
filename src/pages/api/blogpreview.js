@@ -1,13 +1,13 @@
+// api/blog-preview.js
 import dbConnect from "@/backend_utils/db/mongoose";
 import { initializeRedis } from "@/backend_utils/db/redis";
 import { fetchBlogPreviews } from "./cron/refresh-redis";
-import { calculateAndCachePagination } from "./cron/refresh-redis";
+import { calculateCountAndCachePagination } from "./cron/refresh-redis";
 
 async function getCachedPaginationInfo(count = 10, type = null) {
   const client = await initializeRedis();
 
   if (client) {
-    // If type is provided, get type-specific pagination info
     if (type) {
       const cachedTotalPages = await client.get(`blog_total_pages_type_${type}`);
       const cachedTotalBlogs = await client.get(`blog_total_count_type_${type}`);
@@ -19,7 +19,6 @@ async function getCachedPaginationInfo(count = 10, type = null) {
         };
       }
     } else {
-      // Get general pagination info
       const cachedTotalPages = await client.get("blog_total_pages");
       const cachedTotalBlogs = await client.get("blog_total_count");
 
@@ -32,7 +31,7 @@ async function getCachedPaginationInfo(count = 10, type = null) {
     }
   }
   
-  return calculateAndCachePagination(count);
+  return calculateCountAndCachePagination(count, type); // Pass type to function
 }
 
 async function getFromCacheOrFetch(cacheKey, fetchFn) {
@@ -49,7 +48,6 @@ async function getFromCacheOrFetch(cacheKey, fetchFn) {
   return data;
 }
 
-// Main API handler
 export default async function handler(req, res) {
   await dbConnect();
 
@@ -57,22 +55,26 @@ export default async function handler(req, res) {
     try {
       const start = parseInt(req.query.start) || 0;
       const count = parseInt(req.query.count) || 10;
-      const type = req.query.type || null; // Get type from query params if available
+      const type = req.query.type || null;
+      const sort = req.query.sort || 'date_latest'; // Default to date_latest
 
-      // Create cache key based on parameters (including type if provided)
+      // Validate sort parameter
+      const validSorts = ['date_oldest', 'date_latest', 'most_words', 'least_words'];
+      if (sort && !validSorts.includes(sort)) {
+        return res.status(400).json({ message: "Invalid sort parameter" });
+      }
+
+      // Create cache key including sort
       const cacheKey = type 
-        ? `blog_previews:start=${start}&count=${count}&type=${type}`
-        : `blog_previews:start=${start}&count=${count}`;
+        ? `blog_previews:sort=${sort}&start=${start}&count=${count}&type=${type}`
+        : `blog_previews:sort=${sort}&start=${start}&count=${count}`;
       
-      // Fetch blog previews with type filter if provided
       const blogPreviews = await getFromCacheOrFetch(cacheKey, () => 
-        fetchBlogPreviews(start, count, type)
+        fetchBlogPreviews(start, count, type, sort)
       );
 
-      // Get pagination info (with type-specific info if needed)
       const { totalPages, totalBlogs } = await getCachedPaginationInfo(count, type);
 
-      // Return blog previews along with pagination metadata
       res.json({
         data: blogPreviews,
         pagination: {
@@ -80,7 +82,8 @@ export default async function handler(req, res) {
           currentPage: Math.floor(start / count) + 1,
           pageSize: count,
           totalItems: totalBlogs || null,
-          type: type || null, // Include type in response if it was used
+          type: type,
+          sort: sort,
         },
       });
     } catch (err) {
