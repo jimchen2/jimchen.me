@@ -4,7 +4,6 @@ import Navbar from "react-bootstrap/Navbar";
 import { useGlobalColorScheme } from "../config/global.js";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
 import { FaQq } from "react-icons/fa";
 import { FaWeixin } from "react-icons/fa";
 import { FaTelegram } from "react-icons/fa";
@@ -16,17 +15,12 @@ const socialLinks = [
     alt: "GitHub",
   },
   {
-    href: "./email.png",
-    Icon: MdEmail,
-    alt: "Email",
-  },
-  {
-    href: "./qq.jpg",
+    href: "/qq.jpg",
     Icon: FaQq,
     alt: "QQ",
   },
   {
-    href: "./weixin.jpg",
+    href: "/weixin.jpg",
     Icon: FaWeixin,
     alt: "WeChat",
   },

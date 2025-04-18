@@ -1,79 +1,104 @@
-// api/blog-preview.js
-import dbConnect from "@/backend_utils/db/mongoose";
-import { initializeRedis } from "@/backend_utils/db/redis";
-import { fetchBlogPreviews } from "./cron/refresh-redis";
-import { calculateCountAndCachePagination } from "./cron/refresh-redis";
+import dbConnect from "@/lib/db/dbConnect";
 
-async function getCachedPaginationInfo(count = 10, type = null) {
-  const client = await initializeRedis();
+export async function fetchBlogPreviews(start, count, type = null, sort = "date_latest") {
+  const pool = await dbConnect();
+  let query = "SELECT * FROM blogs";
+  let queryParams = [];
+  let paramCounter = 1;
 
-  if (client) {
-    if (type) {
-      const cachedTotalPages = await client.get(`blog_total_pages_type_${type}`);
-      const cachedTotalBlogs = await client.get(`blog_total_count_type_${type}`);
-
-      if (cachedTotalPages && cachedTotalBlogs) {
-        return {
-          totalPages: parseInt(cachedTotalPages),
-          totalBlogs: parseInt(cachedTotalBlogs),
-        };
-      }
-    } else {
-      const cachedTotalPages = await client.get("blog_total_pages");
-      const cachedTotalBlogs = await client.get("blog_total_count");
-
-      if (cachedTotalPages && cachedTotalBlogs) {
-        return {
-          totalPages: parseInt(cachedTotalPages),
-          totalBlogs: parseInt(cachedTotalBlogs),
-        };
-      }
-    }
+  if (type) {
+    query += ` WHERE type = $${paramCounter}`;
+    queryParams.push(type);
+    paramCounter++;
   }
-  
-  return calculateCountAndCachePagination(count, type); // Pass type to function
+
+  // Define sort criteria
+  let sortQuery = "";
+  switch (sort) {
+    case "date_oldest":
+      sortQuery = " ORDER BY date ASC";
+      break;
+    case "most_words":
+      sortQuery = " ORDER BY word_count DESC";
+      break;
+    case "least_words":
+      sortQuery = " ORDER BY word_count ASC";
+      break;
+    default:
+      sortQuery = " ORDER BY date DESC";
+  }
+
+  query += sortQuery;
+  query += ` LIMIT $${paramCounter} OFFSET $${paramCounter + 1}`;
+  queryParams.push(count, start);
+
+  const result = await pool.query(query, queryParams);
+  return result.rows;
 }
 
-async function getFromCacheOrFetch(cacheKey, fetchFn) {
-  const client = await initializeRedis();
-  if (!client) return await fetchFn();
+export async function processBlog(blog) {
+  const dateObj = new Date(blog.date);
+  const formattedDate = dateObj.toLocaleDateString("en-US", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  });
 
-  const cachedData = await client.get(cacheKey);
-  if (cachedData) {
-    return JSON.parse(cachedData);
+  return {
+    ...blog,
+    body: blog.body ? blog.body.substring(0, 200) : '',
+    date: formattedDate,
+  };
+}
+
+export async function calculatePaginationInfo(count = 10, type = null) {
+  const pool = await dbConnect();
+  let query = "SELECT COUNT(*) FROM blogs";
+  let queryParams = [];
+  let paramCounter = 1;
+
+  if (type) {
+    query += ` WHERE type = $${paramCounter}`;
+    queryParams.push(type);
   }
 
-  const data = await fetchFn();
-  await client.setEx(cacheKey, 365 * 24 * 60 * 60, JSON.stringify(data));
-  return data;
+  const result = await pool.query(query, queryParams);
+  const totalBlogs = parseInt(result.rows[0].count, 10);
+  const totalPages = Math.ceil(totalBlogs / count);
+
+  return { totalBlogs, totalPages };
+}
+
+export async function getBlogTypesWithCounts() {
+  const pool = await dbConnect();
+  const query = "SELECT type, COUNT(*) as count FROM blogs GROUP BY type";
+  const result = await pool.query(query);
+  return result.rows.map(row => ({ type: row.type, count: parseInt(row.count, 10) }));
 }
 
 export default async function handler(req, res) {
-  await dbConnect();
-
   if (req.method === "GET") {
     try {
       const start = parseInt(req.query.start) || 0;
       const count = parseInt(req.query.count) || 10;
       const type = req.query.type || null;
-      const sort = req.query.sort || 'date_latest'; // Default to date_latest
+      const sort = req.query.sort || "date_latest"; // Default to date_latest
 
       // Validate sort parameter
-      const validSorts = ['date_oldest', 'date_latest', 'most_words', 'least_words'];
+      const validSorts = ["date_oldest", "date_latest", "most_words", "least_words"];
       if (sort && !validSorts.includes(sort)) {
         return res.status(400).json({ message: "Invalid sort parameter" });
       }
 
-      // Create cache key including sort
-      const cacheKey = type 
-        ? `blog_previews:sort=${sort}&start=${start}&count=${count}&type=${type}`
-        : `blog_previews:sort=${sort}&start=${start}&count=${count}`;
-      
-      const blogPreviews = await getFromCacheOrFetch(cacheKey, () => 
-        fetchBlogPreviews(start, count, type, sort)
-      );
+      // Fetch blog previews directly from the database
+      const blogPreviewsRaw = await fetchBlogPreviews(start, count, type, sort);
+      const blogPreviews = await Promise.all(blogPreviewsRaw.map(blog => processBlog(blog)));
 
-      const { totalPages, totalBlogs } = await getCachedPaginationInfo(count, type);
+      // Get pagination info directly
+      const { totalPages, totalBlogs } = await calculatePaginationInfo(count, type);
+
+      // Get blog types with counts for filtering
+      const typesWithCounts = await getBlogTypesWithCounts();
 
       res.json({
         data: blogPreviews,
@@ -81,9 +106,13 @@ export default async function handler(req, res) {
           totalPages,
           currentPage: Math.floor(start / count) + 1,
           pageSize: count,
-          totalItems: totalBlogs || null,
+          totalItems: totalBlogs,
           type: type,
           sort: sort,
+        },
+        filters: {
+          types: typesWithCounts,
+          sortOptions: validSorts,
         },
       });
     } catch (err) {

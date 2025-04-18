@@ -1,9 +1,7 @@
-import Like from '../../backend_utils/models/like.model';
-import dbConnect from '../../backend_utils/db/mongoose';
+// pages/api/likes/[uuid].js
+import dbConnect from '../../lib/db/dbConnect';
 
 export default async function handler(req, res) {
-  await dbConnect();
-
   if (req.method === 'PATCH') {
     const { uuid } = req.query;
     const { userIP, isLiked } = req.body;
@@ -13,22 +11,48 @@ export default async function handler(req, res) {
     }
 
     try {
-      const foundLike = await Like.findOne({ parent: uuid });
+      const pool = await dbConnect();
+      
+      // First, check if a like record exists for this parent_id
+      const findResult = await pool.query(
+        'SELECT * FROM likes WHERE parent_id = $1',
+        [uuid]
+      );
+      
+      const foundLike = findResult.rows[0];
 
       if (foundLike) {
-        const ipIndex = foundLike.like.indexOf(userIP);
+        // In PostgreSQL, we need to handle arrays differently
+        const likes = foundLike.likes || [];
+        const ipIndex = likes.indexOf(userIP);
+        
         if (isLiked) {
+          // User wants to unlike
           if (ipIndex !== -1) {
-            foundLike.like.splice(ipIndex, 1);
-            await foundLike.save();
+            // Remove the userIP from the array
+            const updatedLikes = [...likes];
+            updatedLikes.splice(ipIndex, 1);
+            
+            await pool.query(
+              'UPDATE likes SET likes = $1, updated_at = CURRENT_TIMESTAMP WHERE parent_id = $2',
+              [updatedLikes, uuid]
+            );
+            
             res.json({ message: "Like removed" });
           } else {
             res.status(400).json({ message: "Like not found for removal" });
           }
         } else {
+          // User wants to like
           if (ipIndex === -1) {
-            foundLike.like.push(userIP);
-            await foundLike.save();
+            // Add userIP to the array
+            const updatedLikes = [...likes, userIP];
+            
+            await pool.query(
+              'UPDATE likes SET likes = $1, updated_at = CURRENT_TIMESTAMP WHERE parent_id = $2',
+              [updatedLikes, uuid]
+            );
+            
             res.json({ message: "Like added" });
           } else {
             res.status(400).json({ message: "Blog already liked" });
@@ -36,11 +60,12 @@ export default async function handler(req, res) {
         }
       } else {
         if (!isLiked) {
-          const newLike = new Like({
-            parent: uuid,
-            like: [userIP],
-          });
-          await newLike.save();
+          // Create a new like record
+          await pool.query(
+            'INSERT INTO likes (parent_id, likes) VALUES ($1, $2)',
+            [uuid, [userIP]]
+          );
+          
           res.json({ message: "Like added to new blog" });
         } else {
           res.status(400).json({ message: "No likes exist for this blog" });

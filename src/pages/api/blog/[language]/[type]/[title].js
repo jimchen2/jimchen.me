@@ -1,21 +1,29 @@
-// pages/api/blog/[language]/[type]/[title].js
-import Blog from "../../../../../backend_utils/models/blog.model.js";
-import dbConnect from "../../../../../backend_utils/db/mongoose.js";
+import dbConnect from "../../../../../lib/db/dbConnect.js";
 
 export default async function handler(req, res) {
-  await dbConnect();
+  const pool = await dbConnect();
 
   if (req.method === "GET") {
     const { language, type, title } = req.query;
 
     try {
-      const blogs = await Blog.find({ language, type, title });
+      // Query the blogs table with the given language, type, and title
+      const query = `
+        SELECT * FROM blogs 
+        WHERE language = $1 
+        AND type = $2 
+        AND title = $3
+      `;
+      const values = [language, type, title];
 
-      if (!blogs || blogs.length === 0) {
+      const result = await pool.query(query, values);
+
+      if (!result.rows || result.rows.length === 0) {
         return res.status(404).json({ message: "Blog not found" });
       }
 
-      const formattedBlogs = blogs.map((blog) => {
+      // Format the date for each blog
+      const formattedBlogs = result.rows.map((blog) => {
         const dateObj = new Date(blog.date);
         const formattedDate = dateObj.toLocaleDateString("en-US", {
           month: "short",
@@ -24,8 +32,8 @@ export default async function handler(req, res) {
         });
 
         return {
-          ...blog.toObject(),
-          date: formattedDate, 
+          ...blog,
+          date: formattedDate,
         };
       });
 

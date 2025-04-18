@@ -1,18 +1,22 @@
-import Blog from '../../backend_utils/models/blog.model';
-import dbConnect from '../../backend_utils/db/mongoose';
+// pages/api/sitemap.js
+import dbConnect from '../../lib/db/dbConnect';
 
 export default async function handler(req, res) {
-  await dbConnect();
-
   if (req.method === 'GET') {
     try {
-      // Fetch all blogs from MongoDB with minimal fields for sitemap
-      const blogs = await Blog.find({}, 'language type title date') // Only fetch necessary fields
-        .sort({ date: -1 }) // Sort by date descending
-        .collation({ locale: 'en_US', numericOrdering: true }) // Consistent sorting
-        .lean(); // Convert to plain JS objects for performance
-
-      const baseUrl = process.env.NEXT_PUBLIC_SITE 
+      const pool = await dbConnect();
+      
+      // Fetch all blogs from PostgreSQL with minimal fields for sitemap
+      const query = `
+        SELECT language, type, title, date
+        FROM blogs
+        ORDER BY date DESC
+      `;
+      
+      const result = await pool.query(query);
+      const blogs = result.rows;
+      
+      const baseUrl = process.env.NEXT_PUBLIC_SITE;
       
       // Map blogs to sitemap entries
       const blogData = blogs.map(blog => {
