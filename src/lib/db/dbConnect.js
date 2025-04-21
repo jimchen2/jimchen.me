@@ -3,30 +3,48 @@ const { Pool } = require('pg');
 
 const PG_URI = process.env.POSTGRESQL_URL;
 
-let cached = global.postgres;
-
-if (!cached) {
-  cached = global.postgres = { pool: null };
-}
+// Initialize cached connection object once
+let cached = global.postgres || (global.postgres = { pool: null });
 
 async function dbConnect() {
+  // Return existing pool if available
   if (cached.pool) {
     return cached.pool;
   }
 
+  // Create a new pool with better error handling
   const pool = new Pool({
     connectionString: PG_URI,
-    max: 20, // Maximum number of connections in pool
-    idleTimeoutMillis: 30000, // Close idle connections after 30 seconds
-    connectionTimeoutMillis: 2000, // Timeout after 2 seconds if connection can't be established
+    max: 10, // Reduced from 20 to avoid overwhelming the DB
+    idleTimeoutMillis: 60000, // Increased idle timeout to 60 seconds
+    connectionTimeoutMillis: 5000, // Increased connection timeout
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false // Add SSL for production
   });
 
-  // Test the connection
-  await pool.query('SELECT NOW()');
-  console.log('Connected to PostgreSQL');
+  // Add error handler to pool
+  pool.on('error', (err) => {
+    console.error('Unexpected error on idle PostgreSQL client', err);
+    // On critical error, clear the cached pool so a new one can be created
+    cached.pool = null;
+  });
 
-  cached.pool = pool;
-  return pool;
+  try {
+    // Test the connection
+    const client = await pool.connect();
+    try {
+      await client.query('SELECT NOW()');
+      console.log('Connected to PostgreSQL successfully');
+      cached.pool = pool;
+      return pool;
+    } finally {
+      // Release the client back to the pool
+      client.release();
+    }
+  } catch (error) {
+    console.error('Failed to connect to PostgreSQL:', error);
+    // Better error handling
+    throw new Error(`Database connection failed: ${error.message}`);
+  }
 }
 
 module.exports = dbConnect;

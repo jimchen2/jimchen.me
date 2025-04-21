@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Link from "next/link";
-import { MathJaxContext } from "better-react-mathjax";
 import parse from "html-react-parser";
 import { SideNav } from "./sideBar";
 import { useGlobalColorScheme } from "../config/global";
@@ -68,30 +67,24 @@ function SingleBlog({ date, text, title, language, type, bloguuid, wordcount }) 
   const [paddingStyles, setPaddingStyles] = useState(calculateBlogPadding()); // Default for SSR
 
   useEffect(() => {
-    // Only runs on the client-side
     const handleResize = () => {
       setPaddingStyles(calculateBlogPadding(window.innerWidth));
     };
-
-    // Set initial padding on mount
     setPaddingStyles(calculateBlogPadding(window.innerWidth));
-
-    // Add resize listener
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const processedText = text.replace(/<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs, (match, language, codeWithLang, codeWithoutLang) => {
     const code = codeWithLang || codeWithoutLang;
-    const langClass = language ? language : "";
-    return `<codeblock language="${langClass}" code="${code.replace(/"/g, "")}"></codeblock>`;
+    return `<codeblock code="${code.replace(/"/g, "")}"></codeblock>`;
   });
-
+  
   const elements = parse(processedText, {
     replace: (domNode) => {
       if (domNode.name === "codeblock") {
-        const { language, code } = domNode.attribs;
-        return <CodeBlock language={language} code={code.replace(/"/g, '"')} />;
+        const { code } = domNode.attribs;
+        return <CodeBlock code={code.replace(/"/g, '"')} />;
       }
     },
   });
@@ -117,12 +110,10 @@ function SingleBlog({ date, text, title, language, type, bloguuid, wordcount }) 
           <div className="mb-4">
             <BlogHeader date={date} language={language} type={type} title={title} colors={colors} wordcount={wordcount}/>
             <BlogTitle title={title} colors={colors} />
-            <MathJaxContext>
               <div className="blog-content">
                 {elements}
                 <style>{styles}</style>
               </div>
-            </MathJaxContext>
             <BlogLikeButtonHelper bloguuid={bloguuid} />
             <br />
           </div>
