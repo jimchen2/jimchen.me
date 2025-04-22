@@ -6,6 +6,7 @@ import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
 import { FaQq } from "react-icons/fa";
 import { FaWeixin } from "react-icons/fa";
+import { FaTelegram } from "react-icons/fa";
 
 const socialLinks = [
   {
@@ -22,6 +23,11 @@ const socialLinks = [
     href: "/weixin.jpg",
     Icon: FaWeixin,
     alt: "WeChat",
+  },
+  {
+    href: "https://t.me/Jimchen4214",
+    Icon: FaTelegram,
+    alt: "Telegram",
   },
 ];
 
