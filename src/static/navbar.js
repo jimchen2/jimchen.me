@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Container, Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
@@ -11,6 +11,7 @@ function NavBar() {
   const { colors, updateColor } = useGlobalColorScheme();
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+  const searchInputRef = useRef(null);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -24,12 +25,25 @@ function NavBar() {
   const handleToggleTheme = () => {
     toggleTheme(colors, updateColor);
   };
-  const externalLinkIcon = (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-      <path d="M14 3h7v7h-2V6.41L10.41 15 9 13.59 17.59 5H14V3zM5 5h4v2H5v12h12v-4h2v4c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2z" />
-    </svg>
-  );
+  
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (
+        event.key === '/' && 
+        document.activeElement.tagName !== 'INPUT' && 
+        document.activeElement.tagName !== 'TEXTAREA'
+      ) {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
 
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+  
   return (
     <>
       <Navbar
@@ -60,9 +74,9 @@ function NavBar() {
             </Nav>
             <Form className="d-flex" onSubmit={handleSearchSubmit}>
               <FormControl
+                ref={searchInputRef}
                 type="search"
-                placeholder="Search"
-                className="me-2"
+                placeholder="Press '/' to jump here"
                 aria-label="Search"
                 value={searchTerm}
                 onChange={handleSearchChange}

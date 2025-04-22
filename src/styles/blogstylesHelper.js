@@ -1,14 +1,12 @@
 export const generateStyles = (colors) => `
   h1, h2, h3, p, code {
     color: ${colors.color_black};
-
   }
 
   h1, h2 {
     font-size: 28px;
     line-height: 1.3;
     font-family:  Arial, sans-serif;
-
   }
 
   h3 {
@@ -20,6 +18,19 @@ export const generateStyles = (colors) => `
   p, code {
     font-size: 16px;
     line-height: 1.6;
+  }
+
+  blockquote {
+    border-left: 4px solid ${colors.color_blue};
+    padding: 10px 20px;
+    margin: 20px 0;
+    background-color: ${colors.dark ? "#2c2f33" : "#f5f5f5"};
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+  }
+
+  blockquote p {
+    margin-bottom: 0;
   }
 
   details {
