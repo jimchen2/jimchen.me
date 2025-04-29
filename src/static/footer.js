@@ -15,11 +15,6 @@ const socialLinks = [
     alt: "GitHub",
   },
   {
-    href: "/qq.jpg",
-    Icon: FaQq,
-    alt: "QQ",
-  },
-  {
     href: "/weixin.jpg",
     Icon: FaWeixin,
     alt: "WeChat",
