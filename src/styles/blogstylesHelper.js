@@ -61,12 +61,16 @@ export const generateStyles = (colors) => `
     margin-bottom: 15px;
     text-indent: -5px;
   }
+  .blog-content table {
+    max-width: 100%;
+    overflow-x: auto;
+    display: block;
+  }
   .blog-content img {
     max-width: 100%;
     height: auto;
     border-radius: 8px;
   }
-
   /* Video styles */
   .blog-content video {
     max-width: 80%;
