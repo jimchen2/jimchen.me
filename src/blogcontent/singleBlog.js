@@ -6,7 +6,7 @@ import { SideNav } from "./sideBar";
 import { useGlobalColorScheme } from "../config/global";
 import BlogLikeButtonHelper from "./likebutton/bloglikebuttonhelper";
 import CodeBlock from "./codeBlock";
-import { generateStyles } from "../blogpreview/blogstylesHelper";
+import { generateStyles } from "./blogstylesHelper";
 
 // Default padding values for server-side rendering
 function calculateBlogPadding(windowWidth = null) {

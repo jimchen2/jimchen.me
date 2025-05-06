@@ -24,6 +24,7 @@ class MyDocument extends Document {
           <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet" />
           <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet" />
           <link href="https://fonts.googleapis.com/css2?family=Georgia&family=Open+Sans:ital@0;1&family=Roboto+Mono&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+          <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,500;1,400&family=Quicksand:wght@400;500&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet" />
           <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" />
         </Head>
         <body>
