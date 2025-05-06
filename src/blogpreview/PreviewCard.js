@@ -20,7 +20,8 @@ function PreviewCard(props) {
           {part}
         </span>
       ) : (
-        part)
+        part
+      )
     );
   };
 
@@ -29,7 +30,7 @@ function PreviewCard(props) {
       <Row className="justify-content-center">
         <Col md={10} lg={8}>
           <Card
-            className="shadow border-1 rounded-3"
+            className="border-1 rounded-3"
             style={{
               backgroundColor: colors.color_white,
             }}
@@ -40,7 +41,8 @@ function PreviewCard(props) {
                   <span
                     style={{
                       fontSize: "0.8rem",
-                      color: colors.color_blue,
+                      color: colors.color_black,
+                      fontFamily: "'Arial', sans-serif",
                     }}
                   >
                     {props.date}
@@ -48,23 +50,20 @@ function PreviewCard(props) {
                   <span
                     style={{
                       fontSize: "1.0rem",
-                      color: colors.color_blue,
+                      color: colors.color_black,
+                      fontFamily: "'Helvetica', Arial, sans-serif",
                     }}
                   >
                     {props.type}
                   </span>
                 </div>
-                <Link
-                  href={`/${props.language}/${props.type}/${props.title}`}
-                  style={{
-                    textDecoration: "none",
-                    color: colors.color_black,
-                  }}
-                >
+                <Link href={`/${props.language}/${props.type}/${props.title}`}>
                   <div
                     style={{
                       transition: "text-decoration 0.3s ease",
                       fontSize: "1.5rem",
+                      fontFamily: "Ubuntu",
+                      fontWeight: "500",
                     }}
                     className="title"
                     onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
@@ -80,6 +79,7 @@ function PreviewCard(props) {
                   lineHeight: "1.5",
                   color: colors.color_black,
                   fontStyle: "italic",
+                  fontFamily: "'Open Sans', 'Roboto', sans-serif",
                 }}
               >
                 {getHighlightedText(props.text, searchTerm)}
@@ -87,7 +87,8 @@ function PreviewCard(props) {
               <div
                 style={{
                   fontSize: "0.8rem",
-                  color: colors.color_blue,
+                  color: colors.color_black,
+                  fontFamily: "'Roboto Mono', monospace",
                 }}
               >
                 {props.wordcount} words

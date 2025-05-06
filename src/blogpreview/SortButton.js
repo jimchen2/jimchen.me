@@ -15,14 +15,14 @@ const SortButton = ({ currentSort, activeType }) => {
 
   const buttonStyle = {
     backgroundColor: colors.color_white,
-    borderColor: colors.color_blue,
-    color: colors.color_blue,
+    borderColor: colors.color_black,
+    color: colors.color_black,
     marginTop: 10,
   };
 
   const dropdownItemStyle = (selected) => ({
     backgroundColor: colors.color_white,
-    color: selected ? colors.color_black : colors.color_blue,
+    color: selected ? colors.color_black : colors.color_black,
     fontWeight: selected ? "bold" : "normal",
   });
 

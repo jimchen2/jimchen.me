@@ -6,11 +6,11 @@ import { SideNav } from "./sideBar";
 import { useGlobalColorScheme } from "../config/global";
 import BlogLikeButtonHelper from "./likebutton/bloglikebuttonhelper";
 import CodeBlock from "./codeBlock";
-import { generateStyles } from "../styles/blogstylesHelper";
+import { generateStyles } from "../blogpreview/blogstylesHelper";
 
 // Default padding values for server-side rendering
 function calculateBlogPadding(windowWidth = null) {
-  const basePaddingTop = 30;
+  const basePaddingTop = 50;
 
   // Default padding values based on screen sizef
   const getPaddingValues = (width) => {

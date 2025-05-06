@@ -1,10 +1,11 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Navbar from "react-bootstrap/Navbar";
 import { useGlobalColorScheme } from "../config/global.js";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
-import { FaQq } from "react-icons/fa";
 import { FaWeixin } from "react-icons/fa";
 import { FaTelegram } from "react-icons/fa";
 
@@ -30,16 +31,10 @@ function Footer() {
   const { colors } = useGlobalColorScheme();
   const year = new Date().getFullYear();
 
-  const linkStyle = {
-    textDecoration: "none",
-    color: colors.color_black,
-  };
-
   const iconStyle = {
-    fontSize: 25,
-    color: colors.color_black,
-    filter: colors.grayscale ? "grayscale(100%)" : "none",
-    margin: "5",
+    fontSize: "30",
+    margin: "0 5px",
+    minHeight: "30px",
   };
 
   const externalLinkIcon = (
@@ -48,37 +43,45 @@ function Footer() {
     </svg>
   );
 
-  const CopyrightSection = ({ year, linkStyle }) => (
-    <div>
-      <span style={{ color: colors.color_black }}>Copyright © {year} Jim Chen,</span>
-      <Link href="https://github.com/jimchen2/jimchen.me" style={linkStyle}>
-        <span> Source{externalLinkIcon}</span>
+  const CopyrightSection = ({ year }) => (
+    <span style={{ color: colors.color_black, display: "inline-flex", flexWrap: "wrap", alignItems: "center", fontSize: "15px" }}>
+      <span>Copyright © {year} Jim Chen,</span>
+      <Link href="https://github.com/jimchen2/jimchen.me">
+        <span style={{ marginLeft: "3px" }}>Source Code{externalLinkIcon}</span>
       </Link>
       ,
-      <Link href={`${process.env.NEXT_PUBLIC_SITE}/api/rss`} style={linkStyle}>
-        <span> RSS{externalLinkIcon}</span>
+      <Link href={`${process.env.NEXT_PUBLIC_SITE}/api/rss`}>
+        <span style={{ marginLeft: "3px" }}>RSS{externalLinkIcon}</span>
       </Link>
+    </span>
+  );
+
+  const IconLinks = ({ iconStyle }) => (
+    <div style={{ display: "inline-flex", alignItems: "center" }}>
+      {socialLinks.map((link) => (
+        <Link key={link.href} href={link.href}>
+          <link.Icon style={iconStyle} title={link.alt} />
+        </Link>
+      ))}
     </div>
   );
 
   return (
-    <Navbar expand="lg" style={{ backgroundColor: colors.color_gray }}>
-      <Container style={{ height: "100%" }}>
-        <CopyrightSection year={year} linkStyle={linkStyle} />
-        <IconLinks iconStyle={iconStyle} />
+    <Navbar style={{ backgroundColor: colors.color_gray, fontFamily: "Ubuntu" }}>
+      <Container>
+        <Row className="w-100 align-items-center">
+          <Col xs={12} md={8} className="d-flex">
+            <span style={{ marginLeft: window.innerWidth > 768 ? "15%" : "0" }}>
+              <CopyrightSection year={year} />
+            </span>
+          </Col>
+          <Col xs={12} md={4} className="d-flex justify-content-md-end">
+            <IconLinks iconStyle={iconStyle} />
+          </Col>
+        </Row>
       </Container>
     </Navbar>
   );
 }
-
-const IconLinks = ({ iconStyle }) => (
-  <div className="justify-content-end">
-    {socialLinks.map((link) => (
-      <Link key={link.href} href={link.href}>
-        <link.Icon style={iconStyle} title={link.alt} />
-      </Link>
-    ))}
-  </div>
-);
 
 export default Footer;
