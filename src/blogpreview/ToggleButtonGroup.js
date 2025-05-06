@@ -2,7 +2,6 @@ import { React, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation.js";
 import { useRouter } from "next/router.js";
 import { useGlobalColorScheme } from "@/config/global.js";
-import SortButton from "./SortButton";
 
 const ToggleButtonGroupComponent = ({ currentType, postTypeArray, paddingTop }) => {
   const { colors } = useGlobalColorScheme();

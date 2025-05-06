@@ -47,7 +47,7 @@ function Footer() {
     <span style={{ color: colors.color_black, display: "inline-flex", flexWrap: "wrap", alignItems: "center", fontSize: "15px" }}>
       <span>Copyright © {year} Jim Chen,</span>
       <Link href="https://github.com/jimchen2/jimchen.me">
-        <span style={{ marginLeft: "3px" }}>Source Code{externalLinkIcon}</span>
+        <span style={{ marginLeft: "3px" }}>Source{externalLinkIcon}</span>
       </Link>
       ,
       <Link href={`${process.env.NEXT_PUBLIC_SITE}/api/rss`}>

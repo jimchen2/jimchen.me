@@ -12,7 +12,6 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
   const contentStyle = {
     maxWidth: "1200px",
     margin: "0 auto",
-    padding: "0 20px",
   };
 
   return (
@@ -25,7 +24,7 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
         <div style={{ marginTop: "2rem" }}></div>
         {data && data.length > 0 ? (
           data.map((post, index) => (
-            <div key={index}>
+            <div key={index} style={{ padding: "0 20px" }}>
               <PreviewCard title={post.title} text={post.body} date={post.date} type={post.type} language={post.language} wordcount={post.word_count} />
             </div>
           ))

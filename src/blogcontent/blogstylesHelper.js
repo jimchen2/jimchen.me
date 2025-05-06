@@ -33,6 +33,10 @@ export const generateStyles = (colors) => `
   line-height: 1.7;
   margin-bottom: 1.5em;
   color: ${colors.color_black};
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .blog-content blockquote {
@@ -184,6 +188,10 @@ export const generateStyles = (colors) => `
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: border-bottom 0.2s ease;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  display: inline-block;
+  max-width: 100%;
 }
 
 .blog-content a:hover {
