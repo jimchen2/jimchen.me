@@ -45,6 +45,7 @@ function NavBar() {
           style={{
             color: colors.color_black,
             fontFamily: "'Ubuntu', sans-serif",
+            fontWeight: "300",
             marginLeft: "15%",
             transition: "color 0.3s ease",
           }}
