@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import Head from "next/head";
 import SingleBlog from "@/blogcontent/singleBlog";
 import Msg from "@/comment/leaveamessage";
 
@@ -12,19 +13,42 @@ function Blog({ blogs, language, type, error }) {
     return <div>Blog not found</div>;
   }
 
+  const blog = blogs[0];
+  // Create a description from the blog body (first 160 characters)
+  const description = blog.body.substring(0, 160).trim() + (blog.body.length > 160 ? '...' : '');
+  
+  // Get the canonical URL
+  const canonicalUrl = `${process.env.NEXT_PUBLIC_SITE}/${language}/${type}/${encodeURIComponent(blog.title.replace(/\s+/g, '-').toLowerCase())}`;
+
   return (
-    <div>
-      <SingleBlog 
-        title={blogs[0].title} 
-        text={blogs[0].body} 
-        language={language} 
-        type={type} 
-        blogid={blogs[0].blogid} 
-        date={blogs[0].date} 
-        wordcount={blogs[0].word_count} 
-      />
-      <Msg blogid={blogs[0].blogid} blogname={blogs[0].title} />
-    </div>
+    <>
+      <Head>
+        <title>{`${blog.title}`}</title>
+        <meta name="description" content={description} />
+        <meta name="keywords" content={`${type}, ${blog.title}, blog`} />
+
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:title" content={blog.title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={blog.image || `${process.env.NEXT_PUBLIC_SITE}/default-blog-image.jpg`} />
+
+        <link rel="canonical" href={canonicalUrl} />
+      </Head>
+      
+      <div>
+        <SingleBlog 
+          title={blog.title} 
+          text={blog.body} 
+          language={language} 
+          type={type} 
+          blogid={blog.blogid} 
+          date={blog.date} 
+          wordcount={blog.word_count} 
+        />
+        <Msg blogid={blog.blogid} blogname={blog.title} />
+      </div>
+    </>
   );
 }
 
