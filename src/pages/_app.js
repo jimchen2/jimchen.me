@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ColorSchemeProvider, useGlobalColorScheme } from "../config/global.js";
-import NavBar from "../static/navbar.js";
-import Footer from "../static/footer";
+import NavBar from "../navbar/navbar.js";
 import axios from "axios";
 import { setIpAddress } from "../config/global.js";
 function AppContent({ Component, pageProps, isEmbedPage }) {
@@ -30,7 +29,6 @@ function AppContent({ Component, pageProps, isEmbedPage }) {
       <main style={mainContentStyle}>
         <Component {...pageProps} />
       </main>
-      {!isEmbedPage && <Footer />}
     </div>
   );
 }

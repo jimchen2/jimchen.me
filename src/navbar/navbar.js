@@ -61,6 +61,25 @@ function NavBar() {
           <Nav className="ms-auto" style={{ fontWeight: "300", fontFamily: "'Ubuntu', sans-serif" }}>
             <Nav.Link
               as={Link}
+              href="/about"
+              style={{
+                color: colors.color_black,
+                transition: "color 0.3s ease, transform 0.3s ease",
+              }}
+              className="me-lg-3 my-2 my-lg-0"
+              onMouseEnter={(e) => {
+                e.target.style.color = colors.color_blue;
+                e.target.style.transform = "scale(1.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.color = colors.color_black;
+                e.target.style.transform = "scale(1)";
+              }}
+            >
+              About
+            </Nav.Link>
+            <Nav.Link
+              as={Link}
               href="/"
               style={{
                 color: colors.color_black,
