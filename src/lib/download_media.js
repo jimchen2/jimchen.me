@@ -39,7 +39,7 @@ try {
 // Copy files from Google Drive
 try {
   console.log('Copying files from Google Drive...');
-  execSync('rclone copy google:backup/media public/media --transfers 200', { stdio: 'inherit' });
+  execSync('rclone copy google:blog-media public/media --transfers 200', { stdio: 'inherit' });
   console.log('Files copied successfully');
 } catch (error) {
   console.error('Failed to copy files:', error);
