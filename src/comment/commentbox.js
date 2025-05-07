@@ -5,6 +5,7 @@ import Commentinputbox from "./commentsubmit/commentinputbox.js";
 import { useGlobalColorScheme } from "../config/global.js";
 import Card from "react-bootstrap/Card";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Link from "next/link.js";
 
 function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuuid, blogid, showName }) {
   const { colors } = useGlobalColorScheme();
@@ -63,7 +64,11 @@ function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuui
     <Card className="mb-3" style={cardStyle}>
       <Card.Header style={headerStyle}>
         <Card.Title style={titleStyle}>{user}</Card.Title>
-        {showName && <a href={`/a/${blogid}`}>{blogname}</a>}
+        {showName && (
+          <Link style={{ color: colors.color_blue }} href={`/a/${blogid}`}>
+            {blogname}
+          </Link>
+        )}
 
         <Card.Subtitle style={subtitleStyle}>
           <span>{date}</span>

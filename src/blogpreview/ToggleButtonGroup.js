@@ -21,13 +21,8 @@ const ToggleButtonGroupComponent = ({ currentType, postTypeArray, paddingTop }) 
   }, [searchParams, postTypeArray]);
 
   const buttonStyle = (type) => ({
-    backgroundColor: activeType === type 
-      ? colors.color_blue 
-      : hoveredButton === type 
-        ? colors.color_gray 
-        : colors.color_white,
-    color: activeType === type 
-    ? colors.color_white : colors.color_black,
+    backgroundColor: activeType === type ? colors.color_blue : hoveredButton === type ? colors.color_gray : colors.color_white,
+    color: activeType === type ? colors.color_white : colors.color_black,
     borderRadius: "8px",
     padding: "0.5rem 0.5rem",
     margin: "0.3rem",
@@ -58,29 +53,16 @@ const ToggleButtonGroupComponent = ({ currentType, postTypeArray, paddingTop }) 
       style={{
         display: "flex",
         flexDirection: "column",
-        padding: "0 8%",
+        padding: window.innerWidth > 768 ? "0 8%" : "0 1%",
         gap: "1rem",
       }}
     >
-      <div
-        role="group"
-      >
-        <button 
-          onClick={() => handleButtonClick("all")} 
-          style={buttonStyle("all")}
-          onMouseEnter={() => setHoveredButton("all")}
-          onMouseLeave={() => setHoveredButton(null)}
-        >
+      <div role="group">
+        <button onClick={() => handleButtonClick("all")} style={buttonStyle("all")} onMouseEnter={() => setHoveredButton("all")} onMouseLeave={() => setHoveredButton(null)}>
           All ({totalPostsCount})
         </button>
         {postTypeArray.map(({ type, count }) => (
-          <button 
-            key={type} 
-            onClick={() => handleButtonClick(type)} 
-            style={buttonStyle(type)}
-            onMouseEnter={() => setHoveredButton(type)}
-            onMouseLeave={() => setHoveredButton(null)}
-          >
+          <button key={type} onClick={() => handleButtonClick(type)} style={buttonStyle(type)} onMouseEnter={() => setHoveredButton(type)} onMouseLeave={() => setHoveredButton(null)}>
             {type.charAt(0).toUpperCase() + type.slice(1)} ({count})
           </button>
         ))}

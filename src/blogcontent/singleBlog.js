@@ -50,10 +50,10 @@ const BlogHeader = ({ date, language, type, title, colors, wordcount, blogid }) 
           </small>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <Link href={`/embed/${language}/${type}/${title}`} target="_blank" rel="noopener noreferrer">
+          <Link href={`/embed/${language}/${type}/${title}`} target="_blank" rel="noopener noreferrer" style={{ color: colors.color_blue }}>
             View Raw
           </Link>
-          <Link href="#" onClick={handleCopy}>
+          <Link href="#" onClick={handleCopy} style={{ color: colors.color_blue }}>
             {copied ? "Copied!" : "Copy Short URL"}
           </Link>
         </div>
