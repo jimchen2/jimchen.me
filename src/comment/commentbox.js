@@ -63,7 +63,7 @@ function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuui
     <Card className="mb-3" style={cardStyle}>
       <Card.Header style={headerStyle}>
         <Card.Title style={titleStyle}>{user}</Card.Title>
-        {showName &&  <span>{blogname}</span>}
+        {showName && <a href={`/a/${blogid}`}>{blogname}</a>}
 
         <Card.Subtitle style={subtitleStyle}>
           <span>{date}</span>

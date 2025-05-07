@@ -23,10 +23,6 @@ function SingleBlogEmbed() {
         setBlog(response.data);
       })
       .catch((error) => console.error("Error fetching blog data:", error));
-
-    // Set up the print after delay
-    const printAfterDelay = setTimeout(() => window.print(), 3000);
-    return () => clearTimeout(printAfterDelay);
   }, [language, type, title]);
 
   // Show loading state while data is being fetched

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Link from "next/link";
 import parse from "html-react-parser";
@@ -12,7 +12,7 @@ import { generateStyles } from "./blogstylesHelper";
 function calculateBlogPadding(windowWidth = null) {
   const basePaddingTop = 50;
 
-  // Default padding values based on screen sizef
+  // Default padding values based on screen size
   const getPaddingValues = (width) => {
     if (width >= 1200) return { left: 10, right: 20 };
     if (width >= 600) return { left: 10, right: 10 };
@@ -30,31 +30,37 @@ function calculateBlogPadding(windowWidth = null) {
   };
 }
 
-const BlogHeader = ({ date, language, type, title, colors, wordcount }) => (
-  <div className="blog-header mb-3">
-    <br />
+const BlogHeader = ({ date, language, type, title, colors, wordcount, blogid }) => {
+  const [copied, setCopied] = useState(false);
 
-    <div className="d-flex justify-content-between align-items-center">
-      <div>
-        <small className="text" style={{ color: colors.color_black }}>
-          {date} • {wordcount} words
-        </small>
+  const handleCopy = () => {
+    const shortUrl = `${window.location.origin}/a/${blogid}`;
+    navigator.clipboard.writeText(shortUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="blog-header mb-3">
+      <br />
+      <div className="d-flex justify-content-between align-items-center">
+        <div>
+          <small className="text" style={{ color: colors.color_black }}>
+            {date} • {wordcount} words
+          </small>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <Link href={`/embed/${language}/${type}/${title}`} target="_blank" rel="noopener noreferrer">
+            View Raw
+          </Link>
+          <Link href="#" onClick={handleCopy}>
+            {copied ? "Copied!" : "Copy Short URL"}
+          </Link>
+        </div>
       </div>
-      <Link
-        href={`/embed/${language}/${type}/${title}`}
-        className="small"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          textDecoration: "underline",
-          color: colors.color_blue,
-        }}
-      >
-        Save as PDF
-      </Link>
     </div>
-  </div>
-);
+  );
+};
 
 const BlogTitle = ({ title, colors }) => (
   <h2 className="mb-4">
@@ -79,7 +85,7 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
     const code = codeWithLang || codeWithoutLang;
     return `<codeblock code="${code.replace(/"/g, "")}"></codeblock>`;
   });
-  
+
   const elements = parse(processedText, {
     replace: (domNode) => {
       if (domNode.name === "codeblock") {
@@ -108,12 +114,12 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
           }}
         >
           <div className="mb-4">
-            <BlogHeader date={date} language={language} type={type} title={title} colors={colors} wordcount={wordcount}/>
+            <BlogHeader date={date} language={language} type={type} title={title} colors={colors} wordcount={wordcount} blogid={blogid} />
             <BlogTitle title={title} colors={colors} />
-              <div className="blog-content">
-                {elements}
-                <style>{styles}</style>
-              </div>
+            <div className="blog-content">
+              {elements}
+              <style>{styles}</style>
+            </div>
             <BlogLikeButtonHelper blogid={blogid} />
             <br />
           </div>
@@ -123,4 +129,4 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
   );
 }
 
-export default SingleBlog;
+export default memo(SingleBlog);
