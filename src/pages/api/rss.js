@@ -27,7 +27,6 @@ export default async function handler(req, res) {
         title: blog.title,
         description: blog.body,
         url: `https://jimchen.me/${blog.language}/${blog.type}/${blog.title}`,
-        guid: blog.uuid,
         categories: [blog.type],
         date: new Date(blog.date),
         language: blog.language,

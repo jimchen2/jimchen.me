@@ -6,7 +6,7 @@ import { useGlobalColorScheme } from "../config/global.js";
 import Card from "react-bootstrap/Card";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuuid, bloguuid, showName }) {
+function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuuid, blogid, showName }) {
   const { colors } = useGlobalColorScheme();
   const [showReply, setShowReply] = useState(false);
 
@@ -75,7 +75,7 @@ function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuui
           <CommentLikeButton like={like} commentuuid={commentuuid} />
           <CommentReplyButton onReplyClick={toggleReply} />
         </div>
-        {showReply && <Commentinputbox commentuuid={commentuuid} bloguuid={bloguuid} />}
+        {showReply && <Commentinputbox commentuuid={commentuuid} blogid={blogid} />}
       </Card.Body>
     </Card>
   );

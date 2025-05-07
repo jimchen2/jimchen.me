@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Container, Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
 import { useGlobalColorScheme } from "../config/global";
 import { toggleTheme } from "../config/global";
@@ -11,7 +11,23 @@ function NavBar() {
   const { colors, updateColor } = useGlobalColorScheme();
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const searchInputRef = useRef(null);
+
+  // Sync searchTerm with URL on mount or route change
+  useEffect(() => {
+    if (!pathname) return; // Exit early if pathname is null or undefined
+
+    // Extract search term from URL (e.g., /search/something)
+    const pathParts = pathname.split("/"); // Split the pathname into parts
+    const searchQuery = pathParts[pathParts.length - 1]; // Get the last part (search term)
+    if (pathname.startsWith("/search") && searchQuery) {
+      setSearchTerm(decodeURIComponent(searchQuery)); // Decode and set search term
+    } else {
+      setSearchTerm(""); // Clear search term if not on a search route
+    }
+  }, [pathname]);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -20,8 +36,8 @@ function NavBar() {
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     if (searchTerm.trim()) {
-      router.push(`/search/${searchTerm}`);
-      setSearchTerm("");
+      router.push(`/search/${encodeURIComponent(searchTerm)}`);
+      // Do not clear searchTerm to keep it in the search bar
     }
   };
 
@@ -135,7 +151,7 @@ function NavBar() {
               Theme
             </Nav.Link>
 
-            {/* Search Form - Will be full width on mobile */}
+            {/* Search Form */}
             <Form className="d-flex mt-2 mt-lg-0" onSubmit={handleSearchSubmit}>
               <FormControl
                 ref={searchInputRef}

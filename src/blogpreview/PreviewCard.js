@@ -57,20 +57,21 @@ function PreviewCard(props) {
                     {props.type}
                   </span>
                 </div>
-                <Link href={`/${props.language}/${props.type}/${props.title}`}>
-                  <div
-                    style={{
-                      transition: "text-decoration 0.3s ease",
-                      fontSize: "1.5rem",
-                      fontFamily: "Ubuntu",
-                      fontWeight: "500",
-                    }}
-                    className="title"
-                    onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
-                    onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
-                  >
-                    {props.title.split("-").join(" ")}
-                  </div>
+                <Link
+                  href={`/${props.language}/${props.type}/${props.title}`}
+                  style={{
+                    transition: "transform 0.3s ease",
+                    fontSize: "1.5rem",
+                    fontFamily: "Ubuntu",
+                    fontWeight: "500",
+                    color: colors.color_blue,
+                    display: "inline-block", // Required for transform to work
+                  }}
+                  className="title"
+                  onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")}
+                  onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+                >
+                  {props.title.split("-").join(" ")}
                 </Link>
               </Card.Title>
               <Card.Text

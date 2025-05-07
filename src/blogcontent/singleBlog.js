@@ -62,7 +62,7 @@ const BlogTitle = ({ title, colors }) => (
   </h2>
 );
 
-function SingleBlog({ date, text, title, language, type, bloguuid, wordcount }) {
+function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
   const { colors } = useGlobalColorScheme();
   const [paddingStyles, setPaddingStyles] = useState(calculateBlogPadding()); // Default for SSR
 
@@ -114,7 +114,7 @@ function SingleBlog({ date, text, title, language, type, bloguuid, wordcount }) 
                 {elements}
                 <style>{styles}</style>
               </div>
-            <BlogLikeButtonHelper bloguuid={bloguuid} />
+            <BlogLikeButtonHelper blogid={blogid} />
             <br />
           </div>
         </Col>

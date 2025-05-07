@@ -19,11 +19,11 @@ function Blog({ blogs, language, type, error }) {
         text={blogs[0].body} 
         language={language} 
         type={type} 
-        bloguuid={blogs[0].uuid} 
+        blogid={blogs[0].blogid} 
         date={blogs[0].date} 
         wordcount={blogs[0].word_count} 
       />
-      <Msg bloguuid={blogs[0].uuid} blogname={blogs[0].title} />
+      <Msg blogid={blogs[0].blogid} blogname={blogs[0].title} />
     </div>
   );
 }

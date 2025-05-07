@@ -1,6 +1,6 @@
 import axios from "axios";
 
-async function SubmitComment({ parentid, username, message, bloguuid, blogname }) {
+async function SubmitComment({ parentid, username, message, blogid, blogname }) {
   const name = username || "anonymous";
   const uuid = [...Array(32)].map(() => Math.floor(Math.random() * 16).toString(16)).join("");
 
@@ -8,7 +8,7 @@ async function SubmitComment({ parentid, username, message, bloguuid, blogname }
     const commentResponse = await axios.post("/api/comment", {
       user: name,
       text: message,
-      blog: bloguuid,
+      blog: blogid,
       uuid: uuid,
       blogname: blogname,
       parentid: parentid !== "-1" ? parentid : null // Include parentid in the initial POST

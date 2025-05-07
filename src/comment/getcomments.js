@@ -3,7 +3,7 @@ import axios from "axios";
 import CommentBox from "./commentbox";
 import { useComments } from "./commentscontext";
 
-const GetComments = ({ showName, bloguuid, paddl = 30, paddr = 30 }) => {
+const GetComments = ({ showName, blogid, paddl = 30, paddr = 30 }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,7 +14,7 @@ const GetComments = ({ showName, bloguuid, paddl = 30, paddr = 30 }) => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `/api/comment/?bloguuid=${bloguuid}`
+          `/api/comment/?blogid=${blogid}`
         );
         setData(response.data);
       } catch (err) {
@@ -24,7 +24,7 @@ const GetComments = ({ showName, bloguuid, paddl = 30, paddr = 30 }) => {
       }
     };
     getComments();
-  }, [bloguuid, updateTrigger]);
+  }, [blogid, updateTrigger]);
 
 
   if (isLoading) return <div>Loading...</div>;
@@ -51,7 +51,7 @@ const GetComments = ({ showName, bloguuid, paddl = 30, paddr = 30 }) => {
             like={comment.like}
             blogname={comment.blogname}
             commentuuid={comment.uuid}
-            bloguuid={comment.blog}
+            blogid={comment.blog}
             showName={showName}
             embed={depth}
           />

@@ -4,13 +4,13 @@ export default async function handler(req, res) {
   const pool = await dbConnect();
 
   if (req.method === 'GET') {
-    const { bloguuid, isarray } = req.query;
+    const { blogid, isarray } = req.query;
 
     try {
-      // Query the likes table for the record matching parent_id (bloguuid)
+      // Query the likes table for the record matching parent_id (blogid)
       const result = await pool.query(
         'SELECT likes FROM likes WHERE parent_id = $1',
-        [bloguuid]
+        [blogid]
       );
 
       // Check if a record exists
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
         }
       }
     } catch (err) {
-      console.error(`Error retrieving blog likes for bloguuid: ${bloguuid}`, err);
+      console.error(`Error retrieving blog likes: ${blogid}`, err);
       res.status(500).json({ message: "Error retrieving blog likes", error: err.message });
     }
   } else {

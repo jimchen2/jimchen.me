@@ -7,15 +7,15 @@ export default async function handler(req, res) {
 
     // Handle GET requests
     if (req.method === "GET") {
-      const { bloguuid } = req.query;
+      const { blogid } = req.query;
 
       try {
         let query = "SELECT * FROM comments";
         const queryParams = [];
 
-        if (bloguuid && bloguuid !== "0") {
+        if (blogid && blogid !== "0") {
           query += " WHERE blog_id = $1";
-          queryParams.push(bloguuid);
+          queryParams.push(blogid);
         }
 
         // Fetch comments and sort by date (descending)

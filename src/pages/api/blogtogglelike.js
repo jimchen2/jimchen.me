@@ -1,9 +1,8 @@
-// pages/api/likes/[uuid].js
 import dbConnect from '../../lib/db/dbConnect';
 
 export default async function handler(req, res) {
   if (req.method === 'PATCH') {
-    const { uuid } = req.query;
+    const { blogid } = req.query;
     const { userIP, isLiked } = req.body;
 
     if (!userIP || userIP === "unknown" || userIP === "127.0.0.1") {
@@ -16,7 +15,7 @@ export default async function handler(req, res) {
       // First, check if a like record exists for this parent_id
       const findResult = await pool.query(
         'SELECT * FROM likes WHERE parent_id = $1',
-        [uuid]
+        [blogid]
       );
       
       const foundLike = findResult.rows[0];
@@ -35,7 +34,7 @@ export default async function handler(req, res) {
             
             await pool.query(
               'UPDATE likes SET likes = $1, updated_at = CURRENT_TIMESTAMP WHERE parent_id = $2',
-              [updatedLikes, uuid]
+              [updatedLikes, blogid]
             );
             
             res.json({ message: "Like removed" });
@@ -50,7 +49,7 @@ export default async function handler(req, res) {
             
             await pool.query(
               'UPDATE likes SET likes = $1, updated_at = CURRENT_TIMESTAMP WHERE parent_id = $2',
-              [updatedLikes, uuid]
+              [updatedLikes, blogid]
             );
             
             res.json({ message: "Like added" });
@@ -63,7 +62,7 @@ export default async function handler(req, res) {
           // Create a new like record
           await pool.query(
             'INSERT INTO likes (parent_id, likes) VALUES ($1, $2)',
-            [uuid, [userIP]]
+            [blogid, [userIP]]
           );
           
           res.json({ message: "Like added to new blog" });
