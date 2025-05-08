@@ -2,18 +2,28 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import { useGlobalColorScheme } from "../config/global.js";
 import Link from "next/link";
-import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope } from "react-icons/fa";
+import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope, FaQq, FaHome } from "react-icons/fa";
 
 const socialLinks = [
-  {
-    href: "https://github.com/jimchen2",
-    Icon: FaGithub,
-    alt: "GitHub",
-  },
   {
     href: "/weixin.jpg",
     Icon: FaWeixin,
     alt: "WeChat",
+  },
+  {
+    href: "/qq.jpg",
+    Icon: FaQq,
+    alt: "QQ",
+  },
+  {
+    href: "mailto:jimchen4214@gmail.com",
+    Icon: FaEnvelope,
+    alt: "Email",
+  },
+  {
+    href: "https://github.com/jimchen2",
+    Icon: FaGithub,
+    alt: "GitHub",
   },
   {
     href: "https://t.me/Jimchen4214",
@@ -26,9 +36,9 @@ const socialLinks = [
     alt: "LinkedIn",
   },
   {
-    href: "mailto:jimchen4214@gmail.com",
-    Icon: FaEnvelope,
-    alt: "Email",
+    href: "https://jimchen.me",
+    Icon: FaHome,
+    alt: "Website",
   },
 ];
 
