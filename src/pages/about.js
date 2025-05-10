@@ -2,9 +2,14 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import { useGlobalColorScheme } from "../config/global.js";
 import Link from "next/link";
-import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope, FaQq, FaHome } from "react-icons/fa";
+import { FaGithub, FaWeixin, FaTelegram, FaWhatsapp, FaLinkedin, FaEnvelope, FaQq, FaHome } from "react-icons/fa";
 
-const socialLinks = [
+const communicationLinks = [
+  {
+    href: "mailto:jimchen4214@gmail.com",
+    Icon: FaEnvelope,
+    alt: "Email",
+  },
   {
     href: "/weixin.jpg",
     Icon: FaWeixin,
@@ -16,19 +21,22 @@ const socialLinks = [
     alt: "QQ",
   },
   {
-    href: "mailto:jimchen4214@gmail.com",
-    Icon: FaEnvelope,
-    alt: "Email",
+    href: "https://t.me/Jimchen4214",
+    Icon: FaTelegram,
+    alt: "Telegram",
   },
+  {
+    href: "/whatsapp.jpg",
+    Icon: FaWhatsapp,
+    alt: "WhatsApp",
+  },
+];
+
+const otherLinks = [
   {
     href: "https://github.com/jimchen2",
     Icon: FaGithub,
     alt: "GitHub",
-  },
-  {
-    href: "https://t.me/Jimchen4214",
-    Icon: FaTelegram,
-    alt: "Telegram",
   },
   {
     href: "https://www.linkedin.com/in/jim-chen-588002255/",
@@ -50,7 +58,6 @@ function About() {
     fontSize: "40px",
     margin: "10px 15px",
     color: colors.color_black,
-    transition: "color 0.2s",
   };
 
   const externalLinkIcon = (
@@ -72,9 +79,9 @@ function About() {
         textAlign: "center",
       }}
     >
-      <h2 style={{ color: colors.color_black, fontSize: "1.8rem", marginBottom: "20px" }}>Website</h2>
+      <h2 style={{ color: colors.color_black, fontSize: "1.8rem", marginBottom: "10px" }}>Website</h2>
 
-      <div style={{ marginBottom: "30px" }}>
+      <div style={{ marginBottom: "40px" }}>
         <Link href="https://github.com/jimchen2/jimchen.me">
           <span style={{ color: colors.color_black, fontSize: "1.3rem", margin: "0 10px" }}>Source{externalLinkIcon}</span>
         </Link>
@@ -83,18 +90,35 @@ function About() {
         </Link>
       </div>
 
-      <h2 style={{ color: colors.color_black, fontSize: "1.8rem", marginBottom: "20px" }}>Accounts</h2>
-      <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
-        {socialLinks.map((link) => (
-          <Link key={link.href} href={link.href}>
-            <link.Icon
-              style={iconStyle}
-              title={link.alt}
-              onMouseEnter={(e) => (e.currentTarget.style.color = colors.color_accent)}
-              onMouseLeave={(e) => (e.currentTarget.style.color = colors.color_black)}
-            />
-          </Link>
-        ))}
+      <div style={{ marginBottom: "40px" }}>
+        <h2 style={{ color: colors.color_black, fontSize: "1.8rem" }}>Communication</h2>
+        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
+          {communicationLinks.map((link) => (
+            <Link key={link.href} href={link.href}>
+              <link.Icon
+                style={iconStyle}
+                title={link.alt}
+                onMouseEnter={(e) => (e.currentTarget.style.color = colors.color_accent)}
+                onMouseLeave={(e) => (e.currentTarget.style.color = colors.color_black)}
+              />
+            </Link>
+          ))}
+        </div>
+      </div>
+      <div style={{ marginBottom: "40px" }}>
+        <h2 style={{ color: colors.color_black, fontSize: "1.8rem" }}>Other</h2>
+        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
+          {otherLinks.map((link) => (
+            <Link key={link.href} href={link.href}>
+              <link.Icon
+                style={iconStyle}
+                title={link.alt}
+                onMouseEnter={(e) => (e.currentTarget.style.color = colors.color_accent)}
+                onMouseLeave={(e) => (e.currentTarget.style.color = colors.color_black)}
+              />
+            </Link>
+          ))}
+        </div>
       </div>
     </Container>
   );
