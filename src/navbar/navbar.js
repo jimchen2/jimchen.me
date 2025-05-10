@@ -83,14 +83,6 @@ function NavBar() {
                 transition: "color 0.3s ease, transform 0.3s ease",
               }}
               className="me-lg-3 my-2 my-lg-0"
-              onMouseEnter={(e) => {
-                e.target.style.color = colors.color_blue;
-                e.target.style.transform = "scale(1.1)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.color = colors.color_black;
-                e.target.style.transform = "scale(1)";
-              }}
             >
               About
             </Nav.Link>
@@ -102,14 +94,6 @@ function NavBar() {
                 transition: "color 0.3s ease, transform 0.3s ease",
               }}
               className="me-lg-3 my-2 my-lg-0"
-              onMouseEnter={(e) => {
-                e.target.style.color = colors.color_blue;
-                e.target.style.transform = "scale(1.1)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.color = colors.color_black;
-                e.target.style.transform = "scale(1)";
-              }}
             >
               Blog
             </Nav.Link>
@@ -121,14 +105,6 @@ function NavBar() {
                 transition: "color 0.3s ease, transform 0.3s ease",
               }}
               className="me-lg-3 my-2 my-lg-0"
-              onMouseEnter={(e) => {
-                e.target.style.color = colors.color_blue;
-                e.target.style.transform = "scale(1.1)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.color = colors.color_black;
-                e.target.style.transform = "scale(1)";
-              }}
             >
               Comments
             </Nav.Link>
@@ -139,14 +115,6 @@ function NavBar() {
                 transition: "color 0.3s ease, transform 0.3s ease",
               }}
               className="me-lg-3 my-2 my-lg-0"
-              onMouseEnter={(e) => {
-                e.target.style.color = colors.color_blue;
-                e.target.style.transform = "scale(1.1)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.color = colors.color_black;
-                e.target.style.transform = "scale(1)";
-              }}
             >
               Theme
             </Nav.Link>
