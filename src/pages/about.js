@@ -63,7 +63,7 @@ function About() {
 
   const linkIconStyle = {
     fontSize: "24px",
-    margin: "0 10px",
+    margin: "10px 15px",
     color: colors.color_black,
     verticalAlign: "middle",
   };
@@ -84,20 +84,10 @@ function About() {
 
       <div style={{ marginBottom: "40px" }}>
         <Link href="https://github.com/jimchen2/jimchen.me">
-          <TbSourceCode
-            style={linkIconStyle}
-            title="Source Code"
-            onMouseEnter={(e) => (e.currentTarget.style.color = colors.color_accent)}
-            onMouseLeave={(e) => (e.currentTarget.style.color = colors.color_black)}
-          />
+          <TbSourceCode style={linkIconStyle} title="Source Code" />
         </Link>
         <Link href={`${process.env.NEXT_PUBLIC_SITE}/api/rss`}>
-          <FaRss
-            style={linkIconStyle}
-            title="RSS Feed"
-            onMouseEnter={(e) => (e.currentTarget.style.color = colors.color_accent)}
-            onMouseLeave={(e) => (e.currentTarget.style.color = colors.color_black)}
-          />
+          <FaRss style={linkIconStyle} title="RSS Feed" />
         </Link>
       </div>
 
@@ -106,12 +96,7 @@ function About() {
         <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
           {communicationLinks.map((link) => (
             <Link key={link.href} href={link.href}>
-              <link.Icon
-                style={iconStyle}
-                title={link.alt}
-                onMouseEnter={(e) => (e.currentTarget.style.color = colors.color_accent)}
-                onMouseLeave={(e) => (e.currentTarget.style.color = colors.color_black)}
-              />
+              <link.Icon style={iconStyle} title={link.alt} />
             </Link>
           ))}
         </div>
@@ -121,12 +106,7 @@ function About() {
         <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
           {otherLinks.map((link) => (
             <Link key={link.href} href={link.href}>
-              <link.Icon
-                style={iconStyle}
-                title={link.alt}
-                onMouseEnter={(e) => (e.currentTarget.style.color = colors.color_accent)}
-                onMouseLeave={(e) => (e.currentTarget.style.color = colors.color_black)}
-              />
+              <link.Icon style={iconStyle} title={link.alt} />
             </Link>
           ))}
         </div>
