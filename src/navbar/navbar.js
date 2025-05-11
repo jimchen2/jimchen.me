@@ -270,7 +270,13 @@ function NavBar() {
         }}
       >
         <Container>
-          <Nav className="d-flex justify-content-around" style={{ fontWeight: "300", fontFamily: "'Ubuntu', sans-serif" }}>
+          <Nav
+            className="d-flex"
+            style={{
+              fontWeight: "300",
+              fontFamily: "'Ubuntu', sans-serif",
+            }}
+          >
             <Nav.Link
               as={Link}
               href="/about"
@@ -284,6 +290,7 @@ function NavBar() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                flex: 1, // Equal width for each button
               }}
             >
               <FaInfoCircle size={24} style={{ marginBottom: "0.2rem" }} />
@@ -302,6 +309,7 @@ function NavBar() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                flex: 1, // Equal width for each button
               }}
             >
               <FaBlogger size={24} style={{ marginBottom: "0.2rem" }} />
@@ -320,6 +328,7 @@ function NavBar() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                flex: 1, // Equal width for each button
               }}
             >
               <FaComments size={24} style={{ marginBottom: "0.2rem" }} />
@@ -337,6 +346,7 @@ function NavBar() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                flex: 1, // Equal width for each button
               }}
             >
               <FaPalette size={24} style={{ marginBottom: "0.2rem" }} />
@@ -345,7 +355,6 @@ function NavBar() {
           </Nav>
         </Container>
       </div>
-
       {/* CSS for Responsive Behavior */}
       <style jsx>{`
         @media (max-width: 991px) {

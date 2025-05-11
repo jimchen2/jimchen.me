@@ -53,17 +53,45 @@ const otherLinks = [
 
 function About() {
   const { colors } = useGlobalColorScheme();
-  const year = new Date().getFullYear();
+  const languageIcons = [
+    { text: "zh", proficiency: "native" },
+    { text: "en", proficiency: "proficient" },
+    { text: "ру", proficiency: "intermediate" },
+    { text: "de", proficiency: "beginner" },
+  ];
 
-  const iconStyle = {
-    fontSize: "40px",
-    margin: "10px 15px",
-    color: colors.color_black,
+  const LanguageIcon = ({ text, proficiency }) => {
+    return (
+      <div
+        style={{
+          margin: "15px",
+          width: "100px",
+          textAlign: "center",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "30px",
+            fontWeight: "400",
+          }}
+        >
+          {text}
+        </div>
+        <div
+          style={{
+            fontSize: "1rem",
+            margin: "0",
+          }}
+        >
+          {proficiency}
+        </div>
+      </div>
+    );
   };
 
   const linkIconStyle = {
-    fontSize: "24px",
-    margin: "10px 15px",
+    fontSize: "30px",
+    margin: "15px",
     color: colors.color_black,
     verticalAlign: "middle",
   };
@@ -96,7 +124,7 @@ function About() {
         <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
           {communicationLinks.map((link) => (
             <Link key={link.href} href={link.href}>
-              <link.Icon style={iconStyle} title={link.alt} />
+              <link.Icon style={linkIconStyle} title={link.alt} />
             </Link>
           ))}
         </div>
@@ -106,8 +134,16 @@ function About() {
         <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
           {otherLinks.map((link) => (
             <Link key={link.href} href={link.href}>
-              <link.Icon style={iconStyle} title={link.alt} />
+              <link.Icon style={linkIconStyle} title={link.alt} />
             </Link>
+          ))}
+        </div>
+      </div>
+      <div style={{ marginBottom: "40px" }}>
+        <h2 style={{ color: colors.color_black, fontSize: "1.5rem" }}>Languages</h2>
+        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
+          {languageIcons.map((lang) => (
+            <LanguageIcon text={lang.text} proficiency={lang.proficiency} />
           ))}
         </div>
       </div>
