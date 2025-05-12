@@ -157,19 +157,11 @@ const FilterSortComponent = ({ currentType, postTypeArray, paddingTop = 0, curre
       <div
         style={{
           display: "flex",
-          overflowX: "auto",
+          overflowY: "scroll",
           whiteSpace: "nowrap",
-          gap: "1rem",
           alignItems: "center",
           flexWrap: "nowrap",
           paddingBottom: "0.5rem",
-          scrollbarWidth: "none",
-          "-ms-overflow-style": "none",
-          "&::-webkit-scrollbar": {
-            display: "none",
-          },
-          position: "relative", // Ensure proper positioning context
-          overflow: "visible", // Prevent clipping of dropdowns
         }}
       >
         {/* Language Filter Dropdown */}

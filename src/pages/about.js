@@ -56,7 +56,7 @@ function About() {
   const languageIcons = [
     { text: "zh", proficiency: "native" },
     { text: "en", proficiency: "proficient" },
-    { text: "ру", proficiency: "intermediate" },
+    { text: "ru", proficiency: "intermediate" },
     { text: "de", proficiency: "beginner" },
   ];
 

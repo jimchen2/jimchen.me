@@ -17,7 +17,7 @@ export async function getServerSideProps(context) {
     }
 
     if (lang) {
-      apiUrl += `&lang=${lang}`; // Append language parameter
+      apiUrl += `&lang=${lang}`; 
     }
 
     if (sort) {
@@ -79,7 +79,7 @@ export async function getServerSideProps(context) {
           totalItems: 0,
         },
         type: type || null,
-        language: language || null,
+        language: lang || null,
         postTypeArray: [],
         sort: sort || null,
       },
