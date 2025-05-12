@@ -255,7 +255,6 @@ function NavBar() {
         </Container>
       </Navbar>
 
-      {/* Bottom Navigation for Mobile */}
       <div
         className="d-lg-none"
         style={{
@@ -275,6 +274,7 @@ function NavBar() {
             style={{
               fontWeight: "300",
               fontFamily: "'Ubuntu', sans-serif",
+              fontSize: "0.8rem",
             }}
           >
             <Nav.Link
@@ -283,14 +283,12 @@ function NavBar() {
               style={{
                 color: isActive("/about") ? colors.color_blue : colors.color_black,
                 backgroundColor: isActive("/about") ? colors.color_white : "transparent",
-                borderRadius: "8px",
-                padding: "0.5rem",
-                transition: "color 0.3s ease, background-color 0.3s ease",
                 textAlign: "center",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                flex: 1, // Equal width for each button
+                flex: 1,
+                width: "25%",
               }}
             >
               <FaInfoCircle size={24} style={{ marginBottom: "0.2rem" }} />
@@ -302,14 +300,12 @@ function NavBar() {
               style={{
                 color: isActive("/") ? colors.color_blue : colors.color_black,
                 backgroundColor: isActive("/") ? colors.color_white : "transparent",
-                borderRadius: "8px",
-                padding: "0.5rem",
-                transition: "color 0.3s ease, background-color 0.3s ease",
                 textAlign: "center",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                flex: 1, // Equal width for each button
+                flex: 1,
+                width: "25%",
               }}
             >
               <FaBlogger size={24} style={{ marginBottom: "0.2rem" }} />
@@ -321,14 +317,12 @@ function NavBar() {
               style={{
                 color: isActive("/comments") ? colors.color_blue : colors.color_black,
                 backgroundColor: isActive("/comments") ? colors.color_white : "transparent",
-                borderRadius: "8px",
-                padding: "0.5rem",
-                transition: "color 0.3s ease, background-color 0.3s ease",
                 textAlign: "center",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                flex: 1, // Equal width for each button
+                flex: 1,
+                width: "25%",
               }}
             >
               <FaComments size={24} style={{ marginBottom: "0.2rem" }} />
@@ -339,14 +333,12 @@ function NavBar() {
               style={{
                 color: colors.color_black,
                 backgroundColor: "transparent",
-                borderRadius: "8px",
-                padding: "0.5rem",
-                transition: "color 0.3s ease, background-color 0.3s ease",
                 textAlign: "center",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                flex: 1, // Equal width for each button
+                flex: 1,
+                width: "25%",
               }}
             >
               <FaPalette size={24} style={{ marginBottom: "0.2rem" }} />
