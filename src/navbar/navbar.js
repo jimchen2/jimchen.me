@@ -6,7 +6,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Container, Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
 import { useGlobalColorScheme } from "../config/global";
 import { toggleTheme } from "../config/global";
-import { FaSearch, FaInfoCircle, FaBlogger, FaComments, FaPalette } from "react-icons/fa"; // Added icons for nav items
+import { FaSearch, FaInfoCircle, FaBlog, FaComments, FaPalette } from "react-icons/fa"; // Added icons for nav items
 
 function NavBar() {
   const { colors, updateColor } = useGlobalColorScheme();
@@ -309,7 +309,7 @@ function NavBar() {
                 width: "25%",
               }}
             >
-              <FaBlogger size={24} style={{ marginBottom: "0.2rem" }} />
+              <FaBlog size={24} style={{ marginBottom: "0.2rem" }} />
               Blog
             </Nav.Link>
             <Nav.Link
