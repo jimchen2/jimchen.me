@@ -125,7 +125,7 @@ const FilterSortComponent = ({ currentType, postTypeArray, paddingTop = 0, curre
     { type: "all", label: `All (${totalPostsCount})`, count: totalPostsCount },
     ...filteredTypeArray.map(({ type, count }) => ({
       type,
-      label: `${type} (${count})`,
+      label: `${type.charAt(0).toUpperCase() + type.slice(1)} (${count})`,
       count,
     })),
   ];
