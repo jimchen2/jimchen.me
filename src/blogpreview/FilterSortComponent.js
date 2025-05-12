@@ -125,7 +125,7 @@ const FilterSortComponent = ({ currentType, postTypeArray, paddingTop = 0, curre
     { type: "all", label: `All (${totalPostsCount})`, count: totalPostsCount },
     ...filteredTypeArray.map(({ type, count }) => ({
       type,
-      label: `${type.charAt(0).toUpperCase() + type.slice(1)} (${count})`,
+      label: `${type} (${count})`,
       count,
     })),
   ];
@@ -172,7 +172,7 @@ const FilterSortComponent = ({ currentType, postTypeArray, paddingTop = 0, curre
   // Get current labels
   const getCurrentLanguageLabel = () => {
     const langOption = languageOptions.find((option) => option.language === activeLanguage);
-    return langOption ? `Lang: ${langOption.label}` : "Lang: All";
+    return langOption ? `Language: ${langOption.label}` : "Lang: All";
   };
 
   const getCurrentTypeLabel = () => {
@@ -208,12 +208,12 @@ const FilterSortComponent = ({ currentType, postTypeArray, paddingTop = 0, curre
         <CustomDropdown id="dropdown-type" label={getCurrentTypeLabel()} options={typeOptions} selectedValue={activeType} onSelect={handleTypeClick} colors={colors} dark={dark} />
         <CustomDropdown id="dropdown-sort" label={getCurrentSortLabel()} options={sortOptions} selectedValue={activeSort} onSelect={handleSortClick} colors={colors} dark={dark} />
       </div>
-      
+
       <style jsx>{`
         .filter-container {
           padding: 0 5%;
         }
-        
+
         @media (min-width: 992px) {
           .filter-container {
             padding: 0 18%;

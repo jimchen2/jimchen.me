@@ -62,14 +62,28 @@ export async function processBlog(blog) {
   };
 }
 
-export async function calculatePaginationInfo(count = 10, type = null) {
+export async function calculatePaginationInfo(count = 10, type = null, lang = null) {
   const pool = await dbConnect();
   let query = "SELECT COUNT(*) FROM blogs";
   let queryParams = [];
+  let conditions = [];
+  let paramCounter = 1;
 
+  // Build WHERE conditions
   if (type) {
-    query += ` WHERE type = $1`;
+    conditions.push(`type = $${paramCounter}`);
     queryParams.push(type);
+    paramCounter++;
+  }
+  if (lang) {
+    conditions.push(`language = $${paramCounter}`);
+    queryParams.push(lang);
+    paramCounter++;
+  }
+
+  // Combine conditions into WHERE clause
+  if (conditions.length > 0) {
+    query += ` WHERE ${conditions.join(" AND ")}`;
   }
 
   try {
@@ -82,11 +96,27 @@ export async function calculatePaginationInfo(count = 10, type = null) {
   }
 }
 
-export async function getBlogTypesWithCounts() {
+export async function getBlogTypesWithCounts(lang = null) {
   const pool = await dbConnect();
-  const query = "SELECT type, COUNT(*) as count FROM blogs GROUP BY type";
+  let query = "SELECT type, COUNT(*) as count FROM blogs";
+  let queryParams = [];
+  let conditions = [];
+  let paramCounter = 1;
+
+  if (lang) {
+    conditions.push(`language = $${paramCounter}`);
+    queryParams.push(lang);
+    paramCounter++;
+  }
+
+  if (conditions.length > 0) {
+    query += ` WHERE ${conditions.join(" AND ")}`;
+  }
+
+  query += " GROUP BY type";
+
   try {
-    const result = await pool.query(query);
+    const result = await pool.query(query, queryParams);
     return result.rows.map((row) => ({ type: row.type, count: parseInt(row.count, 10) }));
   } finally {
     // pool.end(); // Uncomment if necessary
@@ -108,7 +138,7 @@ export default async function handler(req, res) {
         return res.status(400).json({ message: "Invalid sort parameter" });
       }
 
-      // Optional: Validate lang (e.g., ensure it's a valid language code)
+      // Validate lang (e.g., ensure it's a valid language code)
       if (lang && !/^[a-z]{2}$/.test(lang)) {
         return res.status(400).json({ message: "Invalid language code" });
       }
@@ -118,10 +148,10 @@ export default async function handler(req, res) {
       const blogPreviews = await Promise.all(blogPreviewsRaw.map((blog) => processBlog(blog)));
 
       // Get pagination info
-      const { totalPages, totalBlogs } = await calculatePaginationInfo(count, type);
+      const { totalPages, totalBlogs } = await calculatePaginationInfo(count, type, lang);
 
       // Get blog types with counts
-      const typesWithCounts = await getBlogTypesWithCounts();
+      const typesWithCounts = await getBlogTypesWithCounts(lang);
 
       res.json({
         data: blogPreviews,
