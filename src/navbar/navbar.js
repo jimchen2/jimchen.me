@@ -55,6 +55,7 @@ function NavBar() {
 
   // Determine if a nav link is active based on pathname
   const isActive = (href) => {
+    if (!pathname) return false; // Add this check to prevent the error
     if (href === "/" && pathname === "/") return true;
     if (href !== "/" && pathname.startsWith(href)) return true;
     return false;
