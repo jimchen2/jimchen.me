@@ -1,7 +1,70 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Dropdown } from "react-bootstrap";
 import { useGlobalColorScheme } from "@/config/global.js";
+import Modal from "./Modal";
+
+const CustomDropdown = ({ id, label, options, selectedValue, onSelect, colors, dark }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const buttonStyle = {
+    backgroundColor: colors.color_white,
+    borderColor: colors.color_black,
+    color: colors.color_black,
+    margin: "0.3rem",
+    padding: "0.5rem",
+    borderRadius: "8px",
+    boxShadow: "0 3px 6px rgba(0, 0, 0, 0.08)",
+    fontWeight: "500",
+    whiteSpace: "nowrap",
+    cursor: "pointer",
+  };
+
+  const itemStyle = (isSelected) => ({
+    backgroundColor: isSelected ? colors.color_light_gray : colors.color_white,
+    color: colors.color_black,
+    padding: "0.75rem 1rem",
+    margin: "0.2rem 0",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontWeight: isSelected ? "bold" : "normal",
+    textAlign: "center",
+    transition: "background-color 0.2s",
+  });
+
+  return (
+    <div ref={dropdownRef} style={{ display: "inline-block" }}>
+      <button style={buttonStyle} onClick={() => setIsOpen(!isOpen)} aria-expanded={isOpen} aria-controls={id} aria-haspopup="true">
+        {label}
+      </button>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} colors={colors} dark={dark}>
+        <div id={id} role="menu">
+          {options.map((option) => (
+            <div
+              key={option.value || option.language || option.type}
+              style={itemStyle(selectedValue === (option.value || option.language || option.type))}
+              onClick={() => {
+                onSelect(option.value || option.language || option.type);
+                setIsOpen(false);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  onSelect(option.value || option.language || option.type);
+                  setIsOpen(false);
+                }
+              }}
+              role="menuitem"
+              tabIndex={0}
+              aria-selected={selectedValue === (option.value || option.language || option.type)}
+            >
+              {option.label}
+            </div>
+          ))}
+        </div>
+      </Modal>
+    </div>
+  );
+};
 
 const FilterSortComponent = ({ currentType, postTypeArray, paddingTop = 0, currentSort, currentLanguage }) => {
   const { colors } = useGlobalColorScheme();
@@ -19,21 +82,18 @@ const FilterSortComponent = ({ currentType, postTypeArray, paddingTop = 0, curre
     const langFromUrl = searchParams.get("lang");
     const sortFromUrl = searchParams.get("sort");
 
-    // Sync type
     if (typeFromUrl && postTypeArray.some((pt) => pt.type === typeFromUrl && (activeLanguage === "all" || pt.language === activeLanguage))) {
       setActiveType(typeFromUrl);
     } else {
       setActiveType("all");
     }
 
-    // Sync language
     if (langFromUrl && postTypeArray.some((pt) => pt.language === langFromUrl)) {
       setActiveLanguage(langFromUrl);
     } else {
       setActiveLanguage("all");
     }
 
-    // Sync sort
     const isValidSort = sortOptions.some((opt) => opt.value === sortFromUrl);
     setActiveSort(isValidSort ? sortFromUrl : currentSort || "date_latest");
   }, [searchParams, postTypeArray, currentSort, currentLanguage]);
@@ -70,29 +130,10 @@ const FilterSortComponent = ({ currentType, postTypeArray, paddingTop = 0, curre
     })),
   ];
 
-  // Styles
-  const buttonStyle = {
-    backgroundColor: colors.color_white,
-    borderColor: colors.color_black,
-    color: colors.color_black,
-    margin: "0.3rem",
-    padding: "0.5rem",
-    borderRadius: "8px",
-    boxShadow: "0 3px 6px rgba(0, 0, 0, 0.08)",
-    fontWeight: "500",
-    whiteSpace: "nowrap", // Ensure buttons don't wrap text
-  };
-
-  const dropdownItemStyle = (selected) => ({
-    backgroundColor: colors.color_white,
-    color: selected ? colors.color_black : colors.color_black,
-    fontWeight: selected ? "bold" : "normal",
-  });
-
   // Handle language selection
   const handleLanguageClick = (language) => {
     setActiveLanguage(language);
-    setActiveType("all"); // Reset type when language changes
+    setActiveType("all");
     const queryParams = {};
     if (language !== "all") queryParams.lang = language;
     if (activeSort !== "date_latest") queryParams.sort = activeSort;
@@ -131,17 +172,17 @@ const FilterSortComponent = ({ currentType, postTypeArray, paddingTop = 0, curre
   // Get current labels
   const getCurrentLanguageLabel = () => {
     const langOption = languageOptions.find((option) => option.language === activeLanguage);
-    return langOption ? langOption.label : "All Languages";
+    return langOption ? `Lang: ${langOption.label}` : "Lang: All";
   };
 
   const getCurrentTypeLabel = () => {
     const typeOption = typeOptions.find((option) => option.type === activeType);
-    return typeOption ? typeOption.label : `All (${totalPostsCount})`;
+    return typeOption ? `Type: ${typeOption.label}` : `Type: All (${totalPostsCount})`;
   };
 
   const getCurrentSortLabel = () => {
     const sortOption = sortOptions.find((option) => option.value === activeSort);
-    return sortOption ? sortOption.label : "Newest First";
+    return sortOption ? `Sort: ${sortOption.label}` : "Sort: Newest";
   };
 
   const dark = colors.color_black === "#ffffff";
@@ -149,63 +190,36 @@ const FilterSortComponent = ({ currentType, postTypeArray, paddingTop = 0, curre
   return (
     <div
       style={{
-        padding: window.innerWidth > 768 ? "0 18%" : "0 5%",
         marginTop: `${paddingTop}px`,
       }}
+      className="filter-container"
     >
-      {/* Scrollable Button Container */}
       <div
         style={{
           display: "flex",
-          overflowY: "scroll",
+          overflowX: "auto",
           whiteSpace: "nowrap",
           alignItems: "center",
           flexWrap: "nowrap",
           paddingBottom: "0.5rem",
         }}
       >
-        {/* Language Filter Dropdown */}
-        <Dropdown data-bs-theme={dark ? "dark" : "light"} style={{ display: "inline-block" }}>
-          <Dropdown.Toggle style={buttonStyle} id="dropdown-language">
-            Lang: {getCurrentLanguageLabel()}
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {languageOptions.map((option) => (
-              <Dropdown.Item key={option.language} style={dropdownItemStyle(activeLanguage === option.language)} onClick={() => handleLanguageClick(option.language)}>
-                {option.label}
-              </Dropdown.Item>
-            ))}
-          </Dropdown.Menu>
-        </Dropdown>
-
-        {/* Type Filter Dropdown */}
-        <Dropdown data-bs-theme={dark ? "dark" : "light"} style={{ display: "inline-block" }}>
-          <Dropdown.Toggle style={buttonStyle} id="dropdown-type">
-            Type: {getCurrentTypeLabel()}
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {typeOptions.map((option) => (
-              <Dropdown.Item key={option.type} style={dropdownItemStyle(activeType === option.type)} onClick={() => handleTypeClick(option.type)}>
-                {option.label}
-              </Dropdown.Item>
-            ))}
-          </Dropdown.Menu>
-        </Dropdown>
-
-        {/* Sort Dropdown */}
-        <Dropdown data-bs-theme={dark ? "dark" : "light"} style={{ display: "inline-block" }}>
-          <Dropdown.Toggle style={buttonStyle} id="dropdown-sort">
-            Sort: {getCurrentSortLabel()}
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {sortOptions.map((option) => (
-              <Dropdown.Item key={option.value} style={dropdownItemStyle(activeSort === option.value)} onClick={() => handleSortClick(option.value)}>
-                {option.label}
-              </Dropdown.Item>
-            ))}
-          </Dropdown.Menu>
-        </Dropdown>
+        <CustomDropdown id="dropdown-language" label={getCurrentLanguageLabel()} options={languageOptions} selectedValue={activeLanguage} onSelect={handleLanguageClick} colors={colors} dark={dark} />
+        <CustomDropdown id="dropdown-type" label={getCurrentTypeLabel()} options={typeOptions} selectedValue={activeType} onSelect={handleTypeClick} colors={colors} dark={dark} />
+        <CustomDropdown id="dropdown-sort" label={getCurrentSortLabel()} options={sortOptions} selectedValue={activeSort} onSelect={handleSortClick} colors={colors} dark={dark} />
       </div>
+      
+      <style jsx>{`
+        .filter-container {
+          padding: 0 5%;
+        }
+        
+        @media (min-width: 992px) {
+          .filter-container {
+            padding: 0 18%;
+          }
+        }
+      `}</style>
     </div>
   );
 };
