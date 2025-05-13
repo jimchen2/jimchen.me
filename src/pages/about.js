@@ -53,12 +53,7 @@ const otherLinks = [
 
 function About() {
   const { colors } = useGlobalColorScheme();
-  const languageIcons = [
-    { text: "zh", proficiency: "native" },
-    { text: "en", proficiency: "proficient" },
-    { text: "ru", proficiency: "intermediate" },
-    { text: "de", proficiency: "beginner" },
-  ];
+  const languageIcons = [{ text: "zh" }, { text: "en" }, { text: "ru", proficiency: "intermediate" }, { text: "de", proficiency: "beginner" }];
 
   const LanguageIcon = ({ text, proficiency }) => {
     return (
