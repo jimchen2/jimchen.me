@@ -4,9 +4,9 @@ import { useRouter } from "next/router";
 import BlogPreviewPage from "@/blogpreview/BlogPreviewPage";
 
 export async function getServerSideProps(context) {
-  const { page } = context.params || 1;
+  const { page = 1 } = context.params || {};
   const pageNumber = parseInt(page);
-  const { type, sort } = context.query; // Get the sort query parameter
+  const { type, lang, sort } = context.query; // Add language query parameter
 
   try {
     const start = (pageNumber - 1) * 10; // 10 items per page
@@ -16,28 +16,29 @@ export async function getServerSideProps(context) {
       apiUrl += `&type=${type}`;
     }
 
+    if (lang) {
+      apiUrl += `&lang=${lang}`; 
+    }
+
     if (sort) {
-      apiUrl += `&sort=${sort}`; // Append the sort parameter
+      apiUrl += `&sort=${sort}`; // Append sort parameter
     }
 
     // Perform both fetches in parallel using Promise.all
-    const [blogResponse, typesResponse] = await Promise.all([
-      axios.get(apiUrl),
-      axios.get(`${process.env.NEXT_PUBLIC_SITE}/api/blogtypes`),
-    ]);
+    const [blogResponse, typesResponse] = await Promise.all([axios.get(apiUrl), axios.get(`${process.env.NEXT_PUBLIC_SITE}/api/blogtypes`)]);
 
     const data = blogResponse.data.data || [];
     const pagination = blogResponse.data.pagination || {};
-    const postTypeArray = typesResponse.data || [];
+    const postTypeArray = typesResponse.data || []; // Now contains type, language, count
 
     // If requested page is beyond total pages, redirect to last page
     if (pageNumber > pagination.totalPages) {
-      let redirectUrl =
-        pagination.totalPages > 1 ? `/page/${pagination.totalPages}` : `/`;
+      let redirectUrl = pagination.totalPages > 1 ? `/page/${pagination.totalPages}` : `/`;
 
-      // Preserve type and sort parameters during redirection
+      // Preserve type, language, and sort parameters during redirection
       const queryParams = {};
       if (type) queryParams.type = type;
+      if (language) queryParams.language = language;
       if (sort) queryParams.sort = sort;
 
       const queryString = Object.keys(queryParams)
@@ -61,8 +62,9 @@ export async function getServerSideProps(context) {
         data,
         pagination,
         type: type || null,
+        language: lang || null, // Pass language to component
         postTypeArray,
-        sort: sort || null, // Pass the sort parameter to the component
+        sort: sort || null,
       },
     };
   } catch (err) {
@@ -77,6 +79,7 @@ export async function getServerSideProps(context) {
           totalItems: 0,
         },
         type: type || null,
+        language: lang || null,
         postTypeArray: [],
         sort: sort || null,
       },
@@ -84,22 +87,14 @@ export async function getServerSideProps(context) {
   }
 }
 
-function BlogPage({ data, pagination, type, postTypeArray, sort }) {
+function BlogPage({ data, pagination, type, language, postTypeArray, sort }) {
   const router = useRouter();
 
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
 
-  return (
-    <BlogPreviewPage
-      currentType={type}
-      data={data}
-      pagination={pagination}
-      postTypeArray={postTypeArray}
-      sort={sort}
-    />
-  );
+  return <BlogPreviewPage currentType={type} currentLanguage={language} data={data} pagination={pagination} postTypeArray={postTypeArray} sort={sort} />;
 }
 
 export default BlogPage;

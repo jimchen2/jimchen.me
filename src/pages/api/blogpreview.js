@@ -1,39 +1,50 @@
 import dbConnect from "@/lib/db/dbConnect";
 
-export async function fetchBlogPreviews(start, count, type = null, sort = "date_latest") {
+export async function fetchBlogPreviews(start, count, type = null, sort = "date_latest", lang = null) {
   const pool = await dbConnect();
   let query = "SELECT * FROM blogs";
   let queryParams = [];
   let paramCounter = 1;
+  let conditions = [];
 
+  // Build WHERE conditions
   if (type) {
-    query += ` WHERE type = $${paramCounter}`;
+    conditions.push(`type = $${paramCounter}`);
     queryParams.push(type);
     paramCounter++;
   }
-
-  // Define sort criteria
-  let sortQuery = "";
-  switch (sort) {
-    case "date_oldest":
-      sortQuery = " ORDER BY date ASC";
-      break;
-    case "most_words":
-      sortQuery = " ORDER BY word_count DESC";
-      break;
-    case "least_words":
-      sortQuery = " ORDER BY word_count ASC";
-      break;
-    default:
-      sortQuery = " ORDER BY date DESC";
+  if (lang) {
+    conditions.push(`language = $${paramCounter}`);
+    queryParams.push(lang);
+    paramCounter++;
   }
 
-  query += sortQuery;
+  // Combine conditions into WHERE clause
+  if (conditions.length > 0) {
+    query += ` WHERE ${conditions.join(" AND ")}`;
+  }
+
+  // Define sort criteria
+  const sortCriteria = {
+    date_oldest: "date ASC",
+    most_words: "word_count DESC",
+    least_words: "word_count ASC",
+    date_latest: "date DESC",
+  };
+  const sortQuery = sortCriteria[sort] || sortCriteria.date_latest;
+  query += ` ORDER BY ${sortQuery}`;
+
+  // Add LIMIT and OFFSET
   query += ` LIMIT $${paramCounter} OFFSET $${paramCounter + 1}`;
   queryParams.push(count, start);
 
-  const result = await pool.query(query, queryParams);
-  return result.rows;
+  try {
+    const result = await pool.query(query, queryParams);
+    return result.rows;
+  } finally {
+    // Ensure pool/client cleanup if necessary
+    // pool.end(); // Uncomment if using a client that needs explicit closing
+  }
 }
 
 export async function processBlog(blog) {
@@ -46,34 +57,70 @@ export async function processBlog(blog) {
 
   return {
     ...blog,
-    body: blog.body ? blog.body.substring(0, 200) : '',
+    body: blog.body ? blog.body.substring(0, 200) : "",
     date: formattedDate,
   };
 }
 
-export async function calculatePaginationInfo(count = 10, type = null) {
+export async function calculatePaginationInfo(count = 10, type = null, lang = null) {
   const pool = await dbConnect();
   let query = "SELECT COUNT(*) FROM blogs";
   let queryParams = [];
+  let conditions = [];
   let paramCounter = 1;
 
+  // Build WHERE conditions
   if (type) {
-    query += ` WHERE type = $${paramCounter}`;
+    conditions.push(`type = $${paramCounter}`);
     queryParams.push(type);
+    paramCounter++;
+  }
+  if (lang) {
+    conditions.push(`language = $${paramCounter}`);
+    queryParams.push(lang);
+    paramCounter++;
   }
 
-  const result = await pool.query(query, queryParams);
-  const totalBlogs = parseInt(result.rows[0].count, 10);
-  const totalPages = Math.ceil(totalBlogs / count);
+  // Combine conditions into WHERE clause
+  if (conditions.length > 0) {
+    query += ` WHERE ${conditions.join(" AND ")}`;
+  }
 
-  return { totalBlogs, totalPages };
+  try {
+    const result = await pool.query(query, queryParams);
+    const totalBlogs = parseInt(result.rows[0].count, 10);
+    const totalPages = Math.ceil(totalBlogs / count);
+    return { totalBlogs, totalPages };
+  } finally {
+    // pool.end(); // Uncomment if necessary
+  }
 }
 
-export async function getBlogTypesWithCounts() {
+export async function getBlogTypesWithCounts(lang = null) {
   const pool = await dbConnect();
-  const query = "SELECT type, COUNT(*) as count FROM blogs GROUP BY type";
-  const result = await pool.query(query);
-  return result.rows.map(row => ({ type: row.type, count: parseInt(row.count, 10) }));
+  let query = "SELECT type, COUNT(*) as count FROM blogs";
+  let queryParams = [];
+  let conditions = [];
+  let paramCounter = 1;
+
+  if (lang) {
+    conditions.push(`language = $${paramCounter}`);
+    queryParams.push(lang);
+    paramCounter++;
+  }
+
+  if (conditions.length > 0) {
+    query += ` WHERE ${conditions.join(" AND ")}`;
+  }
+
+  query += " GROUP BY type";
+
+  try {
+    const result = await pool.query(query, queryParams);
+    return result.rows.map((row) => ({ type: row.type, count: parseInt(row.count, 10) }));
+  } finally {
+    // pool.end(); // Uncomment if necessary
+  }
 }
 
 export default async function handler(req, res) {
@@ -82,23 +129,29 @@ export default async function handler(req, res) {
       const start = parseInt(req.query.start) || 0;
       const count = parseInt(req.query.count) || 10;
       const type = req.query.type || null;
-      const sort = req.query.sort || "date_latest"; // Default to date_latest
+      const sort = req.query.sort || "date_latest";
+      const lang = req.query.lang || null;
 
       // Validate sort parameter
       const validSorts = ["date_oldest", "date_latest", "most_words", "least_words"];
-      if (sort && !validSorts.includes(sort)) {
+      if (!validSorts.includes(sort)) {
         return res.status(400).json({ message: "Invalid sort parameter" });
       }
 
-      // Fetch blog previews directly from the database
-      const blogPreviewsRaw = await fetchBlogPreviews(start, count, type, sort);
-      const blogPreviews = await Promise.all(blogPreviewsRaw.map(blog => processBlog(blog)));
+      // Validate lang (e.g., ensure it's a valid language code)
+      if (lang && !/^[a-z]{2}$/.test(lang)) {
+        return res.status(400).json({ message: "Invalid language code" });
+      }
 
-      // Get pagination info directly
-      const { totalPages, totalBlogs } = await calculatePaginationInfo(count, type);
+      // Fetch blog previews
+      const blogPreviewsRaw = await fetchBlogPreviews(start, count, type, sort, lang);
+      const blogPreviews = await Promise.all(blogPreviewsRaw.map((blog) => processBlog(blog)));
 
-      // Get blog types with counts for filtering
-      const typesWithCounts = await getBlogTypesWithCounts();
+      // Get pagination info
+      const { totalPages, totalBlogs } = await calculatePaginationInfo(count, type, lang);
+
+      // Get blog types with counts
+      const typesWithCounts = await getBlogTypesWithCounts(lang);
 
       res.json({
         data: blogPreviews,
@@ -107,8 +160,8 @@ export default async function handler(req, res) {
           currentPage: Math.floor(start / count) + 1,
           pageSize: count,
           totalItems: totalBlogs,
-          type: type,
-          sort: sort,
+          type,
+          sort,
         },
         filters: {
           types: typesWithCounts,

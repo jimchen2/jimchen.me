@@ -42,23 +42,23 @@ const otherLinks = [
   {
     href: "https://www.linkedin.com/in/jim-chen-588002255/",
     Icon: FaLinkedin,
-    alt: "LinkedIn",
+    alt: "CV",
   },
   {
     href: "https://jimchen.me",
     Icon: FaHome,
-    alt: "Website",
+    alt: "Blog",
+  },
+  {
+    href: "https://jimchen.me/api/rss",
+    Icon: FaRss,
+    alt: "RSS",
   },
 ];
 
 function About() {
   const { colors } = useGlobalColorScheme();
-  const languageIcons = [
-    { text: "zh", proficiency: "native" },
-    { text: "en", proficiency: "proficient" },
-    { text: "ру", proficiency: "intermediate" },
-    { text: "de", proficiency: "beginner" },
-  ];
+  const languageIcons = [{ text: "zh" }, { text: "en" }, { text: "ru", proficiency: "intermediate" }, { text: "de", proficiency: "beginner" }];
 
   const LanguageIcon = ({ text, proficiency }) => {
     return (
@@ -109,15 +109,6 @@ function About() {
         marginTop: "20px",
       }}
     >
-      <div style={{ marginBottom: "40px" }}>
-        <h2 style={{ color: colors.color_black, fontSize: "1.5rem", fontWeight: "300" }}>Website</h2>
-        <Link href="https://github.com/jimchen2/jimchen.me">
-          <TbSourceCode style={linkIconStyle} title="Source Code" />
-        </Link>
-        <Link href={`${process.env.NEXT_PUBLIC_SITE}/api/rss`}>
-          <FaRss style={linkIconStyle} title="RSS Feed" />
-        </Link>
-      </div>
 
       <div style={{ marginBottom: "40px" }}>
         <h2 style={{ color: colors.color_black, fontSize: "1.5rem", fontWeight: "300" }}>Communication</h2>
