@@ -62,7 +62,7 @@ const websiteLinks = [
     alt: "Website Source Code",
   },
   {
-    href: "https://archive.org/details/@j_c561", 
+    href: "https://archive.org/details/@j_c561/web-archive", 
     Icon: FaArchive,
     alt: "Web Archive",
   },
