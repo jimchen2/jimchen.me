@@ -23,12 +23,12 @@ const communicationLinks = [
     alt: "Email",
   },
   {
-    href: "/weixin.jpg", // Assuming this is an image to display, not a direct link
+    href: "https://jimchen.me/weixin.jpg", 
     Icon: FaWeixin,
     alt: "WeChat",
   },
   {
-    href: "/qq.jpg", // Assuming this is an image to display
+    href: "https://jimchen.me/qq.jpg",
     Icon: FaQq,
     alt: "QQ",
   },
@@ -38,7 +38,7 @@ const communicationLinks = [
     alt: "Telegram",
   },
   {
-    href: "/whatsapp.jpg", // Assuming this is an image to display
+    href: "https://jimchen.me/whatsapp.jpg", 
     Icon: FaWhatsapp,
     alt: "WhatsApp",
   },
@@ -142,11 +142,8 @@ function About() {
           const isImageDisplay = ["/weixin.jpg", "/qq.jpg", "/whatsapp.jpg"].includes(link.href);
 
           if (isImageDisplay) {
-            // For local images like weixin.jpg, just display the icon.
-            // The actual image display might need a modal or separate page logic.
-            // Here, clicking the icon won't navigate but could trigger something else.
             return (
-              <span key={link.href} title={link.alt} style={{ cursor: "pointer" /* indicate it's clickable */ }}>
+              <span key={link.href} title={link.alt} >
                 <link.Icon style={linkIconStyle} />
               </span>
             );
