@@ -12,7 +12,7 @@ const BlogLikeButtonHelper = ({ blogid }) => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `/api/bloggetlikes?blogid=${blogid}&isarray=true`
+          `${process.env.NEXT_PUBLIC_SITE}/api/bloggetlikes?blogid=${blogid}&isarray=true`
         );
         setLikes(response.data.likes); // Assuming the server responds with a property named likes
       } catch (err) {

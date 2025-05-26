@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
+import Head from "next/head"; // Import next/head
 import "../config/globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ColorSchemeProvider, useGlobalColorScheme } from "../config/global.js";
 import NavBar from "../navbar/navbar.js";
 import axios from "axios";
 import { setIpAddress } from "../config/global.js";
+
 function AppContent({ Component, pageProps, isEmbedPage }) {
   const { colors } = useGlobalColorScheme();
 
@@ -13,11 +15,11 @@ function AppContent({ Component, pageProps, isEmbedPage }) {
     backgroundColor: colors.color_white,
     display: "flex",
     flexDirection: "column",
-    minHeight: "100vh", // This ensures the container takes at least the full viewport height
+    minHeight: "100vh",
   };
 
   const mainContentStyle = {
-    flex: "1", // This makes the content area expand to fill available space
+    flex: "1",
   };
 
   useEffect(() => {
@@ -34,7 +36,6 @@ function AppContent({ Component, pageProps, isEmbedPage }) {
   );
 }
 
-// Separate function to fetch IP asynchronously
 const fetchIpInfo = async () => {
   try {
     const response = await axios.get("/api/get-ip");
@@ -55,6 +56,9 @@ function MyApp({ Component, pageProps, router }) {
 
   return (
     <ColorSchemeProvider>
+      <Head>
+        <title>Jim Chen's Blog</title> {/* Default title */}
+      </Head>
       <AppContent Component={Component} pageProps={pageProps} isEmbedPage={isEmbedPage} />
     </ColorSchemeProvider>
   );

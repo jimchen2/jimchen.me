@@ -8,7 +8,7 @@ export default async function handler(req, res) {
       
       // Fetch all blogs from PostgreSQL with minimal fields for sitemap
       const query = `
-        SELECT language, type, title, date
+        SELECT blogid, date
         FROM blogs
         ORDER BY date DESC
       `;
@@ -24,7 +24,7 @@ export default async function handler(req, res) {
         const formattedDate = dateObj.toISOString().split('T')[0]; // YYYY-MM-DD for sitemap
 
         return {
-          url: `${baseUrl}/${encodeURIComponent(blog.language)}/${encodeURIComponent(blog.type)}/${encodeURIComponent(blog.title)}`,
+          url: `${baseUrl}/a/${blogid}`,
           lastmod: formattedDate, // Use blog's date
           changefreq: 'daily',
           priority: 1.0
