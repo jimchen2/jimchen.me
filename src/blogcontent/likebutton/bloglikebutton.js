@@ -48,7 +48,7 @@ function BlogLikeButton({ blogid, like }) {
 
     const isLiked = liked; // If already liked, this will be true, indicating we want to remove the like
     const newLikes = isLiked ? likes - 1 : likes + 1; // Adjust the likes count accordingly
-    const patchUrl = `https://jimchen.me/api/blogtogglelike?blogid=${encodeURIComponent(blogid)}`;
+    const patchUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blogtogglelike?blogid=${encodeURIComponent(blogid)}`;
     try {
       console.log(`Sending PATCH request to: ${patchUrl}`);
       console.log(`Payload: `, { userIP, isLiked: !isLiked }); // Note: The logic might be inverted based on the action
