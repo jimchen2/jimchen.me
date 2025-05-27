@@ -17,23 +17,26 @@ function addHashLinksToHeaders(colors) {
   const headers = document.querySelectorAll("h2, h3");
   headers.forEach((header) => {
     const id = header.getAttribute("id");
+    // If no ID, or if a hash-link element already exists as a child, skip
     if (!id || header.querySelector(".hash-link")) return;
 
     const hashLink = document.createElement("a");
     hashLink.className = "hash-link";
-    hashLink.innerHTML = " ¶";
+    hashLink.innerHTML = "# "; // Use # with a non-breaking space
     hashLink.style.textDecoration = "none";
     hashLink.setAttribute("href", `#${id}`);
-    hashLink.style.color = colors.color_black;
+    hashLink.style.color = colors.color_black; // Or a more subtle color like 'inherit' or a light gray
 
     hashLink.onclick = (e) => {
       e.preventDefault();
       scrollToElementWithOffset(id, -paddingtop);
     };
 
-    header.appendChild(hashLink);
+    // Prepend the hash link to the header
+    header.insertBefore(hashLink, header.firstChild);
   });
 }
+
 function CustomToggle({ children, eventKey, setActiveKey, isActive }) {
   const { colors } = useGlobalColorScheme();
 
@@ -43,7 +46,9 @@ function CustomToggle({ children, eventKey, setActiveKey, isActive }) {
     scrollToElementWithOffset(eventKey, -paddingtop);
   };
 
-  const activeStyle = isActive ? { backgroundColor: colors.color_blue, color: colors.color_white } : { backgroundColor: colors.color_white, color: colors.color_blue };
+  const activeStyle = isActive
+    ? { backgroundColor: colors.color_blue, color: colors.color_white }
+    : { backgroundColor: colors.color_white, color: colors.color_blue };
 
   return (
     <Card.Header
@@ -93,8 +98,13 @@ const useAddItemToNavbar = (setActiveKey) => {
       if (!id) return;
 
       let originalText = header.textContent || "";
-      if (originalText.endsWith(" ¶")) {
-        originalText = originalText.slice(0, -2).trim();
+      // Remove the prepended "# " or "# " before processing for TOC
+      // Checking for common prepended patterns. The actual textContent might render   as a space.
+      if (originalText.startsWith("# ")) {
+        originalText = originalText.substring(2).trim();
+      } else if (originalText.startsWith("#\u00A0")) {
+        // \u00A0 is the non-breaking space character
+        originalText = originalText.substring(2).trim();
       }
 
       const formattedText = formatTextWithNewLines(originalText);
@@ -105,7 +115,11 @@ const useAddItemToNavbar = (setActiveKey) => {
         newTocItems.push({
           key: id,
           content: (
-            <CustomToggle eventKey={id} hasChildren={false} setActiveKey={setActiveKey}>
+            <CustomToggle
+              eventKey={id}
+              hasChildren={false}
+              setActiveKey={setActiveKey}
+            >
               {formattedText}
             </CustomToggle>
           ),
@@ -126,16 +140,18 @@ const useAddItemToNavbar = (setActiveKey) => {
               }}
               style={{
                 paddingLeft: "1rem",
-                paddingTop: "0.5rem", // Add some spacing
+                paddingTop: "0.5rem",
                 paddingBottom: "0.5rem",
                 cursor: "pointer",
                 color: colors.color_blue,
                 backgroundColor: colors.color_white,
                 wordWrap: "break-word",
                 whiteSpace: "normal",
-                borderTop: `1px solid ${colors.color_light_gray || "#eee"}`, // Optional visual separator
+                borderTop: `1px solid ${colors.color_light_gray || "#eee"}`,
               }}
-              onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
+              onMouseEnter={(e) =>
+                (e.target.style.textDecoration = "underline")
+              }
               onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
             >
               {formattedText}
@@ -143,14 +159,15 @@ const useAddItemToNavbar = (setActiveKey) => {
           );
           parentItem.hasChildren = true;
         } else {
-          console.warn(`Found H3 with id '${id}' but its parent H2 ('${lastH2Key}') wasn't found in tocItems. This shouldn't normally happen.`);
+          console.warn(
+            `Found H3 with id '${id}' but its parent H2 ('${lastH2Key}') wasn't found in tocItems. This shouldn't normally happen.`
+          );
         }
       }
     });
 
     setTocItems(newTocItems);
 
-    // Handle initial URL hash (keep this logic)
     const initialHash = window.location.hash.slice(1);
     let timeoutId = null;
 
@@ -160,15 +177,13 @@ const useAddItemToNavbar = (setActiveKey) => {
         if (elementExists) {
           scrollToElementWithOffset(initialHash, -paddingtop);
 
-          // Find the *parent H2* key for the initial hash
           let parentKeyToActivate = null;
           const headerElement = document.getElementById(initialHash);
 
           if (headerElement) {
             if (headerElement.tagName === "H2") {
-              parentKeyToActivate = initialHash; // It's an H2 itself
+              parentKeyToActivate = initialHash;
             } else if (headerElement.tagName === "H3") {
-              // Find the preceding H2 sibling
               let previousElement = headerElement.previousElementSibling;
               while (previousElement) {
                 if (previousElement.tagName === "H2" && previousElement.id) {
@@ -176,7 +191,6 @@ const useAddItemToNavbar = (setActiveKey) => {
                   break;
                 }
                 if (previousElement.tagName === "H2" && !previousElement.id) {
-                  // Found an H2 without ID before finding one with ID, stop searching upwards for this H3
                   break;
                 }
                 previousElement = previousElement.previousElementSibling;
@@ -187,12 +201,14 @@ const useAddItemToNavbar = (setActiveKey) => {
           if (parentKeyToActivate) {
             setActiveKey(parentKeyToActivate);
           } else {
-            // Optional: If it's an H3 without a clear parent H2 in the DOM structure before it,
-            // maybe don't activate any accordion item or log a warning.
-            console.warn(`Could not determine parent H2 for initial hash '#${initialHash}'`);
+            console.warn(
+              `Could not determine parent H2 for initial hash '#${initialHash}'`
+            );
           }
         } else {
-          console.warn(`Element with id '${initialHash}' not found after delay.`);
+          console.warn(
+            `Element with id '${initialHash}' not found after delay.`
+          );
         }
       }, 150);
     }
@@ -204,7 +220,7 @@ const useAddItemToNavbar = (setActiveKey) => {
         clearTimeout(timeoutId);
       }
     };
-  }, [setActiveKey, colors]); // Dependencies are likely correct
+  }, [setActiveKey, colors]);
 
   return tocItems;
 };
@@ -214,15 +230,15 @@ const SideNav = () => {
   const { colors } = useGlobalColorScheme();
   const tocItems = useAddItemToNavbar(setActiveKey);
 
-  // Re-run hash link addition when content changes
   useEffect(() => {
-    addHashLinksToHeaders();
-  }, [tocItems]);
+    // Ensure hash links are added/updated when tocItems or colors change
+    addHashLinksToHeaders(colors);
+  }, [tocItems, colors]); // Added colors to dependency array
 
   return (
     <Col
-      lg={2.5}
-      xl={2.5}
+      lg={2.5} // Consider using string values for Col props like "2.5" if that's standard for your react-bootstrap version
+      xl={2.5} // Or use the object format e.g. lg={{ span: 2, offset: 0.5 }} if more control is needed
       style={{
         position: "fixed",
         top: `${paddingtop}px`,
