@@ -2,18 +2,7 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import { useGlobalColorScheme } from "../config/global.js";
 import Link from "next/link";
-import {
-  FaGithub,
-  FaWeixin,
-  FaTelegram,
-  FaWhatsapp,
-  FaLinkedin,
-  FaEnvelope,
-  FaQq,
-  FaHome,
-  FaRss,
-  FaArchive, 
-} from "react-icons/fa";
+import { FaGithub, FaWeixin, FaTelegram, FaWhatsapp, FaLinkedin, FaEnvelope, FaQq, FaHome, FaRss, FaArchive } from "react-icons/fa";
 import { TbSourceCode } from "react-icons/tb";
 
 const communicationLinks = [
@@ -23,14 +12,9 @@ const communicationLinks = [
     alt: "Email",
   },
   {
-    href: "https://jimchen.me/weixin.jpg", 
+    href: "https://jimchen.me/weixin.jpg",
     Icon: FaWeixin,
     alt: "WeChat",
-  },
-  {
-    href: "https://jimchen.me/qq.jpg",
-    Icon: FaQq,
-    alt: "QQ",
   },
   {
     href: "https://t.me/Jimchen4214",
@@ -38,7 +22,7 @@ const communicationLinks = [
     alt: "Telegram",
   },
   {
-    href: "https://jimchen.me/whatsapp.jpg", 
+    href: "https://jimchen.me/whatsapp.jpg",
     Icon: FaWhatsapp,
     alt: "WhatsApp",
   },
@@ -47,24 +31,14 @@ const communicationLinks = [
 // New "Website" specific links
 const websiteLinks = [
   {
-    href: "https://jimchen.me",
-    Icon: FaHome,
-    alt: "Blog",
-  },
-  {
     href: "https://jimchen.me/api/rss",
     Icon: FaRss,
     alt: "RSS Feed",
   },
   {
-    href: "https://github.com/jimchen2/jimchen.me", 
+    href: "https://github.com/jimchen2/jimchen.me",
     Icon: TbSourceCode,
     alt: "Website Source Code",
-  },
-  {
-    href: "https://archive.org/details/@j_c561/web-archive", 
-    Icon: FaArchive,
-    alt: "Web Archive",
   },
 ];
 
@@ -84,43 +58,6 @@ const otherLinks = [
 
 function About() {
   const { colors } = useGlobalColorScheme();
-  const languageIcons = [
-    { text: "zh" },
-    { text: "en" },
-    { text: "ru", proficiency: "intermediate" },
-    { text: "de", proficiency: "beginner" },
-  ];
-
-  const LanguageIcon = ({ text, proficiency }) => {
-    return (
-      <div
-        style={{
-          margin: "15px",
-          width: "100px",
-          textAlign: "center",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "30px",
-            fontWeight: "400",
-          }}
-        >
-          {text}
-        </div>
-        {proficiency && ( // Conditionally render proficiency
-          <div
-            style={{
-              fontSize: "1rem",
-              margin: "0",
-            }}
-          >
-            {proficiency}
-          </div>
-        )}
-      </div>
-    );
-  };
 
   const linkIconStyle = {
     fontSize: "30px",
@@ -143,20 +80,20 @@ function About() {
 
           if (isImageDisplay) {
             return (
-              <span key={link.href} title={link.alt} >
+              <span key={link.href} title={link.alt}>
                 <link.Icon style={linkIconStyle} />
               </span>
             );
           }
-          
+
           return (
             <Link key={link.href} href={link.href} passHref legacyBehavior>
-              <a 
-                target={isExternal ? "_blank" : undefined} 
+              <a
+                target={isExternal ? "_blank" : undefined}
                 rel={isExternal ? "noopener noreferrer" : undefined}
                 title={link.alt}
-                onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.1)"} // Hover effect
-                onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}  // Reset hover effect
+                onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")} // Hover effect
+                onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")} // Reset hover effect
               >
                 <link.Icon style={linkIconStyle} />
               </a>
@@ -184,15 +121,6 @@ function About() {
       {renderLinkSection("Website", websiteLinks)}
       {renderLinkSection("Communication", communicationLinks)}
       {renderLinkSection("Other Links", otherLinks)}
-
-      <div style={{ marginBottom: "40px", width: "100%", maxWidth: "600px"  }}>
-        <h2 style={{ color: colors.color_black, fontSize: "1.5rem", fontWeight: "300" }}>Languages</h2>
-        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
-          {languageIcons.map((lang, index) => ( // Added index for key
-            <LanguageIcon key={`${lang.text}-${index}`} text={lang.text} proficiency={lang.proficiency} />
-          ))}
-        </div>
-      </div>
     </Container>
   );
 }
