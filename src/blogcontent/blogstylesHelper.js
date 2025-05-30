@@ -185,7 +185,7 @@ export const generateStyles = (colors) => `
 
 .blog-content a {
   color: ${colors.color_blue};
-  text-decoration: none;
+  text-decoration: underline;
   border-bottom: 1px solid transparent;
   transition: border-bottom 0.2s ease;
   word-break: break-word;
@@ -212,7 +212,7 @@ export const generateStyles = (colors) => `
 
 .blog-content ul li a, .blog-content ol li a {
   color: ${colors.color_blue};
-  text-decoration: none;
+  text-decoration: underline;
   transition: color 0.2s ease;
 }
 
