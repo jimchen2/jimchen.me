@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function CodeBlock({ code, language }) {
+function CodeBlock({ code }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -12,7 +12,7 @@ function CodeBlock({ code, language }) {
   return (
     <div className="code-block">
       <pre>
-        <code className={language}>{code}</code>
+        <code>{code}</code>
       </pre>
       <button className="copy-button" onClick={handleCopy}>
         Copy

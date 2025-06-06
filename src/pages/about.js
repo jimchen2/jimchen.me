@@ -1,286 +1,123 @@
 import React from "react";
-import { Card, Container, Row, Col } from "react-bootstrap";
-import { useGlobalColorScheme } from "@/config/global";
-import { FaUser, FaLaptop, FaServer, FaMobileAlt, FaChrome, FaGlobe } from "react-icons/fa";
+import Container from "react-bootstrap/Container";
+import { useGlobalColorScheme } from "../config/global.js";
+import Link from "next/link";
+import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope, FaQq, FaHome, FaRss, FaArchive } from "react-icons/fa";
+import { TbSourceCode } from "react-icons/tb";
 
-const Bio = () => {
+const communicationLinks = [
+  {
+    href: "mailto:jimchen4214@gmail.com",
+    Icon: FaEnvelope,
+    alt: "Email",
+  },
+  {
+    href: "https://jimchen.me/weixin.jpg",
+    Icon: FaWeixin,
+    alt: "WeChat",
+  },
+  {
+    href: "https://t.me/Jimchen4214",
+    Icon: FaTelegram,
+    alt: "Telegram",
+  },
+];
+
+// New "Website" specific links
+const websiteLinks = [
+  {
+    href: "https://jimchen.me/api/rss",
+    Icon: FaRss,
+    alt: "RSS Feed",
+  },
+  {
+    href: "https://github.com/jimchen2/jimchen.me",
+    Icon: TbSourceCode,
+    alt: "Website Source Code",
+  },
+];
+
+// "Other" links, now refined
+const otherLinks = [
+  {
+    href: "https://github.com/jimchen2",
+    Icon: FaGithub,
+    alt: "GitHub Profile",
+  },
+  {
+    href: "https://www.linkedin.com/in/jim-chen-588002255/",
+    Icon: FaLinkedin,
+    alt: "LinkedIn Profile (CV)",
+  },
+];
+
+function About() {
   const { colors } = useGlobalColorScheme();
 
-  // Style for info items
-  const infoItemStyle = {
-    display: "flex",
-    marginBottom: "0.25rem",
+  const linkIconStyle = {
+    fontSize: "30px",
+    margin: "15px",
+    color: colors.color_black,
+    verticalAlign: "middle",
+    transition: "transform 0.2s ease-in-out", // Added for subtle hover effect
   };
 
-  const infoLabelStyle = {
-    minWidth: "120px",
-    paddingRight: "0.5rem",
-  };
+  // Helper to render link sections
+  const renderLinkSection = (title, links) => (
+    <div style={{ marginBottom: "40px", width: "100%", maxWidth: "600px" }}>
+      <h2 style={{ color: colors.color_black, fontSize: "1.5rem", fontWeight: "300" }}>{title}</h2>
+      <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
+        {links.map((link) => {
+          // Determine if the link is external
+          const isExternal = link.href.startsWith("http") || link.href.startsWith("mailto:");
+          // Determine if the link is to an image to be displayed (not navigated to)
+          const isImageDisplay = ["/weixin.jpg", "/qq.jpg"].includes(link.href);
 
-  // Common icon style
-  const iconStyle = {
-    marginRight: "0.5rem",
-    fontSize: "1.1rem",
-  };
+          if (isImageDisplay) {
+            return (
+              <span key={link.href} title={link.alt}>
+                <link.Icon style={linkIconStyle} />
+              </span>
+            );
+          }
+
+          return (
+            <Link key={link.href} href={link.href} passHref legacyBehavior>
+              <a
+                target={isExternal ? "_blank" : undefined}
+                rel={isExternal ? "noopener noreferrer" : undefined}
+                title={link.alt}
+                onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")} // Hover effect
+                onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")} // Reset hover effect
+              >
+                <link.Icon style={linkIconStyle} />
+              </a>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
 
   return (
-    <Container fluid className="py-3">
-      <br />
-      <br />
-
-      <Card
-        className="mx-auto"
-        style={{
-          maxWidth: "800px",
-          backgroundColor: colors.color_white,
-          color: colors.color_black,
-          border: "none",
-          borderRadius: "12px",
-        }}
-      >
-        <Card.Body className="p-3">
-          <h4 className="mb-3 text-center">Jim Chen</h4>
-          <Row>
-            <Col md={6} xs={12}>
-              <Row>
-                <div className="mb-3">
-                  <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
-                    <FaUser style={iconStyle} /> Personal Information
-                  </h5>
-                  <div className="small">
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Birth:</div>
-                      <div>March 23, 2005</div>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Hometown:</div>
-                      <div>Shanghai</div>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Pronouns:</div>
-                      <div>He/Him</div>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Languages:</div>
-                      <div>Chinese, English</div>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Nationality:</div>
-                      <div>Chinese</div>
-                    </div>
-                  </div>
-                </div>
-              </Row>
-
-              <Row>
-                <div>
-                  <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
-                    <FaServer style={iconStyle} /> Stack
-                  </h5>
-
-                  <div className="small">
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Database:</div>
-                      <a href="https://www.mongodb.com/" target="_blank" rel="noopener noreferrer">
-                        MongoDB
-                      </a>
-                      <span style={{ width: 5 }}>, </span>
-                      <a href="https://redis.io/" target="_blank" rel="noopener noreferrer">
-                        Redis
-                      </a>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Domain:</div>
-                      <div>Cloudflare</div>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Blog Hosting:</div>
-                      <div>Vercel</div>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>VPS:</div>
-                      <div>DigitalOcean (paid)</div>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Object Storage:</div>
-                      <div>Cloudflare R2 (paid)</div>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Proxy:</div>
-                      <div>Nexitally (paid)</div>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>GPU:</div>
-                      <div>Vast.ai (paid)</div>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>LLM:</div>
-                      <div>OpenRouter (paid)</div>
-                    </div>
-                  </div>
-                </div>
-              </Row>
-              <Row>
-                <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
-                  <FaGlobe style={iconStyle} /> Blog History
-                </h5>
-
-                <div className="small">
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>2018.3:</div>WeChat public account.
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>2022.9:</div>
-                    <div>I moved to Wix.</div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>2023.2:</div>
-                    <div>
-                      I used
-                      <span style={{ width: 5 }}> </span>
-                      <a href="https://jimchen.me/en/web/How-to-Build-a-Personal-Website" target="_blank" rel="noopener noreferrer">
-                        Github Page.
-                      </a>
-                    </div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>2023.6:</div>
-                    <a href="https://jimchen.me/en/web/MERN-Stack-Conclusion" target="_blank" rel="noopener noreferrer">
-                      <div>MERN stack+React Bootstrap.</div>
-                    </a>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>2025.2:</div>
-                    <div>
-                      Change to <code>Next.js</code> and add SSR.
-                    </div>
-                  </div>
-                </div>
-              </Row>
-            </Col>
-            <Col md={6} xs={12}>
-              <Row>
-                <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
-                  <FaLaptop style={iconStyle} /> Computer
-                </h5>
-
-                <div className="small">
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Device:</div>
-                    <div>ThinkPad P16s Gen 2</div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>OS:</div>
-                    <div>Fedora 41 x86_64</div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>CPU:</div>
-                    <div>Ryzen 7 PRO 7840U</div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Shell:</div>
-                    <div>fish 3.7.0</div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>DE:</div>
-                    <div>GNOME 47.4</div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Theme:</div>
-                    <a href="https://cdn.jimchen.me/09128349328u40982mu30948m24u23984mu2983mu4/IMG_1005.JPEG" target="_blank" rel="noopener noreferrer">
-                      <div>Wallpaper</div>
-                    </a>
-                    <span style={{ width: 5 }}>, </span>
-                    <a href="https://cdn.jimchen.me/96c5f4bc0a3766eff967cb508b1d0cab/dconf-settings.txt" target="_blank" rel="noopener noreferrer">
-                      <div>dconf-settings</div>
-                    </a>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Input:</div>
-                    <div>
-                      en, ru, zh
-                      <span style={{ width: 5 }}>, </span>
-                      <a href="https://github.com/jimchen2/german-keyboard" target="_blank" rel="noopener noreferrer">
-                        de
-                      </a>
-                    </div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Apps:</div>
-                    <div>Settings, Nautilus, Mate Terminal, VSCode, Chrome, Clash </div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Folder Structure:</div>
-                    <div>
-                      <code> Code/ Downloads/ Pictures/ </code>
-                      <br /> in <code>Code/</code>:<code> blog/ mlenv/</code>
-                    </div>
-                  </div>
-                </div>
-              </Row>
-
-              <Row>
-                <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
-                  <FaMobileAlt style={iconStyle} /> Smartphone
-                </h5>
-                <div className="small">
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Device:</div>
-                    Redmi Note 13
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Apps:</div>
-                    <div>Hiddify(per-app proxy), Lawnchair , Gboard, Yandex Browser(extensions), LibreOffice Viewer, VLC</div>
-                  </div>
-                  <div style={infoItemStyle}>
-                    <div style={infoLabelStyle}>Lawnchair:</div>
-                    <a href="https://cdn.jimchen.me/3e0cd3b5edb6aae256abf6d46c9fbdfb/file..lawnchairbackup" target="_blank" rel="noopener noreferrer">
-                      config and wallpaper
-                    </a>
-                  </div>
-                </div>
-              </Row>
-              <Row>
-                <div>
-                  <h5 className="border-bottom pb-1 mb-2 d-flex align-items-center">
-                    <FaChrome style={iconStyle} /> Browser
-                  </h5>
-                  <div className="small">
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Extensions:</div>
-                      <div>Ublock Origin, Violentmonkey</div>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Policies:</div>
-                      <div>
-                        <a href="https://cdn.jimchen.me/d2e18f4893ef9a61fe5944720259e119/policies.json" target="_blank" rel="noopener noreferrer">
-                          <div>policies.json</div>
-                        </a>
-                      </div>
-                    </div>
-                    <div style={infoItemStyle}>
-                      <div style={infoLabelStyle}>Userscripts:</div>
-                      <a href="https://github.com/ilyhalight/voice-over-translation" target="_blank" rel="noopener noreferrer">
-                        <div>VoT</div>
-                      </a>
-                      <span style={{ width: 5 }}>, </span>
-                      <a href="https://github.com/jimchen2/userscripts" target="_blank" rel="noopener noreferrer">
-                        <div>my userscripts</div>
-                      </a>
-                      <br/>
-                      <br/>
-                      <br/>
-                      <br/>
-                    </div>
-                  </div>
-                </div>
-              </Row>
-            </Col>
-          </Row>
-        </Card.Body>
-      </Card>
+    <Container
+      style={{
+        fontFamily: "Ubuntu, sans-serif", // Added sans-serif fallback
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center",
+        paddingTop: "20px", // Changed from marginTop to paddingTop for container
+        paddingBottom: "20px",
+      }}
+    >
+      {renderLinkSection("Website", websiteLinks)}
+      {renderLinkSection("Communication", communicationLinks)}
+      {renderLinkSection("Other Links", otherLinks)}
     </Container>
   );
-};
+}
 
-export default Bio;
+export default About;

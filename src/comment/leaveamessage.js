@@ -2,13 +2,12 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import GetComments from "./getcomments";
 import CommentInputBox from "./commentsubmit/commentinputbox";
-import { paddingtop } from "../config/global";
 import { CommentsProvider } from "./commentscontext";
 
-const Msg = ({ bloguuid, blogname }) => {
+const Msg = ({ blogid, blogname }) => {
   return (
     <CommentsProvider>
-      {bloguuid === "0" && (
+      {blogid === "0" && (
         <div>
           <br />
           <br />
@@ -19,11 +18,10 @@ const Msg = ({ bloguuid, blogname }) => {
         <Row className="my-4">
           <>
             <Col md={{ span: 8, offset: 2 }} style={{ paddingLeft: "15%", paddingRight: "15%" }}>
-              <CommentInputBox commentuuid="-1" bloguuid={bloguuid} blogname={blogname} />
+              <CommentInputBox commentuuid="-1" blogid={blogid} blogname={blogname} />
             </Col>
-            <Col md={{ span: 6, offset: 3 }}>{bloguuid === "0" ? <GetComments bloguuid={bloguuid} showName /> : <GetComments bloguuid={bloguuid} />}</Col>
-
-            <div style={{ marginBottom: `${paddingtop}px` }}></div>
+            <Col md={{ span: 6, offset: 3 }}>{blogid === "0" ? <GetComments blogid={blogid} showName /> : <GetComments blogid={blogid} />}
+            </Col>
           </>
         </Row>
       </Container>

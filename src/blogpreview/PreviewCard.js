@@ -1,16 +1,18 @@
 "use client";
 
 import React from "react";
-import { Container, Card, Row, Col } from "react-bootstrap";
+// Import Badge from react-bootstrap
+import { Container, Card, Row, Col, Badge } from "react-bootstrap";
 import { useGlobalColorScheme } from "../config/global";
 import Link from "next/link";
 
 function PreviewCard(props) {
   const { colors } = useGlobalColorScheme();
-  const { searchTerm } = props;
+  // Destructure the new 'types' prop along with others
+  const { searchTerm, date, types, blogid, title, text, wordcount } = props;
 
   const getHighlightedText = (text, highlight) => {
-    if (!highlight) {
+    if (!highlight || !text) {
       return text;
     }
     const parts = text.split(new RegExp(`(${highlight})`, "gi"));
@@ -30,7 +32,7 @@ function PreviewCard(props) {
       <Row className="justify-content-center">
         <Col md={10} lg={8}>
           <Card
-            className="shadow border-1 rounded-3"
+            className="border-1 rounded-3"
             style={{
               backgroundColor: colors.color_white,
             }}
@@ -41,38 +43,51 @@ function PreviewCard(props) {
                   <span
                     style={{
                       fontSize: "0.8rem",
-                      color: colors.color_blue,
+                      color: colors.color_black,
+                      fontFamily: "'Arial', sans-serif",
                     }}
                   >
-                    {props.date}
+                    {date}
                   </span>
-                  <span
-                    style={{
-                      fontSize: "1.0rem",
-                      color: colors.color_blue,
-                    }}
-                  >
-                    {props.type}
-                  </span>
+                  {/* START: NEW BADGE SECTION FOR MULTIPLE TYPES */}
+                  <div className="d-flex flex-wrap justify-content-end gap-2">
+                    {/* Ensure 'types' is an array before mapping */}
+                    {Array.isArray(types) &&
+                      types.map((type, index) => (
+                        <Badge
+                          key={index}
+                          pill // Makes the badge have rounded ends
+                          className="p-2"
+                          style={{
+                            backgroundColor: colors.color_gray,
+                            color: colors.color_black,
+                            fontSize: "0.8rem",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {type}
+                        </Badge>
+                      ))}
+                  </div>
+                  {/* END: NEW BADGE SECTION */}
                 </div>
                 <Link
-                  href={`/${props.language}/${props.type}/${props.title}`}
+                  href={`/a/${blogid}`}
                   style={{
-                    textDecoration: "none",
-                    color: colors.color_black,
+                    transition: "transform 0.3s ease",
+                    fontSize: "1.5rem",
+                    fontFamily: "Ubuntu",
+                    fontWeight: "500",
+                    color: colors.color_blue,
+                    display: "inline-block", // Required for transform to work
                   }}
+                  className="title"
+                  onMouseEnter={(e) =>
+                    (e.target.style.transform = "scale(1.05)")
+                  }
+                  onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
                 >
-                  <div
-                    style={{
-                      transition: "text-decoration 0.3s ease",
-                      fontSize: "1.5rem",
-                    }}
-                    className="title"
-                    onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
-                    onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
-                  >
-                    {props.title.split("-").join(" ")}
-                  </div>
+                  {title.split("-").join(" ")}
                 </Link>
               </Card.Title>
               <Card.Text
@@ -81,10 +96,20 @@ function PreviewCard(props) {
                   lineHeight: "1.5",
                   color: colors.color_black,
                   fontStyle: "italic",
+                  fontFamily: "'Open Sans', 'Roboto', sans-serif",
                 }}
               >
-                {getHighlightedText(props.text, searchTerm)}
+                {getHighlightedText(text, searchTerm)}
               </Card.Text>
+              <div
+                style={{
+                  fontSize: "0.8rem",
+                  color: colors.color_black,
+                  fontFamily: "'Roboto Mono', monospace",
+                }}
+              >
+                {wordcount} words
+              </div>
             </Card.Body>
           </Card>
         </Col>

@@ -15,14 +15,10 @@ function Search() {
       const fetchData = async () => {
         try {
           const response = await axios.get(`/api/search?query=${term}`);
-          // Extract the data
           let sortedData = response.data;
-          // Convert the date strings to Date objects and then sort them
           sortedData.sort((a, b) => new Date(b.date) - new Date(a.date));
           setData(sortedData);
-        } catch (err) {
-          // Error handling
-        }
+        } catch (err) {}
       };
       fetchData();
     }
@@ -32,8 +28,9 @@ function Search() {
     backgroundColor: colors.color_white,
     color: colors.color_black,
     paddingBottom: "2rem",
-    marginTop: "2rem",
     minHeight: "100vh",
+    maxWidth: "1200px",
+    margin: "0 auto",
   };
 
   return (
@@ -42,7 +39,7 @@ function Search() {
       <br />
       <br />
       {data.map((post, index) => (
-        <PreviewCard key={index} title={post.title} text={post.body} date={post.date} type={post.type} bloguuid={post.uuid} language={post.language} searchTerm={term} />
+        <PreviewCard key={index} title={post.title} text={post.body} date={post.date} type={post.type} blogid={post.blogid} language={post.language} wordcount={post.word_count} searchTerm={term} />
       ))}
       <br />
       <br />{" "}

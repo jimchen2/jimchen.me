@@ -4,7 +4,7 @@ import SubmitComment from "./submitcomment";
 import { useGlobalColorScheme } from "@/config/global";
 import { useComments } from "../commentscontext";
 
-function CommentInputBox({ commentuuid, bloguuid, blogname }) {
+function CommentInputBox({ commentuuid, blogid, blogname }) {
   const { triggerUpdate } = useComments();
 
   const { colors } = useGlobalColorScheme();
@@ -33,7 +33,7 @@ function CommentInputBox({ commentuuid, bloguuid, blogname }) {
         parentid: commentuuid,
         username: username,
         message: message,
-        bloguuid: bloguuid,
+        blogid: blogid,
         blogname: blogname,
       });
       // Reset the values after submit
@@ -118,7 +118,6 @@ function CommentInputBox({ commentuuid, bloguuid, blogname }) {
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Input your message here"
                   required
-                  autoFocus={bloguuid === "00000000"}
                   onFocus={() => handleFocus(setFocusStyleMessage)}
                   onBlur={() => handleBlur(setFocusStyleMessage)}
                 />

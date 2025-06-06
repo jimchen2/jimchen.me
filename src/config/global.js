@@ -22,7 +22,7 @@ const IPAddressModule = (() => {
 export const setIpAddress = IPAddressModule.setIpAddress;
 export const getIpAddress = IPAddressModule.getIpAddress;
 
-export let paddingtop = 80;
+export let paddingtop = 70;
 
 const defaultColors = {
   color_white: "#ffffff",
@@ -55,7 +55,7 @@ export const toggleTheme = (colors, updateColor) => {
   } else {
     updateColor("color_white", "#ffffff");
     updateColor("color_black", "#000000");
-    updateColor("color_blue", "#000000");
+    updateColor("color_blue", "#0000FF");
     updateColor("color_light_gray", "#fffcfc");
     updateColor("color_gray", "#d0d4dc");
     updateColor("grayscale", false);

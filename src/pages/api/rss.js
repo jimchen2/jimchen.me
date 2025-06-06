@@ -1,11 +1,10 @@
 // pages/api/rss.js
 import RSS from "rss";
-import dbConnect from "../../backend_utils/db/mongoose";
-import Blog from "../../backend_utils/models/blog.model.js";
+import dbConnect from "../../lib/db/dbConnect";
 
 export default async function handler(req, res) {
   try {
-    await dbConnect();
+    const pool = await dbConnect();
 
     const feed = new RSS({
       title: "Jim Chen's Blog",
@@ -14,17 +13,20 @@ export default async function handler(req, res) {
       site_url: "https://jimchen.me",
       language: "en",
       pubDate: new Date(),
-      image_url: "https://cdn.jimchen.me/50b97eec1be681f92c0abc602c1f3436/jimchen.me.png",
+      image_url: "https://jimchen.me/site-icon.png",
     });
 
-    const blogs = await Blog.find().sort({ date: -1 }).limit(15).collation({ locale: "en_US", numericOrdering: true });
+    // Get blogs sorted by date, limited to 15 most recent
+    const blogsResult = await pool.query(
+      "SELECT * FROM blogs ORDER BY date DESC LIMIT 15"
+    );
+    const blogs = blogsResult.rows;
 
     blogs.forEach((blog) => {
       feed.item({
         title: blog.title,
         description: blog.body,
         url: `https://jimchen.me/${blog.language}/${blog.type}/${blog.title}`,
-        guid: blog.uuid,
         categories: [blog.type],
         date: new Date(blog.date),
         language: blog.language,
@@ -34,6 +36,7 @@ export default async function handler(req, res) {
     res.setHeader("Content-Type", "application/xml");
     res.status(200).send(feed.xml());
   } catch (error) {
+    console.error("RSS feed generation error:", error);
     res.status(500).json({
       message: "Error generating RSS feed",
       error: error.message,

@@ -5,8 +5,9 @@ import Commentinputbox from "./commentsubmit/commentinputbox.js";
 import { useGlobalColorScheme } from "../config/global.js";
 import Card from "react-bootstrap/Card";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Link from "next/link.js";
 
-function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuuid, bloguuid, showName }) {
+function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuuid, blogid, showName }) {
   const { colors } = useGlobalColorScheme();
   const [showReply, setShowReply] = useState(false);
 
@@ -63,7 +64,11 @@ function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuui
     <Card className="mb-3" style={cardStyle}>
       <Card.Header style={headerStyle}>
         <Card.Title style={titleStyle}>{user}</Card.Title>
-        {showName && blogname!==' ' && <span>{blogname.split("-").join(" ")}</span>}
+        {showName && (
+          <Link style={{ color: colors.color_blue }} href={`/a/${blogid}`}>
+            {blogname}
+          </Link>
+        )}
 
         <Card.Subtitle style={subtitleStyle}>
           <span>{date}</span>
@@ -75,7 +80,7 @@ function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuui
           <CommentLikeButton like={like} commentuuid={commentuuid} />
           <CommentReplyButton onReplyClick={toggleReply} />
         </div>
-        {showReply && <Commentinputbox commentuuid={commentuuid} bloguuid={bloguuid} />}
+        {showReply && <Commentinputbox commentuuid={commentuuid} blogid={blogid} />}
       </Card.Body>
     </Card>
   );

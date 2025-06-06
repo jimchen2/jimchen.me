@@ -1,24 +1,36 @@
-import Like from '../../backend_utils/models/like.model';
-import dbConnect from '../../backend_utils/db/mongoose';
+import dbConnect from '../../lib/db/dbConnect';
 
 export default async function handler(req, res) {
-  await dbConnect();
+  const pool = await dbConnect();
 
   if (req.method === 'GET') {
-    const { bloguuid, isarray } = req.query;
+    const { blogid, isarray } = req.query;
 
     try {
-      const blogLikes = await Like.findOne({ parent: bloguuid });
+      // Query the likes table for the record matching parent_id (blogid)
+      const result = await pool.query(
+        'SELECT likes FROM likes WHERE parent_id = $1',
+        [blogid]
+      );
 
-      if (isarray === "true") {
-        const likesArray = blogLikes ? blogLikes.like : [];
-        res.json({ likes: likesArray });
+      // Check if a record exists
+      if (result.rows.length > 0) {
+        const likesArray = result.rows[0].likes || [];
+        if (isarray === "true") {
+          res.json({ likes: likesArray });
+        } else {
+          res.json({ count: likesArray.length });
+        }
       } else {
-        const likesCount = blogLikes ? blogLikes.like.length : 0;
-        res.json({ count: likesCount });
+        // If no record is found, return an empty array or count of 0
+        if (isarray === "true") {
+          res.json({ likes: [] });
+        } else {
+          res.json({ count: 0 });
+        }
       }
     } catch (err) {
-      console.error(`Error retrieving blog likes for bloguuid: ${bloguuid}`, err);
+      console.error(`Error retrieving blog likes: ${blogid}`, err);
       res.status(500).json({ message: "Error retrieving blog likes", error: err.message });
     }
   } else {

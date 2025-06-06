@@ -1,10 +1,6 @@
 // pages/api/search.js
-import Blog from "../../backend_utils/models/blog.model";
-import dbConnect from "../../backend_utils/db/mongoose";
+import dbConnect from "../../lib/db/dbConnect";
 
-function escapeRegex(text) {
-  return text.replace(/[-[$${}()*+?.,\\^$|#\s]/g, "\\$&");
-}
 
 function getRelevantSnippet(body, searchTerm, isTitleMatch) {
   if (isTitleMatch) {
@@ -16,9 +12,8 @@ function getRelevantSnippet(body, searchTerm, isTitleMatch) {
     return body.substring(start, end);
   }
 }
-export default async function handler(req, res) {
-  await dbConnect();
 
+export default async function handler(req, res) {
   if (req.method === "GET") {
     let { query } = req.query;
     if (!query) {
@@ -26,40 +21,46 @@ export default async function handler(req, res) {
     }
 
     try {
-      query = escapeRegex(query);
-      const regex = new RegExp(query, "i");
-      const blogs = await Blog.find();
+      const pool = await dbConnect();
+      
+      // Use ILIKE for case-insensitive search in PostgreSQL
+      const searchQuery = `
+        SELECT id, blogid, title, date, type, body, language, word_count 
+        FROM blogs 
+        WHERE title ILIKE $1 OR body ILIKE $1
+        ORDER BY date DESC
+      `;
+      
+      const { rows } = await pool.query(searchQuery, [`%${query}%`]);
+      
+      const matches = rows.map(blog => {
+        const isTitleMatch = blog.title.toLowerCase().includes(query.toLowerCase());
+        const isBodyMatch = blog.body.toLowerCase().includes(query.toLowerCase());
+        const snippet = getRelevantSnippet(blog.body, query, isTitleMatch);
 
-      const matches = blogs
-        .map((blog) => {
-          const isTitleMatch = regex.test(blog.title);
-          const isBodyMatch = regex.test(blog.body);
-          const snippet = getRelevantSnippet(blog.body, query, isTitleMatch);
-
-          // Format the date consistently with the preview handler
-          const formattedDate = blog.date.toLocaleDateString("en-US", {
-            month: "short",
-            day: "2-digit",
-            year: "numeric",
-          });
-
-          return {
-            ...blog.toObject(),
-            body: snippet,
-            date: formattedDate,
-            isTitleMatch,
-            isBodyMatch,
-            randomTieBreaker: Math.random(),
-          };
-        })
-        .filter((blog) => blog.isTitleMatch || blog.isBodyMatch)
-        .sort((a, b) => {
-          // Since date is already a Date object in the schema, we can compare directly
-          return b.date - a.date || b.randomTieBreaker - a.randomTieBreaker;
+        // Format the date
+        const formattedDate = new Date(blog.date).toLocaleDateString("en-US", {
+          month: "short",
+          day: "2-digit",
+          year: "numeric",
         });
+
+        return {
+          ...blog,
+          body: snippet,
+          date: formattedDate,
+          isTitleMatch,
+          isBodyMatch,
+          randomTieBreaker: Math.random(),
+        };
+      }).sort((a, b) => {
+        // Generate random tiebreaker for results with same date
+        return b.randomTieBreaker - a.randomTieBreaker;
+      });
 
       res.json(matches);
     } catch (err) {
+      console.error('Search error:', err);
       res.status(500).json({
         message: "Error searching for blog entries",
         error: err.message,

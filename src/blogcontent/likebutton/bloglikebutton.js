@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import axios from "axios";
 import { getIpAddress, useGlobalColorScheme } from "@/config/global.js";
 
-function BlogLikeButton({ bloguuid, like }) {
+function BlogLikeButton({ blogid, like }) {
   const { colors } = useGlobalColorScheme();
   const [likes, setLikes] = useState(like ? like.length : 0);
   const [liked, setLiked] = useState(false);
@@ -48,8 +48,7 @@ function BlogLikeButton({ bloguuid, like }) {
 
     const isLiked = liked; // If already liked, this will be true, indicating we want to remove the like
     const newLikes = isLiked ? likes - 1 : likes + 1; // Adjust the likes count accordingly
-    const patchUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blogtogglelike?uuid=${encodeURIComponent(bloguuid)}`;
-
+    const patchUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blogtogglelike?blogid=${encodeURIComponent(blogid)}`;
     try {
       console.log(`Sending PATCH request to: ${patchUrl}`);
       console.log(`Payload: `, { userIP, isLiked: !isLiked }); // Note: The logic might be inverted based on the action
