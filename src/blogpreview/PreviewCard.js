@@ -49,27 +49,15 @@ function PreviewCard(props) {
                   >
                     {date}
                   </span>
-                  {/* START: NEW BADGE SECTION FOR MULTIPLE TYPES */}
-                  <div className="d-flex flex-wrap justify-content-end gap-2">
-                    {/* Ensure 'types' is an array before mapping */}
-                    {Array.isArray(types) &&
-                      types.map((type, index) => (
-                        <Badge
-                          key={index}
-                          pill // Makes the badge have rounded ends
-                          className="p-2"
-                          style={{
-                            backgroundColor: colors.color_gray,
-                            color: colors.color_black,
-                            fontSize: "0.8rem",
-                            fontWeight: "500",
-                          }}
-                        >
-                          {type}
-                        </Badge>
-                      ))}
+                  <div
+                    className="d-flex flex-wrap justify-content-end gap-2"
+                    style={{
+                      fontSize: "0.8rem",
+                      color: colors.color_black,
+                    }}
+                  >
+                    {wordcount} words
                   </div>
-                  {/* END: NEW BADGE SECTION */}
                 </div>
                 <Link
                   href={`/a/${blogid}`}
@@ -82,9 +70,7 @@ function PreviewCard(props) {
                     display: "inline-block", // Required for transform to work
                   }}
                   className="title"
-                  onMouseEnter={(e) =>
-                    (e.target.style.transform = "scale(1.05)")
-                  }
+                  onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")}
                   onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
                 >
                   {title.split("-").join(" ")}
@@ -101,15 +87,6 @@ function PreviewCard(props) {
               >
                 {getHighlightedText(text, searchTerm)}
               </Card.Text>
-              <div
-                style={{
-                  fontSize: "0.8rem",
-                  color: colors.color_black,
-                  fontFamily: "'Roboto Mono', monospace",
-                }}
-              >
-                {wordcount} words
-              </div>
             </Card.Body>
           </Card>
         </Col>

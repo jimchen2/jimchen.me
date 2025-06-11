@@ -41,21 +41,21 @@ const CustomDropdown = ({ id, label, options, selectedValue, onSelect, colors, d
         <div id={id} role="menu">
           {options.map((option) => (
             <div
-              key={option.value || option.type}
-              style={itemStyle(selectedValue === (option.value || option.type))}
+              key={option.value}
+              style={itemStyle(selectedValue === option.value)}
               onClick={() => {
-                onSelect(option.value || option.type);
+                onSelect(option.value);
                 setIsOpen(false);
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
-                  onSelect(option.value || option.type);
+                  onSelect(option.value);
                   setIsOpen(false);
                 }
               }}
               role="menuitem"
               tabIndex={0}
-              aria-selected={selectedValue === (option.value || option.type)}
+              aria-selected={selectedValue === option.value}
             >
               {option.label}
             </div>
@@ -66,31 +66,19 @@ const CustomDropdown = ({ id, label, options, selectedValue, onSelect, colors, d
   );
 };
 
-const FilterSortComponent = ({ currentType, postTypeArray, paddingTop = 0, currentSort }) => {
+const SortComponent = ({ currentSort, currentType }) => {
   const { colors } = useGlobalColorScheme();
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // State for active type and sort
-  const [activeType, setActiveType] = useState(currentType || "all");
   const [activeSort, setActiveSort] = useState(searchParams.get("sort") || currentSort || "date_latest");
 
-  // Sync activeType and activeSort with URL on mount or URL change
   useEffect(() => {
-    const typeFromUrl = searchParams.get("type");
     const sortFromUrl = searchParams.get("sort");
-
-    if (typeFromUrl && postTypeArray.some((pt) => pt.type === typeFromUrl)) {
-      setActiveType(typeFromUrl);
-    } else {
-      setActiveType("all");
-    }
-
     const isValidSort = sortOptions.some((opt) => opt.value === sortFromUrl);
     setActiveSort(isValidSort ? sortFromUrl : currentSort || "date_latest");
-  }, [searchParams, postTypeArray, currentSort]);
+  }, [searchParams, currentSort]);
 
-  // Sort options
   const sortOptions = [
     { value: "date_latest", label: "Newest" },
     { value: "date_oldest", label: "Oldest" },
@@ -98,44 +86,15 @@ const FilterSortComponent = ({ currentType, postTypeArray, paddingTop = 0, curre
     { value: "least_words", label: "Least Words" },
   ];
 
-  // Type options including "All"
-  const typeOptions = [
-    { type: "all", label: `All` },
-    ...postTypeArray.map(({ type, count }) => ({
-      type,
-      label: `${type.charAt(0).toUpperCase() + type.slice(1)} (${count})`,
-      count,
-    })),
-  ];
-
-  // Handle type selection
-  const handleTypeClick = (type) => {
-    setActiveType(type);
-    const queryParams = {};
-    if (type !== "all") queryParams.type = type;
-    if (activeSort !== "date_latest") queryParams.sort = activeSort;
-    router.replace({
-      pathname: "/",
-      query: queryParams,
-    });
-  };
-
-  // Handle sort selection
   const handleSortClick = (sortValue) => {
     setActiveSort(sortValue);
     const queryParams = {};
-    if (activeType !== "all") queryParams.type = activeType;
+    if (currentType && currentType !== "all") queryParams.type = currentType;
     if (sortValue !== "date_latest") queryParams.sort = sortValue;
     router.replace({
       pathname: "/",
       query: queryParams,
     });
-  };
-
-  // Get current labels
-  const getCurrentTypeLabel = () => {
-    const typeOption = typeOptions.find((option) => option.type === activeType);
-    return typeOption ? `Type: ${typeOption.label}` : `Type: All )`;
   };
 
   const getCurrentSortLabel = () => {
@@ -146,39 +105,16 @@ const FilterSortComponent = ({ currentType, postTypeArray, paddingTop = 0, curre
   const dark = colors.color_black === "#ffffff";
 
   return (
-    <div
-      style={{
-        marginTop: `${paddingTop}px`,
-      }}
-      className="filter-container"
-    >
-      <div
-        style={{
-          display: "flex",
-          overflowX: "auto",
-          whiteSpace: "nowrap",
-          alignItems: "center",
-          flexWrap: "nowrap",
-          paddingBottom: "0.5rem",
-        }}
-      >
-        <CustomDropdown id="dropdown-type" label={getCurrentTypeLabel()} options={typeOptions} selectedValue={activeType} onSelect={handleTypeClick} colors={colors} dark={dark} />
-        <CustomDropdown id="dropdown-sort" label={getCurrentSortLabel()} options={sortOptions} selectedValue={activeSort} onSelect={handleSortClick} colors={colors} dark={dark} />
-      </div>
-
-      <style jsx>{`
-        .filter-container {
-          padding: 0 5%;
-        }
-
-        @media (min-width: 992px) {
-          .filter-container {
-            padding: 0 18%;
-          }
-        }
-      `}</style>
-    </div>
+    <CustomDropdown 
+      id="dropdown-sort" 
+      label={getCurrentSortLabel()} 
+      options={sortOptions} 
+      selectedValue={activeSort} 
+      onSelect={handleSortClick} 
+      colors={colors} 
+      dark={dark} 
+    />
   );
 };
 
-export default FilterSortComponent;
+export default SortComponent;
