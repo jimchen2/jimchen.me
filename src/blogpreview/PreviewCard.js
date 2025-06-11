@@ -50,8 +50,8 @@ function PreviewCard(props) {
                     style={{
                       width: "100%",
                       height: "100%",
-                      maxWidth: "320px",
-                      maxHeight: "180px",
+                      maxWidth: "640px",
+                      maxHeight: "320px",
                       objectFit: "cover",
                       borderRadius: "0 0.3rem 0.3rem 0", // Rounded corners for the right side
                     }}
