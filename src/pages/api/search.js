@@ -23,9 +23,8 @@ export default async function handler(req, res) {
     try {
       const pool = await dbConnect();
       
-      // Use ILIKE for case-insensitive search in PostgreSQL
       const searchQuery = `
-        SELECT id, blogid, title, date, type, body, language, word_count 
+        SELECT id, blogid, title, date, type, body, word_count 
         FROM blogs 
         WHERE title ILIKE $1 OR body ILIKE $1
         ORDER BY date DESC

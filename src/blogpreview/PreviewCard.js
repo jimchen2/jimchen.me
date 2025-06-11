@@ -7,7 +7,7 @@ import Link from "next/link";
 
 function PreviewCard(props) {
   const { colors } = useGlobalColorScheme();
-  const { searchTerm, date, blogid, previewimage, tags, title, text, wordcount } = props;
+  const { searchTerm, date, blogid, previewimage, title, text, wordcount } = props;
 
   const getHighlightedText = (text, highlight) => {
     if (!highlight || !text) {

@@ -6,67 +6,55 @@ import OtherComponent from "./OtherComponent";
 
 const useIsMobile = (breakpoint = 1000) => {
   const [isMobile, setIsMobile] = useState(false);
-
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < breakpoint);
-    };
-
-    // Set initial value after mounting on the client
+    const handleResize = () => setIsMobile(window.innerWidth < breakpoint);
     handleResize();
     window.addEventListener("resize", handleResize);
-
-    // Clean up event listener on component unmount
     return () => window.removeEventListener("resize", handleResize);
   }, [breakpoint]);
-
   return isMobile;
 };
 
-function BlogPreviewPage({ currentType, data, pagination, postTypeArray, currentSort, currentLanguage }) {
+// Accept 'searchTerm' as a new prop
+function BlogPreviewPage({ currentType, data, pagination, postTypeArray, currentSort, searchTerm }) {
   const isMobile = useIsMobile();
 
   const containerStyle = {
     minHeight: "100vh",
-    paddingTop: paddingtop,
   };
 
-  // The main layout container. It switches between row (desktop) and column (mobile).
   const contentStyle = {
     display: "flex",
     flexDirection: isMobile ? "column" : "row",
-    padding: "2rem 20px",
-    marginRight: isMobile ? "0%" : "15%",
+    padding: "1rem 20px", // Adjusted padding
+    maxWidth: "1200px",
+    margin: "0 auto",
   };
 
-  // Style for the desktop-only left sidebar
+  // Conditionally show sidebar only if there are types to filter by
+  const showSidebar = !isMobile && postTypeArray && postTypeArray.length > 0;
+
   const sidebarStyle = {
     flex: "0 0 350px",
-    top: `calc(${paddingtop} + 2rem)`,
+    marginTop: paddingtop,
     alignSelf: "flex-start",
-    marginLeft: "15%",
   };
 
-  // Style for the main content area (posts)
   const mainContentStyle = {
     flex: "1",
+    marginTop: 50,
+    marginLeft: showSidebar ? "2rem" : "0",
   };
 
   return (
     <div style={containerStyle}>
       <div style={contentStyle}>
-        {!isMobile && (
+        {showSidebar && (
           <div style={sidebarStyle}>
-            <OtherComponent
-              currentType={currentType}
-              postTypeArray={postTypeArray}
-              currentSort={currentSort}
-              isSidebar={true} // Use the compact sidebar style
-            />
+            <OtherComponent currentType={currentType} postTypeArray={postTypeArray} currentSort={currentSort} isSidebar={true} />
           </div>
         )}
 
-        {/* --- Main Content (Posts and Pagination) --- */}
         <div style={mainContentStyle}>
           {data && data.length > 0 ? (
             data.map((post, index) => (
@@ -74,30 +62,22 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
                 <PreviewCard
                   blogid={post.blogid}
                   title={post.title}
-                  text={post.preview}
+                  text={post.preview} // 'preview' contains the snippet from the API
                   date={post.date}
                   tags={post.type}
-                  language={post.language}
                   wordcount={post.word_count}
                   previewimage={post.preview_image}
+                  searchTerm={searchTerm} // Pass searchTerm for highlighting
                 />
               </div>
             ))
           ) : (
-            <div style={{ textAlign: "center", margin: "5rem 0" }}>No blog posts available.</div>
+            <div style={{ textAlign: "center", margin: "5rem 0" }}>No results found.</div>
           )}
-          {pagination && <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />}
+          {pagination && pagination.totalPages > 1 && <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />}
         </div>
 
-        {/* --- Bottom Type Component (Mobile Only) --- */}
-        {isMobile && (
-          <OtherComponent
-            currentType={currentType}
-            postTypeArray={postTypeArray}
-            currentSort={currentSort}
-            isSidebar={false} // Use the horizontal button style
-          />
-        )}
+        {isMobile && postTypeArray && postTypeArray.length > 0 && <OtherComponent currentType={currentType} postTypeArray={postTypeArray} currentSort={currentSort} isSidebar={false} />}
       </div>
     </div>
   );
