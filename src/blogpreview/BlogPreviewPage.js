@@ -4,9 +4,7 @@ import Pagination from "@/blogpreview/Pagination.js";
 import { paddingtop } from "@/config/global.js";
 import OtherComponent from "./OtherComponent";
 
-// A simple custom hook to detect if the screen is mobile-sized.
-// It's client-side only and safe for SSR with Next.js.
-const useIsMobile = (breakpoint = 768) => {
+const useIsMobile = (breakpoint = 1000) => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -25,7 +23,6 @@ const useIsMobile = (breakpoint = 768) => {
   return isMobile;
 };
 
-
 function BlogPreviewPage({ currentType, data, pagination, postTypeArray, currentSort, currentLanguage }) {
   const isMobile = useIsMobile();
 
@@ -38,17 +35,16 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
   const contentStyle = {
     display: "flex",
     flexDirection: isMobile ? "column" : "row",
-    gap: "2rem",
-    margin: "0 auto",
-    padding: "2rem 20px 0 20px",
+    padding: "2rem 20px",
+    marginRight: isMobile ? "0%" : "15%",
   };
 
   // Style for the desktop-only left sidebar
   const sidebarStyle = {
     flex: "0 0 350px",
-    position: "sticky",
     top: `calc(${paddingtop} + 2rem)`,
     alignSelf: "flex-start",
+    marginLeft: "15%",
   };
 
   // Style for the main content area (posts)
@@ -59,7 +55,6 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
   return (
     <div style={containerStyle}>
       <div style={contentStyle}>
-        {/* --- Left Sidebar (Desktop Only) --- */}
         {!isMobile && (
           <div style={sidebarStyle}>
             <OtherComponent
@@ -76,15 +71,7 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
           {data && data.length > 0 ? (
             data.map((post, index) => (
               <div key={index}>
-                <PreviewCard
-                  blogid={post.blogid}
-                  title={post.title}
-                  text={post.body}
-                  date={post.date}
-                  type={post.type}
-                  language={post.language}
-                  wordcount={post.word_count}
-                />
+                <PreviewCard blogid={post.blogid} title={post.title} text={post.body} date={post.date} type={post.type} language={post.language} wordcount={post.word_count} />
               </div>
             ))
           ) : (
@@ -95,12 +82,12 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
 
         {/* --- Bottom Type Component (Mobile Only) --- */}
         {isMobile && (
-           <OtherComponent
-              currentType={currentType}
-              postTypeArray={postTypeArray}
-              currentSort={currentSort}
-              isSidebar={false} // Use the horizontal button style
-            />
+          <OtherComponent
+            currentType={currentType}
+            postTypeArray={postTypeArray}
+            currentSort={currentSort}
+            isSidebar={false} // Use the horizontal button style
+          />
         )}
       </div>
     </div>

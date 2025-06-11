@@ -1,15 +1,13 @@
 "use client";
 
 import React from "react";
-// Import Badge from react-bootstrap
 import { Container, Card, Row, Col, Badge } from "react-bootstrap";
 import { useGlobalColorScheme } from "../config/global";
 import Link from "next/link";
 
 function PreviewCard(props) {
   const { colors } = useGlobalColorScheme();
-  // Destructure the new 'types' prop along with others
-  const { searchTerm, date, types, blogid, title, text, wordcount } = props;
+  const { searchTerm, date, blogid, title, text, wordcount } = props;
 
   const getHighlightedText = (text, highlight) => {
     if (!highlight || !text) {
@@ -30,7 +28,7 @@ function PreviewCard(props) {
   return (
     <Container fluid className="my-4">
       <Row className="justify-content-center">
-        <Col md={10} lg={8}>
+        <Col>
           <Card
             className="border-1 rounded-3"
             style={{
