@@ -22,6 +22,7 @@ const TypeComponent = ({ currentType, postTypeArray, currentSort }) => {
   }, [searchParams, postTypeArray]);
 
   const typeOptions = [
+    // The count for "all" is calculated but will not be shown, which is fine.
     { type: "all", label: `All`, count: postTypeArray.reduce((sum, pt) => sum + pt.count, 0) },
     ...postTypeArray.map(({ type, count }) => ({
       type,
@@ -78,10 +79,16 @@ const TypeComponent = ({ currentType, postTypeArray, currentSort }) => {
             role="button"
             tabIndex={0}
             aria-selected={activeType === option.type}
-            aria-label={`Filter by type ${option.label} (${option.count} posts)`}
+            // MODIFIED: Make aria-label conditional to not announce the meaningless "All" count
+            aria-label={
+              option.type === "all"
+                ? `Filter by type ${option.label}`
+                : `Filter by type ${option.label} (${option.count} posts)`
+            }
           >
             {option.label}
-            {showCountFor === option.type && ` (${option.count})`} {/* Show count if clicked */}
+            {/* MODIFIED: Add condition to not show count for "all" */}
+            {showCountFor === option.type && option.type !== "all" && ` (${option.count})`}
           </div>
         ))}
       </div>
