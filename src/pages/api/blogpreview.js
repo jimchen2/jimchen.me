@@ -55,7 +55,6 @@ export async function processBlog(blog) {
   return {
     ...blog,
     date: formattedDate,
-    preview: blog.preview_text || "",
   };
 }
 

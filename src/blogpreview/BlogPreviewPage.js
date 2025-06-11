@@ -62,7 +62,7 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
                 <PreviewCard
                   blogid={post.blogid}
                   title={post.title}
-                  text={post.preview} // 'preview' contains the snippet from the API
+                  text={post.preview_text} 
                   date={post.date}
                   tags={post.type}
                   wordcount={post.word_count}
