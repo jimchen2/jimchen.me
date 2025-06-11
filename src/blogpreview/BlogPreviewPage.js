@@ -71,7 +71,16 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
           {data && data.length > 0 ? (
             data.map((post, index) => (
               <div key={index}>
-                <PreviewCard blogid={post.blogid} title={post.title} text={post.body} date={post.date} type={post.type} language={post.language} wordcount={post.word_count} />
+                <PreviewCard
+                  blogid={post.blogid}
+                  title={post.title}
+                  text={post.preview}
+                  date={post.date}
+                  tags={post.type}
+                  language={post.language}
+                  wordcount={post.word_count}
+                  previewimage={post.preview_image}
+                />
               </div>
             ))
           ) : (
