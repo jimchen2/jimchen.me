@@ -158,17 +158,6 @@ function NavBar() {
             <Nav className="ms-auto d-none d-lg-flex" style={{ fontWeight: "300", fontFamily: "'Ubuntu', sans-serif" }}>
               <Nav.Link
                 as={Link}
-                href="/about"
-                style={{
-                  color: isActive("/about") ? colors.color_blue : colors.color_black,
-                  transition: "color 0.3s ease, transform 0.3s ease",
-                }}
-                className="me-lg-3 my-2 my-lg-0"
-              >
-                About
-              </Nav.Link>
-              <Nav.Link
-                as={Link}
                 href="/"
                 style={{
                   color: isActive("/") ? colors.color_blue : colors.color_black,
@@ -278,23 +267,6 @@ function NavBar() {
               fontSize: "0.8rem",
             }}
           >
-            <Nav.Link
-              as={Link}
-              href="/about"
-              style={{
-                color: isActive("/about") ? colors.color_blue : colors.color_black,
-                backgroundColor: isActive("/about") ? colors.color_white : "transparent",
-                textAlign: "center",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                flex: 1,
-                width: "25%",
-              }}
-            >
-              <FaInfoCircle size={24} style={{ marginBottom: "0.2rem" }} />
-              About
-            </Nav.Link>
             <Nav.Link
               as={Link}
               href="/"

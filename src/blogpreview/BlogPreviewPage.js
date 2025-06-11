@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PreviewCard from "./PreviewCard.js";
 import Pagination from "@/blogpreview/Pagination.js";
 import { paddingtop } from "@/config/global.js";
-import TypeComponent from "./TypeComponent";
+import OtherComponent from "./OtherComponent";
 
 // A simple custom hook to detect if the screen is mobile-sized.
 // It's client-side only and safe for SSR with Next.js.
@@ -62,7 +62,7 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
         {/* --- Left Sidebar (Desktop Only) --- */}
         {!isMobile && (
           <div style={sidebarStyle}>
-            <TypeComponent
+            <OtherComponent
               currentType={currentType}
               postTypeArray={postTypeArray}
               currentSort={currentSort}
@@ -95,7 +95,7 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
 
         {/* --- Bottom Type Component (Mobile Only) --- */}
         {isMobile && (
-           <TypeComponent
+           <OtherComponent
               currentType={currentType}
               postTypeArray={postTypeArray}
               currentSort={currentSort}

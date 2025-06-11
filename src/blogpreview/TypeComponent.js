@@ -1,8 +1,10 @@
+// TypeComponent.js
+
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useGlobalColorScheme } from "@/config/global.js";
 
-const TypeComponent = ({ currentType, postTypeArray, currentSort, isSidebar }) => {
+const TypeComponent = ({ currentType, postTypeArray, currentSort }) => {
   const { colors } = useGlobalColorScheme();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -42,7 +44,6 @@ const TypeComponent = ({ currentType, postTypeArray, currentSort, isSidebar }) =
 
   // --- REFINED STYLING LOGIC ---
 
-  // Style for the container div. It's only a styled "box" in the sidebar.
   const typeListStyle = {
     display: "flex",
     flexDirection: "row",
@@ -53,22 +54,18 @@ const TypeComponent = ({ currentType, postTypeArray, currentSort, isSidebar }) =
     borderRadius: "8px",
   };
 
-  // Style for each individual tag. This is now the SAME compact style for both mobile and desktop.
-  const typeItemStyle = (isSelected) => {
-    return {
-      color: isSelected ? colors.color_black : colors.color_text_faded,
-      fontWeight: isSelected ? "bold" : "normal",
-      cursor: "pointer",
-      fontSize: "0.9rem",
-      lineHeight: "1.5",
-      transition: "color 0.2s",
-    };
-  };
+  const typeItemStyle = (isSelected) => ({
+    color: isSelected ? colors.color_black : colors.color_text_faded,
+    fontWeight: isSelected ? "bold" : "normal",
+    cursor: "pointer",
+    fontSize: "0.9rem",
+    lineHeight: "1.5",
+    transition: "color 0.2s",
+  });
 
   return (
-    <div>
+    <div style={{ marginBottom: "1rem" }}>
       <span style={{ display: "block", marginBottom: "0.5rem", paddingLeft: "1rem", fontWeight: "bold" }}>Tags:</span>
-
       <div style={typeListStyle}>
         {typeOptions.map((option) => (
           <div
@@ -76,9 +73,7 @@ const TypeComponent = ({ currentType, postTypeArray, currentSort, isSidebar }) =
             style={typeItemStyle(activeType === option.type)}
             onClick={() => handleTypeClick(option.type)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                handleTypeClick(option.type);
-              }
+              if (e.key === "Enter" || e.key === " ") handleTypeClick(option.type);
             }}
             role="button"
             tabIndex={0}
@@ -90,7 +85,6 @@ const TypeComponent = ({ currentType, postTypeArray, currentSort, isSidebar }) =
           </div>
         ))}
       </div>
-      <br />
     </div>
   );
 };
