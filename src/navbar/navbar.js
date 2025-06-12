@@ -1,74 +1,20 @@
+// components/NavBar.js
+
 "use client";
 
-import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { Container, Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
+import { usePathname } from "next/navigation";
+import { Container, Navbar, Nav } from "react-bootstrap";
 import { useGlobalColorScheme } from "../config/global";
-import { toggleTheme } from "../config/global";
-import { FaSearch, FaBlog, FaComments, FaPalette } from "react-icons/fa";
+// Removed toggleTheme import
+import { FaComments } from "react-icons/fa"; // Removed FaPalette import
 
 function NavBar() {
-  const { colors, updateColor } = useGlobalColorScheme();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const router = useRouter();
+  const { colors } = useGlobalColorScheme(); // Removed updateColor as it's no longer used here
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const searchInputRef = useRef(null);
 
-  // *** MODIFIED PART 1: Sync searchTerm with URL on ANY page ***
-  // This effect now reads the `searchterm` from the URL query string
-  // regardless of the current path.
-  useEffect(() => {
-    const query = searchParams.get("searchterm");
-    if (query) {
-      setSearchTerm(decodeURIComponent(query));
-    } else {
-      setSearchTerm(""); // Clear search term if 'searchterm' is not in the URL
-    }
-  }, [searchParams]); // Dependency is now just searchParams
+  // Removed handleToggleTheme function
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  // *** MODIFIED PART 2: Update search submission to stay on the current page ***
-  // This function now appends the search query to the CURRENT path.
-  const handleSearchSubmit = (event) => {
-    event.preventDefault();
-    const trimmedSearchTerm = searchTerm.trim();
-
-    // Create a new URLSearchParams object from the current one
-    const newParams = new URLSearchParams(searchParams.toString());
-
-    if (trimmedSearchTerm) {
-      // Set or update the 'searchterm' parameter
-      newParams.set("searchterm", trimmedSearchTerm);
-    } else {
-      // If the search is empty, remove the parameter from the URL
-      newParams.delete("searchterm");
-    }
-
-    // Push the new URL with the current pathname and updated search parameters
-    router.push(`${pathname}?${newParams.toString()}`);
-    
-    setIsSearchOpen(false); // Close mobile search overlay
-  };
-
-  const handleToggleTheme = () => {
-    toggleTheme(colors, updateColor);
-  };
-
-  const toggleSearch = () => {
-    setIsSearchOpen(!isSearchOpen);
-    if (!isSearchOpen && searchInputRef.current) {
-      setTimeout(() => searchInputRef.current.focus(), 0);
-    }
-  };
-
-  // *** MODIFIED PART 3: Simplified isActive function ***
-  // Removed the check for the now non-existent `/search` page.
   const isActive = (href) => {
     if (!pathname) return false;
     if (href === "/" && pathname === "/") return true;
@@ -78,7 +24,7 @@ function NavBar() {
 
   return (
     <>
-      {/* Top Navbar for both desktop and mobile */}
+      {/* Top Navbar */}
       <Navbar
         fixed="top"
         style={{
@@ -88,173 +34,30 @@ function NavBar() {
         }}
       >
         <Container style={{ maxWidth: "1140px" }}>
-          {!isSearchOpen && (
-            <>
-              <Navbar.Brand
-                as={Link}
-                href="/"
-                className="d-lg-block"
-                style={{
-                  color: colors.color_black,
-                  fontFamily: "'Ubuntu', sans-serif",
-                  fontWeight: "300",
-                  marginLeft: "15%",
-                  transition: "color 0.3s ease",
-                }}
-                onMouseEnter={(e) => (e.target.style.color = colors.color_blue)}
-                onMouseLeave={(e) => (e.target.style.color = colors.color_black)}
-              >
-                Jim Chen's Website
-              </Navbar.Brand>
+          <Navbar.Brand
+            as={Link}
+            href="/"
+            className="d-lg-block"
+            style={{
+              color: colors.color_black,
+              fontFamily: "'Ubuntu', sans-serif",
+              fontWeight: "300",
+              marginLeft: "15%",
+              transition: "color 0.3s ease",
+            }}
+            onMouseEnter={(e) => (e.target.style.color = colors.color_blue)}
+            onMouseLeave={(e) => (e.target.style.color = colors.color_black)}
+          >
+            Jim Chen's Blog
+          </Navbar.Brand>
 
-              {/* Mobile Search Icon */}
-              <div className="d-lg-none">
-                <Button
-                  variant="link"
-                  onClick={toggleSearch}
-                  style={{
-                    color: colors.color_black,
-                    padding: "0.5rem",
-                  }}
-                  aria-label="Search"
-                >
-                  <FaSearch size={20} />
-                </Button>
-              </div>
-            </>
-          )}
-
-          {/* Mobile Search Bar (takes over top bar when open) */}
-          {isSearchOpen && (
-            <Container className="d-lg-none py-2" style={{ backgroundColor: colors.color_light_gray }}>
-              <Form onSubmit={handleSearchSubmit} className="d-flex align-items-center">
-                <FormControl
-                  ref={searchInputRef}
-                  type="search"
-                  placeholder="Search..."
-                  aria-label="Search"
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                  style={{
-                    color: colors.color_black,
-                    borderColor: colors.color_black,
-                    backgroundColor: colors.color_white,
-                    fontFamily: "'Ubuntu', sans-serif",
-                    flex: 1,
-                    transition: "border-color 0.3s ease, box-shadow 0.3s ease",
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = colors.color_blue;
-                    e.target.style.boxShadow = `0 0 5px ${colors.color_blue}`;
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = colors.color_black;
-                    e.target.style.boxShadow = "none";
-                  }}
-                />
-                <Button
-                  variant="link"
-                  onClick={toggleSearch}
-                  style={{
-                    color: colors.color_black,
-                    marginLeft: "0.5rem",
-                  }}
-                  aria-label="Cancel search"
-                >
-                  Cancel
-                </Button>
-              </Form>
-            </Container>
-          )}
-
-          {/* Desktop Navbar Toggle and Collapse */}
           <Navbar.Toggle aria-controls="basic-navbar-nav" className="custom-toggler d-lg-none" />
           <Navbar.Collapse id="basic-navbar-nav" className="d-lg-flex">
             <Nav className="ms-auto d-none d-lg-flex" style={{ fontWeight: "300", fontFamily: "'Ubuntu', sans-serif" }}>
-              <Nav.Link
-                as={Link}
-                href="/"
-                style={{
-                  color: isActive("/") ? colors.color_blue : colors.color_black,
-                  transition: "color 0.3s ease, transform 0.3s ease",
-                }}
-                className="me-lg-3 my-2 my-lg-0"
-              >
-                Blog
-              </Nav.Link>
-              <Nav.Link
-                as={Link}
-                href="/comments"
-                style={{
-                  color: isActive("/comments") ? colors.color_blue : colors.color_black,
-                  transition: "color 0.3s ease, transform 0.3s ease",
-                }}
-                className="me-lg-3 my-2 my-lg-0"
-              >
+              <Nav.Link as={Link} href="/comments" style={{ color: isActive("/comments") ? colors.color_blue : colors.color_black }} className="me-lg-3 my-2 my-lg-0">
                 Comments
               </Nav.Link>
-              <Nav.Link
-                onClick={handleToggleTheme}
-                style={{
-                  color: colors.color_black,
-                  transition: "color 0.3s ease, transform 0.3s ease",
-                }}
-                className="me-lg-3 my-2 my-lg-0"
-              >
-                Theme
-              </Nav.Link>
-
-              {/* Desktop Search Form */}
-              <Form className="d-flex mt-2 mt-lg-0" onSubmit={handleSearchSubmit}>
-                <FormControl
-                  ref={searchInputRef}
-                  type="search"
-                  placeholder="Search..."
-                  aria-label="Search"
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                  style={{
-                    color: colors.color_black,
-                    borderColor: colors.color_black,
-                    backgroundColor: colors.color_white,
-                    fontFamily: "'Ubuntu', sans-serif",
-                    maxWidth: "200px",
-                    transition: "border-color 0.3s ease, box-shadow 0.3s ease",
-                  }}
-                  className="me-2"
-                  onFocus={(e) => {
-                    e.target.style.borderColor = colors.color_blue;
-                    e.target.style.boxShadow = `0 0 5px ${colors.color_blue}`;
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = colors.color_black;
-                    e.target.style.boxShadow = "none";
-                  }}
-                />
-                <Button
-                  variant="outline-primary"
-                  type="submit"
-                  style={{
-                    backgroundColor: colors.color_white,
-                    color: colors.color_blue,
-                    borderColor: colors.color_blue,
-                    fontFamily: "'Ubuntu', sans-serif",
-                    transition: "background-color 0.3s ease, color 0.3s ease, transform 0.3s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = colors.color_blue;
-                    e.target.style.color = colors.color_white;
-                    e.target.style.transform = "scale(1.05)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = colors.color_white;
-                    e.target.style.color = colors.color_blue;
-                    e.target.style.transform = "scale(1)";
-                  }}
-                >
-                  Search
-                </Button>
-              </Form>
+              {/* Theme Nav.Link has been removed */}
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -275,31 +78,7 @@ function NavBar() {
         }}
       >
         <Container>
-          <Nav
-            className="d-flex"
-            style={{
-              fontWeight: "300",
-              fontFamily: "'Ubuntu', sans-serif",
-              fontSize: "0.8rem",
-            }}
-          >
-            <Nav.Link
-              as={Link}
-              href="/"
-              style={{
-                color: isActive("/") ? colors.color_blue : colors.color_black,
-                backgroundColor: isActive("/") ? colors.color_white : "transparent",
-                textAlign: "center",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                flex: 1,
-                width: "25%",
-              }}
-            >
-              <FaBlog size={24} style={{ marginBottom: "0.2rem" }} />
-              Blog
-            </Nav.Link>
+          <Nav className="d-flex" style={{ fontWeight: "300", fontFamily: "'Ubuntu', sans-serif", fontSize: "0.8rem" }}>
             <Nav.Link
               as={Link}
               href="/comments"
@@ -311,28 +90,13 @@ function NavBar() {
                 flexDirection: "column",
                 alignItems: "center",
                 flex: 1,
-                width: "25%",
+                width: "100%", // Adjusted for 1 item
               }}
             >
               <FaComments size={24} style={{ marginBottom: "0.2rem" }} />
               Comments
             </Nav.Link>
-            <Nav.Link
-              onClick={handleToggleTheme}
-              style={{
-                color: colors.color_black,
-                backgroundColor: "transparent",
-                textAlign: "center",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                flex: 1,
-                width: "25%",
-              }}
-            >
-              <FaPalette size={24} style={{ marginBottom: "0.2rem" }} />
-              Theme
-            </Nav.Link>
+            {/* Theme Nav.Link has been removed */}
           </Nav>
         </Container>
       </div>
@@ -340,9 +104,6 @@ function NavBar() {
         @media (max-width: 991px) {
           .custom-toggler {
             margin-right: 15px;
-          }
-          .navbar-brand {
-            display: ${isSearchOpen ? "none" : "block"};
           }
         }
       `}</style>

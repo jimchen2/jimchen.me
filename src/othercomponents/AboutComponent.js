@@ -3,7 +3,8 @@
 import React from "react";
 import { useGlobalColorScheme } from "../config/global.js";
 import Link from "next/link";
-import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope, FaRss, FaArchive, FaMap } from "react-icons/fa";
+// Added FaWrench for the new link
+import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope, FaRss, FaArchive, FaMap, FaWrench } from "react-icons/fa";
 import { TbSourceCode } from "react-icons/tb";
 
 const communicationLinks = [
@@ -25,6 +26,7 @@ const profileLinks = [
 const utilityLinks = [
   { href: "https://archive.org/details/@j_c561", Icon: FaArchive, alt: "Internet Archive" },
   { href: "https://www.openstreetmap.org/user/jimchen4214", Icon: FaMap, alt: "OpenStreetMap" },
+  { href: "https://greasyfork.org/en/users/1430831-jimchen2", Icon: FaWrench, alt: "Greasy Fork" },
 ];
 
 function AboutComponent() {

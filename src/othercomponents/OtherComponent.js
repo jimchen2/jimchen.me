@@ -1,15 +1,23 @@
+// components/OtherComponent.js
+
 import React from "react";
-import TypeComponent from "./TypeComponent"; // Assuming it's in the same folder
-import AboutComponent from "./AboutComponent"; // Assuming it's in the same folder
+import TypeComponent from "./TypeComponent";
+import AboutComponent from "./AboutComponent";
 import SortComponent from "./SortComponent";
+import SearchComponent from "./SearchComponent";
+import ThemeComponent from "./ThemeComponent"; // 1. Import the new ThemeComponent
 
 const OtherComponent = (props) => {
   return (
     <div>
-      {/* The TypeComponent handles all the tag filtering logic */}
+      <SearchComponent />
+
       <TypeComponent {...props} />
+
       <SortComponent />
+
       <AboutComponent />
+      <ThemeComponent />
     </div>
   );
 };
