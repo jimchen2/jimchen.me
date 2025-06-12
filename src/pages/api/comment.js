@@ -7,7 +7,8 @@ export default async function handler(req, res) {
 
     // Handle GET requests
     if (req.method === "GET") {
-      const { blogid } = req.query;
+      // Destructure blogid and limit from the query
+      const { blogid, limit } = req.query;
 
       try {
         let query = "SELECT * FROM comments";
@@ -20,9 +21,17 @@ export default async function handler(req, res) {
 
         // Fetch comments and sort by date (descending)
         query += " ORDER BY date DESC";
-        
+
+        // Add LIMIT clause if a limit is provided
+        if (limit) {
+          // Use the next available parameter index
+          query += ` LIMIT $${queryParams.length + 1}`;
+          // Ensure limit is an integer and push to params
+          queryParams.push(parseInt(limit, 10));
+        }
+
         const result = await pool.query(query, queryParams);
-        
+
         // Format the date for each comment
         const commentsWithFormattedDate = result.rows.map((comment) => {
           const date = new Date(comment.date);
@@ -30,9 +39,6 @@ export default async function handler(req, res) {
             month: "short",
             day: "2-digit",
             year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
           });
 
           return {
@@ -42,7 +48,7 @@ export default async function handler(req, res) {
             user: comment.user_name,
             blog: comment.blog_id,
             blogname: comment.blog_name,
-            like: comment.likes || []
+            like: comment.likes || [],
           };
         });
 
@@ -63,7 +69,7 @@ export default async function handler(req, res) {
           VALUES ($1, $2, $3, $4, $5, $6, $7)
           RETURNING *
         `;
-        
+
         const insertValues = [
           uuid,
           user,
@@ -71,7 +77,7 @@ export default async function handler(req, res) {
           blog,
           blogname,
           [], // Empty pointer array
-          [] // Empty likes array
+          [], // Empty likes array
         ];
 
         const result = await pool.query(insertQuery, insertValues);
@@ -82,16 +88,17 @@ export default async function handler(req, res) {
           // First, get the current pointer array
           const getParentQuery = "SELECT pointer FROM comments WHERE uuid = $1";
           const parentResult = await pool.query(getParentQuery, [parentid]);
-          
+
           if (parentResult.rows.length === 0) {
             console.warn(`Parent comment ${parentid} not found`);
           } else {
             // Add the new UUID to the pointer array
             const currentPointers = parentResult.rows[0].pointer || [];
             const newPointers = [...currentPointers, uuid];
-            
+
             // Update the parent comment
-            const updateParentQuery = "UPDATE comments SET pointer = $1, updated_at = CURRENT_TIMESTAMP WHERE uuid = $2";
+            const updateParentQuery =
+              "UPDATE comments SET pointer = $1, updated_at = CURRENT_TIMESTAMP WHERE uuid = $2";
             await pool.query(updateParentQuery, [newPointers, parentid]);
           }
         }
@@ -102,7 +109,7 @@ export default async function handler(req, res) {
           user: savedComment.user_name,
           blog: savedComment.blog_id,
           blogname: savedComment.blog_name,
-          like: savedComment.likes || []
+          like: savedComment.likes || [],
         };
 
         res.status(201).json(formattedComment);

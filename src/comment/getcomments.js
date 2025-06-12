@@ -3,7 +3,7 @@ import axios from "axios";
 import CommentBox from "./commentbox";
 import { useComments } from "./commentscontext";
 
-const GetComments = ({ showName, blogid, paddl = 30, paddr = 30 }) => {
+const GetComments = ({ showName, blogid, paddl = 30, paddr = 30, limit }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,9 +13,13 @@ const GetComments = ({ showName, blogid, paddl = 30, paddr = 30 }) => {
     const getComments = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(
-          `/api/comment/?blogid=${blogid}`
-        );
+        // Build the request URL conditionally
+        let apiUrl = `/api/comment/?blogid=${blogid}`;
+        if (limit) {
+          apiUrl += `&limit=${limit}`;
+        }
+
+        const response = await axios.get(apiUrl); // Use the constructed URL
         setData(response.data);
       } catch (err) {
         setError(err);
@@ -24,8 +28,7 @@ const GetComments = ({ showName, blogid, paddl = 30, paddr = 30 }) => {
       }
     };
     getComments();
-  }, [blogid, updateTrigger]);
-
+  }, [blogid, updateTrigger, limit]); // Added limit to dependency array
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
