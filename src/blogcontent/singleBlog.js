@@ -30,16 +30,7 @@ function calculateBlogPadding(windowWidth = null) {
   };
 }
 
-const BlogHeader = ({ date, language, type, title, colors, wordcount, blogid }) => {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    const shortUrl = `${window.location.origin}/a/${blogid}`;
-    navigator.clipboard.writeText(shortUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
+const BlogHeader = ({ date, colors, wordcount }) => {
   return (
     <div className="blog-header mb-3">
       <br />
@@ -92,9 +83,7 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
   return (
     <Container fluid className="pb-3">
       <Row>
-        <Col className="d-none d-lg-block">
-          <SideNav />
-        </Col>
+        {/* The main content column now comes first */}
         <Col
           md={12}
           lg={9}
@@ -115,6 +104,10 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
             <BlogLikeButtonHelper blogid={blogid} />
             <br />
           </div>
+        </Col>
+        {/* The SideNav column is now on the right */}
+        <Col className="d-none d-lg-block">
+          <SideNav />
         </Col>
       </Row>
     </Container>

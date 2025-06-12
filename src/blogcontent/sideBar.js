@@ -237,12 +237,12 @@ const SideNav = () => {
 
   return (
     <Col
-      lg={2.5} // Consider using string values for Col props like "2.5" if that's standard for your react-bootstrap version
-      xl={2.5} // Or use the object format e.g. lg={{ span: 2, offset: 0.5 }} if more control is needed
+      lg={2.5}
+      xl={2.5}
       style={{
         position: "fixed",
         top: `${paddingtop}px`,
-        left: "50px",
+        right: "50px", // Changed from 'left' to 'right'
         height: "100vh",
         overflowY: "auto",
         padding: "10px",

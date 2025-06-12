@@ -38,20 +38,16 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
   const mainContentStyle = {
     flex: "1",
     marginTop: 50,
-    marginLeft: !isMobile ? "8%" : "auto",
-    marginRight: "auto",
-    maxWidth: "750px",
+    marginLeft: "5%",
+    marginRight: !isMobile ? "10%" : "auto",
+    maxWidth: "800px",
   };
 
   return (
     <div style={containerStyle}>
       <div style={contentStyle}>
-        {!isMobile && (
-          <div style={sidebarStyle}>
-            <OtherComponent currentType={currentType} postTypeArray={postTypeArray} currentSort={currentSort} isSidebar={true} />
-          </div>
-        )}
-
+        {/* --- CHANGE 2: Reordered the elements --- */}
+        {/* The main content now comes FIRST in the JSX for desktop view */}
         <div style={mainContentStyle}>
           {data && data.length > 0 ? (
             data.map((post, index) => (
@@ -74,6 +70,14 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
           {pagination && pagination.totalPages > 1 && <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />}
         </div>
 
+        {/* The sidebar now comes SECOND, so it appears on the right */}
+        {!isMobile && (
+          <div style={sidebarStyle}>
+            <OtherComponent currentType={currentType} postTypeArray={postTypeArray} currentSort={currentSort} isSidebar={true} />
+          </div>
+        )}
+
+        {/* The mobile layout remains unchanged, appearing at the bottom */}
         {isMobile && postTypeArray && postTypeArray.length > 0 && <OtherComponent currentType={currentType} postTypeArray={postTypeArray} currentSort={currentSort} isSidebar={false} />}
       </div>
     </div>
