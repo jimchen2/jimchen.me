@@ -1,26 +1,16 @@
 // AboutComponent.js
+
 import React from "react";
 import { useGlobalColorScheme } from "../config/global.js";
 import Link from "next/link";
-import {
-  FaGithub,
-  FaWeixin,
-  FaTelegram,
-  FaLinkedin,
-  FaEnvelope,
-  FaRss,
-  FaArchive,
-  FaMap,
-  FaWrench,
-  FaMastodon, 
-} from "react-icons/fa";
+// Added FaWrench for the new link
+import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope, FaRss, FaArchive, FaMap, FaWrench } from "react-icons/fa";
 import { TbSourceCode } from "react-icons/tb";
 
 const communicationLinks = [
   { href: "mailto:jimchen4214@gmail.com", Icon: FaEnvelope, alt: "Email" },
-  { href: "https://jimchen.me/weixin.jpg", Icon: FaWeixin, alt: "WeChat QR Code" },
+  { href: "https://jimchen.me/weixin.jpg", Icon: FaWeixin, alt: "WeChat" },
   { href: "https://t.me/Jimchen4214", Icon: FaTelegram, alt: "Telegram" },
-  { href: "https://mastodon.social/@jimchen2", Icon: FaMastodon, alt: "Mastodon" }, // Fixed Icon
 ];
 
 const websiteLinks = [
@@ -41,59 +31,37 @@ const utilityLinks = [
 
 function AboutComponent() {
   const { colors } = useGlobalColorScheme();
-  const defaultColor = "#000"; // Fallback color
 
   const linkIconStyle = {
     fontSize: "26px",
     margin: "10px",
-    color: colors.color_black || defaultColor,
+    color: colors.color_black,
     verticalAlign: "middle",
     transition: "transform 0.2s ease-in-out",
   };
 
   const renderLinkSection = (title, links) => (
     <div style={{ marginBottom: "2rem", width: "100%" }}>
-      <h3
-        style={{
-          color: colors.color_black || defaultColor,
-          fontSize: "1rem",
-          fontWeight: "bold",
-          paddingLeft: "1rem",
-          marginBottom: "0.5rem",
-        }}
-      >
-        {title}
-      </h3>
+      <h3 style={{ color: colors.color_black, fontSize: "1rem", fontWeight: 'bold', paddingLeft: '1rem', marginBottom: '0.5rem' }}>{title}</h3>
       <div style={{ display: "flex", justifyContent: "flex-start", flexWrap: "wrap", padding: "0 0.5rem" }}>
         {links.map((link) => {
           const isExternal = link.href.startsWith("http") || link.href.startsWith("mailto:");
-          const isImageDisplay = link.href.endsWith("/weixin.jpg"); // Simplified check
+          const isImageDisplay = ["/weixin.jpg", "/qq.jpg"].includes(link.href);
 
           if (isImageDisplay) {
             return (
-              <a
-                key={link.href}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={link.alt}
-                aria-label={link.alt}
-                style={{ display: "inline-flex", alignItems: "center" }}
-                onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.15)")}
-                onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-              >
+              <span key={link.href} title={link.alt}>
                 <link.Icon style={linkIconStyle} />
-              </a>
+              </span>
             );
           }
 
           return (
-            <Link key={link.href} href={link.href} passHref>
+            <Link key={link.href} href={link.href} passHref legacyBehavior>
               <a
                 target={isExternal ? "_blank" : undefined}
                 rel={isExternal ? "noopener noreferrer" : undefined}
                 title={link.alt}
-                aria-label={link.alt}
                 onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.15)")}
                 onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
               >
