@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PreviewCard from "./PreviewCard.js";
 import Pagination from "@/blogpreview/Pagination.js";
 import { paddingtop } from "@/config/global.js";
-import OtherComponent from "./OtherComponent";
+import OtherComponent from "@/othercomponents/OtherComponent.js";
 
 const useIsMobile = (breakpoint = 1000) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -27,15 +27,10 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
     display: "flex",
     flexDirection: isMobile ? "column" : "row",
     padding: "1rem 20px", // Adjusted padding
-    maxWidth: "1200px",
-    margin: "0 auto",
   };
 
-  // Conditionally show sidebar only if there are types to filter by
-  const showSidebar = !isMobile && postTypeArray && postTypeArray.length > 0;
-
   const sidebarStyle = {
-    flex: "0 0 350px",
+    flex: "0 0 300px",
     marginTop: paddingtop,
     alignSelf: "flex-start",
   };
@@ -43,13 +38,15 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
   const mainContentStyle = {
     flex: "1",
     marginTop: 50,
-    marginLeft: showSidebar ? "2rem" : "0",
+    marginLeft: !isMobile ? "8%" : "auto",
+    marginRight: "auto",
+    maxWidth: "750px",
   };
 
   return (
     <div style={containerStyle}>
       <div style={contentStyle}>
-        {showSidebar && (
+        {!isMobile && (
           <div style={sidebarStyle}>
             <OtherComponent currentType={currentType} postTypeArray={postTypeArray} currentSort={currentSort} isSidebar={true} />
           </div>
@@ -62,7 +59,7 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
                 <PreviewCard
                   blogid={post.blogid}
                   title={post.title}
-                  text={post.preview_text} 
+                  text={post.preview_text}
                   date={post.date}
                   tags={post.type}
                   wordcount={post.word_count}

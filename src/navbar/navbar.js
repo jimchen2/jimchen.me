@@ -6,7 +6,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Container, Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
 import { useGlobalColorScheme } from "../config/global";
 import { toggleTheme } from "../config/global";
-import { FaSearch, FaInfoCircle, FaBlog, FaComments, FaPalette } from "react-icons/fa"; // Added icons for nav items
+import { FaSearch, FaBlog, FaComments, FaPalette } from "react-icons/fa";
 
 function NavBar() {
   const { colors, updateColor } = useGlobalColorScheme();
@@ -17,29 +17,43 @@ function NavBar() {
   const searchParams = useSearchParams();
   const searchInputRef = useRef(null);
 
-  // Sync searchTerm with URL on mount or route change
+  // *** MODIFIED PART 1: Sync searchTerm with URL on ANY page ***
+  // This effect now reads the `searchterm` from the URL query string
+  // regardless of the current path.
   useEffect(() => {
-    if (!pathname) return;
-
-    const pathParts = pathname.split("/");
-    const searchQuery = pathParts[pathParts.length - 1];
-    if (pathname.startsWith("/search") && searchQuery) {
-      setSearchTerm(decodeURIComponent(searchQuery));
+    const query = searchParams.get("searchterm");
+    if (query) {
+      setSearchTerm(decodeURIComponent(query));
     } else {
-      setSearchTerm("");
+      setSearchTerm(""); // Clear search term if 'searchterm' is not in the URL
     }
-  }, [pathname]);
+  }, [searchParams]); // Dependency is now just searchParams
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
+  // *** MODIFIED PART 2: Update search submission to stay on the current page ***
+  // This function now appends the search query to the CURRENT path.
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    if (searchTerm.trim()) {
-      router.push(`/search/${encodeURIComponent(searchTerm)}`);
-      setIsSearchOpen(false);
+    const trimmedSearchTerm = searchTerm.trim();
+
+    // Create a new URLSearchParams object from the current one
+    const newParams = new URLSearchParams(searchParams.toString());
+
+    if (trimmedSearchTerm) {
+      // Set or update the 'searchterm' parameter
+      newParams.set("searchterm", trimmedSearchTerm);
+    } else {
+      // If the search is empty, remove the parameter from the URL
+      newParams.delete("searchterm");
     }
+
+    // Push the new URL with the current pathname and updated search parameters
+    router.push(`${pathname}?${newParams.toString()}`);
+    
+    setIsSearchOpen(false); // Close mobile search overlay
   };
 
   const handleToggleTheme = () => {
@@ -53,9 +67,10 @@ function NavBar() {
     }
   };
 
-  // Determine if a nav link is active based on pathname
+  // *** MODIFIED PART 3: Simplified isActive function ***
+  // Removed the check for the now non-existent `/search` page.
   const isActive = (href) => {
-    if (!pathname) return false; // Add this check to prevent the error
+    if (!pathname) return false;
     if (href === "/" && pathname === "/") return true;
     if (href !== "/" && pathname.startsWith(href)) return true;
     return false;
@@ -245,6 +260,7 @@ function NavBar() {
         </Container>
       </Navbar>
 
+      {/* Mobile Bottom Bar */}
       <div
         className="d-lg-none"
         style={{
@@ -320,7 +336,6 @@ function NavBar() {
           </Nav>
         </Container>
       </div>
-      {/* CSS for Responsive Behavior */}
       <style jsx>{`
         @media (max-width: 991px) {
           .custom-toggler {

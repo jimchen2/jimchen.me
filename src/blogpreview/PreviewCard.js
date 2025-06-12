@@ -7,8 +7,7 @@ import Link from "next/link";
 
 function PreviewCard(props) {
   const { colors } = useGlobalColorScheme();
-  const { searchTerm, date, blogid, previewimage, title, text, wordcount } =
-    props;
+  const { searchTerm, date, blogid, previewimage, title, text, wordcount } = props;
 
   const getHighlightedText = (text, highlight) => {
     if (!highlight || !text) {
@@ -73,9 +72,6 @@ function PreviewCard(props) {
                 </Col>
               )}
 
-              {/* --- TEXT CONTENT COLUMN --- */}
-              {/* Placed second in JSX. */}
-              {/* On desktop (md and up), 'order-md-1' moves it to the left. */}
               <Col md={previewimage ? 8 : 12} className="order-md-1">
                 <Card.Body>
                   <Card.Title className="mb-3">
@@ -110,12 +106,8 @@ function PreviewCard(props) {
                         display: "inline-block",
                       }}
                       className="title"
-                      onMouseEnter={(e) =>
-                        (e.target.style.transform = "scale(1.05)")
-                      }
-                      onMouseLeave={(e) =>
-                        (e.target.style.transform = "scale(1)")
-                      }
+                      onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")}
+                      onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
                     >
                       {title.split("-").join(" ")}
                     </Link>

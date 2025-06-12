@@ -1,5 +1,3 @@
-// OtherComponent.js (The new container component)
-
 import React from "react";
 import TypeComponent from "./TypeComponent"; // Assuming it's in the same folder
 import AboutComponent from "./AboutComponent"; // Assuming it's in the same folder
