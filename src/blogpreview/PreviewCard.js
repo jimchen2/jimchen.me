@@ -7,7 +7,8 @@ import Link from "next/link";
 
 function PreviewCard(props) {
   const { colors } = useGlobalColorScheme();
-  const { searchTerm, date, blogid, previewimage, title, text, wordcount } = props;
+  const { searchTerm, date, blogid, previewimage, title, text, wordcount } =
+    props;
 
   const getHighlightedText = (text, highlight) => {
     if (!highlight || !text) {
@@ -26,7 +27,7 @@ function PreviewCard(props) {
   };
 
   return (
-    <Container fluid className="my-4">
+    <Container fluid className="my-4" style={{ maxWidth: "100%" }}>
       <Row className="justify-content-center">
         <Col>
           <Card
@@ -37,8 +38,6 @@ function PreviewCard(props) {
           >
             <Row className="g-0">
               {/* --- IMAGE COLUMN --- */}
-              {/* Placed first in JSX for mobile-first layout. */}
-              {/* On desktop (md and up), 'order-md-2' moves it to the right. */}
               {previewimage && (
                 <Col xs={12} md={4} className="order-md-2">
                   {/* Image for Desktop (right) */}
@@ -52,7 +51,7 @@ function PreviewCard(props) {
                       maxWidth: "640px",
                       maxHeight: "320px",
                       objectFit: "cover",
-                      borderRadius: "0 0.3rem 0.3rem 0", // Rounded corners for the right side
+                      borderRadius: "0 0.3rem 0.3rem 0",
                     }}
                   />
                   {/* Image for Mobile (top) */}
@@ -66,13 +65,18 @@ function PreviewCard(props) {
                       maxWidth: "320px",
                       maxHeight: "180px",
                       objectFit: "cover",
-                      borderRadius: "0.3rem 0.3rem 0 0", // Rounded corners for the top
+                      borderRadius: "0.3rem 0.3rem 0 0",
                     }}
                   />
                 </Col>
               )}
 
-              <Col md={previewimage ? 8 : 12} className="order-md-1">
+              {/* --- TEXT COLUMN (THE FIX IS HERE) --- */}
+              <Col
+                md={previewimage ? 8 : 12}
+                className="order-md-1"
+                style={{ minWidth: 0 }} // <-- THE CRITICAL FIX
+              >
                 <Card.Body>
                   <Card.Title className="mb-3">
                     <div className="d-flex justify-content-between align-items-center mb-2">
@@ -106,8 +110,12 @@ function PreviewCard(props) {
                         display: "inline-block",
                       }}
                       className="title"
-                      onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")}
-                      onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+                      onMouseEnter={(e) =>
+                        (e.target.style.transform = "scale(1.05)")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.target.style.transform = "scale(1)")
+                      }
                     >
                       {title.split("-").join(" ")}
                     </Link>
@@ -119,6 +127,11 @@ function PreviewCard(props) {
                       color: colors.color_black,
                       fontStyle: "italic",
                       fontFamily: "'Open Sans', 'Roboto', sans-serif",
+                      whiteSpace: "normal",
+                      overflowWrap: "anywhere", // More aggressive word-breaking
+                      wordBreak: "break-all", // Fallback for older browsers
+                      overflow: "hidden", // Prevent overflow
+                      textOverflow: "ellipsis", // Optional: truncate with ellipsis if needed
                     }}
                   >
                     {getHighlightedText(text, searchTerm)}

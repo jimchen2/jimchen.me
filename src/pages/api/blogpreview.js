@@ -17,7 +17,13 @@ function getRelevantSnippet(body, searchterm, isTitleMatch) {
   }
 }
 
-export async function fetchBlogPreviews(start, count, type = null, sort = "date_latest", searchterm = null) {
+export async function fetchBlogPreviews(
+  start,
+  count,
+  type = null,
+  sort = "date_latest",
+  searchterm = null
+) {
   const pool = await dbConnect();
 
   const selectClause = searchterm
@@ -38,8 +44,11 @@ export async function fetchBlogPreviews(start, count, type = null, sort = "date_
 
   if (searchterm) {
     queryParams.push(`%${searchterm}%`);
-    const searchIndex = queryParams.length; // The index for the search term
-    conditions.push(`(title ILIKE $${searchIndex} OR body ILIKE $${searchIndex})`);
+    const searchIndex = queryParams.length;
+    // Replace hyphens with spaces in title for matching
+    conditions.push(
+      `(REPLACE(title, '-', ' ') ILIKE $${searchIndex} OR body ILIKE $${searchIndex})`
+    );
   }
 
   // Combine conditions into WHERE clause
@@ -51,7 +60,9 @@ export async function fetchBlogPreviews(start, count, type = null, sort = "date_
   let sortQuery;
   if (searchterm) {
     const searchIndex = queryParams.findIndex((p) => p.includes(searchterm));
-    sortQuery = `ORDER BY CASE WHEN title ILIKE $${searchIndex + 1} THEN 0 ELSE 1 END, date DESC`;
+    sortQuery = `ORDER BY CASE WHEN REPLACE(title, '-', ' ') ILIKE $${
+      searchIndex + 1
+    } THEN 0 ELSE 1 END, date DESC`;
   } else {
     const sortCriteria = {
       date_oldest: "date ASC",
@@ -92,15 +103,25 @@ export async function processAndSnippetBlog(blog, searchterm = null) {
   };
 
   if (searchterm) {
-    const isTitleMatch = blog.title.toLowerCase().includes(searchterm.toLowerCase());
-    processedBlog.preview_text = getRelevantSnippet(blog.body, searchterm, isTitleMatch);
+    const isTitleMatch = blog.title
+      .toLowerCase()
+      .includes(searchterm.toLowerCase());
+    processedBlog.preview_text = getRelevantSnippet(
+      blog.body,
+      searchterm,
+      isTitleMatch
+    );
     delete processedBlog.body; // Remove full body to reduce payload size
   }
 
   return processedBlog;
 }
 
-export async function calculatePaginationInfo(count = 10, type = null, searchterm = null) {
+export async function calculatePaginationInfo(
+  count = 10,
+  type = null,
+  searchterm = null
+) {
   const pool = await dbConnect();
   let query = "SELECT COUNT(*) FROM blogs";
   let queryParams = [];
@@ -115,7 +136,9 @@ export async function calculatePaginationInfo(count = 10, type = null, searchter
   }
 
   if (searchterm) {
-    conditions.push(`(title ILIKE $${paramCounter} OR body ILIKE $${paramCounter})`);
+    conditions.push(
+      `(title ILIKE $${paramCounter} OR body ILIKE $${paramCounter})`
+    );
     queryParams.push(`%${searchterm}%`);
     paramCounter++;
   }
@@ -146,7 +169,10 @@ export async function getBlogTypesWithCounts() {
   `;
   try {
     const result = await pool.query(query);
-    return result.rows.map((row) => ({ type: row.type, count: parseInt(row.count, 10) }));
+    return result.rows.map((row) => ({
+      type: row.type,
+      count: parseInt(row.count, 10),
+    }));
   } catch (error) {
     console.error("Error getting blog types:", error);
     throw error;
@@ -167,17 +193,34 @@ export default async function handler(req, res) {
     const sort = req.query.sort || "date_latest";
     const searchterm = req.query.searchterm || null;
 
-    const validSorts = ["date_oldest", "date_latest", "most_words", "least_words"];
+    const validSorts = [
+      "date_oldest",
+      "date_latest",
+      "most_words",
+      "least_words",
+    ];
     if (!validSorts.includes(sort)) {
       return res.status(400).json({ message: "Invalid sort parameter" });
     }
 
     // Fetch blog data based on all parameters
-    const blogPreviewsRaw = await fetchBlogPreviews(start, count, type, sort, searchterm);
-    const blogPreviews = await Promise.all(blogPreviewsRaw.map((blog) => processAndSnippetBlog(blog, searchterm)));
+    const blogPreviewsRaw = await fetchBlogPreviews(
+      start,
+      count,
+      type,
+      sort,
+      searchterm
+    );
+    const blogPreviews = await Promise.all(
+      blogPreviewsRaw.map((blog) => processAndSnippetBlog(blog, searchterm))
+    );
 
     // Get pagination info (aware of search/filter)
-    const { totalPages, totalBlogs } = await calculatePaginationInfo(count, type, searchterm);
+    const { totalPages, totalBlogs } = await calculatePaginationInfo(
+      count,
+      type,
+      searchterm
+    );
 
     // Get types for filter UI (this is independent of the current search/filter)
     const typesWithCounts = await getBlogTypesWithCounts();
@@ -200,6 +243,8 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     console.error("Error in blog API:", err);
-    res.status(500).json({ message: "Error fetching blog data", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching blog data", error: err.message });
   }
 }
