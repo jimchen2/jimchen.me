@@ -38,7 +38,7 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
   const mainContentStyle = {
     flex: "1",
     marginTop: 50,
-    marginLeft: "5%",
+    marginLeft:  !isMobile ? "5%" : "auto",
     marginRight: !isMobile ? "10%" : "auto",
     maxWidth: "800px",
   };
