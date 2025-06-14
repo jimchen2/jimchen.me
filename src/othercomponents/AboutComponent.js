@@ -25,7 +25,7 @@ const profileLinks = [
 
 const utilityLinks = [
   { href: "https://archive.org/details/@j_c561", Icon: FaArchive, alt: "Internet Archive" },
-  { href: "https://www.openstreetmap.org/user/jimchen4214", Icon: FaMap, alt: "OpenStreetMap" },
+  { href: "https://umap.openstreetmap.fr/en/user/jimchen2/", Icon: FaMap, alt: "Umap" },
   { href: "https://greasyfork.org/en/users/1430831-jimchen2", Icon: FaWrench, alt: "Greasy Fork" },
 ];
 

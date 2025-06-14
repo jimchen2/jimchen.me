@@ -1,12 +1,18 @@
 import dbConnect from "@/lib/db/dbConnect";
 
+/**
+ * Creates a relevant text snippet from a blog body based on a search term.
+ */
 function getRelevantSnippet(body, searchterm, isTitleMatch) {
   if (!body) return ""; // Handle case where body is null or undefined
   if (isTitleMatch) {
+    // If title matches, just show the beginning of the body
     return body.length > 150 ? body.substring(0, 150) + "..." : body;
   } else {
+    // If body matches, find the term and create a snippet around it
     const index = body.toLowerCase().indexOf(searchterm.toLowerCase());
     if (index === -1) {
+      // Fallback if the term isn't found (shouldn't happen with correct query)
       return body.length > 150 ? body.substring(0, 150) + "..." : body;
     }
     const start = Math.max(index - 75, 0);
@@ -17,6 +23,9 @@ function getRelevantSnippet(body, searchterm, isTitleMatch) {
   }
 }
 
+/**
+ * Fetches a list of blog previews from the database with filtering, sorting, and searching.
+ */
 export async function fetchBlogPreviews(
   start,
   count,
@@ -26,6 +35,8 @@ export async function fetchBlogPreviews(
 ) {
   const pool = await dbConnect();
 
+  // If searching, we need the full 'body' to create a relevant snippet.
+  // Otherwise, we use the pre-made 'preview_text'.
   const selectClause = searchterm
     ? `SELECT id, blogid, title, date, type, word_count, created_at, updated_at, preview_image, body`
     : `SELECT id, blogid, title, date, type, word_count, created_at, updated_at, preview_image, preview_text`;
@@ -34,9 +45,7 @@ export async function fetchBlogPreviews(
   let queryParams = [];
   let conditions = [];
 
-  // --- REVISED LOGIC ---
-
-  // Build WHERE conditions and params sequentially
+  // Build WHERE conditions and params sequentially for safety
   if (type) {
     queryParams.push(type);
     conditions.push(`$${queryParams.length} = ANY(type)`);
@@ -45,13 +54,13 @@ export async function fetchBlogPreviews(
   if (searchterm) {
     queryParams.push(`%${searchterm}%`);
     const searchIndex = queryParams.length;
-    // Replace hyphens with spaces in title for matching
+    // This logic matches hyphens in titles to spaces in the search term.
     conditions.push(
       `(REPLACE(title, '-', ' ') ILIKE $${searchIndex} OR body ILIKE $${searchIndex})`
     );
   }
 
-  // Combine conditions into WHERE clause
+  // Combine conditions into a WHERE clause if any exist
   if (conditions.length > 0) {
     query += ` WHERE ${conditions.join(" AND ")}`;
   }
@@ -59,11 +68,13 @@ export async function fetchBlogPreviews(
   // Define sort criteria
   let sortQuery;
   if (searchterm) {
+    // If searching, prioritize results where the title matches.
     const searchIndex = queryParams.findIndex((p) => p.includes(searchterm));
     sortQuery = `ORDER BY CASE WHEN REPLACE(title, '-', ' ') ILIKE $${
       searchIndex + 1
     } THEN 0 ELSE 1 END, date DESC`;
   } else {
+    // Standard sorting options
     const sortCriteria = {
       date_oldest: "date ASC",
       most_words: "word_count DESC",
@@ -74,7 +85,7 @@ export async function fetchBlogPreviews(
   }
   query += ` ${sortQuery}`;
 
-  // Add LIMIT and OFFSET. Their indices will now be correct because we've built the array sequentially.
+  // Add LIMIT and OFFSET for pagination. Indices are correct due to sequential building.
   queryParams.push(count, start);
   query += ` LIMIT $${queryParams.length - 1} OFFSET $${queryParams.length}`;
 
@@ -89,6 +100,9 @@ export async function fetchBlogPreviews(
   }
 }
 
+/**
+ * Formats a raw blog row for the frontend, creating a snippet if searching.
+ */
 export async function processAndSnippetBlog(blog, searchterm = null) {
   const dateObj = new Date(blog.date);
   const formattedDate = dateObj.toLocaleDateString("en-US", {
@@ -102,21 +116,27 @@ export async function processAndSnippetBlog(blog, searchterm = null) {
     date: formattedDate,
   };
 
+  // If a search was performed, generate a custom preview snippet.
   if (searchterm) {
     const isTitleMatch = blog.title
       .toLowerCase()
+      .replace(/-/g, " ") // Also replace hyphens here for a consistent match check
       .includes(searchterm.toLowerCase());
+
     processedBlog.preview_text = getRelevantSnippet(
       blog.body,
       searchterm,
       isTitleMatch
     );
-    delete processedBlog.body; // Remove full body to reduce payload size
+    delete processedBlog.body; // Remove full body to reduce API payload size
   }
 
   return processedBlog;
 }
 
+/**
+ * Calculates total blogs and pages, respecting any active filters or search terms.
+ */
 export async function calculatePaginationInfo(
   count = 10,
   type = null,
@@ -125,22 +145,22 @@ export async function calculatePaginationInfo(
   const pool = await dbConnect();
   let query = "SELECT COUNT(*) FROM blogs";
   let queryParams = [];
-  let paramCounter = 1;
   let conditions = [];
 
-  // Build WHERE conditions
+  // Build WHERE conditions sequentially
   if (type) {
-    conditions.push(`$${paramCounter} = ANY(type)`);
     queryParams.push(type);
-    paramCounter++;
+    conditions.push(`$${queryParams.length} = ANY(type)`);
   }
 
   if (searchterm) {
-    conditions.push(
-      `(title ILIKE $${paramCounter} OR body ILIKE $${paramCounter})`
-    );
     queryParams.push(`%${searchterm}%`);
-    paramCounter++;
+    const searchIndex = queryParams.length;
+    // *** FIX APPLIED HERE ***
+    // This logic MUST match fetchBlogPreviews to ensure pagination is accurate.
+    conditions.push(
+      `(REPLACE(title, '-', ' ') ILIKE $${searchIndex} OR body ILIKE $${searchIndex})`
+    );
   }
 
   if (conditions.length > 0) {
@@ -158,8 +178,12 @@ export async function calculatePaginationInfo(
   }
 }
 
+/**
+ * Fetches all unique blog types and their respective post counts.
+ */
 export async function getBlogTypesWithCounts() {
   const pool = await dbConnect();
+  // This query unnests the 'type' array and counts occurrences of each unique type.
   const query = `
     SELECT single_type AS type, COUNT(*) AS count
     FROM blogs, UNNEST(type) AS single_type
@@ -179,6 +203,9 @@ export async function getBlogTypesWithCounts() {
   }
 }
 
+/**
+ * The main API handler for GET /api/blogpreview
+ */
 export default async function handler(req, res) {
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
@@ -199,32 +226,25 @@ export default async function handler(req, res) {
       "most_words",
       "least_words",
     ];
-    if (!validSorts.includes(sort)) {
+    if (sort && !validSorts.includes(sort)) {
       return res.status(400).json({ message: "Invalid sort parameter" });
     }
 
-    // Fetch blog data based on all parameters
-    const blogPreviewsRaw = await fetchBlogPreviews(
-      start,
-      count,
-      type,
-      sort,
-      searchterm
-    );
+    // Perform data fetching in parallel for efficiency
+    const [blogPreviewsRaw, paginationInfo, typesWithCounts] = await Promise.all([
+      fetchBlogPreviews(start, count, type, sort, searchterm),
+      calculatePaginationInfo(count, type, searchterm),
+      getBlogTypesWithCounts(), // This is independent of filters
+    ]);
+    
+    // Process the raw blog data to format dates and create snippets
     const blogPreviews = await Promise.all(
       blogPreviewsRaw.map((blog) => processAndSnippetBlog(blog, searchterm))
     );
+    
+    const { totalPages, totalBlogs } = paginationInfo;
 
-    // Get pagination info (aware of search/filter)
-    const { totalPages, totalBlogs } = await calculatePaginationInfo(
-      count,
-      type,
-      searchterm
-    );
-
-    // Get types for filter UI (this is independent of the current search/filter)
-    const typesWithCounts = await getBlogTypesWithCounts();
-
+    // Return everything the frontend needs in a single, well-structured response
     res.status(200).json({
       data: blogPreviews,
       pagination: {
@@ -232,6 +252,7 @@ export default async function handler(req, res) {
         currentPage: Math.floor(start / count) + 1,
         pageSize: count,
         totalItems: totalBlogs,
+        // Echo back the params for frontend state management
         type,
         sort,
         searchterm,
@@ -242,7 +263,7 @@ export default async function handler(req, res) {
       },
     });
   } catch (err) {
-    console.error("Error in blog API:", err);
+    console.error("Error in blog API handler:", err);
     res
       .status(500)
       .json({ message: "Error fetching blog data", error: err.message });
