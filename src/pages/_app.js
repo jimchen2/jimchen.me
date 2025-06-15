@@ -52,7 +52,6 @@ function Layout({ children }) {
     <div style={layoutStyle}>
       {/* --- Start of NavBar logic --- */}
       <Navbar
-        fixed="top"
         style={{
           backgroundColor: colors.color_light_gray,
           boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
