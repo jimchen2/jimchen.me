@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Accordion, Card, Col } from "react-bootstrap";
-import { paddingtop, useGlobalColorScheme } from "@/config/global";
+import { useGlobalColorScheme } from "@/config/global";
 
 const scrollToElementWithOffset = (id, offset) => {
   const element = document.getElementById(id);
@@ -29,7 +29,7 @@ function addHashLinksToHeaders(colors) {
 
     hashLink.onclick = (e) => {
       e.preventDefault();
-      scrollToElementWithOffset(id, -paddingtop);
+      scrollToElementWithOffset(id, 0);
     };
 
     // Prepend the hash link to the header
@@ -43,7 +43,7 @@ function CustomToggle({ children, eventKey, setActiveKey, isActive }) {
   const handleClick = () => {
     const newActiveKey = isActive ? null : eventKey;
     setActiveKey(newActiveKey);
-    scrollToElementWithOffset(eventKey, -paddingtop);
+    scrollToElementWithOffset(eventKey, 0);
   };
 
   const activeStyle = isActive
@@ -136,7 +136,7 @@ const useAddItemToNavbar = (setActiveKey) => {
               id={`toc-child-${id}`}
               onClick={(e) => {
                 e.stopPropagation();
-                scrollToElementWithOffset(id, -paddingtop);
+                scrollToElementWithOffset(id, 0);
               }}
               style={{
                 paddingLeft: "1rem",
@@ -175,7 +175,7 @@ const useAddItemToNavbar = (setActiveKey) => {
       timeoutId = setTimeout(() => {
         const elementExists = document.getElementById(initialHash);
         if (elementExists) {
-          scrollToElementWithOffset(initialHash, -paddingtop);
+          scrollToElementWithOffset(initialHash, 0);
 
           let parentKeyToActivate = null;
           const headerElement = document.getElementById(initialHash);
@@ -241,7 +241,6 @@ const SideNav = () => {
       xl={2.5}
       style={{
         position: "fixed",
-        top: `${paddingtop}px`,
         right: "50px", // Changed from 'left' to 'right'
         height: "100vh",
         overflowY: "auto",

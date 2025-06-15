@@ -7,11 +7,12 @@ import Head from "next/head";
 import Link from "next/link"; // <-- Import Link for the Navbar
 import { Container, Navbar, Nav } from "react-bootstrap"; // <-- Import React Bootstrap components
 import axios from "axios";
-
-// Your Global Config and CSS Imports
-import "../config/globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { ColorSchemeProvider, useGlobalColorScheme, setIpAddress } from "../config/global.js";
+import {
+  ColorSchemeProvider,
+  useGlobalColorScheme,
+  setIpAddress,
+} from "../config/global.js";
 
 // --- Helper function to fetch IP ---
 const fetchIpInfo = async () => {
@@ -53,6 +54,7 @@ function Layout({ children }) {
       {/* --- Start of NavBar logic --- */}
       <Navbar
         style={{
+          fixed: "top",
           backgroundColor: colors.color_light_gray,
           boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
           zIndex: 1000,
@@ -73,7 +75,10 @@ function Layout({ children }) {
             Jim Chen's Blog
           </Navbar.Brand>
 
-          <Navbar.Toggle aria-controls="basic-navbar-nav" className="custom-toggler d-lg-none" />
+          <Navbar.Toggle
+            aria-controls="basic-navbar-nav"
+            className="custom-toggler d-lg-none"
+          />
           <Navbar.Collapse id="basic-navbar-nav" className="d-lg-flex">
             <Nav className="ms-auto d-none d-lg-flex"></Nav>
           </Navbar.Collapse>

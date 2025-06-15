@@ -7,20 +7,25 @@ import { CommentsProvider } from "./commentscontext";
 const Msg = ({ blogid, blogname }) => {
   return (
     <CommentsProvider>
-      {blogid === "0" && (
-        <div>
-          <br />
-          <br />
-          <br />
-        </div>
-      )}
       <Container fluid style={{ overflowX: "hidden", overflowY: "hidden" }}>
         <Row className="my-4">
           <>
-            <Col md={{ span: 8, offset: 2 }} style={{ paddingLeft: "15%", paddingRight: "15%" }}>
-              <CommentInputBox commentuuid="-1" blogid={blogid} blogname={blogname} />
+            <Col
+              md={{ span: 8, offset: 2 }}
+              style={{ paddingLeft: "15%", paddingRight: "15%" }}
+            >
+              <CommentInputBox
+                commentuuid="-1"
+                blogid={blogid}
+                blogname={blogname}
+              />
             </Col>
-            <Col md={{ span: 6, offset: 3 }}>{blogid === "0" ? <GetComments blogid={blogid} showName /> : <GetComments blogid={blogid} />}
+            <Col md={{ span: 6, offset: 3 }}>
+              {blogid === "0" ? (
+                <GetComments blogid={blogid} showName />
+              ) : (
+                <GetComments blogid={blogid} />
+              )}
             </Col>
           </>
         </Row>

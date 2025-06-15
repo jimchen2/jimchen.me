@@ -10,8 +10,6 @@ import { generateStyles } from "./blogstylesHelper";
 
 // Default padding values for server-side rendering
 function calculateBlogPadding(windowWidth = null) {
-  const basePaddingTop = 50;
-
   // Default padding values based on screen size
   const getPaddingValues = (width) => {
     if (width >= 1200) return { left: 10, right: 20 };
@@ -24,7 +22,6 @@ function calculateBlogPadding(windowWidth = null) {
   const padding = getPaddingValues(width);
 
   return {
-    paddingTop: `${basePaddingTop}px`,
     paddingLeft: `${padding.left}%`,
     paddingRight: `${padding.right}%`,
   };
@@ -64,10 +61,13 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const processedText = text.replace(/<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs, (match, language, codeWithLang, codeWithoutLang) => {
-    const code = codeWithLang || codeWithoutLang;
-    return `<codeblock code="${code.replace(/"/g, "")}"></codeblock>`;
-  });
+  const processedText = text.replace(
+    /<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs,
+    (match, language, codeWithLang, codeWithoutLang) => {
+      const code = codeWithLang || codeWithoutLang;
+      return `<codeblock code="${code.replace(/"/g, "")}"></codeblock>`;
+    }
+  );
 
   const elements = parse(processedText, {
     replace: (domNode) => {
@@ -89,13 +89,20 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
           lg={9}
           xl={10}
           style={{
-            paddingTop: paddingStyles.paddingTop,
             paddingLeft: paddingStyles.paddingLeft,
             paddingRight: paddingStyles.paddingRight,
           }}
         >
           <div className="mb-4">
-            <BlogHeader date={date} language={language} type={type} title={title} colors={colors} wordcount={wordcount} blogid={blogid} />
+            <BlogHeader
+              date={date}
+              language={language}
+              type={type}
+              title={title}
+              colors={colors}
+              wordcount={wordcount}
+              blogid={blogid}
+            />
             <BlogTitle title={title} colors={colors} />
             <div className="blog-content">
               {elements}

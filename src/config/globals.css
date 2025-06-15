@@ -1,9 +1,0 @@
-html {
-  scroll-padding-top: 70px;
-  scroll-behavior: smooth;
-}
-@media (max-width: 991.98px) {
-  body {
-    padding-bottom: 80px;
-  }
-}

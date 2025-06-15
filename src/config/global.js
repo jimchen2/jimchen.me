@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import Cookies from "js-cookie";
 
 const IPAddressModule = (() => {
@@ -22,8 +28,6 @@ const IPAddressModule = (() => {
 export const setIpAddress = IPAddressModule.setIpAddress;
 export const getIpAddress = IPAddressModule.getIpAddress;
 
-export let paddingtop = 0;
-
 const defaultColors = {
   color_white: "#ffffff",
   color_black: "#000000",
@@ -33,7 +37,6 @@ const defaultColors = {
   grayscale: false,
   dark: false,
 };
-
 
 export const toggleTheme = (colors, updateColor) => {
   if (colors.dark === false && colors.color_light_gray === "#fffcfc") {
@@ -68,7 +71,7 @@ export const useColorScheme = () => {
   const [isHydrated, setIsHydrated] = useState(false);
 
   const getColorSchemeFromCookies = useCallback(() => {
-    if (typeof window === 'undefined') {
+    if (typeof window === "undefined") {
       // Return default colors during SSR
       return defaultColors;
     }
@@ -96,10 +99,10 @@ export const useColorScheme = () => {
   };
 
   // Return null colors until hydration is complete
-  return { 
-    colors: colors || defaultColors, 
+  return {
+    colors: colors || defaultColors,
     updateColor,
-    isHydrated 
+    isHydrated,
   };
 };
 
@@ -123,7 +126,9 @@ export const ColorSchemeProvider = ({ children }) => {
 export const useGlobalColorScheme = () => {
   const context = useContext(ColorSchemeContext);
   if (context === undefined) {
-    throw new Error('useGlobalColorScheme must be used within a ColorSchemeProvider');
+    throw new Error(
+      "useGlobalColorScheme must be used within a ColorSchemeProvider"
+    );
   }
   return context;
 };
