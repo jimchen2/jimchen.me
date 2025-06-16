@@ -21,7 +21,6 @@ const websiteLinks = [
 
 const profileLinks = [
   { href: "https://github.com/jimchen2", Icon: FaGithub, alt: "GitHub Profile" },
-  { href: "https://huggingface.co/jimchen2", Icon: SiHuggingface, alt: "Hugging Face Profile" },
   { href: "https://www.linkedin.com/in/jim-chen-588002255/", Icon: FaLinkedin, alt: "LinkedIn Profile (CV)" },
 ];
 
@@ -29,6 +28,7 @@ const utilityLinks = [
   { href: "https://archive.org/details/@j_c561", Icon: SiInternetarchive, alt: "Internet Archive" },
   { href: "https://umap.openstreetmap.fr/en/user/jimchen2/", Icon: SiOpenstreetmap, alt: "Umap" },
   { href: "https://greasyfork.org/en/users/1430831-jimchen2", Icon: SiTampermonkey, alt: "Greasy Fork" },
+  { href: "https://huggingface.co/jimchen2", Icon: SiHuggingface, alt: "Hugging Face Profile" },
 ];
 
 function AboutComponent() {
