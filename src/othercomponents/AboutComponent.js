@@ -3,10 +3,10 @@
 import React from "react";
 import { useGlobalColorScheme } from "../config/global.js";
 import Link from "next/link";
-// Added FaWrench for the new link
-import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope, FaRss, FaArchive, FaMap, FaWrench } from "react-icons/fa";
-import { TbSourceCode } from "react-icons/tb";
-// Imported SiHuggingface for the new link
+import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope, FaRss } from "react-icons/fa";
+import { SiInternetarchive } from "react-icons/si";
+import { SiOpenstreetmap } from "react-icons/si";
+import { SiTampermonkey } from "react-icons/si";
 import { SiHuggingface } from "react-icons/si";
 
 const communicationLinks = [
@@ -17,20 +17,18 @@ const communicationLinks = [
 
 const websiteLinks = [
   { href: "https://jimchen.me/api/rss", Icon: FaRss, alt: "RSS Feed" },
-  { href: "https://github.com/jimchen2/jimchen.me", Icon: TbSourceCode, alt: "Website Source Code" },
 ];
 
 const profileLinks = [
   { href: "https://github.com/jimchen2", Icon: FaGithub, alt: "GitHub Profile" },
-  // Added Hugging Face link
   { href: "https://huggingface.co/jimchen2", Icon: SiHuggingface, alt: "Hugging Face Profile" },
   { href: "https://www.linkedin.com/in/jim-chen-588002255/", Icon: FaLinkedin, alt: "LinkedIn Profile (CV)" },
 ];
 
 const utilityLinks = [
-  { href: "https://archive.org/details/@j_c561", Icon: FaArchive, alt: "Internet Archive" },
-  { href: "https://umap.openstreetmap.fr/en/user/jimchen2/", Icon: FaMap, alt: "Umap" },
-  { href: "https://greasyfork.org/en/users/1430831-jimchen2", Icon: FaWrench, alt: "Greasy Fork" },
+  { href: "https://archive.org/details/@j_c561", Icon: SiInternetarchive, alt: "Internet Archive" },
+  { href: "https://umap.openstreetmap.fr/en/user/jimchen2/", Icon: SiOpenstreetmap, alt: "Umap" },
+  { href: "https://greasyfork.org/en/users/1430831-jimchen2", Icon: SiTampermonkey, alt: "Greasy Fork" },
 ];
 
 function AboutComponent() {
@@ -80,7 +78,7 @@ function AboutComponent() {
 
   return (
     <div style={{ fontFamily: "Ubuntu, sans-serif", paddingTop: "1rem" }}>
-      {renderLinkSection("Website", websiteLinks)}
+      {renderLinkSection("RSS", websiteLinks)}
       {renderLinkSection("Communication", communicationLinks)}
       {renderLinkSection("Profiles", profileLinks)}
       {renderLinkSection("Utility Links", utilityLinks)}
