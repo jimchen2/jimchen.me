@@ -6,6 +6,8 @@ import Link from "next/link";
 // Added FaWrench for the new link
 import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope, FaRss, FaArchive, FaMap, FaWrench } from "react-icons/fa";
 import { TbSourceCode } from "react-icons/tb";
+// Imported SiHuggingface for the new link
+import { SiHuggingface } from "react-icons/si";
 
 const communicationLinks = [
   { href: "mailto:jimchen4214@gmail.com", Icon: FaEnvelope, alt: "Email" },
@@ -20,6 +22,8 @@ const websiteLinks = [
 
 const profileLinks = [
   { href: "https://github.com/jimchen2", Icon: FaGithub, alt: "GitHub Profile" },
+  // Added Hugging Face link
+  { href: "https://huggingface.co/jimchen2", Icon: SiHuggingface, alt: "Hugging Face Profile" },
   { href: "https://www.linkedin.com/in/jim-chen-588002255/", Icon: FaLinkedin, alt: "LinkedIn Profile (CV)" },
 ];
 
