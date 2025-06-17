@@ -75,7 +75,7 @@ function AboutComponent() {
   return (
     <div style={{ fontFamily: "Ubuntu, sans-serif", paddingTop: "1rem" }}>
       {renderLinkSection("RSS", websiteLinks)}
-      {renderLinkSection("Profiles", profileLinks)}
+      {renderLinkSection("Profile", profileLinks)}
       {renderLinkSection("Utility Links", utilityLinks)}
     </div>
   );
