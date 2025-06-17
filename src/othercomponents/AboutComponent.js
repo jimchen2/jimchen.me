@@ -76,7 +76,7 @@ function AboutComponent() {
     <div style={{ fontFamily: "Ubuntu, sans-serif", paddingTop: "1rem" }}>
       {renderLinkSection("RSS", websiteLinks)}
       {renderLinkSection("Profiles", profileLinks)}
-      {renderLinkSection("Utility Links", utilityLinks)}
+      {renderLinkSection("Utilities", utilityLinks)}
     </div>
   );
 }
