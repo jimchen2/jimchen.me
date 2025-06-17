@@ -9,16 +9,13 @@ import { SiOpenstreetmap } from "react-icons/si";
 import { SiTampermonkey } from "react-icons/si";
 import { SiHuggingface } from "react-icons/si";
 
-const communicationLinks = [
-  { href: "mailto:jimchen4214@gmail.com", Icon: FaEnvelope, alt: "Email" },
-  { href: "https://t.me/Jimchen4214", Icon: FaTelegram, alt: "Telegram" },
-];
-
 const websiteLinks = [
   { href: "https://jimchen.me/api/rss", Icon: FaRss, alt: "RSS Feed" },
 ];
 
 const profileLinks = [
+  { href: "mailto:jimchen4214@gmail.com", Icon: FaEnvelope, alt: "Email" },
+  { href: "https://t.me/Jimchen4214", Icon: FaTelegram, alt: "Telegram" },
   { href: "https://github.com/jimchen2", Icon: FaGithub, alt: "GitHub Profile" },
   { href: "https://www.linkedin.com/in/jim-chen-588002255/", Icon: FaLinkedin, alt: "LinkedIn Profile (CV)" },
 ];
@@ -78,7 +75,6 @@ function AboutComponent() {
   return (
     <div style={{ fontFamily: "Ubuntu, sans-serif", paddingTop: "1rem" }}>
       {renderLinkSection("RSS", websiteLinks)}
-      {renderLinkSection("Communication", communicationLinks)}
       {renderLinkSection("Profiles", profileLinks)}
       {renderLinkSection("Utility Links", utilityLinks)}
     </div>
