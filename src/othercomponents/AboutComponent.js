@@ -11,7 +11,6 @@ import { SiHuggingface } from "react-icons/si";
 
 const communicationLinks = [
   { href: "mailto:jimchen4214@gmail.com", Icon: FaEnvelope, alt: "Email" },
-  { href: "https://jimchen.me/weixin.jpg", Icon: FaWeixin, alt: "WeChat" },
   { href: "https://t.me/Jimchen4214", Icon: FaTelegram, alt: "Telegram" },
 ];
 
