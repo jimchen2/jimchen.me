@@ -12,7 +12,7 @@ import {
   ColorSchemeProvider,
   useGlobalColorScheme,
   setIpAddress,
-} from "../config/global.js";
+} from "../lib/config.js";
 
 // --- Helper function to fetch IP ---
 const fetchIpInfo = async () => {
