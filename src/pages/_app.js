@@ -77,11 +77,7 @@ function Layout({ children }) {
             aria-controls="basic-navbar-nav"
             className="custom-toggler d-lg-none"
           />
-          <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-            <Nav className="align-items-center">
-              {/* Theme Toggle Button has been removed from here */}
-            </Nav>
-          </Navbar.Collapse>
+        
         </Container>
       </Navbar>
 
