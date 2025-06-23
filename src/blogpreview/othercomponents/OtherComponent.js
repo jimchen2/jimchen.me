@@ -14,11 +14,10 @@ const OtherComponent = (props) => {
       <SearchComponent />
 
       <TypeComponent {...props} />
-
       <SortComponent />
+      <ThemeComponent />
 
       <AboutComponent />
-      <ThemeComponent />
       <LatestCommentComponent />
     </div>
   );

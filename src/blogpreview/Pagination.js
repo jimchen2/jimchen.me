@@ -1,25 +1,32 @@
+
 import React from "react";
 import Link from "next/link";
 import { Pagination as BSPagination } from "react-bootstrap";
 import { useRouter } from "next/router";
 
-const Pagination = ({ currentPage, totalPages, basePath = "/page" }) => {
+const Pagination = ({ currentPage, totalPages, basePath = "" }) => {
   const router = useRouter();
 
   // Extract query parameters from current URL
   const { query } = router;
   const currentQuery = { ...query };
 
-  // Remove the page number from query if it exists
-  delete currentQuery.page;
-
   // Function to generate URL with preserved query params
   const getPageUrl = (pageNum) => {
-    const queryString = Object.entries(currentQuery)
+    // Create new query object with page parameter
+    const newQuery = { ...currentQuery, page: pageNum };
+    
+    // If page is 1, remove page parameter for cleaner URL
+    if (pageNum === 1) {
+      delete newQuery.page;
+    }
+
+    // Convert query object to string
+    const queryString = Object.entries(newQuery)
       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
       .join("&");
 
-    return `${basePath}/${pageNum}${queryString ? `?${queryString}` : ""}`;
+    return `${basePath}${queryString ? `?${queryString}` : ""}`;
   };
 
   const pageNumbers = [];
@@ -73,7 +80,7 @@ const Pagination = ({ currentPage, totalPages, basePath = "/page" }) => {
 
       {currentPage < totalPages && (
         <Link href={getPageUrl(currentPage + 1)} passHref legacyBehavior>
-          <BSPagination.Next as="a"> &gt;</BSPagination.Next>
+          <BSPagination.Next as="a">&gt;</BSPagination.Next>
         </Link>
       )}
     </BSPagination>

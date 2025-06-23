@@ -33,7 +33,7 @@ const ThemeComponent = () => {
         lineHeight: "1.5",
       }}
     >
-      <span style={{ marginRight: "0.25rem" }}>Theme:</span>
+      <span style={{ marginRight: "0.25rem", fontWeight: "bold" }}>Theme:</span>
       {isHydrated ? (
         themeOptions.map((option, index) => (
           <React.Fragment key={option.value}>
