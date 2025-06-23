@@ -3,7 +3,7 @@
 import React from "react";
 import { useGlobalColorScheme } from "../config/global.js";
 import Link from "next/link";
-import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope, FaRss } from "react-icons/fa";
+import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope, FaRss, FaGoodreads } from "react-icons/fa";
 import { SiInternetarchive } from "react-icons/si";
 import { SiOpenstreetmap } from "react-icons/si";
 import { SiTampermonkey } from "react-icons/si";
@@ -25,6 +25,7 @@ const utilityLinks = [
   { href: "https://umap.openstreetmap.fr/en/user/jimchen2/", Icon: SiOpenstreetmap, alt: "Umap" },
   { href: "https://greasyfork.org/en/users/1430831-jimchen2", Icon: SiTampermonkey, alt: "Greasy Fork" },
   { href: "https://huggingface.co/jimchen2", Icon: SiHuggingface, alt: "Hugging Face Profile" },
+  { href: "https://www.goodreads.com/user/show/154371677-jim-chen", Icon: FaGoodreads, alt: "Goodreads Profile" }, // Moved Goodreads link here
 ];
 
 function AboutComponent() {
