@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import { getIpAddress, useGlobalColorScheme } from "@/config/global.js";
+import { getIpAddress } from "@/lib/config";
 
 function BlogLikeButton({ blogid, like }) {
-  const { colors } = useGlobalColorScheme();
   const [likes, setLikes] = useState(like ? like.length : 0);
   const [liked, setLiked] = useState(false);
   const [userIP, setUserIP] = useState("unknown");
@@ -69,9 +68,6 @@ function BlogLikeButton({ blogid, like }) {
 
   const baseStyle = {
     fontSize: "0.75rem",
-    color: colors.color_blue,
-    backgroundColor: colors.color_white,
-    borderColor: colors.color_blue,
     padding: "2px 6px",
     margin: "5px",
     transition: "background-color 0.3s, color 0.3s",
@@ -79,8 +75,6 @@ function BlogLikeButton({ blogid, like }) {
 
   const likedButtonStyle = {
     ...baseStyle,
-    backgroundColor: colors.color_blue,
-    color: colors.color_white,
   };
 
   return (

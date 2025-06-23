@@ -4,21 +4,19 @@ import React, {
   useState,
   useEffect,
   useCallback,
+  useRef, // Added useRef
 } from "react";
 import Cookies from "js-cookie";
 
+// --- IP Address Module (Unchanged) ---
 const IPAddressModule = (() => {
-  let globalIpAddress = "unknown"; // Default IP address encapsulated inside the module
-
+  let globalIpAddress = "unknown";
   function setIpAddress(ip) {
     globalIpAddress = ip;
   }
-
   function getIpAddress() {
     return globalIpAddress;
   }
-
-  // Export the public interface
   return {
     setIpAddress,
     getIpAddress,
@@ -28,94 +26,107 @@ const IPAddressModule = (() => {
 export const setIpAddress = IPAddressModule.setIpAddress;
 export const getIpAddress = IPAddressModule.getIpAddress;
 
-const defaultColors = {
-  color_white: "#ffffff",
-  color_black: "#000000",
-  color_blue: "#000000", // Dark blue
-  color_light_gray: "#fffcfc", // Light gray
-  color_gray: "#d0d4dc", // Dark gray
-  grayscale: false,
-  dark: false,
-};
+// --- Theme Management with DarkReader ---
+const THEME_COOKIE_KEY = "themeMode";
+const DEFAULT_THEME = "light"; // 'light' or 'dark'
 
-export const toggleTheme = (colors, updateColor) => {
-  if (colors.dark === false && colors.color_light_gray === "#fffcfc") {
-    updateColor("color_white", "#1a1a1a");
-    updateColor("color_black", "#ffffff");
-    updateColor("color_blue", "#00ff00");
-    updateColor("color_light_gray", "#333333");
-    updateColor("color_gray", "#282828");
-    updateColor("grayscale", false);
-    updateColor("dark", true);
-  } else if (colors.dark === true) {
-    updateColor("color_white", "#FFF0F5");
-    updateColor("color_black", "#8A2BE2");
-    updateColor("color_blue", "#FF1493");
-    updateColor("color_light_gray", "#FFD1DC");
-    updateColor("color_gray", "#FFC0CB");
-    updateColor("grayscale", false);
-    updateColor("dark", false);
-  } else {
-    updateColor("color_white", "#ffffff");
-    updateColor("color_black", "#000000");
-    updateColor("color_blue", "#0000FF");
-    updateColor("color_light_gray", "#fffcfc");
-    updateColor("color_gray", "#d0d4dc");
-    updateColor("grayscale", false);
-    updateColor("dark", false);
-  }
-};
 export const useColorScheme = () => {
-  // Initialize with null to indicate loading state
-  const [colors, setColors] = useState(null);
+  const [themeMode, setThemeMode] = useState(null); // Initial state is null
   const [isHydrated, setIsHydrated] = useState(false);
 
-  const getColorSchemeFromCookies = useCallback(() => {
-    if (typeof window === "undefined") {
-      // Return default colors during SSR
-      return defaultColors;
-    }
-    const savedColors = Cookies.get("colorScheme");
-    return savedColors ? JSON.parse(savedColors) : defaultColors;
-  }, []);
+  // Refs to store DarkReader functions once loaded
+  const darkReaderFunctionsRef = useRef({ enable: null, disable: null });
+  const [darkReaderLoaded, setDarkReaderLoaded] = useState(false);
 
-  // Only run on client-side mount
+  // Effect to dynamically load DarkReader on the client
   useEffect(() => {
-    const initialColors = getColorSchemeFromCookies();
-    setColors(initialColors);
-    setIsHydrated(true);
-  }, [getColorSchemeFromCookies]);
+    // This effect runs only on the client
+    if (typeof window !== "undefined") {
+      import("darkreader")
+        .then((DarkReader) => {
+          darkReaderFunctionsRef.current = {
+            enable: DarkReader.enable,
+            disable: DarkReader.disable,
+          };
+          setDarkReaderLoaded(true); // Signal that DarkReader functions are ready
+        })
+        .catch((err) =>
+          console.error("Failed to load DarkReader dynamically:", err)
+        );
+    }
+  }, []); // Empty dependency array means it runs once on mount (client-side)
 
-  const updateColor = (colorName, colorValue) => {
-    setColors((prevColors) => {
-      if (!prevColors) return prevColors; // Don't update until hydrated
-      const newColors = {
-        ...prevColors,
-        [colorName]: colorValue,
-      };
-      Cookies.set("colorScheme", JSON.stringify(newColors), { expires: 1000 });
-      return newColors;
+  // Function to apply theme using DarkReader
+  const applyTheme = useCallback(
+    (mode) => {
+      if (!darkReaderLoaded || !darkReaderFunctionsRef.current.enable || !darkReaderFunctionsRef.current.disable) {
+        // DarkReader not loaded yet, or failed to load
+        return;
+      }
+      if (mode === "dark") {
+        darkReaderFunctionsRef.current.enable({
+          brightness: 100,
+          contrast: 90,
+          sepia: 10,
+        });
+      } else {
+        darkReaderFunctionsRef.current.disable();
+      }
+    },
+    [darkReaderLoaded] // Re-create if darkReaderLoaded changes
+  );
+
+  // Effect for initial theme load from cookies and applying it
+  useEffect(() => {
+    // This effect now depends on darkReaderLoaded
+    if (darkReaderLoaded) { // Ensures DarkReader is available
+      const savedTheme = Cookies.get(THEME_COOKIE_KEY);
+      const initialTheme =
+        savedTheme === "dark" || savedTheme === "light"
+          ? savedTheme
+          : DEFAULT_THEME;
+
+      setThemeMode(initialTheme); // Set state first
+      applyTheme(initialTheme); // Then apply visual theme
+      setIsHydrated(true); // Now we are truly hydrated with the correct theme
+    } else if (typeof window === "undefined") {
+      // For SSR, set a default themeMode so components can render.
+      // Actual DarkReader application happens client-side.
+      setThemeMode(DEFAULT_THEME);
+    }
+    // If darkReader isn't loaded yet on the client, this effect will re-run when darkReaderLoaded becomes true.
+  }, [darkReaderLoaded, applyTheme]);
+
+  const toggleThemeMode = useCallback(() => {
+    if (!darkReaderLoaded) {
+      console.warn("DarkReader not loaded yet, cannot toggle theme.");
+      return;
+    }
+
+    setThemeMode((prevMode) => {
+      // Ensure prevMode is not null if component renders before hydration completes fully
+      const currentActualMode = prevMode || DEFAULT_THEME; // Use default if prevMode is null
+      const newMode = currentActualMode === "light" ? "dark" : "light";
+      applyTheme(newMode);
+      Cookies.set(THEME_COOKIE_KEY, newMode, { expires: 365 });
+      return newMode;
     });
-  };
+  }, [applyTheme, darkReaderLoaded]);
 
-  // Return null colors until hydration is complete
   return {
-    colors: colors || defaultColors,
-    updateColor,
+    themeMode: themeMode || DEFAULT_THEME, // Provide a fallback during initial null state or SSR
+    toggleThemeMode,
     isHydrated,
   };
 };
 
-const ColorSchemeContext = createContext();
+const ColorSchemeContext = createContext(undefined);
 
 export const ColorSchemeProvider = ({ children }) => {
   const colorScheme = useColorScheme();
 
-  // Optionally render nothing or a loading state until hydrated
-  if (!colorScheme.isHydrated) {
-    return null; // or a loading component
-  }
-
+  // The provider itself just passes down the value.
+  // Consumers (like Layout) can use `isHydrated` to manage rendering if needed.
   return (
     <ColorSchemeContext.Provider value={colorScheme}>
       {children}

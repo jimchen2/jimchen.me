@@ -2,10 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { useGlobalColorScheme } from "../config/global";
 
 function SearchComponent() {
-  const { colors } = useGlobalColorScheme();
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
   const pathname = usePathname();
@@ -44,14 +42,6 @@ function SearchComponent() {
       <style jsx>{`
         .search-wrapper {
           max-width: 300px;
-        }
-        input {
-          background: ${colors.color_white};
-          color: ${colors.color_black};
-        }
-        button {
-          background: ${colors.color_white};
-          color: ${colors.color_black};
         }
       `}</style>
     </div>

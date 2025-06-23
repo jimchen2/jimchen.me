@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useGlobalColorScheme } from "@/config/global.js";
 
 const SortComponent = ({ currentSort, currentType }) => {
-  const { colors } = useGlobalColorScheme();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -43,12 +41,10 @@ const SortComponent = ({ currentSort, currentType }) => {
     flexWrap: "wrap",
     gap: "0.2rem 0.5rem",
     padding: "1rem",
-    backgroundColor: colors.color_light_gray,
     borderRadius: "8px",
   };
 
   const sortItemStyle = (isSelected) => ({
-    color: isSelected ? colors.color_black : colors.color_text_faded,
     fontWeight: isSelected ? "bold" : "normal",
     cursor: "pointer",
     fontSize: "0.9rem",

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PreviewCard from "./PreviewCard.js";
 import Pagination from "@/blogpreview/Pagination.js";
-import OtherComponent from "@/othercomponents/OtherComponent.js";
+import OtherComponent from "./othercomponents/OtherComponent.js";
 
 const useIsMobile = (breakpoint = 1000) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -15,14 +15,7 @@ const useIsMobile = (breakpoint = 1000) => {
 };
 
 // Accept 'searchTerm' as a new prop
-function BlogPreviewPage({
-  currentType,
-  data,
-  pagination,
-  postTypeArray,
-  currentSort,
-  searchTerm,
-}) {
+function BlogPreviewPage({ currentType, data, pagination, postTypeArray, currentSort, searchTerm }) {
   const isMobile = useIsMobile();
 
   const containerStyle = {
@@ -69,39 +62,20 @@ function BlogPreviewPage({
               </div>
             ))
           ) : (
-            <div style={{ textAlign: "center", margin: "5rem 0" }}>
-              No results found.
-            </div>
+            <div style={{ textAlign: "center", margin: "5rem 0" }}>No results found.</div>
           )}
-          {pagination && pagination.totalPages > 1 && (
-            <Pagination
-              currentPage={pagination.currentPage}
-              totalPages={pagination.totalPages}
-            />
-          )}
+          {pagination && pagination.totalPages > 1 && <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />}
         </div>
 
         {/* The sidebar now comes SECOND, so it appears on the right */}
         {!isMobile && (
           <div style={sidebarStyle}>
-            <OtherComponent
-              currentType={currentType}
-              postTypeArray={postTypeArray}
-              currentSort={currentSort}
-              isSidebar={true}
-            />
+            <OtherComponent currentType={currentType} postTypeArray={postTypeArray} currentSort={currentSort} isSidebar={true} />
           </div>
         )}
 
         {/* The mobile layout remains unchanged, appearing at the bottom */}
-        {isMobile && postTypeArray && postTypeArray.length > 0 && (
-          <OtherComponent
-            currentType={currentType}
-            postTypeArray={postTypeArray}
-            currentSort={currentSort}
-            isSidebar={false}
-          />
-        )}
+        {isMobile && postTypeArray && postTypeArray.length > 0 && <OtherComponent currentType={currentType} postTypeArray={postTypeArray} currentSort={currentSort} isSidebar={false} />}
       </div>
     </div>
   );

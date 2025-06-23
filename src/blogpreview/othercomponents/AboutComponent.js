@@ -1,7 +1,6 @@
 // AboutComponent.js
 
 import React from "react";
-import { useGlobalColorScheme } from "../config/global.js";
 import Link from "next/link";
 import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope, FaRss, FaGoodreads } from "react-icons/fa";
 import { SiInternetarchive } from "react-icons/si";
@@ -9,9 +8,7 @@ import { SiOpenstreetmap } from "react-icons/si";
 import { SiTampermonkey } from "react-icons/si";
 import { SiHuggingface } from "react-icons/si";
 
-const websiteLinks = [
-  { href: "https://jimchen.me/api/rss", Icon: FaRss, alt: "RSS Feed" },
-];
+const websiteLinks = [{ href: "https://jimchen.me/api/rss", Icon: FaRss, alt: "RSS Feed" }];
 
 const profileLinks = [
   { href: "mailto:jimchen4214@gmail.com", Icon: FaEnvelope, alt: "Email" },
@@ -29,19 +26,16 @@ const utilityLinks = [
 ];
 
 function AboutComponent() {
-  const { colors } = useGlobalColorScheme();
-
   const linkIconStyle = {
     fontSize: "26px",
     margin: "10px",
-    color: colors.color_black,
     verticalAlign: "middle",
     transition: "transform 0.2s ease-in-out",
   };
 
   const renderLinkSection = (title, links) => (
     <div style={{ marginBottom: "2rem", width: "100%" }}>
-      <h3 style={{ color: colors.color_black, fontSize: "1rem", fontWeight: 'bold', paddingLeft: '1rem', marginBottom: '0.5rem' }}>{title}</h3>
+      <h3 style={{ fontSize: "1rem", fontWeight: "bold", paddingLeft: "1rem", marginBottom: "0.5rem" }}>{title}</h3>
       <div style={{ display: "flex", justifyContent: "flex-start", flexWrap: "wrap", padding: "0 0.5rem" }}>
         {links.map((link) => {
           const isExternal = link.href.startsWith("http") || link.href.startsWith("mailto:");

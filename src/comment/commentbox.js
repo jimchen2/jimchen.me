@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Commentinputbox from "./commentsubmit.js";
-import { useGlobalColorScheme, getIpAddress } from "../config/global.js";
+import { getIpAddress } from "@/lib/config.js";
 import Card from "react-bootstrap/Card";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Link from "next/link.js";
@@ -8,7 +8,6 @@ import { Button } from "react-bootstrap";
 import axios from "axios"; // Added missing import for the API call
 
 function CommentLikeButton({ commentuuid, like }) {
-  const { colors } = useGlobalColorScheme();
   const [likes, setLikes] = useState(like.length);
   const [liked, setLiked] = useState(false);
   const [userIP, setUserIP] = useState("unknown");
@@ -70,9 +69,6 @@ function CommentLikeButton({ commentuuid, like }) {
 
   const baseStyle = {
     fontSize: "0.75rem",
-    color: colors.color_blue,
-    backgroundColor: colors.color_white,
-    borderColor: colors.color_blue,
     padding: "2px 6px",
     margin: "5px",
     transition: "background-color 0.3s, color 0.3s",
@@ -80,8 +76,6 @@ function CommentLikeButton({ commentuuid, like }) {
 
   const likedButtonStyle = {
     ...baseStyle,
-    backgroundColor: colors.color_blue,
-    color: colors.color_white,
   };
 
   return (
@@ -91,18 +85,10 @@ function CommentLikeButton({ commentuuid, like }) {
   );
 }
 
-// --- CHANGE 1: SIMPLIFIED THIS COMPONENT ---
-// This component's only job is to be a button.
-// The logic to show/hide the reply box is handled by its parent (`CommentBox`).
-// This removes redundant state and logic.
 function CommentReplyButton({ onReplyClick }) {
-  const { colors } = useGlobalColorScheme();
 
   const buttonStyle = {
     fontSize: "0.75rem",
-    color: colors.color_blue,
-    backgroundColor: colors.color_white,
-    borderColor: colors.color_blue,
     padding: "2px 6px",
     margin: "5px",
     transition: "background-color 0.3s",
@@ -116,7 +102,6 @@ function CommentReplyButton({ onReplyClick }) {
 }
 
 function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuuid, blogid, showName }) {
-  const { colors } = useGlobalColorScheme();
   const [showReply, setShowReply] = useState(false);
 
   const MAX_EMBED = 2;
@@ -131,9 +116,6 @@ function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuui
   const cardStyle = {
     marginLeft: `${adjustedEmbed * ADJUST_FACTOR}px`,
     fontSize: `${BASE_FONT_SIZE}px`,
-    backgroundColor: colors.color_white,
-    color: colors.color_black,
-    borderColor: colors.color_black,
   };
 
   const headerStyle = {
@@ -141,8 +123,6 @@ function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuui
     alignItems: "center",
     justifyContent: "space-between",
     flexWrap: "wrap",
-    backgroundColor: colors.color_white,
-    color: colors.color_black,
   };
 
   const titleStyle = {
@@ -152,12 +132,10 @@ function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuui
 
   const subtitleStyle = {
     fontSize: `${SUBTITLE_FONT_SIZE}px`,
-    color: colors.color_black,
   };
 
   const cardTextStyle = {
     whiteSpace: "pre-wrap",
-    color: colors.color_black,
   };
 
   const buttonContainerStyle = {
@@ -174,7 +152,7 @@ function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuui
       <Card.Header style={headerStyle}>
         <Card.Title style={titleStyle}>{user}</Card.Title>
         {showName && (
-          <Link style={{ color: colors.color_blue }} href={`/a/${blogid}`}>
+          <Link  href={`/a/${blogid}`}>
             {blogname}
           </Link>
         )}

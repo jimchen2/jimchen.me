@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Accordion, Card, Col } from "react-bootstrap";
-import { useGlobalColorScheme } from "@/config/global";
 
 const scrollToElementWithOffset = (id, offset) => {
   const element = document.getElementById(id);
@@ -13,7 +12,7 @@ const scrollToElementWithOffset = (id, offset) => {
   }
 };
 
-function addHashLinksToHeaders(colors) {
+function addHashLinksToHeaders() {
   const headers = document.querySelectorAll("h2, h3");
   headers.forEach((header) => {
     const id = header.getAttribute("id");
@@ -25,7 +24,6 @@ function addHashLinksToHeaders(colors) {
     hashLink.innerHTML = "# "; // Use # with a non-breaking space
     hashLink.style.textDecoration = "none";
     hashLink.setAttribute("href", `#${id}`);
-    hashLink.style.color = colors.color_black; // Or a more subtle color like 'inherit' or a light gray
 
     hashLink.onclick = (e) => {
       e.preventDefault();
@@ -38,24 +36,17 @@ function addHashLinksToHeaders(colors) {
 }
 
 function CustomToggle({ children, eventKey, setActiveKey, isActive }) {
-  const { colors } = useGlobalColorScheme();
-
   const handleClick = () => {
     const newActiveKey = isActive ? null : eventKey;
     setActiveKey(newActiveKey);
     scrollToElementWithOffset(eventKey, 0);
   };
 
-  const activeStyle = isActive
-    ? { backgroundColor: colors.color_blue, color: colors.color_white }
-    : { backgroundColor: colors.color_white, color: colors.color_blue };
-
   return (
     <Card.Header
       onClick={handleClick}
       style={{
         cursor: "pointer",
-        ...activeStyle,
         wordWrap: "break-word",
         whiteSpace: "normal",
       }}
@@ -66,7 +57,6 @@ function CustomToggle({ children, eventKey, setActiveKey, isActive }) {
 }
 
 const useAddItemToNavbar = (setActiveKey) => {
-  const { colors } = useGlobalColorScheme();
   const [tocItems, setTocItems] = useState([]);
 
   const formatTextWithNewLines = (text, maxLineLength = 25) => {
@@ -115,11 +105,7 @@ const useAddItemToNavbar = (setActiveKey) => {
         newTocItems.push({
           key: id,
           content: (
-            <CustomToggle
-              eventKey={id}
-              hasChildren={false}
-              setActiveKey={setActiveKey}
-            >
+            <CustomToggle eventKey={id} hasChildren={false} setActiveKey={setActiveKey}>
               {formattedText}
             </CustomToggle>
           ),
@@ -143,15 +129,10 @@ const useAddItemToNavbar = (setActiveKey) => {
                 paddingTop: "0.5rem",
                 paddingBottom: "0.5rem",
                 cursor: "pointer",
-                color: colors.color_blue,
-                backgroundColor: colors.color_white,
                 wordWrap: "break-word",
                 whiteSpace: "normal",
-                borderTop: `1px solid ${colors.color_light_gray || "#eee"}`,
               }}
-              onMouseEnter={(e) =>
-                (e.target.style.textDecoration = "underline")
-              }
+              onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
               onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
             >
               {formattedText}
@@ -159,9 +140,7 @@ const useAddItemToNavbar = (setActiveKey) => {
           );
           parentItem.hasChildren = true;
         } else {
-          console.warn(
-            `Found H3 with id '${id}' but its parent H2 ('${lastH2Key}') wasn't found in tocItems. This shouldn't normally happen.`
-          );
+          console.warn(`Found H3 with id '${id}' but its parent H2 ('${lastH2Key}') wasn't found in tocItems. This shouldn't normally happen.`);
         }
       }
     });
@@ -201,40 +180,34 @@ const useAddItemToNavbar = (setActiveKey) => {
           if (parentKeyToActivate) {
             setActiveKey(parentKeyToActivate);
           } else {
-            console.warn(
-              `Could not determine parent H2 for initial hash '#${initialHash}'`
-            );
+            console.warn(`Could not determine parent H2 for initial hash '#${initialHash}'`);
           }
         } else {
-          console.warn(
-            `Element with id '${initialHash}' not found after delay.`
-          );
+          console.warn(`Element with id '${initialHash}' not found after delay.`);
         }
       }, 150);
     }
 
-    addHashLinksToHeaders(colors);
+    addHashLinksToHeaders();
 
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
     };
-  }, [setActiveKey, colors]);
+  }, [setActiveKey]);
 
   return tocItems;
 };
 
 const SideNav = () => {
   const [activeKey, setActiveKey] = useState(null);
-  const { colors } = useGlobalColorScheme();
   const tocItems = useAddItemToNavbar(setActiveKey);
 
   useEffect(() => {
-    // Ensure hash links are added/updated when tocItems or colors change
-    addHashLinksToHeaders(colors);
-  }, [tocItems, colors]); // Added colors to dependency array
-
+    addHashLinksToHeaders();
+  }, [tocItems]); 
+  
   return (
     <Col
       lg={2.5}
@@ -251,7 +224,7 @@ const SideNav = () => {
     >
       <Accordion activeKey={activeKey}>
         {tocItems.map((item) => (
-          <Card key={item.key} style={{ backgroundColor: colors.color_white }}>
+          <Card key={item.key}>
             {React.cloneElement(item.content, {
               isActive: activeKey === item.key,
               hasChildren: item.hasChildren,

@@ -1,20 +1,18 @@
-// pages/_app.js
-
-"use client"; // Required because we use hooks (useEffect, useGlobalColorScheme)
+"use client";
 
 import React, { useEffect } from "react";
 import Head from "next/head";
-import Link from "next/link"; // <-- Import Link for the Navbar
-import { Container, Navbar, Nav } from "react-bootstrap"; // <-- Import React Bootstrap components
+import Link from "next/link";
+import { Container, Navbar, Nav } from "react-bootstrap"; // Removed Button
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   ColorSchemeProvider,
   useGlobalColorScheme,
   setIpAddress,
-} from "../lib/config.js";
+} from "../lib/config.js"; // Adjust path if necessary
 
-// --- Helper function to fetch IP ---
+// --- Helper function to fetch IP (Unchanged) ---
 const fetchIpInfo = async () => {
   try {
     const response = await axios.get("/api/get-ip");
@@ -27,36 +25,36 @@ const fetchIpInfo = async () => {
 };
 
 // --- Combined Layout Component ---
-// This component now includes the NavBar logic directly.
 function Layout({ children }) {
-  const { colors } = useGlobalColorScheme();
-
-  // Effect to set the body background color from the global theme
-  useEffect(() => {
-    document.body.style.backgroundColor = colors.color_white;
-  }, [colors.color_white]);
-
-  // Styles for the main layout container
+  const { themeMode, isHydrated } = useGlobalColorScheme(); // toggleThemeMode is no longer used here
   const layoutStyle = {
-    color: colors.color_black,
-    backgroundColor: colors.color_white,
     display: "flex",
     flexDirection: "column",
     minHeight: "100vh",
+    // backgroundColor and color will be managed by DarkReader or Bootstrap's theme classes
   };
 
   const mainContentStyle = {
     flex: "1",
+    paddingTop: "70px", // Adjust if navbar height changes
   };
+
+  // if (!isHydrated) {
+  //   // You might want a loading state or specific handling here,
+  //   // but for now, we let Bootstrap handle initial rendering.
+  //   // The navbar variant will correctly apply once themeMode is hydrated.
+  // }
 
   return (
     <div style={layoutStyle}>
-      {/* --- Start of NavBar logic --- */}
       <Navbar
+        fixed="top"
+        // Use Bootstrap's theming variants based on our themeMode
+        variant={themeMode === "dark" ? "dark" : "light"}
+        bg={themeMode === "dark" ? "dark" : "light"}
+        expand="lg" // Ensure expand is set
         style={{
-          fixed: "top",
-          backgroundColor: colors.color_light_gray,
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+          boxShadow: "0 2px 4px rgba(0,0,0,0.1)", // Shadow might need adjustment for dark mode
           zIndex: 1000,
         }}
       >
@@ -66,10 +64,10 @@ function Layout({ children }) {
             href="/"
             className="d-lg-block"
             style={{
-              color: colors.color_black,
+              // Color will be handled by Navbar variant
               fontFamily: "'Ubuntu', sans-serif",
               fontWeight: "300",
-              marginLeft: "15%",
+              marginLeft: "15%", // This might need to be conditional or adjusted
             }}
           >
             Jim Chen's Blog
@@ -79,24 +77,39 @@ function Layout({ children }) {
             aria-controls="basic-navbar-nav"
             className="custom-toggler d-lg-none"
           />
-          <Navbar.Collapse id="basic-navbar-nav" className="d-lg-flex">
-            <Nav className="ms-auto d-none d-lg-flex"></Nav>
+          <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
+            <Nav className="align-items-center">
+              {/* Theme Toggle Button has been removed from here */}
+            </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      {/* --- End of NavBar logic --- */}
 
-      {/* Styled JSX for the custom toggler, now part of the layout */}
+      <style jsx global>{`
+        body {
+          transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+        }
+        .navbar-brand, .nav-link {
+            transition: color 0.3s ease; /* Smooth transition for navbar text */
+        }
+      `}</style>
       <style jsx>{`
         @media (max-width: 991px) {
           .custom-toggler {
             margin-right: 15px;
           }
+          /* Adjust Navbar Brand margin for smaller screens if needed */
+          .navbar-brand {
+            margin-left: 10px !important; 
+          }
+          .navbar-collapse {
+            margin-top: 10px; /* Add some space when collapsed */
+          }
         }
       `}</style>
 
       <main style={mainContentStyle}>
-        {children} {/* Renders the current page */}
+        {children}
       </main>
     </div>
   );
@@ -104,7 +117,6 @@ function Layout({ children }) {
 
 // --- Main App Component ---
 function MyApp({ Component, pageProps }) {
-  // Fetch IP on initial load
   useEffect(() => {
     fetchIpInfo();
   }, []);
@@ -112,7 +124,8 @@ function MyApp({ Component, pageProps }) {
   return (
     <ColorSchemeProvider>
       <Head>
-        <title>Jim Chen's Blog</title> {/* Default title for all pages */}
+        <title>Jim Chen's Blog</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Layout>
         <Component {...pageProps} />

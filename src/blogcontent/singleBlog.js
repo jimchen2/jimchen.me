@@ -1,9 +1,7 @@
 import React, { useEffect, useState, memo } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import Link from "next/link";
 import parse from "html-react-parser";
 import { SideNav } from "./sideBar";
-import { useGlobalColorScheme } from "../config/global";
 import BlogLikeButtonHelper from "./likebutton/bloglikebuttonhelper";
 import CodeBlock from "./codeBlock";
 import { generateStyles } from "./blogstylesHelper";
@@ -27,13 +25,13 @@ function calculateBlogPadding(windowWidth = null) {
   };
 }
 
-const BlogHeader = ({ date, colors, wordcount }) => {
+const BlogHeader = ({ date, wordcount }) => {
   return (
     <div className="blog-header mb-3">
       <br />
       <div className="d-flex justify-content-between align-items-center">
         <div>
-          <small className="text" style={{ color: colors.color_black }}>
+          <small className="text">
             {date} • {wordcount} words
           </small>
         </div>
@@ -42,14 +40,13 @@ const BlogHeader = ({ date, colors, wordcount }) => {
   );
 };
 
-const BlogTitle = ({ title, colors }) => (
+const BlogTitle = ({ title }) => (
   <h2 className="mb-4">
-    <div style={{ color: colors.color_blue }}>{title.split("-").join(" ")}</div>
+    <div>{title.split("-").join(" ")}</div>
   </h2>
 );
 
 function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
-  const { colors } = useGlobalColorScheme();
   const [paddingStyles, setPaddingStyles] = useState(calculateBlogPadding()); // Default for SSR
 
   useEffect(() => {
@@ -61,13 +58,10 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const processedText = text.replace(
-    /<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs,
-    (match, language, codeWithLang, codeWithoutLang) => {
-      const code = codeWithLang || codeWithoutLang;
-      return `<codeblock code="${code.replace(/"/g, "")}"></codeblock>`;
-    }
-  );
+  const processedText = text.replace(/<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs, (match, language, codeWithLang, codeWithoutLang) => {
+    const code = codeWithLang || codeWithoutLang;
+    return `<codeblock code="${code.replace(/"/g, "")}"></codeblock>`;
+  });
 
   const elements = parse(processedText, {
     replace: (domNode) => {
@@ -78,7 +72,7 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
     },
   });
 
-  const styles = [generateStyles(colors)].join(" ");
+  const styles = [generateStyles()].join(" ");
 
   return (
     <Container fluid className="pb-3">
@@ -94,16 +88,8 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
           }}
         >
           <div className="mb-4">
-            <BlogHeader
-              date={date}
-              language={language}
-              type={type}
-              title={title}
-              colors={colors}
-              wordcount={wordcount}
-              blogid={blogid}
-            />
-            <BlogTitle title={title} colors={colors} />
+            <BlogHeader date={date} language={language} type={type} title={title} wordcount={wordcount} blogid={blogid} />
+            <BlogTitle title={title} />
             <div className="blog-content">
               {elements}
               <style>{styles}</style>

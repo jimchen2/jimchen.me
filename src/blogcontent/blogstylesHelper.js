@@ -1,7 +1,4 @@
-export const generateStyles = (colors) => `
-.blog-content Lutheran, h2, h3, p, code {
-  color: ${colors.color_black};
-}
+export const generateStyles = () => `
 
 .blog-content h1 {
   font-size: 32px;
@@ -32,7 +29,6 @@ export const generateStyles = (colors) => `
   font-family: 'Ubuntu', sans-serif;
   line-height: 1.7;
   margin-bottom: 1.5em;
-  color: ${colors.color_black};
   overflow-wrap: break-word;
   word-wrap: break-word;
   word-break: break-word;
@@ -40,10 +36,9 @@ export const generateStyles = (colors) => `
 }
 
 .blog-content blockquote {
-  border-left: 4px solid ${colors.color_blue};
+  border-left: 4px solid ;
   padding: 10px 20px;
   margin: 20px 0;
-  background-color: ${colors.dark ? "#2c2f33" : "#f5f5f5"};
   font-style: italic;
   border-radius: 0 8px 8px 0;
   font-family: 'Lato', 'Segoe UI', sans-serif;
@@ -55,26 +50,21 @@ export const generateStyles = (colors) => `
 }
 
 .blog-content details {
-  background-color: ${colors.dark ? "#2c2f33" : "#ffffff"};
-  border: 1px solid ${colors.dark ? "#4f545c" : "#e0e0e0"};
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 15px;
-  box-shadow: ${colors.dark ? "0 2px 5px rgba(0, 0, 0, 0.3)" : "0 2px 5px rgba(0, 0, 0, 0.1)"};
   transition: background-color 0.3s ease, border 0.3s ease;
   font-family: 'Lato', 'Segoe UI', sans-serif;
 }
 
 .blog-content code {
   font-family: 'Source Code Pro', monospace;
-  background-color: ${colors.dark ? "#2c2f33" : "#f4f4f4"};
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 90%;
 }
 
 .blog-content pre {
-  background-color: ${colors.dark ? "#2c2f33" : "#f4f4f4"};
   padding: 15px;
   border-radius: 8px;
   overflow-x: auto;
@@ -95,7 +85,6 @@ export const generateStyles = (colors) => `
 }
 
 .blog-content table th {
-  background-color: ${colors.dark ? "#2c2f33" : "#f0f0f0"};
   font-weight: 500;
   font-size: 14px;
   letter-spacing: 0.5px;
@@ -103,14 +92,12 @@ export const generateStyles = (colors) => `
 
 .blog-content table th, .blog-content table td {
   padding: 12px 15px;
-  border: 1px solid ${colors.dark ? "#4f545c" : "#e0e0e0"};
 }
 
 .blog-content img {
   max-width: 100%;
   height: auto;
   border-radius: 12px;
-  box-shadow: ${colors.dark ? "0 4px 8px rgba(0, 0, 0, 0.4)" : "0 4px 8px rgba(0, 0, 0, 0.1)"};
 }
 
 /* Video styles */
@@ -120,7 +107,6 @@ export const generateStyles = (colors) => `
   border-radius: 12px;
   display: block;
   margin: 0 auto 1.5em;
-  box-shadow: ${colors.dark ? "0 4px 8px rgba(0, 0, 0, 0.4)" : "0 4px 8px rgba(0, 0, 0, 0.1)"};
 }
 
 /* Video wrapper for better responsiveness */
@@ -139,7 +125,6 @@ export const generateStyles = (colors) => `
   width: 80%;
   border: none;
   border-radius: 12px;
-  box-shadow: ${colors.dark ? "0 4px 8px rgba(0, 0, 0, 0.4)" : "0 4px 8px rgba(0, 0, 0, 0.1)"};
 }
 
 .code-block {
@@ -151,8 +136,6 @@ export const generateStyles = (colors) => `
   top: 10px;
   right: 10px;
   padding: 5px 10px;
-  background-color: ${colors.dark ? "#4f545c" : "#e0e0e0"};
-  color: ${colors.dark ? "#ffffff" : "#000000"};
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -161,16 +144,11 @@ export const generateStyles = (colors) => `
   transition: background-color 0.2s ease;
 }
 
-.copy-button:hover {
-  background-color: ${colors.dark ? "#5d6269" : "#d0d0d0"};
-}
-
 .copied-notification {
   position: absolute;
   top: 10px;
   right: 60px;
   padding: 5px 10px;
-  background-color: ${colors.color_blue || "#28a745"};
   color: #ffffff;
   border-radius: 6px;
   font-family: 'Lato', 'Segoe UI', sans-serif;
@@ -184,7 +162,6 @@ export const generateStyles = (colors) => `
 }
 
 .blog-content a {
-  color: ${colors.color_blue};
   text-decoration: underline;
   border-bottom: 1px solid transparent;
   transition: border-bottom 0.2s ease;
@@ -194,9 +171,6 @@ export const generateStyles = (colors) => `
   max-width: 100%;
 }
 
-.blog-content a:hover {
-  border-bottom: 1px solid ${colors.color_blue};
-}
 
 .blog-content ul, .blog-content ol {
   margin-bottom: 1.5em;
@@ -211,19 +185,12 @@ export const generateStyles = (colors) => `
 }
 
 .blog-content ul li a, .blog-content ol li a {
-  color: ${colors.color_blue};
   text-decoration: underline;
   transition: color 0.2s ease;
-}
-
-.blog-content ul li a:hover, .blog-content ol li a:hover {
-  color: ${colors.color_blue};
-  border-bottom: 1px solid ${colors.color_blue};
 }
 
 .blog-content ul li p, .blog-content ol li p {
   margin: 0;
   font-size: 16px;
   line-height: 1.6;
-  color: ${colors.color_black};
 }`;

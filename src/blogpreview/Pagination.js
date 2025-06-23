@@ -1,17 +1,15 @@
 import React from "react";
 import Link from "next/link";
 import { Pagination as BSPagination } from "react-bootstrap";
-import { useGlobalColorScheme } from "../config/global.js";
 import { useRouter } from "next/router";
 
 const Pagination = ({ currentPage, totalPages, basePath = "/page" }) => {
-  const { colors } = useGlobalColorScheme();
   const router = useRouter();
-  
+
   // Extract query parameters from current URL
   const { query } = router;
   const currentQuery = { ...query };
-  
+
   // Remove the page number from query if it exists
   delete currentQuery.page;
 
@@ -19,9 +17,9 @@ const Pagination = ({ currentPage, totalPages, basePath = "/page" }) => {
   const getPageUrl = (pageNum) => {
     const queryString = Object.entries(currentQuery)
       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-      .join('&');
-    
-    return `${basePath}/${pageNum}${queryString ? `?${queryString}` : ''}`;
+      .join("&");
+
+    return `${basePath}/${pageNum}${queryString ? `?${queryString}` : ""}`;
   };
 
   const pageNumbers = [];
@@ -51,19 +49,8 @@ const Pagination = ({ currentPage, totalPages, basePath = "/page" }) => {
     pageNumbers.push(totalPages);
   }
 
-  // Custom styles using the colors
-  const paginationStyles = {
-    "--bs-pagination-color": colors.color_black,
-    "--bs-pagination-bg": colors.color_white,
-    "--bs-pagination-active-bg": colors.color_black,
-    "--bs-pagination-active-color": colors.color_white,
-    "--bs-pagination-hover-color": colors.color_black,
-    "--bs-pagination-hover-bg": colors.color_gray,
-    "--bs-pagination-disabled-bg": colors.color_white,
-  };
-
   return (
-    <BSPagination className="justify-content-center my-4" style={paginationStyles}>
+    <BSPagination className="justify-content-center my-4">
       {currentPage > 1 && (
         <Link href={getPageUrl(currentPage - 1)} passHref legacyBehavior>
           <BSPagination.Prev as="a">&lt;</BSPagination.Prev>
