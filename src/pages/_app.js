@@ -31,7 +31,6 @@ function Layout({ children }) {
     display: "flex",
     flexDirection: "column",
     minHeight: "100vh",
-    // backgroundColor and color will be managed by DarkReader or Bootstrap's theme classes
   };
 
   const mainContentStyle = {
@@ -39,11 +38,6 @@ function Layout({ children }) {
     paddingTop: "70px", // Adjust if navbar height changes
   };
 
-  // if (!isHydrated) {
-  //   // You might want a loading state or specific handling here,
-  //   // but for now, we let Bootstrap handle initial rendering.
-  //   // The navbar variant will correctly apply once themeMode is hydrated.
-  // }
 
   return (
     <div style={layoutStyle}>
@@ -73,11 +67,7 @@ function Layout({ children }) {
             Jim Chen's Blog
           </Navbar.Brand>
 
-          <Navbar.Toggle
-            aria-controls="basic-navbar-nav"
-            className="custom-toggler d-lg-none"
-          />
-        
+          
         </Container>
       </Navbar>
 
