@@ -3,14 +3,14 @@
 import React, { useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
-import { Container, Navbar, Nav } from "react-bootstrap"; // Removed Button
+import { Container, Navbar, Nav } from "react-bootstrap";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   ColorSchemeProvider,
   useGlobalColorScheme,
   setIpAddress,
-} from "../lib/config.js"; // Adjust path if necessary
+} from "../lib/config.js";
 
 // --- Helper function to fetch IP (Unchanged) ---
 const fetchIpInfo = async () => {
@@ -26,7 +26,7 @@ const fetchIpInfo = async () => {
 
 // --- Combined Layout Component ---
 function Layout({ children }) {
-  const { themeMode, isHydrated } = useGlobalColorScheme(); // toggleThemeMode is no longer used here
+  const { themeMode, isHydrated } = useGlobalColorScheme();
   const layoutStyle = {
     display: "flex",
     flexDirection: "column",
@@ -35,20 +35,18 @@ function Layout({ children }) {
 
   const mainContentStyle = {
     flex: "1",
-    paddingTop: "70px", // Adjust if navbar height changes
+    paddingTop: "70px", // Matches navbar height
   };
-
 
   return (
     <div style={layoutStyle}>
       <Navbar
         fixed="top"
-        // Use Bootstrap's theming variants based on our themeMode
         variant={themeMode === "dark" ? "dark" : "light"}
         bg={themeMode === "dark" ? "dark" : "light"}
-        expand="lg" // Ensure expand is set
+        expand="lg"
         style={{
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)", // Shadow might need adjustment for dark mode
+          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
           zIndex: 1000,
         }}
       >
@@ -58,25 +56,28 @@ function Layout({ children }) {
             href="/"
             className="d-lg-block"
             style={{
-              // Color will be handled by Navbar variant
               fontFamily: "'Ubuntu', sans-serif",
               fontWeight: "300",
-              marginLeft: "15%", // This might need to be conditional or adjusted
+              marginLeft: "15%",
             }}
           >
             Jim Chen's Blog
           </Navbar.Brand>
-
-          
         </Container>
       </Navbar>
 
       <style jsx global>{`
         body {
-          transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+          transition: background-color 0.3s ease, color 0.3s ease;
         }
         .navbar-brand, .nav-link {
-            transition: color 0.3s ease; /* Smooth transition for navbar text */
+          transition: color 0.3s ease;
+        }
+        /* Add scroll offset for sections with IDs */
+        section[id], div[id] {
+          padding-top: 70px; /* Matches navbar height */
+          margin-top: -70px; /* Compensates for padding */
+          scroll-margin-top: 70px; /* Adjusts scroll target for modern browsers */
         }
       `}</style>
       <style jsx>{`
@@ -84,12 +85,11 @@ function Layout({ children }) {
           .custom-toggler {
             margin-right: 15px;
           }
-          /* Adjust Navbar Brand margin for smaller screens if needed */
           .navbar-brand {
-            margin-left: 10px !important; 
+            margin-left: 10px !important;
           }
           .navbar-collapse {
-            margin-top: 10px; /* Add some space when collapsed */
+            margin-top: 10px;
           }
         }
       `}</style>
