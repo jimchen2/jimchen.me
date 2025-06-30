@@ -18,8 +18,8 @@ const addHashLinks = () => {
       const link = document.createElement("a");
       link.className = "hash-link";
       link.href = `#${id}`;
-      link.innerHTML = "#"; // Removed the space
-      link.style.marginRight = "4px"; // Add spacing using CSS instead
+      link.innerHTML = "#"; 
+      link.style.marginRight = "5px"; 
       link.onclick = (e) => {
         e.preventDefault();
         scrollToElement(id);
