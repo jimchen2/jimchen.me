@@ -1,7 +1,7 @@
 import React, { useEffect, useState, memo } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import parse from "html-react-parser";
-import { SideNav } from "./sideBar";
+import { SideBar } from "./sideBar";
 import BlogLikeButtonHelper from "./likebutton/bloglikebuttonhelper";
 import CodeBlock from "./codeBlock";
 import { generateStyles } from "./blogstylesHelper";
@@ -98,9 +98,8 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
             <br />
           </div>
         </Col>
-        {/* The SideNav column is now on the right */}
         <Col className="d-none d-lg-block">
-          <SideNav />
+          <SideBar />
         </Col>
       </Row>
     </Container>

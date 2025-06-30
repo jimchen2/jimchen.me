@@ -8,8 +8,7 @@ const TypeComponent = ({ currentType, postTypeArray, currentSort }) => {
   const router = useRouter();
 
   const [activeType, setActiveType] = useState(currentType || "all");
-  const [showCountFor, setShowCountFor] = useState(null); // Track which type's count to show
-
+const [showCountFor, setShowCountFor] = useState(currentType || null);
   useEffect(() => {
     const typeFromUrl = searchParams.get("type");
     if (typeFromUrl && postTypeArray.some((pt) => pt.type === typeFromUrl)) {
@@ -83,7 +82,6 @@ const TypeComponent = ({ currentType, postTypeArray, currentSort }) => {
             }
           >
             {option.label}
-            {/* MODIFIED: Add condition to not show count for "all" */}
             {showCountFor === option.type && option.type !== "all" && ` (${option.count})`}
           </div>
         ))}

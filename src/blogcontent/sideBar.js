@@ -1,45 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { Accordion, Card, Col } from "react-bootstrap";
 
-const scrollToElementWithOffset = (id, offset) => {
+const scrollToElement = (id, offset = -70) => {
   const element = document.getElementById(id);
   if (element) {
-    const y = element.getBoundingClientRect().top + window.pageYOffset + offset;
-    window.scrollTo({ top: y, behavior: "smooth" });
-    window.history.pushState(null, "", `#${id}`); // Update URL with hash
-  } else {
-    console.error(`No element with id '${id}' was found.`);
+    window.scrollTo({
+      top: element.getBoundingClientRect().top + window.pageYOffset + offset,
+      behavior: "smooth",
+    });
+    window.history.pushState(null, "", `#${id}`);
   }
 };
-
-function addHashLinksToHeaders() {
-  const headers = document.querySelectorAll("h2, h3");
-  headers.forEach((header) => {
-    const id = header.getAttribute("id");
-    // If no ID, or if a hash-link element already exists as a child, skip
-    if (!id || header.querySelector(".hash-link")) return;
-
-    const hashLink = document.createElement("a");
-    hashLink.className = "hash-link";
-    hashLink.innerHTML = "# "; // Use # with a non-breaking space
-    hashLink.style.textDecoration = "none";
-    hashLink.setAttribute("href", `#${id}`);
-
-    hashLink.onclick = (e) => {
-      e.preventDefault();
-      scrollToElementWithOffset(id, 0);
-    };
-
-    // Prepend the hash link to the header
-    header.insertBefore(hashLink, header.firstChild);
+const addHashLinks = () => {
+  document.querySelectorAll("h2, h3").forEach((header) => {
+    const id = header.id;
+    if (id && !header.querySelector(".hash-link")) {
+      const link = document.createElement("a");
+      link.className = "hash-link";
+      link.href = `#${id}`;
+      link.innerHTML = "#"; // Removed the space
+      link.style.marginRight = "4px"; // Add spacing using CSS instead
+      link.onclick = (e) => {
+        e.preventDefault();
+        scrollToElement(id);
+      };
+      header.prepend(link);
+    }
   });
-}
+};
 
-function CustomToggle({ children, eventKey, setActiveKey, isActive }) {
+const CustomToggle = ({ children, eventKey, setActiveKey, isActive }) => {
   const handleClick = () => {
-    const newActiveKey = isActive ? null : eventKey;
-    setActiveKey(newActiveKey);
-    scrollToElementWithOffset(eventKey, 0);
+    const newKey = isActive ? null : eventKey;
+    setActiveKey(newKey);
+    scrollToElement(eventKey);
   };
 
   return (
@@ -47,179 +41,101 @@ function CustomToggle({ children, eventKey, setActiveKey, isActive }) {
       onClick={handleClick}
       style={{
         cursor: "pointer",
-        wordWrap: "break-word",
-        whiteSpace: "normal",
+        backgroundColor: isActive ? "black" : "white",
+        color: isActive ? "white" : "black",
       }}
     >
       <span style={{ fontWeight: 500 }}>{children}</span>
     </Card.Header>
   );
-}
+};
 
-const useAddItemToNavbar = (setActiveKey) => {
+const useTableOfContents = (setActiveKey) => {
   const [tocItems, setTocItems] = useState([]);
-
-  const formatTextWithNewLines = (text, maxLineLength = 25) => {
-    const words = text.split(" ");
-    let lines = [];
-    let currentLine = "";
-
-    words.forEach((word) => {
-      if (currentLine.length + word.length > maxLineLength) {
-        lines.push(currentLine);
-        lines.push(<br key={`br-${lines.length}`} />);
-        currentLine = word;
-      } else {
-        currentLine += (currentLine ? " " : "") + word;
-      }
-    });
-
-    if (currentLine) lines.push(currentLine);
-    return lines;
-  };
 
   useEffect(() => {
     const headers = Array.from(document.querySelectorAll("h2, h3"));
-    let newTocItems = [];
+    const items = [];
     let lastH2Key = null;
 
     headers.forEach((header) => {
-      const id = header.getAttribute("id");
+      const id = header.id;
       if (!id) return;
 
-      let originalText = header.textContent || "";
-      // Remove the prepended "# " or "# " before processing for TOC
-      // Checking for common prepended patterns. The actual textContent might render   as a space.
-      if (originalText.startsWith("# ")) {
-        originalText = originalText.substring(2).trim();
-      } else if (originalText.startsWith("#\u00A0")) {
-        // \u00A0 is the non-breaking space character
-        originalText = originalText.substring(2).trim();
-      }
-
-      const formattedText = formatTextWithNewLines(originalText);
+      const text = header.textContent.replace(/^#\s+/, "").trim();
       const isH2 = header.tagName === "H2";
 
       if (isH2) {
         lastH2Key = id;
-        newTocItems.push({
+        items.push({
           key: id,
           content: (
-            <CustomToggle eventKey={id} hasChildren={false} setActiveKey={setActiveKey}>
-              {formattedText}
+            <CustomToggle eventKey={id} setActiveKey={setActiveKey}>
+              {text}
             </CustomToggle>
           ),
           children: [],
           hasChildren: false,
         });
       } else if (lastH2Key) {
-        // It's an H3 and we have a preceding H2
-        const parentItem = newTocItems.find((item) => item.key === lastH2Key);
-        if (parentItem) {
-          parentItem.children.push(
+        const parent = items.find((item) => item.key === lastH2Key);
+        if (parent) {
+          parent.children.push(
             <div
               key={`child-${id}`}
-              id={`toc-child-${id}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                scrollToElementWithOffset(id, 0);
-              }}
+              onClick={() => scrollToElement(id)}
               style={{
-                paddingLeft: "1rem",
-                paddingTop: "0.5rem",
-                paddingBottom: "0.5rem",
+                padding: "0.5rem 0.5rem 0.5rem 1rem",
                 cursor: "pointer",
-                wordWrap: "break-word",
-                whiteSpace: "normal",
               }}
-              onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
-              onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
+              className="hover:bg-gray-100 hover:underline"
             >
-              {formattedText}
+              {text}
             </div>
           );
-          parentItem.hasChildren = true;
-        } else {
-          console.warn(`Found H3 with id '${id}' but its parent H2 ('${lastH2Key}') wasn't found in tocItems. This shouldn't normally happen.`);
+          parent.hasChildren = true;
         }
       }
     });
 
-    setTocItems(newTocItems);
+    setTocItems(items);
 
-    const initialHash = window.location.hash.slice(1);
-    let timeoutId = null;
-
-    if (initialHash) {
-      timeoutId = setTimeout(() => {
-        const elementExists = document.getElementById(initialHash);
-        if (elementExists) {
-          scrollToElementWithOffset(initialHash, 0);
-
-          let parentKeyToActivate = null;
-          const headerElement = document.getElementById(initialHash);
-
-          if (headerElement) {
-            if (headerElement.tagName === "H2") {
-              parentKeyToActivate = initialHash;
-            } else if (headerElement.tagName === "H3") {
-              let previousElement = headerElement.previousElementSibling;
-              while (previousElement) {
-                if (previousElement.tagName === "H2" && previousElement.id) {
-                  parentKeyToActivate = previousElement.id;
-                  break;
-                }
-                if (previousElement.tagName === "H2" && !previousElement.id) {
-                  break;
-                }
-                previousElement = previousElement.previousElementSibling;
-              }
-            }
-          }
-
-          if (parentKeyToActivate) {
-            setActiveKey(parentKeyToActivate);
-          } else {
-            console.warn(`Could not determine parent H2 for initial hash '#${initialHash}'`);
-          }
-        } else {
-          console.warn(`Element with id '${initialHash}' not found after delay.`);
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+      setTimeout(() => {
+        scrollToElement(hash);
+        const header = document.getElementById(hash);
+        if (header?.tagName === "H3") {
+          let prev = header.previousElementSibling;
+          while (prev && prev.tagName !== "H2") prev = prev.previousElementSibling;
+          if (prev?.id) setActiveKey(prev.id);
+        } else if (header?.tagName === "H2") {
+          setActiveKey(hash);
         }
       }, 150);
     }
 
-    addHashLinksToHeaders();
-
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
+    addHashLinks();
   }, [setActiveKey]);
 
   return tocItems;
 };
 
-const SideNav = () => {
+const SideBar = () => {
   const [activeKey, setActiveKey] = useState(null);
-  const tocItems = useAddItemToNavbar(setActiveKey);
+  const tocItems = useTableOfContents(setActiveKey);
 
-  useEffect(() => {
-    addHashLinksToHeaders();
-  }, [tocItems]); 
-  
   return (
     <Col
       lg={2.5}
       xl={2.5}
       style={{
         position: "fixed",
-        right: "50px", // Changed from 'left' to 'right'
-        height: "100vh",
+        top: "70px",
+        right: "50px",
+        height: "calc(100vh - 70px)",
         overflowY: "auto",
         padding: "10px",
-        boxSizing: "border-box",
-        paddingBottom: "150px",
       }}
     >
       <Accordion activeKey={activeKey}>
@@ -227,7 +143,6 @@ const SideNav = () => {
           <Card key={item.key}>
             {React.cloneElement(item.content, {
               isActive: activeKey === item.key,
-              hasChildren: item.hasChildren,
               setActiveKey,
             })}
             {item.hasChildren && (
@@ -242,4 +157,4 @@ const SideNav = () => {
   );
 };
 
-export { SideNav };
+export { SideBar };
