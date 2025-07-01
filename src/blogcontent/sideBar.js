@@ -18,8 +18,8 @@ const addHashLinks = () => {
       const link = document.createElement("a");
       link.className = "hash-link";
       link.href = `#${id}`;
-      link.innerHTML = "#"; 
-      link.style.marginRight = "5px"; 
+      link.innerHTML = "#";
+      link.style.marginRight = "5px";
       link.onclick = (e) => {
         e.preventDefault();
         scrollToElement(id);
@@ -43,13 +43,24 @@ const CustomToggle = ({ children, eventKey, setActiveKey, isActive }) => {
         cursor: "pointer",
         backgroundColor: isActive ? "black" : "white",
         color: isActive ? "white" : "black",
+        maxWidth: "300px", // Adjust this value as needed
+        wordWrap: "break-word",
+        whiteSpace: "normal",
+        lineHeight: "1.3",
       }}
     >
-      <span style={{ fontWeight: 500 }}>{children}</span>
+      <span
+        style={{
+          fontWeight: 500,
+          display: "block",
+          wordBreak: "break-word",
+        }}
+      >
+        {children}
+      </span>
     </Card.Header>
   );
 };
-
 const useTableOfContents = (setActiveKey) => {
   const [tocItems, setTocItems] = useState([]);
 
@@ -87,6 +98,12 @@ const useTableOfContents = (setActiveKey) => {
               style={{
                 padding: "0.5rem 0.5rem 0.5rem 1rem",
                 cursor: "pointer",
+                maxWidth: "300px",
+                wordWrap: "break-word",
+                whiteSpace: "normal",
+                lineHeight: "1.3",
+                wordBreak: "break-word",
+                overflow: "hidden",
               }}
               className="hover:bg-gray-100 hover:underline"
             >
@@ -132,7 +149,7 @@ const SideBar = () => {
       style={{
         position: "fixed",
         top: "70px",
-        right: "50px",
+        right: "20px",
         height: "calc(100vh - 70px)",
         overflowY: "auto",
         padding: "10px",
