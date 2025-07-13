@@ -46,7 +46,6 @@ function PreviewCard(props) {
                     style={{
                       width: "100%",
                       height: "auto",
-                      maxHeight: "180px",
                       objectFit: "cover",
                       borderRadius: "0.3rem 0.3rem 0 0",
                     }}
