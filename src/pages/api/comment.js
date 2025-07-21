@@ -62,8 +62,59 @@ export default async function handler(req, res) {
     else if (req.method === "POST") {
       const { user, text, blog, uuid, blogname, parentid } = req.body;
 
+      // INPUT VALIDATION CHECKS
       try {
-        // Insert new comment
+        // 1. Validate required fields
+        if (!blog || !uuid || !blogname || !text) {
+          return res.status(400).json({ error: "Missing required fields" });
+        }
+
+        // 2. Validate blog ID exists in database
+        const blogValidationQuery = "SELECT title FROM blogs WHERE blogid = $1";
+        const blogValidationResult = await pool.query(blogValidationQuery, [blog]);
+
+        if (blogValidationResult.rows.length === 0) {
+          return res.status(400).json({ error: "Invalid blog ID - blog does not exist" });
+        }
+
+        // 3. Validate blogname matches actual blog title
+        const actualBlogTitle = blogValidationResult.rows[0].title;
+        if (blogname !== actualBlogTitle) {
+          return res.status(400).json({
+            error: "Blog name tampering detected - provided name does not match blog title",
+          });
+        }
+
+        // 4. Validate UUID format (32 character hex string)
+        const uuidRegex = /^[0-9a-f]{32}$/i;
+        if (!uuidRegex.test(uuid)) {
+          return res.status(400).json({ error: "Invalid UUID format" });
+        }
+
+        // 5. Check if UUID already exists (prevent duplicates)
+        const uuidCheckQuery = "SELECT uuid FROM comments WHERE uuid = $1";
+        const uuidCheckResult = await pool.query(uuidCheckQuery, [uuid]);
+
+        if (uuidCheckResult.rows.length > 0) {
+          return res.status(400).json({ error: "UUID already exists - potential tampering detected" });
+        }
+
+        // 6. Additional text validation (prevent excessively long comments)
+        if (text.length > 5000) {
+          return res.status(400).json({ error: "Comment text too long" });
+        }
+
+        // 7. Validate parentid if provided
+        if (parentid) {
+          const parentCheckQuery = "SELECT uuid FROM comments WHERE uuid = $1";
+          const parentCheckResult = await pool.query(parentCheckQuery, [parentid]);
+
+          if (parentCheckResult.rows.length === 0) {
+            return res.status(400).json({ error: "Invalid parent comment ID" });
+          }
+        }
+
+        // If all validations pass, proceed with insert
         const insertQuery = `
           INSERT INTO comments (uuid, user_name, text, blog_id, blog_name, pointer, likes)
           VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -72,7 +123,7 @@ export default async function handler(req, res) {
 
         const insertValues = [
           uuid,
-          user,
+          user || "anonymous", // Provide default if user is empty
           text,
           blog,
           blogname,
@@ -83,27 +134,21 @@ export default async function handler(req, res) {
         const result = await pool.query(insertQuery, insertValues);
         const savedComment = result.rows[0];
 
-        // If it's a reply, update the parent comment
+        // Handle parent comment update (same as before)
         if (parentid) {
-          // First, get the current pointer array
           const getParentQuery = "SELECT pointer FROM comments WHERE uuid = $1";
           const parentResult = await pool.query(getParentQuery, [parentid]);
 
-          if (parentResult.rows.length === 0) {
-            console.warn(`Parent comment ${parentid} not found`);
-          } else {
-            // Add the new UUID to the pointer array
+          if (parentResult.rows.length > 0) {
             const currentPointers = parentResult.rows[0].pointer || [];
             const newPointers = [...currentPointers, uuid];
 
-            // Update the parent comment
-            const updateParentQuery =
-              "UPDATE comments SET pointer = $1, updated_at = CURRENT_TIMESTAMP WHERE uuid = $2";
+            const updateParentQuery = "UPDATE comments SET pointer = $1, updated_at = CURRENT_TIMESTAMP WHERE uuid = $2";
             await pool.query(updateParentQuery, [newPointers, parentid]);
           }
         }
 
-        // Format the response to match MongoDB structure
+        // Format the response
         const formattedComment = {
           ...savedComment,
           user: savedComment.user_name,
@@ -114,7 +159,7 @@ export default async function handler(req, res) {
 
         res.status(201).json(formattedComment);
       } catch (err) {
-        console.error(err);
+        console.error("Validation or insert error:", err);
         res.status(400).json({ error: "Error creating comment" });
       }
     }
