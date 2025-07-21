@@ -10,23 +10,10 @@ const Msg = ({ blogid, blogname }) => {
       <Container fluid style={{ overflowX: "hidden", overflowY: "hidden" }}>
         <Row className="my-4">
           <>
-            <Col
-              md={{ span: 8, offset: 2 }}
-              style={{ paddingLeft: "15%", paddingRight: "15%" }}
-            >
-              <CommentInputBox
-                commentuuid="-1"
-                blogid={blogid}
-                blogname={blogname}
-              />
+            <Col md={{ span: 8, offset: 2 }} style={{ paddingLeft: "15%", paddingRight: "15%" }}>
+              {blogid === "0" ? <></> : <CommentInputBox commentuuid="-1" blogid={blogid} blogname={blogname} />}
             </Col>
-            <Col md={{ span: 6, offset: 3 }}>
-              {blogid === "0" ? (
-                <GetComments blogid={blogid} showName />
-              ) : (
-                <GetComments blogid={blogid} />
-              )}
-            </Col>
+            <Col md={{ span: 6, offset: 3 }}>{blogid === "0" ? <GetComments blogid={blogid} showName /> : <GetComments blogid={blogid} />}</Col>
           </>
         </Row>
       </Container>
