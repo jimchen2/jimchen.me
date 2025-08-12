@@ -13,6 +13,7 @@ const websiteLinks = [{ href: "https://jimchen.me/api/rss", Icon: FaRss, alt: "R
 const profileLinks = [
   { href: "mailto:jimchen4214@gmail.com", Icon: FaEnvelope, alt: "Email" },
   { href: "https://t.me/Jimchen4214", Icon: FaTelegram, alt: "Telegram" },
+  { href: "https://jimchen.me/weixin.jpg", Icon: FaWeixin, alt: "WeChat" },
   { href: "https://github.com/jimchen2", Icon: FaGithub, alt: "GitHub Profile" },
   { href: "https://www.linkedin.com/in/jim-chen-588002255/", Icon: FaLinkedin, alt: "LinkedIn Profile (CV)" },
   { href: "https://www.youtube.com/@jimchen4214", Icon: FaYoutube, alt: "YouTube Channel" },
