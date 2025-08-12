@@ -2,23 +2,27 @@
 
 import React from "react";
 import Link from "next/link";
-import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope, FaRss, FaGoodreads, FaYoutube } from "react-icons/fa";
+import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope, FaGoodreads, FaYoutube } from "react-icons/fa";
 import { SiInternetarchive } from "react-icons/si";
 import { SiOpenstreetmap } from "react-icons/si";
 import { SiTampermonkey } from "react-icons/si";
 import { SiHuggingface } from "react-icons/si";
 
-const websiteLinks = [{ href: "https://jimchen.me/api/rss", Icon: FaRss, alt: "RSS Feed" }];
-
+// 2 profile links for the top section
 const profileLinks = [
+  { href: "https://github.com/jimchen2", Icon: FaGithub, alt: "GitHub Profile" },
+  { href: "https://www.linkedin.com/in/jim-chen-588002255/", Icon: FaLinkedin, alt: "LinkedIn Profile (CV)" },
+];
+
+// 4 social media/communication links for the middle section
+const socialLinks = [
   { href: "mailto:jimchen4214@gmail.com", Icon: FaEnvelope, alt: "Email" },
   { href: "https://t.me/Jimchen4214", Icon: FaTelegram, alt: "Telegram" },
   { href: "https://jimchen.me/weixin.jpg", Icon: FaWeixin, alt: "WeChat" },
-  { href: "https://github.com/jimchen2", Icon: FaGithub, alt: "GitHub Profile" },
-  { href: "https://www.linkedin.com/in/jim-chen-588002255/", Icon: FaLinkedin, alt: "LinkedIn Profile (CV)" },
   { href: "https://www.youtube.com/@jimchen4214", Icon: FaYoutube, alt: "YouTube Channel" },
 ];
 
+// 5 utility links for the bottom section (no change)
 const utilityLinks = [
   { href: "https://archive.org/details/@j_c561", Icon: SiInternetarchive, alt: "Internet Archive" },
   { href: "https://umap.openstreetmap.fr/en/user/jimchen2/", Icon: SiOpenstreetmap, alt: "Umap" },
@@ -71,8 +75,8 @@ function AboutComponent() {
 
   return (
     <div style={{ fontFamily: "Ubuntu, sans-serif", paddingTop: "1rem" }}>
-      {renderLinkSection("RSS", websiteLinks)}
-      {renderLinkSection("Profiles", profileLinks)}
+      {renderLinkSection("Profile", profileLinks)}
+      {renderLinkSection("Social & Communication", socialLinks)}
       {renderLinkSection("Utilities", utilityLinks)}
     </div>
   );
