@@ -9,7 +9,6 @@ class MyDocument extends Document {
           <meta name="author" content="Jim Chen" />
           <meta name="robots" content="index, follow" />
           <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-          <meta name="theme-color" content="#000000" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link
