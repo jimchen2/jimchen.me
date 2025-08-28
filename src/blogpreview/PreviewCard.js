@@ -5,15 +5,27 @@ import { Container, Card, Row, Col } from "react-bootstrap";
 import Link from "next/link";
 
 function PreviewCard(props) {
-  const { searchTerm, date, blogid, previewimage, title, text, wordcount } = props;
+  const { searchTerm, date, blogid, previewimage, title, text, wordcount } =
+    props;
 
   const getHighlightedText = (text, highlight) => {
     if (!highlight || !text) {
       return text;
     }
     const parts = text.split(new RegExp(`(${highlight})`, "gi"));
-    return parts.map((part, i) => (part.toLowerCase() === highlight.toLowerCase() ? <span key={i}>{part}</span> : part));
+    return parts.map((part, i) =>
+      part.toLowerCase() === highlight.toLowerCase() ? (
+        <span key={i}>{part}</span>
+      ) : (
+        part
+      )
+    );
   };
+
+  // --- CHANGE IS HERE ---
+  // Create a variable to hold the date text.
+  // If the date is "Dec 31, 9999", display "Current", otherwise display the original date.
+  const displayDate = date === "Dec 31, 9999" ? "Current" : date;
 
   return (
     <Container fluid className="my-4" style={{ maxWidth: "100%" }}>
@@ -53,11 +65,11 @@ function PreviewCard(props) {
                 </Col>
               )}
 
-              {/* --- TEXT COLUMN (THE FIX IS HERE) --- */}
+              {/* --- TEXT COLUMN --- */}
               <Col
                 md={previewimage ? 8 : 12}
                 className="order-md-1"
-                style={{ minWidth: 0 }} // <-- THE CRITICAL FIX
+                style={{ minWidth: 0 }}
               >
                 <Card.Body>
                   <Card.Title className="mb-3">
@@ -68,7 +80,9 @@ function PreviewCard(props) {
                           fontFamily: "'Arial', sans-serif",
                         }}
                       >
-                        {date}
+                        {/* --- AND HERE --- */}
+                        {/* Use the new variable to display the date */}
+                        {displayDate}
                       </span>
                       <div
                         className="d-flex flex-wrap justify-content-end gap-2"
@@ -89,8 +103,12 @@ function PreviewCard(props) {
                         display: "inline-block",
                       }}
                       className="title"
-                      onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")}
-                      onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+                      onMouseEnter={(e) =>
+                        (e.target.style.transform = "scale(1.05)")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.target.style.transform = "scale(1)")
+                      }
                     >
                       {title.split("-").join(" ")}
                     </Link>

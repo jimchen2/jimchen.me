@@ -26,13 +26,19 @@ function calculateBlogPadding(windowWidth = null) {
 }
 
 const BlogHeader = ({ date, wordcount }) => {
+  // --- CHANGE IS HERE ---
+  // If the date is "Dec 31, 9999", display "Current", otherwise display the original date.
+  const displayDate = date === "Dec 31, 9999" ? "Current" : date;
+
   return (
     <div className="blog-header mb-3">
       <br />
       <div className="d-flex justify-content-between align-items-center">
         <div>
           <small className="text">
-            {date} • {wordcount} words
+            {/* --- AND HERE --- */}
+            {/* Use the new variable to display the date */}
+            {displayDate} • {wordcount} words
           </small>
         </div>
       </div>
