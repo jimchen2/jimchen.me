@@ -23,3 +23,11 @@ CREATE TABLE comments (
 );
 ```
 
+```
+pg_dump --clean --no-owner -f neondb_dump.sql "postgres://........aws.neon.tech/neondb?sslmode=require"
+```
+
+```
+createdb neondb_local_copy
+psql -d neondb_local_copy -f neondb_dump.sql
+```
