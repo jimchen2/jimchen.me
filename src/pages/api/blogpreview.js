@@ -1,18 +1,28 @@
 import dbConnect from "@/lib/db/dbConnect";
 
 /**
+ * A helper function to safely determine the correct table name from a language code.
+ * Defaults to 'blogs' for 'original' or invalid codes.
+ * This prevents SQL injection by using a whitelist.
+ */
+function getTableName(language) {
+  const allowedLangs = ["en", "zh", "ru"];
+  if (language && allowedLangs.includes(language)) {
+    return `blogs_${language}`;
+  }
+  return "blogs"; // Default table for 'original' language
+}
+
+/**
  * Creates a relevant text snippet from a blog body based on a search term.
  */
 function getRelevantSnippet(body, searchterm, isTitleMatch) {
-  if (!body) return ""; // Handle case where body is null or undefined
+  if (!body) return "";
   if (isTitleMatch) {
-    // If title matches, just show the beginning of the body
     return body.length > 150 ? body.substring(0, 150) + "..." : body;
   } else {
-    // If body matches, find the term and create a snippet around it
     const index = body.toLowerCase().indexOf(searchterm.toLowerCase());
     if (index === -1) {
-      // Fallback if the term isn't found (shouldn't happen with correct query)
       return body.length > 150 ? body.substring(0, 150) + "..." : body;
     }
     const start = Math.max(index - 75, 0);
@@ -31,50 +41,45 @@ export async function fetchBlogPreviews(
   count,
   type = null,
   sort = "date_latest",
-  searchterm = null
+  searchterm = null,
+  language = null // ADDED: Language parameter
 ) {
   const pool = await dbConnect();
+  const tableName = getTableName(language); // Use the helper to get the safe table name
 
-  // If searching, we need the full 'body' to create a relevant snippet.
-  // Otherwise, we use the pre-made 'preview_text'.
   const selectClause = searchterm
-    ? `SELECT id, blogid, title, date, type, word_count, created_at, updated_at, preview_image, body`
-    : `SELECT id, blogid, title, date, type, word_count, created_at, updated_at, preview_image, preview_text`;
+    ? `SELECT id, blogid, title, date, tags, word_count, created_at, updated_at, preview_image, body`
+    : `SELECT id, blogid, title, date, tags, word_count, created_at, updated_at, preview_image, preview_text`;
 
-  let query = `${selectClause} FROM blogs`;
+  // MODIFIED: Use the dynamic tableName
+  let query = `${selectClause} FROM ${tableName}`;
   let queryParams = [];
   let conditions = [];
 
-  // Build WHERE conditions and params sequentially for safety
   if (type) {
     queryParams.push(type);
-    conditions.push(`$${queryParams.length} = ANY(type)`);
+    conditions.push(`$${queryParams.length} = ANY(tags)`);
   }
 
   if (searchterm) {
     queryParams.push(`%${searchterm}%`);
     const searchIndex = queryParams.length;
-    // This logic matches hyphens in titles to spaces in the search term.
     conditions.push(
       `(REPLACE(title, '-', ' ') ILIKE $${searchIndex} OR body ILIKE $${searchIndex})`
     );
   }
 
-  // Combine conditions into a WHERE clause if any exist
   if (conditions.length > 0) {
     query += ` WHERE ${conditions.join(" AND ")}`;
   }
 
-  // Define sort criteria
   let sortQuery;
   if (searchterm) {
-    // If searching, prioritize results where the title matches.
     const searchIndex = queryParams.findIndex((p) => p.includes(searchterm));
     sortQuery = `ORDER BY CASE WHEN REPLACE(title, '-', ' ') ILIKE $${
       searchIndex + 1
     } THEN 0 ELSE 1 END, date DESC`;
   } else {
-    // Standard sorting options
     const sortCriteria = {
       date_oldest: "date ASC",
       most_words: "word_count DESC",
@@ -85,7 +90,6 @@ export async function fetchBlogPreviews(
   }
   query += ` ${sortQuery}`;
 
-  // Add LIMIT and OFFSET for pagination. Indices are correct due to sequential building.
   queryParams.push(count, start);
   query += ` LIMIT $${queryParams.length - 1} OFFSET $${queryParams.length}`;
 
@@ -94,8 +98,6 @@ export async function fetchBlogPreviews(
     return result.rows;
   } catch (error) {
     console.error("Error fetching blog previews:", error);
-    console.error("Failed Query:", query);
-    console.error("Failed Params:", queryParams);
     throw error;
   }
 }
@@ -111,24 +113,24 @@ export async function processAndSnippetBlog(blog, searchterm = null) {
     year: "numeric",
   });
 
+  const { tags, ...restOfBlog } = blog;
   const processedBlog = {
-    ...blog,
+    ...restOfBlog,
+    type: tags,
     date: formattedDate,
   };
 
-  // If a search was performed, generate a custom preview snippet.
   if (searchterm) {
     const isTitleMatch = blog.title
       .toLowerCase()
-      .replace(/-/g, " ") // Also replace hyphens here for a consistent match check
+      .replace(/-/g, " ")
       .includes(searchterm.toLowerCase());
-
     processedBlog.preview_text = getRelevantSnippet(
       blog.body,
       searchterm,
       isTitleMatch
     );
-    delete processedBlog.body; // Remove full body to reduce API payload size
+    delete processedBlog.body;
   }
 
   return processedBlog;
@@ -140,24 +142,25 @@ export async function processAndSnippetBlog(blog, searchterm = null) {
 export async function calculatePaginationInfo(
   count = 10,
   type = null,
-  searchterm = null
+  searchterm = null,
+  language = null // ADDED: Language parameter
 ) {
   const pool = await dbConnect();
-  let query = "SELECT COUNT(*) FROM blogs";
+  const tableName = getTableName(language); // Use the helper to get the safe table name
+
+  // MODIFIED: Use the dynamic tableName
+  let query = `SELECT COUNT(*) FROM ${tableName}`;
   let queryParams = [];
   let conditions = [];
 
-  // Build WHERE conditions sequentially
   if (type) {
     queryParams.push(type);
-    conditions.push(`$${queryParams.length} = ANY(type)`);
+    conditions.push(`$${queryParams.length} = ANY(tags)`);
   }
 
   if (searchterm) {
     queryParams.push(`%${searchterm}%`);
     const searchIndex = queryParams.length;
-    // *** FIX APPLIED HERE ***
-    // This logic MUST match fetchBlogPreviews to ensure pagination is accurate.
     conditions.push(
       `(REPLACE(title, '-', ' ') ILIKE $${searchIndex} OR body ILIKE $${searchIndex})`
     );
@@ -179,15 +182,17 @@ export async function calculatePaginationInfo(
 }
 
 /**
- * Fetches all unique blog types and their respective post counts.
+ * Fetches all unique blog tags and their respective post counts for a given language.
  */
-export async function getBlogTypesWithCounts() {
+export async function getBlogTypesWithCounts(language = null) { // ADDED: Language parameter
   const pool = await dbConnect();
-  // This query unnests the 'type' array and counts occurrences of each unique type.
+  const tableName = getTableName(language); // Use the helper to get the safe table name
+
+  // MODIFIED: Use the dynamic tableName
   const query = `
     SELECT single_type AS type, COUNT(*) AS count
-    FROM blogs, UNNEST(type) AS single_type
-    WHERE type IS NOT NULL AND cardinality(type) > 0
+    FROM ${tableName}, UNNEST(tags) AS single_type
+    WHERE tags IS NOT NULL AND cardinality(tags) > 0
     GROUP BY single_type
     ORDER BY count DESC;
   `;
@@ -213,12 +218,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Parse and validate query parameters
     const start = parseInt(req.query.start) || 0;
     const count = parseInt(req.query.count) || 10;
     const type = req.query.type || null;
     const sort = req.query.sort || "date_latest";
     const searchterm = req.query.searchterm || null;
+    const language = req.query.language || null; // ADDED: Read language from query
 
     const validSorts = [
       "date_oldest",
@@ -230,21 +235,20 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: "Invalid sort parameter" });
     }
 
-    // Perform data fetching in parallel for efficiency
-    const [blogPreviewsRaw, paginationInfo, typesWithCounts] = await Promise.all([
-      fetchBlogPreviews(start, count, type, sort, searchterm),
-      calculatePaginationInfo(count, type, searchterm),
-      getBlogTypesWithCounts(), // This is independent of filters
-    ]);
-    
-    // Process the raw blog data to format dates and create snippets
+    const [blogPreviewsRaw, paginationInfo, typesWithCounts] =
+      await Promise.all([
+        // Pass language to all functions
+        fetchBlogPreviews(start, count, type, sort, searchterm, language),
+        calculatePaginationInfo(count, type, searchterm, language),
+        getBlogTypesWithCounts(language),
+      ]);
+
     const blogPreviews = await Promise.all(
       blogPreviewsRaw.map((blog) => processAndSnippetBlog(blog, searchterm))
     );
-    
+
     const { totalPages, totalBlogs } = paginationInfo;
 
-    // Return everything the frontend needs in a single, well-structured response
     res.status(200).json({
       data: blogPreviews,
       pagination: {
@@ -252,10 +256,10 @@ export default async function handler(req, res) {
         currentPage: Math.floor(start / count) + 1,
         pageSize: count,
         totalItems: totalBlogs,
-        // Echo back the params for frontend state management
         type,
         sort,
         searchterm,
+        language, // ADDED: Echo language back in response
       },
       filters: {
         types: typesWithCounts,

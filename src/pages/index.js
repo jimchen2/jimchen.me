@@ -4,14 +4,28 @@ import { useRouter } from "next/router";
 import BlogPreviewPage from "@/blogpreview/BlogPreviewPage";
 
 export async function getServerSideProps(context) {
-  // Extract page from query parameters instead of params
   const { page = "1", type, sort, searchterm } = context.query;
-  const pageNumber = parseInt(page) || 1; // Default to 1 if page is invalid
+  const pageNumber = parseInt(page) || 1;
 
   try {
-    const start = (pageNumber - 1) * 10; // 10 items per page
-    let apiUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blogpreview?start=${start}&count=10`;
+    const start = (pageNumber - 1) * 10;
 
+    const lang = context.req.cookies.language;
+
+    const params = new URLSearchParams({
+      start: start.toString(),
+      count: "10",
+    });
+
+    if (type) params.append("type", type);
+    if (sort) params.append("sort", sort);
+    if (searchterm) params.append("searchterm", searchterm);
+
+    if (lang && lang !== "original") {
+      params.append("language", lang);
+    }
+
+    const apiUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blogpreview?${params.toString()}`;
     if (type) {
       apiUrl += `&type=${type}`;
     }
@@ -29,7 +43,6 @@ export async function getServerSideProps(context) {
     const data = blogResponse.data.data || [];
     const pagination = blogResponse.data.pagination || {};
     const postTypeArray = blogResponse.data.filters?.types || [];
-
     // If requested page is beyond total pages, redirect to last page
     if (pageNumber > 1 && pageNumber > pagination.totalPages) {
       let redirectUrl = "/"; // Base path

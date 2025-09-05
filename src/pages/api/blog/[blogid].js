@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 
     try {
       const query = `
-        SELECT * FROM blogs 
+        SELECT * FROM blogs_ru
         WHERE blogid = $1 
       `;
       const values = [blogid];

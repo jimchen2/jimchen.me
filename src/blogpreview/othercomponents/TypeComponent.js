@@ -8,7 +8,7 @@ const TypeComponent = ({ currentType, postTypeArray, currentSort }) => {
   const router = useRouter();
 
   const [activeType, setActiveType] = useState(currentType || "all");
-const [showCountFor, setShowCountFor] = useState(currentType || null);
+  const [showCountFor, setShowCountFor] = useState(currentType || null);
   useEffect(() => {
     const typeFromUrl = searchParams.get("type");
     if (typeFromUrl && postTypeArray.some((pt) => pt.type === typeFromUrl)) {
@@ -75,11 +75,7 @@ const [showCountFor, setShowCountFor] = useState(currentType || null);
             tabIndex={0}
             aria-selected={activeType === option.type}
             // MODIFIED: Make aria-label conditional to not announce the meaningless "All" count
-            aria-label={
-              option.type === "all"
-                ? `Filter by type ${option.label}`
-                : `Filter by type ${option.label} (${option.count} posts)`
-            }
+            aria-label={option.type === "all" ? `Filter by type ${option.label}` : `Filter by type ${option.label} (${option.count} posts)`}
           >
             {option.label}
             {showCountFor === option.type && option.type !== "all" && ` (${option.count})`}
