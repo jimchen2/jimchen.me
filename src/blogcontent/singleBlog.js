@@ -1,7 +1,7 @@
 import React, { useEffect, useState, memo } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import parse from "html-react-parser";
-import { useTranslation } from 'next-i18next'; // 1. IMPORT THE HOOK
+import { useTranslation } from "next-i18next";
 import { SideBar } from "./sideBar";
 import BlogLikeButtonHelper from "./likebutton/bloglikebuttonhelper";
 import CodeBlock from "./codeBlock";
@@ -9,17 +9,13 @@ import { generateStyles } from "./blogstylesHelper";
 
 // Default padding values for server-side rendering
 function calculateBlogPadding(windowWidth = null) {
-  // Default padding values based on screen size
   const getPaddingValues = (width) => {
     if (width >= 1200) return { left: 10, right: 20 };
     if (width >= 600) return { left: 10, right: 10 };
     return { left: 5, right: 5 };
   };
-
-  // Use provided windowWidth or fallback to a default (e.g., 1200 for SSR)
-  const width = windowWidth || 1200; // Default width for SSR
+  const width = windowWidth || 1200;
   const padding = getPaddingValues(width);
-
   return {
     paddingLeft: `${padding.left}%`,
     paddingRight: `${padding.right}%`,
@@ -27,10 +23,18 @@ function calculateBlogPadding(windowWidth = null) {
 }
 
 const BlogHeader = ({ date, wordcount }) => {
-  const { t } = useTranslation('common'); // 2. INITIALIZE THE HOOK
-  console.log(date);
+  const { t } = useTranslation("common");
+  function getDisplayDateSimple(dateString) {
+    const targetDates = ["December 31, 9999", "31 декабря 9999 г", "9999年12月31日"];
 
-  const displayDate = date === "December 31, 9999" ? "Current" : date;
+    if (targetDates.includes(dateString)) {
+      return t("previewCard.current");
+    }
+
+    return dateString;
+  }
+
+  const displayDate = getDisplayDateSimple(date);
 
   return (
     <div className="blog-header mb-3">
@@ -38,8 +42,7 @@ const BlogHeader = ({ date, wordcount }) => {
       <div className="d-flex justify-content-between align-items-center">
         <div>
           <small className="text">
-            {/* 3. USE THE 't' FUNCTION FOR TRANSLATION & PLURALIZATION */}
-            {displayDate} • {t('word_count', { count: wordcount })}
+            {displayDate} • {t("word_count", { count: wordcount })}
           </small>
         </div>
       </div>
@@ -53,12 +56,18 @@ const BlogTitle = ({ title }) => (
   </h2>
 );
 
+// This component's logic is perfect. It will automatically display the correct language.
+const TranslationDisclaimer = () => {
+  const { t } = useTranslation("common");
+  return (
+    <div className="alert alert-info" role="alert">
+      <i>{t("translation_disclaimer")}</i>
+    </div>
+  );
+};
+
 function SingleBlog({ date, text, title, language, type, blogid, wordcount, istranslated }) {
-  console.log(istranslated)
-  console.log(istranslated)
-  console.log(istranslated)
-  console.log(istranslated)
-  const [paddingStyles, setPaddingStyles] = useState(calculateBlogPadding()); // Default for SSR
+  const [paddingStyles, setPaddingStyles] = useState(calculateBlogPadding());
 
   useEffect(() => {
     const handleResize = () => {
@@ -88,7 +97,6 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount, istr
   return (
     <Container fluid className="pb-3">
       <Row>
-        {/* The main content column now comes first */}
         <Col
           md={12}
           lg={9}
@@ -99,8 +107,12 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount, istr
           }}
         >
           <div className="mb-4">
-            <BlogHeader date={date} language={language} type={type} title={title} wordcount={wordcount} blogid={blogid} />
+            <BlogHeader date={date} wordcount={wordcount} />
             <BlogTitle title={title} />
+
+            {/* This logic correctly shows the disclaimer component when needed */}
+            {istranslated && <TranslationDisclaimer />}
+
             <div className="blog-content">
               {elements}
               <style>{styles}</style>
