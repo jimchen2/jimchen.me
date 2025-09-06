@@ -1,3 +1,5 @@
+// /pages/_app.js
+
 "use client";
 
 import React, { useEffect } from "react";
@@ -6,14 +8,14 @@ import Link from "next/link";
 import { Container, Navbar } from "react-bootstrap";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  ColorSchemeProvider,
-  useGlobalColorScheme,
-  setIpAddress,
-} from "../lib/config.js";
-// --> 1. Add these imports for i18n
-import { useTranslation } from 'next-i18next';
-import { appWithTranslation } from 'next-i18next';
+import { ColorSchemeProvider, useGlobalColorScheme, setIpAddress } from "../lib/config.js";
+
+// --- Imports for i18n ---
+import { useTranslation } from "next-i18next";
+import { appWithTranslation } from "next-i18next";
+
+// --- NEW: Import useRouter for language redirection ---
+import { useRouter } from "next/router";
 
 // --- Helper function to fetch IP (Unchanged) ---
 const fetchIpInfo = async () => {
@@ -27,11 +29,10 @@ const fetchIpInfo = async () => {
   }
 };
 
-// --- Combined Layout Component ---
+// --- Combined Layout Component (Unchanged) ---
 function Layout({ children }) {
   const { themeMode } = useGlobalColorScheme();
-  // --> 2. Use the translation hook
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("common");
 
   const layoutStyle = {
     display: "flex",
@@ -67,7 +68,7 @@ function Layout({ children }) {
               marginLeft: "15%",
             }}
           >
-            {t('blog-title')}
+            {t("blog-title")}
           </Navbar.Brand>
         </Container>
       </Navbar>
@@ -77,10 +78,12 @@ function Layout({ children }) {
         body {
           transition: background-color 0.3s ease, color 0.3s ease;
         }
-        .navbar-brand, .nav-link {
+        .navbar-brand,
+        .nav-link {
           transition: color 0.3s ease;
         }
-        section[id], div[id] {
+        section[id],
+        div[id] {
           padding-top: 70px;
           margin-top: -70px;
           scroll-margin-top: 70px;
@@ -100,18 +103,33 @@ function Layout({ children }) {
         }
       `}</style>
 
-      <main style={mainContentStyle}>
-        {children}
-      </main>
+      <main style={mainContentStyle}>{children}</main>
     </div>
   );
 }
 
 // --- Main App Component ---
 function MyApp({ Component, pageProps }) {
-  // --> 4. Use the translation hook here as well for the <Head> component
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("common");
+  // --- NEW: Get router details for language logic ---
+  const router = useRouter();
+  const { locale, locales, pathname, asPath, query } = router;
 
+  // --- NEW: useEffect for Automatic Language Redirection ---
+  // This is the "brain" that makes the language choice persistent.
+  useEffect(() => {
+    const savedLocale = localStorage.getItem("user_preferred_locale");
+
+    // 1. Check if a preference is saved in localStorage.
+    // 2. Check if that preference is a valid, supported locale.
+    // 3. Check that we are not already on the preferred locale (to prevent a redirect loop).
+    if (savedLocale && locales.includes(savedLocale) && locale !== savedLocale) {
+      // If all conditions are met, redirect to the same page but with the preferred locale.
+      router.push({ pathname, query }, asPath, { locale: savedLocale });
+    }
+  }, [locale, locales, pathname, asPath, query, router]); // Dependencies ensure this runs on page change
+
+  // This useEffect for fetching IP remains unchanged.
   useEffect(() => {
     fetchIpInfo();
   }, []);
@@ -119,7 +137,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <ColorSchemeProvider>
       <Head>
-        <title>{t('blog-title')}</title>
+        <title>{t("blog-title")}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Layout>
@@ -129,5 +147,5 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-// --> 6. Make sure your final export is wrapped with appWithTranslation
+// --- Final export remains wrapped with appWithTranslation ---
 export default appWithTranslation(MyApp);

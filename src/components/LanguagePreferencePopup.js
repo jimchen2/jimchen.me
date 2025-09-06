@@ -4,10 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 // --- Embedded Translations ---
-// This is the "clever" part. We embed the translations for this specific
-// component here so we can show the prompt in the user's detected language,
-// even when the main page's language is the original (English).
-
+// This allows the prompt to be shown in the user's detected language
+// before the main page's translation has loaded.
 const popupTranslations = {
   // English is our fallback
   en: {
@@ -30,7 +28,7 @@ const popupTranslations = {
   }
 };
 
-// Map to get the language's native name
+// Map to get the language's native name for display
 const languageNameMap = {
   en: 'English',
   zh: '中文',
@@ -45,12 +43,20 @@ const LanguagePreferencePopup = () => {
   const [detectedLocale, setDetectedLocale] = useState('');
 
   useEffect(() => {
-    const preference = localStorage.getItem('language_preference_chosen');
-    if (preference) return;
+    // --- MODIFIED ---
+    // Check for the specific preference key. If the user has EVER made a choice
+    // (either via this popup or the manual language switcher), we don't show the popup.
+    const preference = localStorage.getItem('user_preferred_locale');
+    if (preference) {
+      return;
+    }
 
-    // Only show on the "original" page
-    if (locale !== 'x-default') return;
+    // Only show the popup on the "original" page (x-default)
+    if (locale !== 'x-default') {
+      return;
+    }
 
+    // Get the user's browser language (e.g., 'en-US' -> 'en')
     const browserLang = navigator.language.split('-')[0];
 
     // Check if the detected language is one of our supported, non-original languages
@@ -58,19 +64,27 @@ const LanguagePreferencePopup = () => {
       setDetectedLocale(browserLang);
       setIsVisible(true);
     }
-  }, [locale, locales]);
+  }, [locale, locales]); // Dependencies for the effect
 
   const handleSwitch = () => {
-    localStorage.setItem('language_preference_chosen', 'true');
+    // --- MODIFIED ---
+    // Store the specific locale the user is switching TO.
+    // This allows the logic in _app.js to remember their choice for future visits.
+    localStorage.setItem('user_preferred_locale', detectedLocale);
     setIsVisible(false);
+    // Redirect to the same page but with the new locale
     router.push({ pathname, query }, asPath, { locale: detectedLocale });
   };
 
   const handleStay = () => {
-    localStorage.setItem('language_preference_chosen', 'true');
+    // --- MODIFIED ---
+    // Explicitly store that the user chose to stay on the original version.
+    // This prevents the popup from appearing again on their next visit.
+    localStorage.setItem('user_preferred_locale', 'x-default');
     setIsVisible(false);
   };
 
+  // If the popup shouldn't be visible, render nothing.
   if (!isVisible) {
     return null;
   }
@@ -79,15 +93,14 @@ const LanguagePreferencePopup = () => {
   const t = popupTranslations[detectedLocale] || popupTranslations.en;
   const detectedLanguageName = languageNameMap[detectedLocale] || detectedLocale;
 
-  // --- Basic Styling ---
+  // --- Basic Inline Styling ---
   const popupStyles = {
-    // ... (styling is the same as before, you can copy it from the previous answer)
     overlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, },
-    modal: { backgroundColor: '#fff', padding: '2rem', borderRadius: '8px', maxWidth: '450px', textAlign: 'center', boxShadow: '0 4px 15px rgba(0,0,0,0.2)', color: '#333' },
+    modal: { backgroundColor: '#fff', padding: '2rem', borderRadius: '8px', maxWidth: '450px', width: '90%', textAlign: 'center', boxShadow: '0 4px 15px rgba(0,0,0,0.2)', color: '#333' },
     title: { fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem', },
     description: { marginBottom: '1.5rem', lineHeight: '1.5', },
     buttonContainer: { display: 'flex', gap: '1rem', justifyContent: 'center', },
-    button: { padding: '0.75rem 1.5rem', border: 'none', borderRadius: '5px', fontSize: '1rem', cursor: 'pointer', },
+    button: { padding: '0.75rem 1.5rem', border: 'none', borderRadius: '5px', fontSize: '1rem', cursor: 'pointer', transition: 'background-color 0.2s', },
     primaryButton: { backgroundColor: '#0070f3', color: 'white', },
     secondaryButton: { backgroundColor: '#eaeaea', color: '#333' }
   };

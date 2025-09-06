@@ -1,18 +1,17 @@
-// components/LanguageComponent.js
+// /components/LanguageComponent.js
 
 import React from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { useTranslation } from 'next-i18next'; // Import the translation hook
+import { useTranslation } from 'next-i18next';
 
 const LanguageComponent = () => {
-  const { t } = useTranslation('common'); // Initialize the hook
+  const { t } = useTranslation('common');
   const router = useRouter();
-  // `locale` will now be 'x-default', 'en', 'zh', or 'ru'
+  // `locale` will be 'x-default', 'en', 'zh', or 'ru'
   const { pathname, query, asPath, locale: activeLocale } = router;
 
-  // --- KEY CHANGE ---
-  // The labels are now dynamically loaded using the t() function.
+  // The labels are dynamically loaded using the t() function from your translation files.
   const languages = [
     { code: "x-default", label: t('languages.original') },
     { code: "en", label: t('languages.english') },
@@ -20,7 +19,14 @@ const LanguageComponent = () => {
     { code: "ru", label: t('languages.russian') },
   ];
 
-  // --- STYLING (Unchanged) ---
+  // --- NEW ---
+  // This function is called when a user clicks a language link.
+  // It saves their explicit choice to localStorage.
+  const handleLanguageClick = (locale) => {
+    localStorage.setItem('user_preferred_locale', locale);
+  };
+
+  // --- Styling (Unchanged) ---
   const containerStyle = {
     padding: "1rem",
     paddingBottom: "0.5rem",
@@ -44,7 +50,6 @@ const LanguageComponent = () => {
 
   return (
     <div style={containerStyle}>
-      {/* Use the t function for the main label */}
       <span style={{ display: "block", marginBottom: "0.5rem", fontWeight: "bold" }}>
         {t('languages.label')}
       </span>
@@ -57,11 +62,18 @@ const LanguageComponent = () => {
               locale={lang.code}          // The new locale to switch to
               legacyBehavior
             >
-              <a style={linkStyle(activeLocale === lang.code)}>
+              {/* --- MODIFIED --- 
+                  The onClick handler is added here to save the preference.
+                  The Link component still handles the navigation itself. */}
+              <a
+                style={linkStyle(activeLocale === lang.code)}
+                onClick={() => handleLanguageClick(lang.code)}
+              >
                 {lang.label}
               </a>
             </Link>
             
+            {/* Render the separator between links */}
             {index < languages.length - 1 && <span aria-hidden="true">/</span>}
           </React.Fragment>
         ))}
