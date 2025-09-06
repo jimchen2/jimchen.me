@@ -70,5 +70,13 @@
     "wordCount_one": "{{count}} слово",
     "wordCount_few": "{{count}} слова",
     "wordCount_many": "{{count}} слов"
-  }
+  },
+
+  "tags": {
+    "label": "Теги:",
+    "all": "Все"
+  },
+  "word_count_one": "{{count}} слово",
+  "word_count_few": "{{count}} слова",
+  "word_count_many": "{{count}} слов"
 }

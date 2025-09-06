@@ -1,6 +1,7 @@
 import React, { useEffect, useState, memo } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import parse from "html-react-parser";
+import { useTranslation } from 'next-i18next'; // 1. IMPORT THE HOOK
 import { SideBar } from "./sideBar";
 import BlogLikeButtonHelper from "./likebutton/bloglikebuttonhelper";
 import CodeBlock from "./codeBlock";
@@ -26,6 +27,7 @@ function calculateBlogPadding(windowWidth = null) {
 }
 
 const BlogHeader = ({ date, wordcount }) => {
+  const { t } = useTranslation('common'); // 2. INITIALIZE THE HOOK
   console.log(date);
 
   const displayDate = date === "December 31, 9999" ? "Current" : date;
@@ -36,9 +38,8 @@ const BlogHeader = ({ date, wordcount }) => {
       <div className="d-flex justify-content-between align-items-center">
         <div>
           <small className="text">
-            {/* --- AND HERE --- */}
-            {/* Use the new variable to display the date */}
-            {displayDate} • {wordcount} words
+            {/* 3. USE THE 't' FUNCTION FOR TRANSLATION & PLURALIZATION */}
+            {displayDate} • {t('word_count', { count: wordcount })}
           </small>
         </div>
       </div>
@@ -52,7 +53,7 @@ const BlogTitle = ({ title }) => (
   </h2>
 );
 
-function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
+function SingleBlog({ date, text, title, language, type, blogid, wordcount, istranslated }) {
   const [paddingStyles, setPaddingStyles] = useState(calculateBlogPadding()); // Default for SSR
 
   useEffect(() => {

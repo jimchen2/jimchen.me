@@ -64,11 +64,15 @@
     }
   },
   "latest-comments-title": "Latest Comments:",
-  "see-all-comments-link": "See all comments...",  "previewCard": {
+  "see-all-comments-link": "See all comments...",
+  "previewCard": {
     "current": "In Progress",
     "wordCount_one": "{{count}} word",
     "wordCount_other": "{{count}} words"
-  }
-
-
+  },
+  "tags": {
+    "label": "Tags:",
+    "all": "All"
+  },
+  "word_count": "{{count}} 字"
 }

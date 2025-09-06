@@ -68,5 +68,10 @@
   "previewCard": {
     "current": "进行中",
     "wordCount": "{{count}} 字"
-  }
+  },
+  "tags": {
+    "label": "标签:",
+    "all": "全部"
+  },
+  "word_count": "{{count}} 字"
 }

@@ -70,6 +70,7 @@ export default function Blog({ blog, tags, error }) {
           blogid={blog.blogid}
           date={displayDate}
           wordcount={blog.word_count}
+          istranslated={blog.is_translated}
         />
         <Msg blogid={blog.blogid} blogname={blog.title} />
       </div>
@@ -100,7 +101,7 @@ export async function getServerSideProps(context) {
 
     // 3. Use the dynamic tableName in the query
     const query = `
-      SELECT blogid, tags, title, body, date, word_count, preview_image, preview_text
+      SELECT blogid, tags, title, body, date, is_translated, word_count, preview_image, preview_text
       FROM ${tableName}
       WHERE blogid = $1
     `;
