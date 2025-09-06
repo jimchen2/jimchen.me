@@ -92,5 +92,5 @@
     "reply": "Ответить",
     "replyingTo": "Ответ @{{user}}"
   },
-  "translation_disclaimer": "Этот пост в блоге был автоматически переведен Gemini-2.5-Flash-Lite."
+"translation_disclaimer": "Этот пост в блоге был автоматически переведен с помощью ИИ."
 }
