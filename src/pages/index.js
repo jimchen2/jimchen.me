@@ -3,13 +3,13 @@
 import React from "react";
 import axios from "axios";
 // NOTE: Use 'next/router' not 'next/navigation' for `locale` property
-import { useRouter } from "next/router"; 
+import { useRouter } from "next/router";
 import BlogPreviewPage from "@/blogpreview/BlogPreviewPage";
 import LanguagePreferencePopup from "../components/LanguagePreferencePopup"; // Adjust path if needed
 
 // --- I18N Imports ---
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 // ... (your getServerSideProps function remains the same)
 export async function getServerSideProps(context) {
@@ -35,17 +35,17 @@ export async function getServerSideProps(context) {
     if (locale && locale !== "x-default") {
       params.append("language", locale);
     }
-    
+
     const apiUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blogpreview?${params.toString()}`;
     const blogResponse = await axios.get(apiUrl);
     const data = blogResponse.data.data || [];
     const pagination = blogResponse.data.pagination || {};
     const postTypeArray = blogResponse.data.filters?.types || [];
-    
+
     if (pageNumber > 1 && pageNumber > pagination.totalPages) {
       // 5. Build locale-aware redirects correctly. 'x-default' will have no prefix.
-      const redirectPrefix = locale === 'x-default' ? '' : `/${locale}`;
-      let redirectUrl = redirectPrefix + '/'; // Assuming this is the root page
+      const redirectPrefix = locale === "x-default" ? "" : `/${locale}`;
+      let redirectUrl = redirectPrefix + "/"; // Assuming this is the root page
       const queryParams = new URLSearchParams();
       if (type) queryParams.set("type", type);
       if (sort) queryParams.set("sort", sort);
@@ -66,7 +66,7 @@ export async function getServerSideProps(context) {
     return {
       props: {
         // 6. Use the `locale` variable from context.
-        ...(await serverSideTranslations(locale, ['common'])),
+        ...(await serverSideTranslations(locale, ["common"])),
         data,
         pagination: {
           ...pagination,
@@ -82,7 +82,7 @@ export async function getServerSideProps(context) {
     console.error("Error in getServerSideProps:", err);
     return {
       props: {
-        ...(await serverSideTranslations(locale, ['common'])),
+        ...(await serverSideTranslations(locale, ["common"])),
         data: [],
         pagination: {},
         type: type || null,
@@ -95,27 +95,19 @@ export async function getServerSideProps(context) {
   }
 }
 
-
 function BlogPage({ data, pagination, type, postTypeArray, sort, searchterm }) {
   const router = useRouter();
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("common");
 
   if (router.isFallback) {
-    return <div>{t('loading')}</div>;
+    return <div>{t("loading")}</div>;
   }
 
   return (
     <>
       {/* This component will manage its own visibility */}
-      <LanguagePreferencePopup /> 
-      <BlogPreviewPage 
-        currentType={type} 
-        data={data} 
-        pagination={pagination} 
-        postTypeArray={postTypeArray} 
-        currentSort={sort} 
-        searchTerm={searchterm} 
-      />
+      <LanguagePreferencePopup />
+      <BlogPreviewPage currentType={type} data={data} pagination={pagination} postTypeArray={postTypeArray} currentSort={sort} searchTerm={searchterm} />
     </>
   );
 }

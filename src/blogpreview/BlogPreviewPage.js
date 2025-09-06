@@ -90,7 +90,7 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
           ) : (
             <div style={{ textAlign: "center", margin: "5rem 0" }}>No results found.</div>
           )}
-          {pagination && pagination.totalPages > 1 && <Pagination currentPage={pagination.currentPage} totalPages={totalPages} />}
+          {pagination && pagination.totalPages > 1 && <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />}
         </div>
 
         {!isMobile && (
