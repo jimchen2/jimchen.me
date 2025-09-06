@@ -64,5 +64,11 @@
     }
   },
   "latest-comments-title": "Последние комментарии:",
-  "see-all-comments-link": "Посмотреть все комментарии..."
+  "see-all-comments-link": "Посмотреть все комментарии...",
+  "previewCard": {
+    "current": "В процессе",
+    "wordCount_one": "{{count}} слово",
+    "wordCount_few": "{{count}} слова",
+    "wordCount_many": "{{count}} слов"
+  }
 }

@@ -3,8 +3,10 @@
 import React from "react";
 import { Container, Card, Row, Col } from "react-bootstrap";
 import Link from "next/link";
+import { useTranslation } from "next-i18next"; // 1. Import the hook
 
 function PreviewCard(props) {
+  const { t } = useTranslation("common"); // 2. Initialize the hook
   const { searchTerm, date, blogid, previewimage, title, text, wordcount } =
     props;
 
@@ -22,10 +24,9 @@ function PreviewCard(props) {
     );
   };
 
-  // --- CHANGE IS HERE ---
-  // Create a variable to hold the date text.
-  // If the date is "Dec 31, 9999", display "Current", otherwise display the original date.
-  const displayDate = date === "Dec 31, 9999" ? "Current" : date;
+  // 3. Use the t function for the "Current" status
+  const displayDate =
+    date === "Dec 31, 9999" ? t("previewCard.current") : date;
 
   return (
     <Container fluid className="my-4" style={{ maxWidth: "100%" }}>
@@ -80,8 +81,6 @@ function PreviewCard(props) {
                           fontFamily: "'Arial', sans-serif",
                         }}
                       >
-                        {/* --- AND HERE --- */}
-                        {/* Use the new variable to display the date */}
                         {displayDate}
                       </span>
                       <div
@@ -90,7 +89,8 @@ function PreviewCard(props) {
                           fontSize: "0.8rem",
                         }}
                       >
-                        {wordcount} words
+                        {/* 4. Use the t function for word count and pluralization */}
+                        {t("previewCard.wordCount", { count: wordcount })}
                       </div>
                     </div>
                     <Link
@@ -120,10 +120,10 @@ function PreviewCard(props) {
                       fontStyle: "italic",
                       fontFamily: "'Open Sans', 'Roboto', sans-serif",
                       whiteSpace: "normal",
-                      overflowWrap: "anywhere", // More aggressive word-breaking
-                      wordBreak: "break-all", // Fallback for older browsers
-                      overflow: "hidden", // Prevent overflow
-                      textOverflow: "ellipsis", // Optional: truncate with ellipsis if needed
+                      overflowWrap: "anywhere",
+                      wordBreak: "break-all",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
                     }}
                   >
                     {getHighlightedText(text, searchTerm)}

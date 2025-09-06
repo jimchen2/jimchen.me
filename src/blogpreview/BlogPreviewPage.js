@@ -1,7 +1,10 @@
+// BlogPreviewPage.js
+
 import React, { useState, useEffect } from "react";
 import PreviewCard from "./PreviewCard.js";
 import Pagination from "@/blogpreview/Pagination.js";
 import OtherComponent from "./othercomponents/OtherComponent.js";
+import { useTranslation } from "next-i18next"; // Import the hook
 
 const useIsMobile = (breakpoint = 1000) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -14,9 +17,13 @@ const useIsMobile = (breakpoint = 1000) => {
   return isMobile;
 };
 
-// Accept 'searchTerm' as a new prop
 function BlogPreviewPage({ currentType, data, pagination, postTypeArray, currentSort, searchTerm }) {
+  // 1. Get both `t` (for translation) and `i18n` (for language)
+  const { t, i18n } = useTranslation("common");
   const isMobile = useIsMobile();
+
+  // 2. Determine the locale for date formatting, treating 'x-default' as 'en'
+  const dateLocale = i18n.language === 'x-default' ? 'en' : i18n.language;
 
   const containerStyle = {
     minHeight: "100vh",
@@ -25,7 +32,7 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
   const contentStyle = {
     display: "flex",
     flexDirection: isMobile ? "column" : "row",
-    padding: "1rem 20px", // Adjusted padding
+    padding: "1rem 20px",
   };
 
   const sidebarStyle = {
@@ -43,38 +50,55 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
   return (
     <div style={containerStyle}>
       <div style={contentStyle}>
-        {/* --- CHANGE 2: Reordered the elements --- */}
-        {/* The main content now comes FIRST in the JSX for desktop view */}
         <div style={mainContentStyle}>
           {data && data.length > 0 ? (
-            data.map((post, index) => (
-              <div key={index}>
-                <PreviewCard
-                  blogid={post.blogid}
-                  title={post.title}
-                  text={post.preview_text}
-                  date={post.date}
-                  tags={post.type}
-                  wordcount={post.word_count}
-                  previewimage={post.preview_image}
-                  searchTerm={searchTerm} // Pass searchTerm for highlighting
-                />
-              </div>
-            ))
+            data.map((post, index) => {
+              // 3. Handle all date formatting logic right here
+              let displayDate;
+              if (post.date === "Dec 31, 9999") {
+                displayDate = t("previewCard.current"); // Use translation for "In Progress"
+              } else if (post.date) {
+                try {
+                  // Format the date using the determined locale
+                  displayDate = new Intl.DateTimeFormat(dateLocale, {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  }).format(new Date(post.date));
+                } catch (error) {
+                  displayDate = post.date; // Fallback to original string on error
+                }
+              } else {
+                displayDate = ""; // Or handle as needed if date is missing
+              }
+
+              return (
+                <div key={index}>
+                  <PreviewCard
+                    blogid={post.blogid}
+                    title={post.title}
+                    text={post.preview_text}
+                    date={displayDate} // 4. Pass the final, formatted string
+                    tags={post.type}
+                    wordcount={post.word_count}
+                    previewimage={post.preview_image}
+                    searchTerm={searchTerm}
+                  />
+                </div>
+              );
+            })
           ) : (
             <div style={{ textAlign: "center", margin: "5rem 0" }}>No results found.</div>
           )}
-          {pagination && pagination.totalPages > 1 && <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />}
+          {pagination && pagination.totalPages > 1 && <Pagination currentPage={pagination.currentPage} totalPages={totalPages} />}
         </div>
 
-        {/* The sidebar now comes SECOND, so it appears on the right */}
         {!isMobile && (
           <div style={sidebarStyle}>
             <OtherComponent currentType={currentType} postTypeArray={postTypeArray} currentSort={currentSort} isSidebar={true} />
           </div>
         )}
 
-        {/* The mobile layout remains unchanged, appearing at the bottom */}
         {isMobile && postTypeArray && postTypeArray.length > 0 && <OtherComponent currentType={currentType} postTypeArray={postTypeArray} currentSort={currentSort} isSidebar={false} />}
       </div>
     </div>

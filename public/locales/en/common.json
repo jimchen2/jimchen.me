@@ -64,6 +64,11 @@
     }
   },
   "latest-comments-title": "Latest Comments:",
-  "see-all-comments-link": "See all comments..."
+  "see-all-comments-link": "See all comments...",  "previewCard": {
+    "current": "In Progress",
+    "wordCount_one": "{{count}} word",
+    "wordCount_other": "{{count}} words"
+  }
+
 
 }

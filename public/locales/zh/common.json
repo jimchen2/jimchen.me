@@ -64,5 +64,9 @@
     }
   },
   "latest-comments-title": "最新评论:",
-  "see-all-comments-link": "查看所有评论..."
+  "see-all-comments-link": "查看所有评论...",
+  "previewCard": {
+    "current": "进行中",
+    "wordCount": "{{count}} 字"
+  }
 }

@@ -5,7 +5,7 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <meta charset="UTF-8" />
+          <meta charSet="UTF-8" />
           <meta name="author" content="Jim Chen" />
           <meta name="robots" content="index, follow" />
           <link rel="icon" type="image/x-icon" href="/favicon.ico" />
