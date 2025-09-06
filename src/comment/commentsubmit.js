@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { Button, Form, Card } from "react-bootstrap";
 import { useComments } from "./commentscontext";
 import axios from "axios";
+import { useTranslation } from 'next-i18next'; // 1. Import the hook
 
+// This function doesn't need translation as it's pure logic
 async function SubmitComment({ parentid, username, message, blogid, blogname }) {
   const name = username || "anonymous";
   const uuid = [...Array(32)].map(() => Math.floor(Math.random() * 16).toString(16)).join("");
@@ -14,7 +16,7 @@ async function SubmitComment({ parentid, username, message, blogid, blogname }) 
       blog: blogid,
       uuid: uuid,
       blogname: blogname,
-      parentid: parentid !== "-1" ? parentid : null, // Include parentid in the initial POST
+      parentid: parentid !== "-1" ? parentid : null,
     });
 
     console.log("Comment created:", commentResponse.data);
@@ -25,8 +27,9 @@ async function SubmitComment({ parentid, username, message, blogid, blogname }) 
   }
 }
 
+
 function CommentInputBox({ commentuuid, blogid, blogname }) {
-  console.log("OIDJFPOIDJF", blogname);
+  const { t } = useTranslation('common'); // 2. Initialize the hook
   const { triggerUpdate } = useComments();
 
   const [username, setUsername] = useState("");
@@ -64,14 +67,8 @@ function CommentInputBox({ commentuuid, blogid, blogname }) {
     transition: "background-color 0.3s",
   };
 
-  // Separate styles for each input
-  const usernameInputStyle = {
-    ...focusStyleUsername,
-  };
-
-  const messageInputStyle = {
-    ...focusStyleMessage,
-  };
+  const usernameInputStyle = { ...focusStyleUsername };
+  const messageInputStyle = { ...focusStyleMessage };
 
   return (
     <div style={{ marginTop: "0" }}>
@@ -80,19 +77,21 @@ function CommentInputBox({ commentuuid, blogid, blogname }) {
           <div style={{ fontFamily: "'Roboto', sans-serif" }}>
             <Form onSubmit={handleSubmitReply}>
               <Form.Group className="mb-3">
-                <Form.Label>Name (Optional)</Form.Label>
+                {/* 3. Replace hardcoded text with t() function */}
+                <Form.Label>{t('commentBox.nameLabel')}</Form.Label>
                 <Form.Control
                   className="custom-placeholder"
                   style={usernameInputStyle}
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Guest"
+                  placeholder={t('commentBox.namePlaceholder')}
                   onBlur={() => handleBlur(setFocusStyleUsername)}
                 />
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Label>Message</Form.Label>
+                {/* 3. Replace hardcoded text with t() function */}
+                <Form.Label>{t('commentBox.messageLabel')}</Form.Label>
                 <Form.Control
                   className="custom-placeholder"
                   style={messageInputStyle}
@@ -100,13 +99,14 @@ function CommentInputBox({ commentuuid, blogid, blogname }) {
                   rows={3}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Input your message here"
+                  placeholder={t('commentBox.messagePlaceholder')}
                   required
                   onBlur={() => handleBlur(setFocusStyleMessage)}
                 />
               </Form.Group>
               <Button variant="outline-primary" style={submitButtonStyle} type="submit">
-                Comment
+                {/* 3. Replace hardcoded text with t() function */}
+                {t('commentBox.submitButton')}
               </Button>
             </Form>
           </div>

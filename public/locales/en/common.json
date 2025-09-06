@@ -74,5 +74,12 @@
     "label": "Tags:",
     "all": "All"
   },
-  "word_count": "{{count}} 字"
+  "word_count": "{{count}} 字",
+    "commentBox": {
+    "nameLabel": "Name (Optional)",
+    "namePlaceholder": "Guest",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Input your message here",
+    "submitButton": "Comment"
+  }
 }

@@ -78,5 +78,12 @@
   },
   "word_count_one": "{{count}} слово",
   "word_count_few": "{{count}} слова",
-  "word_count_many": "{{count}} слов"
+  "word_count_many": "{{count}} слов",
+  "commentBox": {
+    "nameLabel": "Имя (необязательно)",
+    "namePlaceholder": "Гость",
+    "messageLabel": "Сообщение",
+    "messagePlaceholder": "Введите ваше сообщение здесь",
+    "submitButton": "Комментировать"
+  }
 }

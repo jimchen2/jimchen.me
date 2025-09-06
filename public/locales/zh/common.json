@@ -73,5 +73,12 @@
     "label": "标签:",
     "all": "全部"
   },
-  "word_count": "{{count}} 字"
+  "word_count": "{{count}} 字",
+  "commentBox": {
+    "nameLabel": "名称（可选）",
+    "namePlaceholder": "访客",
+    "messageLabel": "消息",
+    "messagePlaceholder": "在此输入您的消息",
+    "submitButton": "评论"
+  }
 }
