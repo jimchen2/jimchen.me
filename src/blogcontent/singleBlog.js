@@ -54,6 +54,10 @@ const BlogTitle = ({ title }) => (
 );
 
 function SingleBlog({ date, text, title, language, type, blogid, wordcount, istranslated }) {
+  console.log(istranslated)
+  console.log(istranslated)
+  console.log(istranslated)
+  console.log(istranslated)
   const [paddingStyles, setPaddingStyles] = useState(calculateBlogPadding()); // Default for SSR
 
   useEffect(() => {

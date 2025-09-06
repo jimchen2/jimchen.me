@@ -74,7 +74,8 @@
     "label": "Tags:",
     "all": "All"
   },
-  "word_count": "{{count}} 字",
+  "word_count": "{{count}} word",
+  "word_count_plural": "{{count}} words",
   "commentBox": {
     "nameLabel": "Name (Optional)",
     "namePlaceholder": "Guest",
@@ -86,6 +87,6 @@
     "like": "Like",
     "liked": "Liked",
     "reply": "Reply",
-        "replyingTo": "Replying to @{{user}}"
+    "replyingTo": "Replying to @{{user}}"
   }
 }
