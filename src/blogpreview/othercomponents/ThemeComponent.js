@@ -1,12 +1,15 @@
 import React from "react";
+import { useTranslation } from 'next-i18next'; // 1. Import the hook
 import { useGlobalColorScheme } from "@/lib/config"; // Ensure this path is correct for your project
 
 const ThemeComponent = () => {
+  const { t } = useTranslation('common'); // 2. Initialize the hook
   const { themeMode, toggleThemeMode, isHydrated } = useGlobalColorScheme();
 
+  // 3. Define theme options inside the component to use the `t` function
   const themeOptions = [
-    { value: "light", label: "Light" },
-    { value: "dark", label: "Dark" },
+    { value: "light", label: t('theme.light') },
+    { value: "dark", label: t('theme.dark') },
   ];
 
   const handleThemeClick = (selectedMode) => {
@@ -33,7 +36,8 @@ const ThemeComponent = () => {
         lineHeight: "1.5",
       }}
     >
-      <span style={{ marginRight: "0.25rem", fontWeight: "bold" }}>Theme:</span>
+      {/* 4. Translate the "Theme:" label */}
+      <span style={{ marginRight: "0.25rem", fontWeight: "bold" }}>{t('theme.label')}</span>
       {isHydrated ? (
         themeOptions.map((option, index) => (
           <React.Fragment key={option.value}>
@@ -46,14 +50,16 @@ const ThemeComponent = () => {
               role="button"
               tabIndex={0}
               aria-selected={themeMode === option.value}
-              aria-label={`Set theme to ${option.label}`}
+              // 5. Translate the aria-label using interpolation
+              aria-label={t('theme.ariaLabel', { label: option.label })}
             >
               {option.label}
             </span>
           </React.Fragment>
         ))
       ) : (
-        <span style={{ fontStyle: "italic", marginLeft: "0.25rem" }}>Loading...</span>
+        // 6. Translate the "Loading..." fallback text
+        <span style={{ fontStyle: "italic", marginLeft: "0.25rem" }}>{t('loading')}</span>
       )}
     </div>
   );

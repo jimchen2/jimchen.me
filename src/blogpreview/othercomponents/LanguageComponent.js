@@ -1,47 +1,30 @@
 // components/LanguageComponent.js
 
-import React, { useState, useEffect } from "react";
-import Cookies from "js-cookie"; // Import the cookie library
+import React from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { useTranslation } from 'next-i18next'; // Import the translation hook
 
 const LanguageComponent = () => {
-  // 1. Added "Original" to the list of languages.
+  const { t } = useTranslation('common'); // Initialize the hook
+  const router = useRouter();
+  // `locale` will now be 'x-default', 'en', 'zh', or 'ru'
+  const { pathname, query, asPath, locale: activeLocale } = router;
+
+  // --- KEY CHANGE ---
+  // The labels are now dynamically loaded using the t() function.
   const languages = [
-    { code: "original", label: "Original" },
-    { code: "zh", label: "中文" },
-    { code: "en", label: "English" },
-    { code: "ru", label: "Русский" },
+    { code: "x-default", label: t('languages.original') },
+    { code: "en", label: t('languages.english') },
+    { code: "zh", label: t('languages.chinese') },
+    { code: "ru", label: t('languages.russian') },
   ];
 
-  // 2. State to hold the active language. Default to 'original' if no cookie is found.
-  const [activeLang, setActiveLang] = useState("original");
-
-  // On component mount, read the language from the cookie.
-  useEffect(() => {
-    const savedLang = Cookies.get("language");
-    if (savedLang && languages.some((lang) => lang.code === savedLang)) {
-      setActiveLang(savedLang);
-    }
-  }, []); // The empty dependency array ensures this runs only once on mount.
-
-  const handleLanguageSelect = (langCode) => {
-    // If the selected language is already active, do nothing.
-    if (activeLang === langCode) {
-      return;
-    }
-
-    // Set the cookie. It will expire in 365 days.
-    Cookies.set("language", langCode, { expires: 365 });
-
-    // Reload the page to apply the language change site-wide.
-    window.location.reload();
-  };
-
-  // --- STYLING ---
+  // --- STYLING (Unchanged) ---
   const containerStyle = {
     padding: "1rem",
     paddingBottom: "0.5rem",
   };
-
   const listStyle = {
     display: "flex",
     flexDirection: "row",
@@ -49,35 +32,36 @@ const LanguageComponent = () => {
     gap: "0.2rem 0.5rem",
     alignItems: "center",
   };
-
-  const itemStyle = (isSelected) => ({
+  const linkStyle = (isSelected) => ({
     fontWeight: isSelected ? "bold" : "normal",
     cursor: "pointer",
     fontSize: "0.9rem",
     lineHeight: "1.5",
     transition: "color 0.2s",
+    textDecoration: 'none',
+    color: 'inherit',
   });
 
   return (
     <div style={containerStyle}>
-      <span style={{ display: "block", marginBottom: "0.5rem", fontWeight: "bold" }}>Language:</span>
+      {/* Use the t function for the main label */}
+      <span style={{ display: "block", marginBottom: "0.5rem", fontWeight: "bold" }}>
+        {t('languages.label')}
+      </span>
       <div style={listStyle}>
         {languages.map((lang, index) => (
           <React.Fragment key={lang.code}>
-            <span
-              style={itemStyle(activeLang === lang.code)}
-              onClick={() => handleLanguageSelect(lang.code)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") handleLanguageSelect(lang.code);
-              }}
-              role="button"
-              tabIndex={0}
-              aria-selected={activeLang === lang.code}
-              aria-label={`Set language to ${lang.label}`}
+            <Link
+              href={{ pathname, query }} // The page we are on
+              as={asPath}                 // The exact URL path with query params
+              locale={lang.code}          // The new locale to switch to
+              legacyBehavior
             >
-              {lang.label}
-            </span>
-            {/* Add a separator between items */}
+              <a style={linkStyle(activeLocale === lang.code)}>
+                {lang.label}
+              </a>
+            </Link>
+            
             {index < languages.length - 1 && <span aria-hidden="true">/</span>}
           </React.Fragment>
         ))}

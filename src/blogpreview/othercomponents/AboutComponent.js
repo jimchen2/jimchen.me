@@ -2,35 +2,37 @@
 
 import React from "react";
 import Link from "next/link";
+import { useTranslation } from 'next-i18next';
 import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope, FaGoodreads, FaYoutube, FaWhatsapp } from "react-icons/fa";
 import { SiInternetarchive, SiOpenstreetmap, SiTampermonkey, SiHuggingface, SiBitwarden } from "react-icons/si";
 
-// 2 profile links for the top section
-const profileLinks = [
-  { href: "https://github.com/jimchen2", Icon: FaGithub, alt: "GitHub Profile", name: "GitHub" },
-  { href: "https://www.linkedin.com/in/jim-chen-588002255/", Icon: FaLinkedin, alt: "LinkedIn Profile (CV)", name: "LinkedIn" },
-  { href: "https://www.youtube.com/@jimchen4214", Icon: FaYoutube, alt: "YouTube Channel", name: "YouTube" },
-];
-
-// 4 social media/communication links for the middle section
-const socialLinks = [
-  { href: "mailto:jimchen4214@gmail.com", Icon: FaEnvelope, alt: "Email", name: "Email" },
-  { href: "https://t.me/Jimchen4214", Icon: FaTelegram, alt: "Telegram", name: "Telegram" },
-  { href: "https://wa.me/qr/7DODSHY3VJN3K1", Icon: FaWhatsapp, alt: "WhatsApp", name: "WhatsApp" },
-  { href: "https://jimchen.me/weixin.jpg", Icon: FaWeixin, alt: "WeChat", name: "WeChat" },
-];
-
-// 5 utility links for the bottom section
-const utilityLinks = [
-  { href: "https://archive.org/details/@j_c561", Icon: SiInternetarchive, alt: "Internet Archive", name: "Internet Archive" },
-  { href: "https://umap.openstreetmap.fr/en/user/jimchen2/", Icon: SiOpenstreetmap, alt: "Umap", name: "Umap" },
-  { href: "https://greasyfork.org/en/users/1430831-jimchen2", Icon: SiTampermonkey, alt: "Greasy Fork", name: "Greasy Fork" },
-  { href: "https://huggingface.co/jimchen2", Icon: SiHuggingface, alt: "Hugging Face Profile", name: "Hugging Face" },
-  { href: "https://www.goodreads.com/user/show/154371677-jim-chen", Icon: FaGoodreads, alt: "Goodreads Profile", name: "Goodreads" },
-  { href: "https://bitwarden.com/", Icon: SiBitwarden, alt: "Bitwarden Password Manager", name: "Bitwarden" },
-];
 
 function AboutComponent() {
+  const { t } = useTranslation('common');
+
+  // Define links inside the component to access the 't' function
+  const profileLinks = [
+    { href: "https://github.com/jimchen2", Icon: FaGithub, alt: t('about.profile.github_alt'), name: t('about.linkNames.github') },
+    { href: "https://www.linkedin.com/in/jim-chen-588002255/", Icon: FaLinkedin, alt: t('about.profile.linkedin_alt'), name: t('about.linkNames.linkedin') },
+    { href: "https://www.youtube.com/@jimchen4214", Icon: FaYoutube, alt: t('about.profile.youtube_alt'), name: t('about.linkNames.youtube') },
+  ];
+
+  const socialLinks = [
+    { href: "mailto:jimchen4214@gmail.com", Icon: FaEnvelope, alt: t('about.contact.email_alt'), name: t('about.linkNames.email') },
+    { href: "https://t.me/Jimchen4214", Icon: FaTelegram, alt: t('about.contact.telegram_alt'), name: t('about.linkNames.telegram') },
+    { href: "https://wa.me/qr/7DODSHY3VJN3K1", Icon: FaWhatsapp, alt: t('about.contact.whatsapp_alt'), name: t('about.linkNames.whatsapp') },
+    { href: "https://jimchen.me/weixin.jpg", Icon: FaWeixin, alt: t('about.contact.wechat_alt'), name: t('about.linkNames.wechat') },
+  ];
+
+  const utilityLinks = [
+    { href: "https://archive.org/details/@j_c561", Icon: SiInternetarchive, alt: t('about.utility.archive_alt'), name: t('about.linkNames.archive') },
+    { href: "https://umap.openstreetmap.fr/en/user/jimchen2/", Icon: SiOpenstreetmap, alt: t('about.utility.umap_alt'), name: t('about.linkNames.umap') },
+    { href: "https://greasyfork.org/en/users/1430831-jimchen2", Icon: SiTampermonkey, alt: t('about.utility.greasyfork_alt'), name: t('about.linkNames.greasyfork') },
+    { href: "https://huggingface.co/jimchen2", Icon: SiHuggingface, alt: t('about.utility.huggingface_alt'), name: t('about.linkNames.huggingface') },
+    { href: "https://www.goodreads.com/user/show/154371677-jim-chen", Icon: FaGoodreads, alt: t('about.utility.goodreads_alt'), name: t('about.linkNames.goodreads') },
+    { href: "https://bitwarden.com/", Icon: SiBitwarden, alt: t('about.utility.bitwarden_alt'), name: t('about.linkNames.bitwarden') },
+  ];
+
   const renderLinkSection = (title, links) => (
     <div style={{ marginBottom: "2rem", width: "100%" }}>
       <h3 style={{ fontSize: "1rem", fontWeight: "bold", paddingLeft: "1rem", marginBottom: "0.5rem" }}>{title}</h3>
@@ -100,9 +102,9 @@ function AboutComponent() {
 
   return (
     <div style={{ fontFamily: "Ubuntu, sans-serif", paddingTop: "1rem" }}>
-      {renderLinkSection("Profile", profileLinks)}
-      {renderLinkSection("Contact", socialLinks)}
-      {renderLinkSection("Utility Links", utilityLinks)}
+      {renderLinkSection(t('about.profile.title'), profileLinks)}
+      {renderLinkSection(t('about.contact.title'), socialLinks)}
+      {renderLinkSection(t('about.utility.title'), utilityLinks)}
     </div>
   );
 }

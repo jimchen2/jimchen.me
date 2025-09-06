@@ -1,0 +1,68 @@
+{
+  "loading": "Загрузка...",
+  "blog-title": "Блог Дима Чена",
+  "search-placeholder": "Поиск статей...",
+  "search-button": "Поиск",
+  "sort": {
+    "label": "Сортировать:",
+    "newest": "Новые",
+    "oldest": "Старые",
+    "most_words": "Больше слов",
+    "least_words": "Меньше слов",
+    "ariaLabel": "Сортировать по {{label}}"
+  },
+  "theme": {
+    "label": "Тема:",
+    "light": "Светлая",
+    "dark": "Тёмная",
+    "ariaLabel": "Установить тему {{label}}"
+  },
+  "languages": {
+    "label": "Язык:",
+    "original": "Оригинал",
+    "english": "English",
+    "chinese": "中文",
+    "russian": "Русский"
+  },
+  "about": {
+    "profile": {
+      "title": "Профиль",
+      "github_alt": "Профиль на GitHub",
+      "linkedin_alt": "Профиль LinkedIn (резюме)",
+      "youtube_alt": "Канал на YouTube"
+    },
+    "contact": {
+      "title": "Контакты",
+      "email_alt": "Электронная почта",
+      "telegram_alt": "Telegram",
+      "whatsapp_alt": "WhatsApp",
+      "wechat_alt": "WeChat"
+    },
+    "utility": {
+      "title": "Полезные ссылки",
+      "archive_alt": "Интернет-архив",
+      "umap_alt": "Umap",
+      "greasyfork_alt": "Greasy Fork",
+      "huggingface_alt": "Профиль на Hugging Face",
+      "goodreads_alt": "Профиль на Goodreads",
+      "bitwarden_alt": "Менеджер паролей Bitwarden"
+    },
+    "linkNames": {
+      "github": "GitHub",
+      "linkedin": "LinkedIn",
+      "youtube": "YouTube",
+      "email": "Почта",
+      "telegram": "Telegram",
+      "whatsapp": "WhatsApp",
+      "wechat": "WeChat",
+      "archive": "Интернет-архив",
+      "umap": "Umap",
+      "greasyfork": "Greasy Fork",
+      "huggingface": "Hugging Face",
+      "goodreads": "Goodreads",
+      "bitwarden": "Bitwarden"
+    }
+  },
+  "latest-comments-title": "Последние комментарии:",
+  "see-all-comments-link": "Посмотреть все комментарии..."
+}

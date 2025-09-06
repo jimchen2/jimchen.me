@@ -1,9 +1,15 @@
+// components/SearchComponent.jsx
 "use client";
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useTranslation } from "next-i18next"; // <-- Import the hook
 
 function SearchComponent() {
+  // Use the hook to get the 't' (translate) function
+  // We'll assume the search text is in a 'common' namespace
+  const { t } = useTranslation('common'); 
+
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
   const pathname = usePathname();
@@ -22,6 +28,10 @@ function SearchComponent() {
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     const trimmedSearchTerm = searchTerm.trim();
+    
+    // The router hooks from `next/navigation` are locale-aware.
+    // `pathname` already includes the locale prefix (e.g., /en/search).
+    // So this logic correctly preserves the locale.
     const newParams = new URLSearchParams(searchParams.toString());
 
     if (trimmedSearchTerm) {
@@ -35,8 +45,15 @@ function SearchComponent() {
   return (
     <div className="search-wrapper" style={{ marginLeft: "5%", marginBottom: "5%", marginTop: "5%" }}>
       <form onSubmit={handleSearchSubmit}>
-        <input ref={searchInputRef} type="search" placeholder="Search articles..." value={searchTerm} onChange={handleSearchChange} />
-        <button type="submit">Search</button>
+        {/* Use the 't' function for placeholder and button text */}
+        <input 
+          ref={searchInputRef} 
+          type="search" 
+          placeholder={t('search-placeholder')} 
+          value={searchTerm} 
+          onChange={handleSearchChange} 
+        />
+        <button type="submit">{t('search-button')}</button>
       </form>
 
       <style jsx>{`

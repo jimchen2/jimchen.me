@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
-import { Container, Navbar, Nav } from "react-bootstrap";
+import { Container, Navbar } from "react-bootstrap";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
@@ -11,6 +11,9 @@ import {
   useGlobalColorScheme,
   setIpAddress,
 } from "../lib/config.js";
+// --> 1. Add these imports for i18n
+import { useTranslation } from 'next-i18next';
+import { appWithTranslation } from 'next-i18next';
 
 // --- Helper function to fetch IP (Unchanged) ---
 const fetchIpInfo = async () => {
@@ -26,7 +29,10 @@ const fetchIpInfo = async () => {
 
 // --- Combined Layout Component ---
 function Layout({ children }) {
-  const { themeMode, isHydrated } = useGlobalColorScheme();
+  const { themeMode } = useGlobalColorScheme();
+  // --> 2. Use the translation hook
+  const { t } = useTranslation('common');
+
   const layoutStyle = {
     display: "flex",
     flexDirection: "column",
@@ -35,7 +41,7 @@ function Layout({ children }) {
 
   const mainContentStyle = {
     flex: "1",
-    paddingTop: "70px", // Matches navbar height
+    paddingTop: "70px",
   };
 
   return (
@@ -61,11 +67,13 @@ function Layout({ children }) {
               marginLeft: "15%",
             }}
           >
-            Jim Chen's Blog
+            {/* --> 3. Replace the static text with the t() function */}
+            {t('blog-title')}
           </Navbar.Brand>
         </Container>
       </Navbar>
 
+      {/* Global styles remain the same */}
       <style jsx global>{`
         body {
           transition: background-color 0.3s ease, color 0.3s ease;
@@ -73,11 +81,10 @@ function Layout({ children }) {
         .navbar-brand, .nav-link {
           transition: color 0.3s ease;
         }
-        /* Add scroll offset for sections with IDs */
         section[id], div[id] {
-          padding-top: 70px; /* Matches navbar height */
-          margin-top: -70px; /* Compensates for padding */
-          scroll-margin-top: 70px; /* Adjusts scroll target for modern browsers */
+          padding-top: 70px;
+          margin-top: -70px;
+          scroll-margin-top: 70px;
         }
       `}</style>
       <style jsx>{`
@@ -103,6 +110,9 @@ function Layout({ children }) {
 
 // --- Main App Component ---
 function MyApp({ Component, pageProps }) {
+  // --> 4. Use the translation hook here as well for the <Head> component
+  const { t } = useTranslation('common');
+
   useEffect(() => {
     fetchIpInfo();
   }, []);
@@ -110,7 +120,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <ColorSchemeProvider>
       <Head>
-        <title>Jim Chen's Blog</title>
+        <title>{t('blog-title')}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Layout>
@@ -120,4 +130,5 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-export default MyApp;
+// --> 6. Make sure your final export is wrapped with appWithTranslation
+export default appWithTranslation(MyApp);

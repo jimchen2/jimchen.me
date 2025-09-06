@@ -1,0 +1,68 @@
+{
+  "loading": "加载中...",
+  "blog-title": "陈加木的博客",
+  "search-placeholder": "搜索文章...",
+  "search-button": "搜索",
+  "sort": {
+    "label": "排序:",
+    "newest": "最新",
+    "oldest": "最旧",
+    "most_words": "字数最多",
+    "least_words": "字数最少",
+    "ariaLabel": "按 {{label}} 排序"
+  },
+  "theme": {
+    "label": "主题:",
+    "light": "浅色",
+    "dark": "深色",
+    "ariaLabel": "设置主题为 {{label}}"
+  },
+  "languages": {
+    "label": "语言:",
+    "original": "原文",
+    "english": "English",
+    "chinese": "中文",
+    "russian": "Русский"
+  },
+  "about": {
+    "profile": {
+      "title": "个人资料",
+      "github_alt": "GitHub 个人资料",
+      "linkedin_alt": "领英个人资料 (简历)",
+      "youtube_alt": "YouTube 频道"
+    },
+    "contact": {
+      "title": "联系方式",
+      "email_alt": "电子邮件",
+      "telegram_alt": "Telegram",
+      "whatsapp_alt": "WhatsApp",
+      "wechat_alt": "微信"
+    },
+    "utility": {
+      "title": "实用链接",
+      "archive_alt": "互联网档案馆",
+      "umap_alt": "Umap",
+      "greasyfork_alt": "Greasy Fork",
+      "huggingface_alt": "Hugging Face 个人资料",
+      "goodreads_alt": "Goodreads 个人资料",
+      "bitwarden_alt": "Bitwarden 密码管理器"
+    },
+    "linkNames": {
+      "github": "GitHub",
+      "linkedin": "领英",
+      "youtube": "YouTube",
+      "email": "邮箱",
+      "telegram": "Telegram",
+      "whatsapp": "WhatsApp",
+      "wechat": "微信",
+      "archive": "互联网档案馆",
+      "umap": "Umap",
+      "greasyfork": "Greasy Fork",
+      "huggingface": "Hugging Face",
+      "goodreads": "Goodreads",
+      "bitwarden": "Bitwarden"
+    }
+  },
+  "latest-comments-title": "最新评论:",
+  "see-all-comments-link": "查看所有评论..."
+}
