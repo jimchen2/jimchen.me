@@ -1,5 +1,3 @@
-Need to add i18n
-
 ## Schema
 
 ```
@@ -33,13 +31,3 @@ pg_dump --clean --no-owner -f neondb_dump.sql "postgres://........aws.neon.tech/
 createdb neondb_local_copy
 psql -d neondb_local_copy -f neondb_dump.sql
 ```
-
-
-
-
-Use i18n.
-Also in the website repo separate the blog fetching in the backend.
-Also, add a popup at page start with the locale to check which language user wants if there's no cookie.
-Also, blog's comments title should also match that title.
-Also, try to add ?tr=lang to the blog name in the preview menu instead of different fetching.
-Also add the disclaimers that the blog is translated by which LLM and add a link to the original language.
