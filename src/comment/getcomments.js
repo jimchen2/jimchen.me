@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CommentBox from "./commentbox";
 import { useComments } from "./commentscontext";
+import { useTranslation } from "next-i18next"; // 1. Import the hook
 
 const GetComments = ({ showName, blogid, paddl = 30, paddr = 30, limit }) => {
+  const { t } = useTranslation("common"); // 2. Initialize the hook
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,13 +15,11 @@ const GetComments = ({ showName, blogid, paddl = 30, paddr = 30, limit }) => {
     const getComments = async () => {
       setIsLoading(true);
       try {
-        // Build the request URL conditionally
         let apiUrl = `/api/comment/?blogid=${blogid}`;
         if (limit) {
           apiUrl += `&limit=${limit}`;
         }
-
-        const response = await axios.get(apiUrl); // Use the constructed URL
+        const response = await axios.get(apiUrl);
         setData(response.data);
       } catch (err) {
         setError(err);
@@ -28,10 +28,11 @@ const GetComments = ({ showName, blogid, paddl = 30, paddr = 30, limit }) => {
       }
     };
     getComments();
-  }, [blogid, updateTrigger, limit]); // Added limit to dependency array
+  }, [blogid, updateTrigger, limit]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  // 3. Translate the "Loading..." text
+  if (isLoading) return <div>{t("loading")}</div>;
+  if (error) return <div>Error: {error.message}</div>; // Per your request, this is not translated
 
   const renderComments = (comments, parentId, depth, parentUser = null) => {
     let result = [];
@@ -40,9 +41,9 @@ const GetComments = ({ showName, blogid, paddl = 30, paddr = 30, limit }) => {
     );
 
     for (let comment of currentComments) {
-      // Modify the comment text if it's a reply
+      // 3. Translate the "Replying to" text using interpolation
       const modifiedText = parentUser
-        ? `Replying to @${parentUser}\n${comment.text}`
+        ? `${t("comment.replyingTo", { user: parentUser })}\n${comment.text}`
         : comment.text;
 
       result.push(
@@ -58,7 +59,6 @@ const GetComments = ({ showName, blogid, paddl = 30, paddr = 30, limit }) => {
             showName={showName}
             embed={depth}
           />
-          {/* Pass the current comment's user to child comments */}
           {comment.pointer.map((childId) =>
             renderComments(comments, childId, depth + 1, comment.user)
           )}
@@ -69,13 +69,12 @@ const GetComments = ({ showName, blogid, paddl = 30, paddr = 30, limit }) => {
     return result;
   };
 
-  // Identify root comments and initiate recursive rendering
   const allPointers = data.flatMap((comment) => comment.pointer);
   const rootComments = data.filter(
     (comment) => !allPointers.includes(comment.uuid)
   );
   const renderedComments = rootComments.flatMap((comment) =>
-    renderComments(data, comment.uuid, 1, null) // Pass null as parentUser for root comments
+    renderComments(data, comment.uuid, 1, null)
   );
 
   return (

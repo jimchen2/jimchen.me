@@ -85,5 +85,11 @@
     "messageLabel": "Сообщение",
     "messagePlaceholder": "Введите ваше сообщение здесь",
     "submitButton": "Комментировать"
+  },
+  "comment": {
+    "like": "Нравится",
+    "liked": "Понравилось",
+    "reply": "Ответить",
+    "replyingTo": "Ответ @{{user}}"
   }
 }

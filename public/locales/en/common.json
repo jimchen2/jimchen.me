@@ -75,11 +75,17 @@
     "all": "All"
   },
   "word_count": "{{count}} 字",
-    "commentBox": {
+  "commentBox": {
     "nameLabel": "Name (Optional)",
     "namePlaceholder": "Guest",
     "messageLabel": "Message",
     "messagePlaceholder": "Input your message here",
     "submitButton": "Comment"
+  },
+  "comment": {
+    "like": "Like",
+    "liked": "Liked",
+    "reply": "Reply",
+        "replyingTo": "Replying to @{{user}}"
   }
 }

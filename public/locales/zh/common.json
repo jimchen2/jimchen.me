@@ -80,5 +80,11 @@
     "messageLabel": "消息",
     "messagePlaceholder": "在此输入您的消息",
     "submitButton": "评论"
+  },
+  "comment": {
+    "like": "赞",
+    "liked": "已赞",
+    "reply": "回复",
+    "replyingTo": "回复 @{{user}}"
   }
 }

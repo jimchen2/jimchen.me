@@ -67,7 +67,6 @@ function Layout({ children }) {
               marginLeft: "15%",
             }}
           >
-            {/* --> 3. Replace the static text with the t() function */}
             {t('blog-title')}
           </Navbar.Brand>
         </Container>
