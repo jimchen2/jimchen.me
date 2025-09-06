@@ -179,6 +179,7 @@ function CommentInputBox({ commentuuid, blogid, blogname }) {
 // --- Main Exported Component ---
 function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuuid, blogid, showName }) {
   const [showReply, setShowReply] = useState(false);
+  const { i18n } = useTranslation("common"); // Get the i18n instance
 
   const MAX_EMBED = 2;
   const ADJUST_FACTOR = 40;
@@ -196,13 +197,22 @@ function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuui
 
   const toggleReply = () => setShowReply(!showReply);
 
+  // Format the date based on the current locale
+  const dateLocale = i18n.language === 'x-default' ? 'en' : i18n.language;
+  const displayDate = new Intl.DateTimeFormat(dateLocale, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+  }).format(new Date(date));
+
+
   return (
     <Card className="mb-3" style={cardStyle}>
       <Card.Header style={headerStyle}>
         <Card.Title style={titleStyle}>{user}</Card.Title>
-        {showName && <Link href={`/a/${blogid}`}>{blogname}</Link>}
         <Card.Subtitle style={subtitleStyle}>
-          <span>{date}</span>
+          {/* Use the formatted date here */}
+          <span>{displayDate}</span>
         </Card.Subtitle>
       </Card.Header>
       <Card.Body>
