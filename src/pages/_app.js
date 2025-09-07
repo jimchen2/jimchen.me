@@ -123,7 +123,12 @@ function MyApp({ Component, pageProps }) {
     // 1. Check if a preference is saved in localStorage.
     // 2. Check if that preference is a valid, supported locale.
     // 3. Check that we are not already on the preferred locale (to prevent a redirect loop).
-    if (savedLocale && locales.includes(savedLocale) && locale !== savedLocale) {
+    if (
+      savedLocale &&
+      locales.includes(savedLocale) &&
+      locale !== savedLocale &&
+      pathname === "/" // <-- ADD THIS LINE
+    ) {
       // If all conditions are met, redirect to the same page but with the preferred locale.
       router.push({ pathname, query }, asPath, { locale: savedLocale });
     }

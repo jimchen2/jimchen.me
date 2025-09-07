@@ -1,4 +1,4 @@
-// Your pages/index.js or equivalent file
+// index.js
 
 import React from "react";
 import axios from "axios";
