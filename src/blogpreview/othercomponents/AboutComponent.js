@@ -3,15 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
-import {
-  FaGithub,
-  FaWeixin,
-  FaTelegram,
-  FaLinkedin,
-  FaEnvelope,
-  FaGoodreads,
-  FaYoutube,
-} from "react-icons/fa";
+import { FaGithub, FaWeixin, FaTelegram, FaLinkedin, FaEnvelope, FaGoodreads, FaYoutube } from "react-icons/fa";
 import { SiInternetarchive, SiTampermonkey } from "react-icons/si";
 
 function AboutComponent() {
@@ -43,12 +35,6 @@ function AboutComponent() {
       alt: t("about.contact.telegram_alt"),
       name: t("about.linkNames.telegram"),
     },
-    {
-      href: "https://jimchen.me/weixin.jpg",
-      Icon: FaWeixin,
-      alt: t("about.contact.wechat_alt"),
-      name: t("about.linkNames.wechat"),
-    },
   ];
 
   const utilityLinks = [
@@ -63,12 +49,6 @@ function AboutComponent() {
       Icon: SiInternetarchive,
       alt: t("about.utility.archive_alt"),
       name: t("about.linkNames.archive"),
-    },
-    {
-      href: "https://greasyfork.org/en/users/1430831-jimchen2",
-      Icon: SiTampermonkey,
-      alt: t("about.utility.greasyfork_alt"),
-      name: t("about.linkNames.greasyfork"),
     },
   ];
 
