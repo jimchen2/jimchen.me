@@ -20,7 +20,6 @@ function AboutComponent() {
   const socialLinks = [
     { href: "mailto:jimchen4214@gmail.com", Icon: FaEnvelope, alt: t('about.contact.email_alt'), name: t('about.linkNames.email') },
     { href: "https://t.me/Jimchen4214", Icon: FaTelegram, alt: t('about.contact.telegram_alt'), name: t('about.linkNames.telegram') },
-    { href: "https://wa.me/8615026814735", Icon: FaWhatsapp, alt: t('about.contact.whatsapp_alt'), name: t('about.linkNames.whatsapp') },
     { href: "https://jimchen.me/weixin.jpg", Icon: FaWeixin, alt: t('about.contact.wechat_alt'), name: t('about.linkNames.wechat') },
   ];
 
