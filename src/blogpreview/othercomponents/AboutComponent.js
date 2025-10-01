@@ -70,12 +70,6 @@ function AboutComponent() {
       alt: t("about.utility.greasyfork_alt"),
       name: t("about.linkNames.greasyfork"),
     },
-    {
-      href: "https://www.goodreads.com/user/show/154371677-jim-chen",
-      Icon: FaGoodreads,
-      alt: t("about.utility.goodreads_alt"),
-      name: t("about.linkNames.goodreads"),
-    },
   ];
 
   const renderLinkSection = (title, links) => (
