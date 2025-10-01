@@ -30,7 +30,6 @@ function AboutComponent() {
     { href: "https://greasyfork.org/en/users/1430831-jimchen2", Icon: SiTampermonkey, alt: t('about.utility.greasyfork_alt'), name: t('about.linkNames.greasyfork') },
     { href: "https://huggingface.co/jimchen2", Icon: SiHuggingface, alt: t('about.utility.huggingface_alt'), name: t('about.linkNames.huggingface') },
     { href: "https://www.goodreads.com/user/show/154371677-jim-chen", Icon: FaGoodreads, alt: t('about.utility.goodreads_alt'), name: t('about.linkNames.goodreads') },
-    { href: "https://bitwarden.com/", Icon: SiBitwarden, alt: t('about.utility.bitwarden_alt'), name: t('about.linkNames.bitwarden') },
   ];
 
   const renderLinkSection = (title, links) => (
