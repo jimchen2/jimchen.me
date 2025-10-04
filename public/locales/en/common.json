@@ -89,5 +89,20 @@
     "reply": "Reply",
     "replyingTo": "Replying to @{{user}}"
   },
-  "translation_disclaimer": "This blog post was automatically translated by AI."
+  "translation_disclaimer": "This blog post was automatically translated by AI.",
+  "portfolio": {
+    "title": "Personal Photos",
+    "photo1_alt": "Photo of Jim Chen",
+    "photo1_name": "Photo 1",
+    "photo2_alt": "Photo of Jim Chen",
+    "photo2_name": "Photo 2",
+    "photo3_alt": "Photo of Jim Chen",
+    "photo3_name": "Photo 3",
+    "photo4_alt": "Photo of Jim Chen",
+    "photo4_name": "Photo 4",
+    "photo5_alt": "Photo of Jim Chen",
+    "photo5_name": "Photo 5",
+    "photo6_alt": "Photo of Jim Chen",
+    "photo6_name": "Photo 6"
+  }
 }

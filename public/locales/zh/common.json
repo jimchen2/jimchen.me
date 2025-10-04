@@ -87,5 +87,20 @@
     "reply": "回复",
     "replyingTo": "回复 @{{user}}"
   },
-  "translation_disclaimer": "这篇博文由 AI 自动翻译。"
+  "translation_disclaimer": "这篇博文由 AI 自动翻译。",
+  "portfolio": {
+    "title": "个人照片",
+    "photo1_alt": "Jim Chen 的照片",
+    "photo1_name": "照片 1",
+    "photo2_alt": "Jim Chen 的照片",
+    "photo2_name": "照片 2",
+    "photo3_alt": "Jim Chen 的照片",
+    "photo3_name": "照片 3",
+    "photo4_alt": "Jim Chen 的照片",
+    "photo4_name": "照片 4",
+    "photo5_alt": "Jim Chen 的照片",
+    "photo5_name": "照片 5",
+    "photo6_alt": "Jim Chen 的照片",
+    "photo6_name": "照片 6"
+  }
 }
