@@ -7,6 +7,7 @@ import SortComponent from "./SortComponent";
 import SearchComponent from "./SearchComponent";
 import ThemeComponent from "./ThemeComponent"; // 1. Import the new ThemeComponent
 import LatestCommentComponent from "./LatestCommentComponent";
+import PortfolioComponent from "./PortfolioComponent";
 
 const OtherComponent = (props) => {
   return (
@@ -18,6 +19,7 @@ const OtherComponent = (props) => {
       <ThemeComponent />
 
       <AboutComponent />
+      <PortfolioComponent />
       <LatestCommentComponent />
     </div>
   );

@@ -26,9 +26,9 @@ function calculateBlogPadding(windowWidth = null) {
 }
 
 const BlogHeader = ({ date, wordcount }) => {
-  // --- CHANGE IS HERE ---
-  // If the date is "Dec 31, 9999", display "Current", otherwise display the original date.
-  const displayDate = date === "Dec 31, 9999" ? "Current" : date;
+  console.log(date);
+
+  const displayDate = date === "December 31, 9999" ? "Current" : date;
 
   return (
     <div className="blog-header mb-3">
