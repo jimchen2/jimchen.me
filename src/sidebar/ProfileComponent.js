@@ -2,12 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import {
-  FaGithub,
-  FaTelegram,
-  FaLinkedin,
-  FaEnvelope,
-} from "react-icons/fa";
+import { FaGithub, FaTelegram, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
 const socialLinks = [
   { href: "https://github.com/jimchen2", Icon: FaGithub, alt: "GitHub Profile" },

@@ -29,6 +29,24 @@ function AboutPage() {
     },
   ];
 
+  const techSetup = [
+    { name: "jimchen2/dconf-dump", url: "https://github.com/jimchen2/dconf-dump" },
+    { name: "jimchen2/jimchen.me", url: "https://github.com/jimchen2/jimchen.me" },
+    { name: "jimchen2/userscripts", url: "https://github.com/jimchen2/userscripts" },
+  ];
+
+  const globalInternet = [
+    { name: "Русский язык, медиа и культура", url: "https://jimchen.me/a/1580c8" },
+    { name: "German YouTubers", url: "https://jimchen.me/a/7d67cb" },
+    { name: "My Language Learning Journey", url: "https://jimchen.me/a/9bf4b4" },
+    { name: "My Guide to the Global Internet", url: "https://jimchen.me/a/19b074" },
+  ];
+
+  // --- NEW DATA ARRAY FOR YOUR LINK ---
+  const philosophy = [
+    { name: "My Personal Philosophy", url: "https://archive.org/details/my-personal-philosophy-2025" },
+  ];
+
   const linkStyle = {
     cursor: "pointer",
     fontSize: "0.9rem",
@@ -37,15 +55,23 @@ function AboutPage() {
     textDecoration: "underline",
   };
 
+  const sectionStyle = {
+    marginBottom: "2rem",
+  };
+
+  const h2Style = {
+    fontSize: "1.5rem",
+    fontWeight: "bold",
+    marginBottom: "1rem",
+  };
+
   return (
     <div style={{ fontFamily: "Ubuntu, sans-serif", padding: "2rem", maxWidth: "800px", margin: "0 auto" }}>
       <h1 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "2rem" }}>About Me</h1>
 
       {/* Portfolio Section */}
-      <div style={{ marginBottom: "2rem" }}>
-        <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "1rem" }}>Portfolio</h2>
-
-        {/* First photo with thumbnail */}
+      <div style={sectionStyle}>
+        <h2 style={h2Style}>Portfolio</h2>
         <div style={{ marginBottom: "1rem" }}>
           <a
             href={personalPhotos[0].src}
@@ -69,8 +95,6 @@ function AboutPage() {
             />
           </a>
         </div>
-
-        {/* All photos as links */}
         <div
           style={{
             display: "flex",
@@ -89,6 +113,48 @@ function AboutPage() {
             </React.Fragment>
           ))}
         </div>
+      </div>
+
+      {/* Tech Setup Section */}
+      <div style={sectionStyle}>
+        <h2 style={h2Style}>Tech Setup</h2>
+        <ul style={{ listStyle: "none", padding: 0 }}>
+          {techSetup.map((item, index) => (
+            <li key={index} style={{ marginBottom: "0.5rem" }}>
+              <a href={item.url} target="_blank" rel="noopener noreferrer" style={linkStyle}>
+                {item.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Global Internet Section */}
+      <div style={sectionStyle}>
+        <h2 style={h2Style}>Global Internet</h2>
+        <ul style={{ listStyle: "none", padding: 0 }}>
+          {globalInternet.map((item, index) => (
+            <li key={index} style={{ marginBottom: "0.5rem" }}>
+              <a href={item.url} target="_blank" rel="noopener noreferrer" style={linkStyle}>
+                {item.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* --- NEW SECTION FOR PHILOSOPHY --- */}
+      <div style={sectionStyle}>
+        <h2 style={h2Style}>Philosophy</h2>
+        <ul style={{ listStyle: "none", padding: 0 }}>
+          {philosophy.map((item, index) => (
+            <li key={index} style={{ marginBottom: "0.5rem" }}>
+              <a href={item.url} target="_blank" rel="noopener noreferrer" style={linkStyle}>
+                {item.name}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
