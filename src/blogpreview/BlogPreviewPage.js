@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PreviewCard from "./PreviewCard.js";
 import Pagination from "@/blogpreview/Pagination.js";
-import OtherComponent from "../sidebar/OtherComponent.js";
+import OtherComponent from "../sidebar/Sidebar.js";
 
 const useIsMobile = (breakpoint = 1000) => {
   const [isMobile, setIsMobile] = useState(false);
