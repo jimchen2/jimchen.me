@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PreviewCard from "./PreviewCard.js";
 import Pagination from "@/blogpreview/Pagination.js";
-import OtherComponent from "./othercomponents/OtherComponent.js";
+import OtherComponent from "../sidebar/OtherComponent.js";
 
 const useIsMobile = (breakpoint = 1000) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -14,7 +14,6 @@ const useIsMobile = (breakpoint = 1000) => {
   return isMobile;
 };
 
-// Accept 'searchTerm' as a new prop
 function BlogPreviewPage({ currentType, data, pagination, postTypeArray, currentSort, searchTerm }) {
   const isMobile = useIsMobile();
 
