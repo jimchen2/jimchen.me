@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PreviewCard from "./PreviewCard.js";
 import Pagination from "@/blogpreview/Pagination.js";
-import OtherComponent from "../sidebar/Sidebar.js";
+import SideBar from "../sidebar/sidebar.js";
 
 const useIsMobile = (breakpoint = 1000) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -69,12 +69,12 @@ function BlogPreviewPage({ currentType, data, pagination, postTypeArray, current
         {/* The sidebar now comes SECOND, so it appears on the right */}
         {!isMobile && (
           <div style={sidebarStyle}>
-            <OtherComponent currentType={currentType} postTypeArray={postTypeArray} currentSort={currentSort} isSidebar={true} />
+            <SideBar currentType={currentType} postTypeArray={postTypeArray} currentSort={currentSort} isSidebar={true} />
           </div>
         )}
 
         {/* The mobile layout remains unchanged, appearing at the bottom */}
-        {isMobile && postTypeArray && postTypeArray.length > 0 && <OtherComponent currentType={currentType} postTypeArray={postTypeArray} currentSort={currentSort} isSidebar={false} />}
+        {isMobile && postTypeArray && postTypeArray.length > 0 && <SideBar currentType={currentType} postTypeArray={postTypeArray} currentSort={currentSort} isSidebar={false} />}
       </div>
     </div>
   );
