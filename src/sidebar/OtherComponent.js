@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import SocialMediaComponent from "./ProfileComponent";
 import SearchComponent from "./SearchComponent";
 // Remove this import
 // import PortfolioComponent from "./PortfolioComponent";
@@ -54,7 +53,6 @@ const OtherComponent = () => {
         </Link>
       </div>
 
-      <SocialMediaComponent />
     </div>
   );
 };

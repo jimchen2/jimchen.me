@@ -1,4 +1,12 @@
 import React from "react";
+import { 
+  FaTelegram, 
+  FaYoutube, 
+  FaArchive, 
+  FaEnvelope, 
+  FaLinkedin, 
+  FaGithub 
+} from "react-icons/fa";
 
 function AboutPage() {
   const personalPhotos = [
@@ -42,9 +50,47 @@ function AboutPage() {
     { name: "My Guide to the Global Internet", url: "https://jimchen.me/a/19b074" },
   ];
 
-  // --- NEW DATA ARRAY FOR YOUR LINK ---
   const philosophy = [
     { name: "My Personal Philosophy", url: "https://archive.org/details/my-personal-philosophy-2025" },
+  ];
+
+  const socialLinks = [
+    { 
+      name: "Telegram", 
+      url: "https://t.me/Jimchen4214", 
+      icon: FaTelegram, 
+      color: "#0088cc" 
+    },
+    { 
+      name: "YouTube", 
+      url: "https://www.youtube.com/@jimchen4214", 
+      icon: FaYoutube, 
+      color: "#FF0000" 
+    },
+    { 
+      name: "Archive.org", 
+      url: "https://archive.org/details/@j_c561", 
+      icon: FaArchive, 
+      color: "#333333" 
+    },
+    { 
+      name: "Email", 
+      url: "mailto:jimchen4214@gmail.com", 
+      icon: FaEnvelope, 
+      color: "#EA4335" 
+    },
+    { 
+      name: "LinkedIn", 
+      url: "https://www.linkedin.com/in/jim-chen-588002255/", 
+      icon: FaLinkedin, 
+      color: "#0077B5" 
+    },
+    { 
+      name: "GitHub", 
+      url: "https://github.com/jimchen2", 
+      icon: FaGithub, 
+      color: "#333333" 
+    },
   ];
 
   const linkStyle = {
@@ -65,9 +111,59 @@ function AboutPage() {
     marginBottom: "1rem",
   };
 
+  const socialLinkStyle = {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "0.5rem",
+    padding: "0.5rem 1rem",
+    borderRadius: "5px",
+    textDecoration: "none",
+    color: "#333",
+    transition: "all 0.3s ease",
+    fontSize: "0.9rem",
+    border: "1px solid #e0e0e0",
+  };
+
   return (
     <div style={{ fontFamily: "Ubuntu, sans-serif", padding: "2rem", maxWidth: "800px", margin: "0 auto" }}>
       <h1 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "2rem" }}>About Me</h1>
+
+      {/* Social & Contact Section */}
+      <div style={sectionStyle}>
+        <h2 style={h2Style}>Social & Contact</h2>
+        <div style={{ 
+          display: "flex", 
+          flexWrap: "wrap", 
+          gap: "0.75rem",
+          marginBottom: "1rem" 
+        }}>
+          {socialLinks.map((link, index) => {
+            const Icon = link.icon;
+            return (
+              <a
+                key={index}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={socialLinkStyle}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = link.color;
+                  e.currentTarget.style.color = "#fff";
+                  e.currentTarget.style.borderColor = link.color;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "transparent";
+                  e.currentTarget.style.color = "#333";
+                  e.currentTarget.style.borderColor = "#e0e0e0";
+                }}
+              >
+                <Icon size={18} />
+                <span>{link.name}</span>
+              </a>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Portfolio Section */}
       <div style={sectionStyle}>
@@ -143,7 +239,7 @@ function AboutPage() {
         </ul>
       </div>
 
-      {/* --- NEW SECTION FOR PHILOSOPHY --- */}
+      {/* Philosophy Section */}
       <div style={sectionStyle}>
         <h2 style={h2Style}>Philosophy</h2>
         <ul style={{ listStyle: "none", padding: 0 }}>
