@@ -1,10 +1,12 @@
 import React from "react";
 
 function PortfolioComponent() {
-  // Define personal photo links
+  // --- UPDATED DATA ---
+  // Now includes a `thumbnailSrc` for the small, fast-loading image.
   const personalPhotos = [
     {
       src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/1.jpeg",
+      thumbnailSrc: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/146c34.jpeg", // <-- REPLACE THIS
       alt: "Personal photo 1",
     },
     {
@@ -50,12 +52,13 @@ function PortfolioComponent() {
         >
           Portfolio
         </h3>
-        
+
         {/* Container for the personal photos */}
         <div style={{ padding: "0 1rem" }}>
           {/* First photo with small thumbnail */}
           <div style={{ marginBottom: "0.5rem" }}>
             <a
+              // The link still points to the FULL-SIZE image
               href={personalPhotos[0].src}
               target="_blank"
               rel="noopener noreferrer"
@@ -65,8 +68,13 @@ function PortfolioComponent() {
               }}
             >
               <img
-                src={personalPhotos[0].src}
+                // ✅ *** THE FIX: Use the new thumbnail source for display ***
+                src={personalPhotos[0].thumbnailSrc}
                 alt={personalPhotos[0].alt}
+                loading="lazy"
+                // Best practice: add width/height to prevent layout shift
+                width="60"
+                height="60"
                 style={{
                   width: "60px",
                   height: "60px",
@@ -77,14 +85,16 @@ function PortfolioComponent() {
             </a>
           </div>
 
-          {/* All photos as inline links */}
-          <div style={{ 
-            display: "flex", 
-            flexWrap: "wrap", 
-            gap: "0.2rem 0.5rem",
-            fontSize: "0.9rem",
-            lineHeight: "1.5",
-          }}>
+          {/* All photos as inline links (this part remains the same) */}
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "0.2rem 0.5rem",
+              fontSize: "0.9rem",
+              lineHeight: "1.5",
+            }}
+          >
             {personalPhotos.map((photo, index) => (
               <React.Fragment key={index}>
                 <a
