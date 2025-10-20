@@ -1,10 +1,18 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
 import Link from "next/link";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { 
-  FaSearch, FaTags, FaComments, FaUser, 
-  FaTelegram, FaYoutube, FaArchive, 
-  FaEnvelope, FaLinkedin, FaGithub 
+import {
+  FaSearch,
+  FaTags,
+  FaComments,
+  FaUser,
+  FaTelegram,
+  FaYoutube,
+  FaArchive,
+  FaEnvelope,
+  FaLinkedin,
+  FaGithub,
+  FaClock,
 } from "react-icons/fa";
 import styles from "./sidebar.module.css"; // Import CSS module
 
@@ -22,9 +30,10 @@ const EXTERNAL_LINKS = [
 ];
 
 const NAV_ITEMS = [
+  { href: "/about", label: "About Me", icon: <FaUser /> },
   { href: "/tags", label: "All Tags", icon: <FaTags /> },
   { href: "/comments", label: "Comments", icon: <FaComments /> },
-  { href: "/about", label: "About Me", icon: <FaUser /> },
+  { href: "/clock", label: "Clock", icon: <FaClock /> },
 ];
 
 // Helper component for link sections to avoid repetition
@@ -39,7 +48,7 @@ const ConnectLinks = ({ title, links }) => (
           target="_blank"
           rel="noopener noreferrer"
           className={styles.connectLink}
-          style={{ '--hover-bg': color }} // CSS Custom Property for dynamic hover color
+          style={{ "--hover-bg": color }} // CSS Custom Property for dynamic hover color
           title={name}
           aria-label={`Visit ${name}`}
         >
@@ -64,22 +73,25 @@ const Sidebar = () => {
 
   const handleSearchChange = useCallback((e) => setSearchTerm(e.target.value), []);
 
-  const handleSearchSubmit = useCallback((event) => {
-    event.preventDefault();
-    const trimmedSearchTerm = searchTerm.trim();
-    const newParams = new URLSearchParams(searchParams.toString());
+  const handleSearchSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
+      const trimmedSearchTerm = searchTerm.trim();
+      const newParams = new URLSearchParams(searchParams.toString());
 
-    if (trimmedSearchTerm) {
-      newParams.set("searchterm", trimmedSearchTerm);
-    } else {
-      newParams.delete("searchterm");
-    }
+      if (trimmedSearchTerm) {
+        newParams.set("searchterm", trimmedSearchTerm);
+      } else {
+        newParams.delete("searchterm");
+      }
 
-    // Only push router if the search term has actually changed
-    if (newParams.get("searchterm") !== searchParams.get("searchterm")) {
+      // Only push router if the search term has actually changed
+      if (newParams.get("searchterm") !== searchParams.get("searchterm")) {
         router.push(`${pathname}?${newParams.toString()}`);
-    }
-  }, [searchTerm, searchParams, pathname, router]);
+      }
+    },
+    [searchTerm, searchParams, pathname, router]
+  );
 
   return (
     <aside className={styles.sidebar} role="complementary">
@@ -111,11 +123,11 @@ const Sidebar = () => {
           </Link>
         ))}
       </nav>
-      
+
       {/* Connect & Social Links */}
       <ConnectLinks title="Profile" links={EXTERNAL_LINKS} />
       <ConnectLinks title="Social Media" links={SOCIAL_MEDIA_LINKS} />
-      
+
       {/* Global styles can be moved to a global CSS file like _app.js or globals.css */}
     </aside>
   );
