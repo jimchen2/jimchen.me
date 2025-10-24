@@ -12,7 +12,6 @@ import {
   FaEnvelope,
   FaLinkedin,
   FaGithub,
-  FaClock,
 } from "react-icons/fa";
 import styles from "./sidebar.module.css"; // Import CSS module
 
@@ -33,7 +32,6 @@ const NAV_ITEMS = [
   { href: "/about", label: "About Me", icon: <FaUser /> },
   { href: "/tags", label: "All Tags", icon: <FaTags /> },
   { href: "/comments", label: "Comments", icon: <FaComments /> },
-  { href: "/clock", label: "Clock", icon: <FaClock /> },
 ];
 
 // Helper component for link sections to avoid repetition

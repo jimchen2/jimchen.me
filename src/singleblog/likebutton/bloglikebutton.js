@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import { getIpAddress } from "@/lib/config";
+import { getIpAddress } from "@/config/config";
 
 function BlogLikeButton({ blogid, like }) {
   const [likes, setLikes] = useState(like ? like.length : 0);

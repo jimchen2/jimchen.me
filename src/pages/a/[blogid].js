@@ -1,7 +1,7 @@
-import dbConnect from "@/lib/db/dbConnect";
+import dbConnect from "@/config/dbConnect";
 import React from "react";
 import Head from "next/head";
-import SingleBlog from "@/blogcontent/singleBlog";
+import SingleBlog from "@/singleblog/singleBlog";
 import Msg from "@/comment/leaveamessage";
 
 export default function Blog({ blog, type, error }) {
@@ -56,6 +56,7 @@ export default function Blog({ blog, type, error }) {
     </>
   );
 }
+Blog.showSidebar = false;
 
 export async function getServerSideProps(context) {
   const { blogid } = context.params;
