@@ -14,7 +14,7 @@ import {
   FaGithub,
 } from "react-icons/fa";
 import { SiOpenstreetmap, SiGoodreads } from "react-icons/si";
-import styles from "./sidebar.module.css"; // Import CSS module
+import styles from "./sidebar.module.css";
 
 const EXTERNAL_LINKS = [
   { name: "Email", url: "mailto:jimchen4214@gmail.com", icon: FaEnvelope, color: "#EA4335" },
@@ -39,7 +39,6 @@ const NAV_ITEMS = [
   { href: "/comments", label: "Comments", icon: <FaComments /> },
 ];
 
-// Helper component for link sections to avoid repetition
 const ConnectLinks = ({ title, links }) => (
   <div className={styles.connectSection}>
     <h6 className={styles.sectionTitle}>{title}</h6>
@@ -51,11 +50,11 @@ const ConnectLinks = ({ title, links }) => (
           target="_blank"
           rel="noopener noreferrer"
           className={styles.connectLink}
-          style={{ "--hover-bg": color }} // CSS Custom Property for dynamic hover color
+          style={{ "--hover-bg": color }}
           title={name}
           aria-label={`Visit ${name}`}
         >
-          <Icon size={20} />
+          <Icon size={16} /> {/* Reduced from 20 to 16 */}
         </a>
       ))}
     </div>
@@ -68,7 +67,6 @@ const Sidebar = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Effect to sync search input with URL query parameter
   useEffect(() => {
     const query = searchParams.get("searchterm");
     setSearchTerm(query ? decodeURIComponent(query) : "");
@@ -88,7 +86,6 @@ const Sidebar = () => {
         newParams.delete("searchterm");
       }
 
-      // Only push router if the search term has actually changed
       if (newParams.get("searchterm") !== searchParams.get("searchterm")) {
         router.push(`${pathname}?${newParams.toString()}`);
       }
@@ -98,7 +95,6 @@ const Sidebar = () => {
 
   return (
     <aside className={styles.sidebar} role="complementary">
-      {/* Search Form */}
       <form onSubmit={handleSearchSubmit} className={styles.searchForm}>
         <div className={styles.searchInputGroup}>
           <input
@@ -108,31 +104,28 @@ const Sidebar = () => {
             onChange={handleSearchChange}
             className={styles.searchInput}
             aria-label="Search"
+            style={{ fontSize: '16px' }}
           />
-          <button type="submit" className={styles.searchButton} aria-label="Submit search">
-            <FaSearch />
+          <button type="submit" className={styles.searchButton} aria-label="Submit search" style={{ padding: '6px 15px' }}>
+            <FaSearch size={13} />
           </button>
         </div>
       </form>
 
-      {/* Navigation Links */}
       <nav className={styles.mainNav}>
         {NAV_ITEMS.map(({ href, label, icon }) => (
           <Link href={href} key={href} passHref legacyBehavior>
-            <a className={styles.navItem}>
-              <span className={styles.navItemIcon}>{icon}</span>
+            <a className={styles.navItem} style={{ fontSize: '16px', padding: '10px 15px' }}> {/* Slightly smaller */}
+              <span className={styles.navItemIcon} style={{ fontSize: '14px' }}>{icon}</span>
               <span className={styles.navItemLabel}>{label}</span>
             </a>
           </Link>
         ))}
       </nav>
 
-      {/* Connect & Social Links */}
       <ConnectLinks title="Profile" links={EXTERNAL_LINKS} />
       <ConnectLinks title="Social Media" links={SOCIAL_MEDIA_LINKS} />
       <ConnectLinks title="Other Links" links={OTHER_LINKS} />
-
-      {/* Global styles can be moved to a global CSS file like _app.js or globals.css */}
     </aside>
   );
 };
