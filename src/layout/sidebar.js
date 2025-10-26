@@ -20,12 +20,12 @@ import styles from "./sidebar.module.css";
 const EXTERNAL_LINKS = [
   { name: "Email", url: "mailto:jimchen4214@gmail.com", icon: FaEnvelope, color: "#EA4335" },
   { name: "LinkedIn", url: "https://www.linkedin.com/in/jim-chen-588002255/", icon: FaLinkedin, color: "#0077B5" },
+  { name: "Instagram", url: "https://www.instagram.com/jimchenme", icon: FaInstagram, color: "#E4405F" },
 ];
 
 const SOCIAL_MEDIA_LINKS = [
   { name: "GitHub", url: "https://github.com/jimchen2", icon: FaGithub, color: "#333333" },
   { name: "Telegram", url: "https://t.me/jimchenme", icon: FaTelegram, color: "#0088cc" },
-  { name: "Instagram", url: "https://www.instagram.com/jimchenme", icon: FaInstagram, color: "#E4405F" },
   { name: "YouTube", url: "https://www.youtube.com/@jimchen4214", icon: FaYoutube, color: "#FF0000" },
 ];
 
