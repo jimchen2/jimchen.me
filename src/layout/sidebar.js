@@ -12,6 +12,7 @@ import {
   FaEnvelope,
   FaLinkedin,
   FaGithub,
+  FaInstagram,
 } from "react-icons/fa";
 import { SiOpenstreetmap, SiGoodreads } from "react-icons/si";
 import styles from "./sidebar.module.css";
@@ -23,7 +24,8 @@ const EXTERNAL_LINKS = [
 
 const SOCIAL_MEDIA_LINKS = [
   { name: "GitHub", url: "https://github.com/jimchen2", icon: FaGithub, color: "#333333" },
-  { name: "Telegram", url: "https://t.me/Jimchen4214", icon: FaTelegram, color: "#0088cc" },
+  { name: "Telegram", url: "https://t.me/jimchenme", icon: FaTelegram, color: "#0088cc" },
+  { name: "Instagram", url: "https://www.instagram.com/jimchenme", icon: FaInstagram, color: "#E4405F" },
   { name: "YouTube", url: "https://www.youtube.com/@jimchen4214", icon: FaYoutube, color: "#FF0000" },
 ];
 
