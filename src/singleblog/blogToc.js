@@ -138,7 +138,7 @@ const useTableOfContents = (setActiveKey) => {
   return tocItems;
 };
 
-const SideBar = () => {
+const BlogToc = () => {
   const [activeKey, setActiveKey] = useState(null);
   const tocItems = useTableOfContents(setActiveKey);
 
@@ -174,4 +174,4 @@ const SideBar = () => {
   );
 };
 
-export { SideBar };
+export { BlogToc };

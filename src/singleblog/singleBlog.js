@@ -1,7 +1,7 @@
 import React, { useEffect, useState, memo } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import parse from "html-react-parser";
-import { SideBar } from "./sideBar";
+import { BlogToc } from "./blogToc";
 import BlogLikeButtonHelper from "./likebutton/bloglikebuttonhelper";
 import CodeBlock from "./codeBlock";
 import { generateStyles } from "./blogstylesHelper";
@@ -64,10 +64,13 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const processedText = text.replace(/<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs, (match, language, codeWithLang, codeWithoutLang) => {
-    const code = codeWithLang || codeWithoutLang;
-    return `<codeblock code="${code.replace(/"/g, "")}"></codeblock>`;
-  });
+  const processedText = text.replace(
+    /<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs,
+    (match, language, codeWithLang, codeWithoutLang) => {
+      const code = codeWithLang || codeWithoutLang;
+      return `<codeblock code="${code.replace(/"/g, "")}"></codeblock>`;
+    }
+  );
 
   const elements = parse(processedText, {
     replace: (domNode) => {
@@ -94,7 +97,14 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
           }}
         >
           <div className="mb-4">
-            <BlogHeader date={date} language={language} type={type} title={title} wordcount={wordcount} blogid={blogid} />
+            <BlogHeader
+              date={date}
+              language={language}
+              type={type}
+              title={title}
+              wordcount={wordcount}
+              blogid={blogid}
+            />
             <BlogTitle title={title} />
             <div className="blog-content">
               {elements}
@@ -105,7 +115,7 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
           </div>
         </Col>
         <Col className="d-none d-lg-block">
-          <SideBar />
+          <BlogToc />
         </Col>
       </Row>
     </Container>

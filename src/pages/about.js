@@ -4,7 +4,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 // --- Data for this page ---
 const personalPhotos = [
-  { src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/1.jpeg", thumbnailSrc: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/146c34.jpeg", alt: "Personal photo 1" },
+  {
+    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/1.jpeg",
+    thumbnailSrc: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/146c34.jpeg",
+    alt: "Personal photo 1",
+  },
   { src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/2.JPEG", alt: "Personal photo 2" },
   { src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/3.JPEG", alt: "Personal photo 3" },
   { src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/4.JPEG", alt: "Personal photo 4" },
@@ -23,19 +27,25 @@ const globalInternet = [
   { name: "My Guide to the Global Internet (2025)", url: "https://jimchen.me/a/19b074" },
 ];
 
-
 function AboutPage() {
-
   // Helper component for simple link lists, reducing code duplication
   const SimpleLinkList = ({ items }) => (
     <ul className="list-unstyled mb-0">
       {items.map((item, index) => (
         <li key={index} className="mb-1">
-          <a href={item.url} target="_blank" rel="noopener noreferrer" 
-             className="text-decoration-none small"
-             style={{ color: "#2980b9", transition: "color 0.2s ease" }}
-             onMouseEnter={(e) => (e.currentTarget.style.color = "#e74c3c")}
-             onMouseLeave={(e) => (e.currentTarget.style.color = "#2980b9")}>
+          <a
+            href={item.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-decoration-none"
+            style={{
+              color: "#2980b9",
+              transition: "color 0.2s ease",
+              fontSize: "1.05rem", // Slightly larger font size
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#e74c3c")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#2980b9")}
+          >
             {item.name}
           </a>
         </li>
@@ -44,27 +54,25 @@ function AboutPage() {
   );
 
   return (
-    <Container style={{ 
-      fontFamily: "Ubuntu, sans-serif",
-      background: "linear-gradient(to bottom, #f0f4f8, #ffffff)",
-      maxWidth: '800px'
-    }} className="py-4">
-
-      <h1 className="fw-bold mb-4 text-center" style={{ color: "#2c3e50" }}>
-        About Me
-      </h1>
-
+    <Container
+      style={{
+        fontFamily: "Ubuntu, sans-serif",
+        background: "linear-gradient(to bottom, #f0f4f8, #ffffff)",
+      }}
+    >
       {/* Portfolio Section */}
       <Card className="mb-4 shadow-sm border-0">
         <Card.Body className="p-3">
-          <Card.Title as="h2" className="h5 mb-3 pb-2 border-bottom fw-bold" style={{ color: "#2c3e50" }}>
+          <Card.Title as="h2" className="h4 mb-3 pb-2 border-bottom fw-bold" style={{ color: "#2c3e50" }}>
             Portfolio
           </Card.Title>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
-            gap: "0.75rem",
-          }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
+              gap: "0.75rem",
+            }}
+          >
             {personalPhotos.map((photo, index) => (
               <a key={index} href={photo.src} target="_blank" rel="noopener noreferrer" title={photo.alt}>
                 <img
@@ -93,7 +101,7 @@ function AboutPage() {
         <Col md={6} className="mb-4">
           <Card className="h-100 shadow-sm border-0">
             <Card.Body className="p-3">
-              <Card.Title as="h3" className="h6 mb-3 fw-semibold" style={{ color: "#34495e" }}>
+              <Card.Title as="h3" className="h5 mb-3 fw-semibold" style={{ color: "#34495e" }}>
                 Tech Setup
               </Card.Title>
               <SimpleLinkList items={techSetup} />
@@ -103,7 +111,7 @@ function AboutPage() {
         <Col md={6} className="mb-4">
           <Card className="h-100 shadow-sm border-0">
             <Card.Body className="p-3">
-              <Card.Title as="h3" className="h6 mb-3 fw-semibold" style={{ color: "#34495e" }}>
+              <Card.Title as="h3" className="h5 mb-3 fw-semibold" style={{ color: "#34495e" }}>
                 Global Internet
               </Card.Title>
               <SimpleLinkList items={globalInternet} />
@@ -111,7 +119,6 @@ function AboutPage() {
           </Card>
         </Col>
       </Row>
-      
     </Container>
   );
 }

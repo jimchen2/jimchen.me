@@ -4,11 +4,9 @@ import React, { useEffect } from "react";
 import Head from "next/head";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  ColorSchemeProvider,
-  setIpAddress,
-} from "../lib/config.js";
-import NavigationBar from "@/navbar/navbar.js";
+import { ColorSchemeProvider, setIpAddress } from "../config/config.js";
+
+import MainLayout from "@/layout/MainLayout.js";
 
 // --- Helper function to fetch IP (Unchanged) ---
 const fetchIpInfo = async () => {
@@ -22,23 +20,30 @@ const fetchIpInfo = async () => {
   }
 };
 
-// --- Layout Component ---
-function Layout({ children }) {
-  const layoutStyle = {
-    display: "flex",
-    flexDirection: "column",
-    minHeight: "100vh",
-  };
 
-  const mainContentStyle = {
-    flex: "1",
-    paddingTop: "70px", // Matches navbar height
-  };
+// --- Main App Component ---
+function MyApp({ Component, pageProps }) {
+  useEffect(() => {
+    fetchIpInfo();
+  }, []);
+
+  // Check if the page component has a `showSidebar` property set to false.
+  // If not specified, it defaults to true.
+  const showSidebar = Component.showSidebar !== false;
 
   return (
-    <div style={layoutStyle}>
-      <NavigationBar />
+    <ColorSchemeProvider>
+      <Head>
+        <title>Jim Chen's Blog</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+      
+      {/* --- Use the new MainLayout --- */}
+      <MainLayout showSidebar={showSidebar}>
+        <Component {...pageProps} />
+      </MainLayout>
 
+      {/* Global styles can be placed here or in a global.css file */}
       <style jsx global>{`
         body {
           transition: background-color 0.3s ease, color 0.3s ease;
@@ -47,35 +52,11 @@ function Layout({ children }) {
         .nav-link {
           transition: color 0.3s ease;
         }
-        /* Add scroll offset for sections with IDs */
         section[id],
         div[id] {
-          padding-top: 70px; /* Matches navbar height */
-          margin-top: -70px; /* Compensates for padding */
-          scroll-margin-top: 70px; /* Adjusts scroll target for modern browsers */
+          scroll-margin-top: 70px;
         }
       `}</style>
-
-      <main style={mainContentStyle}>{children}</main>
-    </div>
-  );
-}
-
-// --- Main App Component (Unchanged) ---
-function MyApp({ Component, pageProps }) {
-  useEffect(() => {
-    fetchIpInfo();
-  }, []);
-
-  return (
-    <ColorSchemeProvider>
-      <Head>
-        <title>Jim Chen's Blog</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
     </ColorSchemeProvider>
   );
 }
