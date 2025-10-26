@@ -15,27 +15,15 @@ const useIsMobile = (breakpoint = 1000) => {
   return isMobile;
 };
 
-
 const MainLayout = ({ children, showSidebar = true }) => {
   const isMobile = useIsMobile();
 
   return (
     <div className={styles.layoutContainer}>
       <NavigationBar />
-      
+
       <div className={styles.mainContentWrapper}>
-        
-        {/* --- MODIFICATION HERE --- */}
-        {/* Apply a different class when the sidebar is hidden */}
-        <main 
-          className={
-            showSidebar && !isMobile 
-              ? styles.pageContent 
-              : styles.pageContentFullWidth
-          }
-        >
-          {children}
-        </main>
+        <main className={showSidebar && !isMobile ? styles.pageContent : styles.pageContentFullWidth}>{children}</main>
         {/* --- END MODIFICATION --- */}
 
         {showSidebar && !isMobile && (

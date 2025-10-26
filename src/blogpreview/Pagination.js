@@ -13,10 +13,8 @@ const Pagination = ({ currentPage, totalPages, basePath = "" }) => {
 
   // Function to generate URL with preserved query params
   const getPageUrl = (pageNum) => {
-    // Create new query object with page parameter
     const newQuery = { ...currentQuery, page: pageNum };
     
-    // If page is 1, remove page parameter for cleaner URL
     if (pageNum === 1) {
       delete newQuery.page;
     }

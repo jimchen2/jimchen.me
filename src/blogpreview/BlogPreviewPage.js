@@ -4,10 +4,10 @@ import Pagination from "@/blogpreview/Pagination.js";
 
 function BlogPreviewPage({ data, pagination, searchTerm }) {
   return (
-    <div>
+<div style={{ maxWidth: "700px", margin: "0 auto" }}>
       {data && data.length > 0 ? (
         data.map((post, index) => (
-          <div key={index} style={{ marginBottom: '2rem' }}>
+          <div key={index} style={{ marginBottom: "2rem" }}>
             <PreviewCard
               blogid={post.blogid}
               title={post.title}
@@ -21,16 +21,11 @@ function BlogPreviewPage({ data, pagination, searchTerm }) {
           </div>
         ))
       ) : (
-        <div style={{ textAlign: "center", margin: "5rem 0" }}>
-          No results found.
-        </div>
+        <div style={{ textAlign: "center", margin: "5rem 0" }}>No results found.</div>
       )}
 
       {pagination && pagination.totalPages > 1 && (
-        <Pagination
-          currentPage={pagination.currentPage}
-          totalPages={pagination.totalPages}
-        />
+        <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
       )}
     </div>
   );
