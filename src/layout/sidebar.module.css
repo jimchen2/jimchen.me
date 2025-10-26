@@ -137,14 +137,13 @@
   height: 45px;
   border-radius: 12px;
   background-color: #f1f3f5;
-  color: #495057;
+  color: var(--hover-bg, #495057); /* Use the brand color */
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .connectLink:hover {
   transform: translateY(-3px) scale(1.05);
-  color: #fff;
-  /* Uses the --hover-bg variable set in the component's style attribute */
+  color: #fff; /* White on hover */
   background-color: var(--hover-bg, #0d6efd); 
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }

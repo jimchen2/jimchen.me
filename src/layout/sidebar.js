@@ -13,6 +13,7 @@ import {
   FaLinkedin,
   FaGithub,
   FaInstagram,
+  FaWeixin, // Add this
 } from "react-icons/fa";
 import { SiOpenstreetmap, SiGoodreads } from "react-icons/si";
 import styles from "./sidebar.module.css";
@@ -20,19 +21,25 @@ import styles from "./sidebar.module.css";
 const EXTERNAL_LINKS = [
   { name: "Email", url: "mailto:jimchen4214@gmail.com", icon: FaEnvelope, color: "#EA4335" },
   { name: "LinkedIn", url: "https://www.linkedin.com/in/jim-chen-588002255/", icon: FaLinkedin, color: "#0077B5" },
-  { name: "Instagram", url: "https://www.instagram.com/jimchenme", icon: FaInstagram, color: "#E4405F" },
+  { name: "GitHub", url: "https://github.com/jimchen2", icon: FaGithub, color: "#333333" },
 ];
 
 const SOCIAL_MEDIA_LINKS = [
-  { name: "GitHub", url: "https://github.com/jimchen2", icon: FaGithub, color: "#333333" },
   { name: "Telegram", url: "https://t.me/jimchenme", icon: FaTelegram, color: "#0088cc" },
+  { name: "Instagram", url: "https://www.instagram.com/jimchenme", icon: FaInstagram, color: "#E4405F" },
+  { name: "WeChat", url: "https://jimchen.me/weixin.jpg", icon: FaWeixin, color: "#07C160" },
   { name: "YouTube", url: "https://www.youtube.com/@jimchen4214", icon: FaYoutube, color: "#FF0000" },
 ];
 
 const OTHER_LINKS = [
   { name: "Archive.org", url: "https://archive.org/details/@j_c561", icon: FaArchive, color: "#333333" },
   { name: "Umap", url: "https://umap.openstreetmap.fr/en/user/jimchen2/", icon: SiOpenstreetmap, color: "#7EBC6F" },
-  { name: "Goodreads", url: "https://www.goodreads.com/user/show/154371677-jim-chen", icon: SiGoodreads, color: "#553B08" },
+  {
+    name: "Goodreads",
+    url: "https://www.goodreads.com/user/show/154371677-jim-chen",
+    icon: SiGoodreads,
+    color: "#553B08",
+  },
 ];
 
 const NAV_ITEMS = [
@@ -106,9 +113,14 @@ const Sidebar = () => {
             onChange={handleSearchChange}
             className={styles.searchInput}
             aria-label="Search"
-            style={{ fontSize: '16px' }}
+            style={{ fontSize: "16px" }}
           />
-          <button type="submit" className={styles.searchButton} aria-label="Submit search" style={{ padding: '6px 15px' }}>
+          <button
+            type="submit"
+            className={styles.searchButton}
+            aria-label="Submit search"
+            style={{ padding: "6px 15px" }}
+          >
             <FaSearch size={13} />
           </button>
         </div>
@@ -117,8 +129,12 @@ const Sidebar = () => {
       <nav className={styles.mainNav}>
         {NAV_ITEMS.map(({ href, label, icon }) => (
           <Link href={href} key={href} passHref legacyBehavior>
-            <a className={styles.navItem} style={{ fontSize: '16px', padding: '10px 15px' }}> {/* Slightly smaller */}
-              <span className={styles.navItemIcon} style={{ fontSize: '14px' }}>{icon}</span>
+            <a className={styles.navItem} style={{ fontSize: "16px", padding: "10px 15px" }}>
+              {" "}
+              {/* Slightly smaller */}
+              <span className={styles.navItemIcon} style={{ fontSize: "14px" }}>
+                {icon}
+              </span>
               <span className={styles.navItemLabel}>{label}</span>
             </a>
           </Link>
