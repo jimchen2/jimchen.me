@@ -13,7 +13,8 @@ import {
   FaLinkedin,
   FaGithub,
   FaInstagram,
-  FaWeixin, // Add this
+  FaWeixin,
+  FaQq, // Add this
 } from "react-icons/fa";
 import { SiOpenstreetmap, SiGoodreads } from "react-icons/si";
 import styles from "./sidebar.module.css";
@@ -40,6 +41,7 @@ const OTHER_LINKS = [
     icon: SiGoodreads,
     color: "#553B08",
   },
+  { name: "QQ", url: "https://jimchen.me/qq.jpg", icon: FaQq, color: "#12B7F5" }, // Add this
 ];
 
 const NAV_ITEMS = [
