@@ -16,9 +16,8 @@ const personalPhotos = [
   { src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/6.jpg", alt: "Personal photo 6" },
 ];
 const techSetup = [
-  { name: "jimchen2/dconf-dump", url: "https://github.com/jimchen2/dconf-dump" },
+  { name: "jimchen2/computer-config", url: "https://github.com/jimchen2/computer-config" },
   { name: "jimchen2/jimchen.me", url: "https://github.com/jimchen2/jimchen.me" },
-  { name: "jimchen2/userscripts", url: "https://github.com/jimchen2/userscripts" },
 ];
 const globalInternet = [
   { name: "Русский язык, медиа и культура (2025)", url: "https://jimchen.me/a/1580c8" },
@@ -26,6 +25,10 @@ const globalInternet = [
   { name: "My Language Learning Journey", url: "https://jimchen.me/a/9bf4b4" },
   { name: "My Guide to the Global Internet (2025)", url: "https://jimchen.me/a/19b074" },
 ];
+const devices = {
+  phones: ["Pixel 8 Pro", "Redmi Note 13"],
+  computers: ["ThinkPad P16s (Fedora)", "Redmi Note (Windows)"]
+};
 
 function AboutPage() {
   // Helper component for simple link lists, reducing code duplication
@@ -98,7 +101,7 @@ function AboutPage() {
 
       {/* Tech Setup & Global Internet Section */}
       <Row>
-        <Col md={6} className="mb-4">
+        <Col md={4} className="mb-4">
           <Card className="h-100 shadow-sm border-0">
             <Card.Body className="p-3">
               <Card.Title as="h3" className="h5 mb-3 fw-semibold" style={{ color: "#34495e" }}>
@@ -108,13 +111,38 @@ function AboutPage() {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={6} className="mb-4">
+        <Col md={4} className="mb-4">
           <Card className="h-100 shadow-sm border-0">
             <Card.Body className="p-3">
               <Card.Title as="h3" className="h5 mb-3 fw-semibold" style={{ color: "#34495e" }}>
                 Global Internet
               </Card.Title>
               <SimpleLinkList items={globalInternet} />
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={4} className="mb-4">
+          <Card className="h-100 shadow-sm border-0">
+            <Card.Body className="p-3">
+              <Card.Title as="h3" className="h5 mb-3 fw-semibold" style={{ color: "#34495e" }}>
+                Devices
+              </Card.Title>
+              <div className="mb-3">
+                <h6 className="fw-semibold mb-2" style={{ color: "#555", fontSize: "0.95rem" }}>Phone</h6>
+                <ul className="list-unstyled mb-0" style={{ fontSize: "1.05rem" }}>
+                  {devices.phones.map((phone, index) => (
+                    <li key={index} className="mb-1" style={{ color: "#555" }}>{phone}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h6 className="fw-semibold mb-2" style={{ color: "#555", fontSize: "0.95rem" }}>Computer</h6>
+                <ul className="list-unstyled mb-0" style={{ fontSize: "1.05rem" }}>
+                  {devices.computers.map((computer, index) => (
+                    <li key={index} className="mb-1" style={{ color: "#555" }}>{computer}</li>
+                  ))}
+                </ul>
+              </div>
             </Card.Body>
           </Card>
         </Col>
