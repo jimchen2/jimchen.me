@@ -22,12 +22,11 @@ const techSetup = [
 const globalInternet = [
   { name: "Русский язык, медиа и культура (2025)", url: "https://jimchen.me/a/1580c8" },
   { name: "German YouTubers (2025)", url: "https://jimchen.me/a/7d67cb" },
-  { name: "My Language Learning Journey", url: "https://jimchen.me/a/9bf4b4" },
   { name: "My Guide to the Global Internet (2025)", url: "https://jimchen.me/a/19b074" },
 ];
 const devices = {
   phones: ["Pixel 8 Pro", "Redmi Note 13"],
-  computers: ["ThinkPad P16s (Fedora)", "Redmi Note (Windows)"]
+  computers: ["ThinkPad P16s (Fedora)", "Redmi Note (Windows)"],
 };
 
 function AboutPage() {
@@ -44,7 +43,7 @@ function AboutPage() {
             style={{
               color: "#2980b9",
               transition: "color 0.2s ease",
-              fontSize: "1.05rem", // Slightly larger font size
+              fontSize: "1.05rem",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.color = "#e74c3c")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "#2980b9")}
@@ -84,9 +83,9 @@ function AboutPage() {
                   loading="lazy"
                   style={{
                     width: "100%",
-                    height: "150px", // Reduced height
+                    height: "150px",
                     objectFit: "cover",
-                    borderRadius: "6px", // Slightly smaller radius
+                    borderRadius: "6px",
                     boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
                     transition: "transform 0.2s ease",
                   }}
@@ -99,50 +98,42 @@ function AboutPage() {
         </Card.Body>
       </Card>
 
-      {/* Tech Setup & Global Internet Section */}
+      {/* Tech Setup & Devices + Global Internet Section */}
       <Row>
-        <Col md={4} className="mb-4">
+        <Col md={6} className="mb-4">
           <Card className="h-100 shadow-sm border-0">
             <Card.Body className="p-3">
               <Card.Title as="h3" className="h5 mb-3 fw-semibold" style={{ color: "#34495e" }}>
-                Tech Setup
+                Tech Setup & Devices
               </Card.Title>
-              <SimpleLinkList items={techSetup} />
+
+              {/* GitHub Repos */}
+              <div className="mb-3">
+                <SimpleLinkList items={techSetup} />
+              </div>
+
+              {/* Devices */}
+              <div className="mb-2">
+                <p className="mb-1" style={{ fontSize: "1.05rem", color: "#555" }}>
+                  <span className="fw-semibold">Phone:</span> {devices.phones.join(", ")}
+                </p>
+              </div>
+              <div>
+                <p className="mb-0" style={{ fontSize: "1.05rem", color: "#555" }}>
+                  <span className="fw-semibold">Computer:</span> {devices.computers.join(", ")}
+                </p>
+              </div>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={4} className="mb-4">
+
+        <Col md={6} className="mb-4">
           <Card className="h-100 shadow-sm border-0">
             <Card.Body className="p-3">
               <Card.Title as="h3" className="h5 mb-3 fw-semibold" style={{ color: "#34495e" }}>
                 Global Internet
               </Card.Title>
               <SimpleLinkList items={globalInternet} />
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={4} className="mb-4">
-          <Card className="h-100 shadow-sm border-0">
-            <Card.Body className="p-3">
-              <Card.Title as="h3" className="h5 mb-3 fw-semibold" style={{ color: "#34495e" }}>
-                Devices
-              </Card.Title>
-              <div className="mb-3">
-                <h6 className="fw-semibold mb-2" style={{ color: "#555", fontSize: "0.95rem" }}>Phone</h6>
-                <ul className="list-unstyled mb-0" style={{ fontSize: "1.05rem" }}>
-                  {devices.phones.map((phone, index) => (
-                    <li key={index} className="mb-1" style={{ color: "#555" }}>{phone}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h6 className="fw-semibold mb-2" style={{ color: "#555", fontSize: "0.95rem" }}>Computer</h6>
-                <ul className="list-unstyled mb-0" style={{ fontSize: "1.05rem" }}>
-                  {devices.computers.map((computer, index) => (
-                    <li key={index} className="mb-1" style={{ color: "#555" }}>{computer}</li>
-                  ))}
-                </ul>
-              </div>
             </Card.Body>
           </Card>
         </Col>
