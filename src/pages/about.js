@@ -21,7 +21,6 @@ const techSetup = [
 ];
 const globalInternet = [
   { name: "Русский язык, медиа и культура (2025)", url: "https://jimchen.me/a/1580c8" },
-  { name: "German YouTubers (2025)", url: "https://jimchen.me/a/7d67cb" },
   { name: "My Guide to the Global Internet (2025)", url: "https://jimchen.me/a/19b074" },
 ];
 const devices = {
