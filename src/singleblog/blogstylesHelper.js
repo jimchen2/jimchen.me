@@ -67,12 +67,19 @@ export const generateStyles = () => `
 .blog-content pre {
   padding: 15px;
   border-radius: 8px;
-  overflow-x: auto;
   font-family: 'Source Code Pro', monospace;
   font-size: 90%;
   margin-bottom: 15px;
   text-indent: -5px;
   line-height: 1.5;
+  
+  /* --- REPLACEMENT --- */
+  /* Remove or comment out overflow-x: auto; */
+  /* overflow-x: auto; */ 
+  
+  /* Add these properties to force wrapping */
+  white-space: pre-wrap; /* Allows wrapping while preserving whitespace */
+  word-break: break-all;   /* Forces a break even in the middle of a word */
 }
 
 .blog-content table {
