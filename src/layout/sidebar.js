@@ -13,8 +13,10 @@ import {
   FaLinkedin,
   FaGithub,
   FaInstagram,
+  FaBlog,
   FaWeixin,
-  FaQq, // Add this
+  FaQq,
+  FaRProject,
 } from "react-icons/fa";
 import { SiOpenstreetmap, SiGoodreads } from "react-icons/si";
 import styles from "./sidebar.module.css";
@@ -41,13 +43,15 @@ const OTHER_LINKS = [
     icon: SiGoodreads,
     color: "#553B08",
   },
-  { name: "QQ", url: "https://jimchen.me/qq.jpg", icon: FaQq, color: "#12B7F5" }, // Add this
+  { name: "QQ", url: "https://jimchen.me/qq.jpg", icon: FaQq, color: "#12B7F5" },
 ];
 
 const NAV_ITEMS = [
   { href: "/", label: "About Me", icon: <FaUser /> },
+  { href: "/blog", label: "My Blog", icon: <FaBlog /> },
   { href: "/tags", label: "All Tags", icon: <FaTags /> },
   { href: "/comments", label: "Comments", icon: <FaComments /> },
+  { href: "/projects", label: "Projects", icon: <FaRProject /> },
 ];
 
 const ConnectLinks = ({ title, links }) => (
@@ -65,7 +69,7 @@ const ConnectLinks = ({ title, links }) => (
           title={name}
           aria-label={`Visit ${name}`}
         >
-          <Icon size={16} /> {/* Reduced from 20 to 16 */}
+          <Icon size={15} />
         </a>
       ))}
     </div>
@@ -115,15 +119,15 @@ const Sidebar = () => {
             onChange={handleSearchChange}
             className={styles.searchInput}
             aria-label="Search"
-            style={{ fontSize: "16px" }}
+            style={{ fontSize: "15px", padding: "6px 10px" }}
           />
           <button
             type="submit"
             className={styles.searchButton}
             aria-label="Submit search"
-            style={{ padding: "6px 15px" }}
+            style={{ padding: "6px 12px" }}
           >
-            <FaSearch size={13} />
+            <FaSearch size={12} />
           </button>
         </div>
       </form>
@@ -131,10 +135,8 @@ const Sidebar = () => {
       <nav className={styles.mainNav}>
         {NAV_ITEMS.map(({ href, label, icon }) => (
           <Link href={href} key={href} passHref legacyBehavior>
-            <a className={styles.navItem} style={{ fontSize: "16px", padding: "10px 15px" }}>
-              {" "}
-              {/* Slightly smaller */}
-              <span className={styles.navItemIcon} style={{ fontSize: "14px" }}>
+            <a className={styles.navItem} style={{ fontSize: "15px", padding: "6px 12px" }}>
+              <span className={styles.navItemIcon} style={{ fontSize: "13px" }}>
                 {icon}
               </span>
               <span className={styles.navItemLabel}>{label}</span>
