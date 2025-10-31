@@ -10,6 +10,13 @@ export const introductionPoints = [
   "I am fluent in English (primary), Mandarin (native), and Russian.",
 ];
 
+// NEW: Hobbies section data
+export const hobbies = [
+  "I enjoy walking in the city and visiting shopping malls.",
+  "I clean my room every week.",
+  "I like watching YouTube.",
+];
+
 export const otherFacts = [
   "I participated in math competitions in middle and high school before entering USTC.",
   <>

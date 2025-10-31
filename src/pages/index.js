@@ -8,11 +8,10 @@ const s = {
   card: { background: "white", borderRadius: "20px", boxShadow: "0 20px 60px rgba(0, 0, 0, 0.08)", overflow: "hidden", marginBottom: "2rem" },
   bar: { background: "linear-gradient(135deg, #93c5fd 0%, #6ee7b7 100%)", height: "6px" },
   gradient: { 
-    // This makes your heading text a gradient, which looks great!
     background: "linear-gradient(135deg, #60a5fa 0%, #34d399 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
-    display: "inline-block", // Ensures the gradient renders correctly
+    display: "inline-block",
   },
   header: { display: "flex", alignItems: "center", marginBottom: "1rem" },
   grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "1rem" },
@@ -53,19 +52,6 @@ const Link = ({ item }) => {
   );
 };
 
-const Tag = ({ text }) => {
-  const [h, setH] = useState(false);
-  return (
-    <span
-      style={{ display: "inline-block", padding: "0.4rem 0.9rem", margin: "0.3rem", background: "linear-gradient(135deg, #93c5fd 0%, #6ee7b7 100%)", color: "white", borderRadius: "20px", fontSize: "0.9rem", fontWeight: "600", boxShadow: h ? "0 4px 12px rgba(147, 197, 253, 0.4)" : "0 2px 8px rgba(147, 197, 253, 0.3)", transform: h ? "translateY(-2px)" : "translateY(0)", transition: "all 0.3s" }}
-      onMouseEnter={() => setH(true)}
-      onMouseLeave={() => setH(false)}
-    >
-      {text}
-    </span>
-  );
-};
-
 const Photo = ({ photo }) => {
   const [h, setH] = useState(false);
   return (
@@ -97,6 +83,16 @@ export default function AboutPage() {
             {data.introductionPoints.map((p, i) => <li key={i} style={{ marginBottom: "0.5rem" }}>{p}</li>)}
           </ul>
           <hr style={{ margin: "1.5rem 0", border: "none", borderTop: "1px solid #e2e8f0" }} />
+          
+          {/* NEW HOBBIES SECTION */}
+          <div style={{ marginBottom: "1.5rem" }}>
+            <h5 style={{ fontWeight: "700", marginBottom: "1rem", color: "#334155" }}>Hobbies:</h5>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, fontSize: "1.05rem", color: "#334155", fontWeight: "500" }}>
+              {data.hobbies.map((h, i) => <li key={i} style={{ marginBottom: "0.5rem" }}>{h}</li>)}
+            </ul>
+          </div>
+
+          {/* OTHER FACTS SECTION */}
           <div>
             <h5 style={{ fontWeight: "700", marginBottom: "1rem", color: "#334155" }}>Other Facts:</h5>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, fontSize: "1.05rem", color: "#334155", fontWeight: "500" }}>
