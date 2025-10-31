@@ -89,24 +89,21 @@ const Sidebar = () => {
 
   const handleSearchChange = useCallback((e) => setSearchTerm(e.target.value), []);
 
-  const handleSearchSubmit = useCallback(
-    (event) => {
-      event.preventDefault();
-      const trimmedSearchTerm = searchTerm.trim();
-      const newParams = new URLSearchParams(searchParams.toString());
+ const handleSearchSubmit = useCallback(
+  (event) => {
+    event.preventDefault();
+    const trimmedSearchTerm = searchTerm.trim();
+    const newParams = new URLSearchParams();
 
-      if (trimmedSearchTerm) {
-        newParams.set("searchterm", trimmedSearchTerm);
-      } else {
-        newParams.delete("searchterm");
-      }
+    if (trimmedSearchTerm) {
+      newParams.set("searchterm", trimmedSearchTerm);
+    }
 
-      if (newParams.get("searchterm") !== searchParams.get("searchterm")) {
-        router.push(`${pathname}?${newParams.toString()}`);
-      }
-    },
-    [searchTerm, searchParams, pathname, router]
-  );
+    // Always navigate to /blog with the search term
+    router.push(`/blog?${newParams.toString()}`);
+  },
+  [searchTerm, router]
+);
 
   return (
     <aside className={styles.sidebar} role="complementary">
