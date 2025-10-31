@@ -120,7 +120,7 @@ const projectData = [
     title: "2048 Game",
     time: "June 2023",
     description:
-      "<b>2048:</b> Game for practicing CSS, Javascript skills<br><br>" +
+      "Game for practicing CSS, Javascript skills<br><br>" +
       "<a href='https://github.com/jimchen2/archived-scripts/tree/master/2048'>Source Code</a>"
   },
   {
