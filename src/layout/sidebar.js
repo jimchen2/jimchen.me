@@ -42,7 +42,6 @@ const OTHER_LINKS = [
     icon: SiGoodreads,
     color: "#553B08",
   },
-  { name: "HuggingFace", url: "https://huggingface.co/jimchen2", icon: SiHuggingface, color: "#FFD21E" },
   { name: "QQ", url: "https://jimchen.me/qq.jpg", icon: FaQq, color: "#12B7F5" },
   { name: "Archive.org", url: "https://archive.org/details/@j_c561", icon: FaArchive, color: "#333333" },
 ];
