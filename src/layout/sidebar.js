@@ -43,7 +43,7 @@ const OTHER_LINKS = [
     color: "#553B08",
   },
   { name: "QQ", url: "https://jimchen.me/qq.jpg", icon: FaQq, color: "#12B7F5" },
-  { name: "Archive.org", url: "https://archive.org/details/@j_c561", icon: FaArchive, color: "#333333" },
+  { name: "Archive.org", url: "https://archive.org/details/@j_c561/web-archive", icon: FaArchive, color: "#333333" },
 ];
 
 const NAV_ITEMS = [
