@@ -54,7 +54,7 @@ export const techSetup = [
       "My personal configurations for using Linux and browser extensions. I mostly use Fedora on my Thinkpad and have a backup Windows on Redmibook.",
   },
   {
-    name: "Website Source Code",
+    name: "My Website Source Code",
     url: "https://github.com/jimchen2/jimchen.me",
     description: "This website is created with Next.js framework, my previous website was in Wix..",
   },
