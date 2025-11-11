@@ -14,7 +14,13 @@ export const introductionPoints = [
 export const hobbies = [
   "I enjoy walking in the city and visiting shopping malls.",
   "I clean my room every week.",
-  "I like watching YouTube.",
+  <>
+    I like watching YouTube. I've collected and organized videos into{" "}
+    <a href="https://www.youtube.com/@jimchen4214/playlists" target="_blank" rel="noopener noreferrer">
+      playlists
+    </a>
+    .
+  </>,
 ];
 
 export const otherFacts = [
@@ -58,6 +64,12 @@ export const techSetup = [
     url: "https://github.com/jimchen2/jimchen.me",
     description: "This website is created with Next.js framework, my previous website was in Wix..",
   },
+    {
+    name: "Dual Subtitle on YouTube",
+    url: "https://github.com/jimchen2/youtube-dual-subtitles",
+    description: "A browser extension to display dual subtitles on YouTube to help language learning.",
+  },
+
   {
     name: "More Projects",
     url: "https://jimchen.me/projects",
@@ -71,10 +83,12 @@ export const culturesDescription =
 
 export const globalInternet = [
   {
-    name: "Русский язык, медиа и культура (2025)",
-    url: "https://jimchen.me/a/1580c8",
+    links: [
+      { name: "Russian Culture and Media", url: "https://jimchen.me/a/1580c8" },
+      { name: "German Culture and Media", url: "https://jimchen.me/a/7d67cb" }
+    ],
     description:
-      "This blog explores modern Russian media and culture, including the distinct digital platforms, artistic scenes, regional geography, the culture nuances, and contemporary daily life. My goal isn't utility but to understand the discussions on Telegram and YouTube directly, to follow the athletes and singers without filter.",
+      "Exploring modern media and culture across different regions, including digital platforms, music, entertainment, regional geography, and cultural nuances. My goal is to understand YouTube and Telegram directly, following athletes and singers without filters.",
   },
   {
     name: "My Guide to the Global Internet (2025)",
@@ -82,13 +96,7 @@ export const globalInternet = [
     description:
       "This personal guide maps out the fragmented global internet by systematically comparing the distinct digital ecosystems of major regions—The West, China, Russia, EU, East Asia. It catalogs the parallel platforms and services for video sharing, messaging, search, cloud computing, and more, with my approach to on data management, Internet archiving, and utilizing open platforms.",
   },
-  {
-    name: "Dual Subtitle on YouTube",
-    url: "https://github.com/jimchen2/youtube-dual-subtitles",
-    description: "A browser extension to display dual subtitles on YouTube to help language learning.",
-  },
 ];
-
 // --- Connect Section ---
 export const connectHeading = "Connect With Me";
 export const connectIntroPoints = [
