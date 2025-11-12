@@ -88,7 +88,7 @@ export const globalInternet = [
       { name: "German Culture and Media", url: "https://jimchen.me/a/7d67cb" }
     ],
     description:
-      "Exploring modern media and culture across different regions, including digital platforms, music, entertainment, regional geography, and cultural nuances. My goal is to understand YouTube and Telegram directly, following athletes and singers without filters.",
+      "Exploring modern media and culture across different regions, including music, entertainment, geography, history, news. My goal is to understand YouTube and Telegram directly and watch news, TV shows, interviews, athletes, and singers without filters.",
   },
   {
     name: "My Guide to the Global Internet (2025)",
