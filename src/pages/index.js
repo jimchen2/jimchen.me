@@ -81,7 +81,13 @@ const Link = ({ item }) => {
               }}
             >
               <span
-                style={{ position: "absolute", left: "0", top: "50%", transform: "translateY(-50%)", fontSize: "1.2rem" }}
+                style={{
+                  position: "absolute",
+                  left: "0",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  fontSize: "1.2rem",
+                }}
               >
                 →
               </span>
@@ -132,7 +138,9 @@ const Link = ({ item }) => {
       )}
     </li>
   );
-};const Photo = ({ photo }) => {
+};
+
+const Photo = ({ photo }) => {
   const [h, setH] = useState(false);
   return (
     <a
@@ -153,7 +161,7 @@ const Link = ({ item }) => {
       onMouseLeave={() => setH(false)}
     >
       <img
-        src={photo.src}
+        src={photo.thumb || photo.src} // Use thumb if available, fallback to src
         alt={photo.alt}
         loading="lazy"
         style={{ width: "100%", height: "180px", objectFit: "cover", display: "block" }}

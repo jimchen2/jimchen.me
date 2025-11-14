@@ -38,14 +38,31 @@ export const otherFacts = [
 export const photosHeading = "A Glimpse Into My Life";
 export const photosDescription = "Here are a few personal photos.";
 export const personalPhotos = [
-  {
-    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/1.jpeg",
-    alt: "Personal photo 1",
+  { 
+    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/1.jpeg", 
+    thumb: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/thumbs/1-thumb.jpeg",
+    alt: "Personal photo 1" 
   },
-  { src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/2.JPEG", alt: "Personal photo 2" },
-  { src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/3.JPEG", alt: "Personal photo 3" },
-  { src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/4.JPEG", alt: "Personal photo 4" },
-  { src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/5.JPEG", alt: "Personal photo 5" },
+  { 
+    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/2.JPEG", 
+    thumb: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/thumbs/2-thumb.jpeg",
+    alt: "Personal photo 2" 
+  },
+  { 
+    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/3.JPEG", 
+    thumb: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/thumbs/3-thumb.jpeg",
+    alt: "Personal photo 3" 
+  },
+  { 
+    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/4.JPEG", 
+    thumb: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/thumbs/4-thumb.jpeg",
+    alt: "Personal photo 4" 
+  },
+  { 
+    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/5.JPEG", 
+    thumb: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/thumbs/5-thumb.jpeg",
+    alt: "Personal photo 5" 
+  },
 ];
 
 // --- Tech & Cultures Section ---
@@ -64,7 +81,7 @@ export const techSetup = [
     url: "https://github.com/jimchen2/jimchen.me",
     description: "This website is created with Next.js framework, my previous website was in Wix..",
   },
-    {
+  {
     name: "Dual Subtitle on YouTube",
     url: "https://github.com/jimchen2/youtube-dual-subtitles",
     description: "A browser extension to display dual subtitles on YouTube to help language learning.",
@@ -85,7 +102,7 @@ export const globalInternet = [
   {
     links: [
       { name: "Russian Culture and Media", url: "https://jimchen.me/a/1580c8" },
-      { name: "German Culture and Media", url: "https://jimchen.me/a/7d67cb" }
+      { name: "German Culture and Media", url: "https://jimchen.me/a/7d67cb" },
     ],
     description:
       "Exploring modern media and culture across different regions, including music, entertainment, geography, history, news. My goal is to understand YouTube and Telegram directly and watch news, TV shows, interviews, athletes, and singers without filters.",
