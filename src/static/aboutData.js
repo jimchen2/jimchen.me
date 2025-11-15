@@ -111,7 +111,7 @@ export const globalInternet = [
     name: "My Guide to the Global Internet (2025)",
     url: "https://jimchen.me/a/19b074",
     description:
-      "This personal guide maps out the fragmented global internet by systematically comparing the distinct digital ecosystems of major regions—The West, China, Russia, EU, East Asia. It catalogs the parallel platforms and services for video sharing, messaging, search, cloud computing, and more, with my approach to on data management, Internet archiving, and utilizing open platforms.",
+      "This personal guide maps out the global Internet across US, China, Russia, EU, including platforms for social media, videos, messaging, search.",
   },
 ];
 // --- Connect Section ---
