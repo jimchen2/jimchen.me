@@ -236,9 +236,19 @@ export default function AboutPage() {
             </ul>
           </div>
 
-          {/* OTHER FACTS SECTION */}
-          <div>
-            <h5 style={{ fontWeight: "700", marginBottom: "1rem", color: "#334155" }}>Other Facts:</h5>
+          {/* OTHER FACTS SECTION - NOW COLLAPSIBLE */}
+          <details>
+            <summary
+              style={{
+                fontWeight: "700",
+                marginBottom: "1rem",
+                color: "#334155",
+                cursor: "pointer",
+                fontSize: "1.17em",
+              }}
+            >
+              Other Facts:
+            </summary>
             <ul
               style={{
                 listStyle: "none",
@@ -255,7 +265,7 @@ export default function AboutPage() {
                 </li>
               ))}
             </ul>
-          </div>
+          </details>
         </Card>
 
         <Card>

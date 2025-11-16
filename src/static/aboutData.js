@@ -24,7 +24,8 @@ export const hobbies = [
 ];
 
 export const otherFacts = [
-  "I participated in math competitions in middle and high school before entering USTC.",
+  "From 2014 to 2021, I participated in math competitions before entering USTC.",
+  "In 2016 and 2020, I was into reciting Ci poetry and memorized about a hundred poems.",
   <>
     From 2016 to 2022 I liked reading English literature. See my{" "}
     <a href="https://www.goodreads.com/user/show/154371677-jim-chen" target="_blank" rel="noopener noreferrer">
@@ -32,36 +33,37 @@ export const otherFacts = [
     </a>
     .
   </>,
+  "In 2022 I began seriously use a smartphone, and watch YouTube heavily in English, then in other languages.",
 ];
 
 // --- Photos Section ---
 export const photosHeading = "A Glimpse Into My Life";
 export const photosDescription = "Here are a few personal photos.";
 export const personalPhotos = [
-  { 
-    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/1.jpeg", 
+  {
+    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/1.jpeg",
     thumb: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/thumbs/1-thumb.jpeg",
-    alt: "Personal photo 1" 
+    alt: "Personal photo 1",
   },
-  { 
-    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/2.JPEG", 
+  {
+    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/2.JPEG",
     thumb: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/thumbs/2-thumb.jpeg",
-    alt: "Personal photo 2" 
+    alt: "Personal photo 2",
   },
-  { 
-    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/3.JPEG", 
+  {
+    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/3.JPEG",
     thumb: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/thumbs/3-thumb.jpeg",
-    alt: "Personal photo 3" 
+    alt: "Personal photo 3",
   },
-  { 
-    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/4.JPEG", 
+  {
+    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/4.JPEG",
     thumb: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/thumbs/4-thumb.jpeg",
-    alt: "Personal photo 4" 
+    alt: "Personal photo 4",
   },
-  { 
-    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/5.JPEG", 
+  {
+    src: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/5.JPEG",
     thumb: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/thumbs/5-thumb.jpeg",
-    alt: "Personal photo 5" 
+    alt: "Personal photo 5",
   },
 ];
 
@@ -79,7 +81,7 @@ export const techSetup = [
   {
     name: "My Website Source Code",
     url: "https://github.com/jimchen2/jimchen.me",
-    description: "This website is created with Next.js framework, my previous website was in Wix..",
+    description: "This website is created with Next.js framework, my previous website was created in 2022 in Wix..",
   },
   {
     name: "Dual Subtitle on YouTube",
@@ -101,8 +103,8 @@ export const culturesDescription =
 export const globalInternet = [
   {
     links: [
-      { name: "Russian Culture and Media", url: "https://jimchen.me/a/1580c8" },
-      { name: "German Culture and Media", url: "https://jimchen.me/a/7d67cb" },
+      { name: "Russian Culture and Media (2024-2025)", url: "https://jimchen.me/a/1580c8" },
+      { name: "German Culture and Media (2025)", url: "https://jimchen.me/a/7d67cb" },
     ],
     description:
       "Exploring modern media and culture across different regions, including music, entertainment, geography, history, news. My goal is to understand YouTube and Telegram directly and watch news, TV shows, interviews, athletes, and singers without filters.",
