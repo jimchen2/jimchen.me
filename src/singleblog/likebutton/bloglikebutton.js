@@ -39,34 +39,37 @@ function BlogLikeButton({ blogid, like }) {
     return () => clearInterval(intervalId); // Cleanup on component unmount
   }, [like]); // Dependency on `like` to re-run effect if it changes
 
-  const handleLike = async () => {
-    if (userIP === "unknown") {
-      console.log("Attempted to like/dislike, but user IP is unknown.");
-      return;
-    }
+const handleLike = async () => {
+  if (userIP === "unknown") {
+    console.log("Attempted to like/dislike, but user IP is unknown.");
+    return;
+  }
 
-    const isLiked = liked; // If already liked, this will be true, indicating we want to remove the like
-    const newLikes = isLiked ? likes - 1 : likes + 1; // Adjust the likes count accordingly
-    const patchUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blogtogglelike?blogid=${encodeURIComponent(blogid)}`;
-    try {
-      console.log(`Sending PATCH request to: ${patchUrl}`);
-      console.log(`Payload: `, { userIP, isLiked: !isLiked }); // Note: The logic might be inverted based on the action
+  const isLiked = liked; // Current state before toggle
+  const newLikes = isLiked ? likes - 1 : likes + 1;
+  
+  // Optimistic update - update UI immediately
+  setLiked(!isLiked);
+  setLikes(newLikes);
 
-      const response = await axios.patch(patchUrl, {
-        userIP,
-        isLiked, // Invert isLiked since true now indicates removal (dislike)
-      });
+  const patchUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blogtogglelike?blogid=${encodeURIComponent(blogid)}`;
+  try {
+    console.log(`Sending PATCH request to: ${patchUrl}`);
+    console.log(`Payload: `, { userIP, isLiked });
 
-      console.log("PATCH request successful, response:", response.data);
+    const response = await axios.patch(patchUrl, {
+      userIP,
+      isLiked,
+    });
 
-      setLiked(!isLiked); // Update liked state based on the action performed
-      setLikes(newLikes); // Update likes count based on the action
-    } catch (error) {
-      console.error("Error updating comment like:", error);
-    }
-  };
-
-  const baseStyle = {
+    console.log("PATCH request successful, response:", response.data);
+  } catch (error) {
+    console.error("Error updating comment like:", error);
+    // Revert the optimistic update on error
+    setLiked(isLiked);
+    setLikes(likes);
+  }
+};  const baseStyle = {
     fontSize: "0.75rem",
     padding: "2px 6px",
     margin: "5px",

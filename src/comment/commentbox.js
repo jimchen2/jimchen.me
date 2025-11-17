@@ -13,57 +13,57 @@ function CommentLikeButton({ commentuuid, like }) {
   const [userIP, setUserIP] = useState("unknown");
 
   useEffect(() => {
-    // This effect to get the user's IP address and check if they've already liked the comment
-    // remains the same, as its logic is self-contained.
     let totalElapsedTime = 0;
-    const maxElapsedTime = 5000; // Give up after 5000ms (5 seconds)
-    let delay = 500; // Start with a 500ms delay
+    const maxElapsedTime = 5000;
+    let delay = 500;
 
     const checkIP = async () => {
-      const ip = await getIpAddress(); // Assuming getIpAddress is async
+      const ip = await getIpAddress();
       if (ip && ip !== "unknown") {
         setUserIP(ip);
         setLiked(like.includes(ip));
-        return true; // IP found, stop polling
+        return true;
       }
-      return false; // IP not found, continue polling
+      return false;
     };
+
+    checkIP(); // Immediately attempt to check IP
 
     const intervalId = setInterval(async () => {
       if ((await checkIP()) || totalElapsedTime >= maxElapsedTime) {
-        clearInterval(intervalId); // Stop polling if IP found or max time reached
+        clearInterval(intervalId);
       } else {
         totalElapsedTime += delay;
-        delay = 1000; // After first check, check every second
+        delay = 1000;
       }
     }, delay);
 
-    // Immediately attempt to check IP without waiting
-    checkIP();
-
-    return () => clearInterval(intervalId); // Cleanup on component unmount
+    return () => clearInterval(intervalId);
   }, [like]);
 
   const handleLike = async () => {
-    if (userIP === "unknown") return; // Prevent action if IP is unknown
+    if (userIP === "unknown") {
+      console.log("Attempted to like/dislike, but user IP is unknown.");
+      return;
+    }
 
-    // Optimistically update the UI
-    const isLiked = !liked;
-    const newLikes = isLiked ? likes + 1 : likes - 1;
-    setLiked(isLiked);
+    const isLiked = liked; // Current state before toggle
+    const newLikes = isLiked ? likes - 1 : likes + 1;
+
+    // Optimistic update - update UI immediately
+    setLiked(!isLiked);
     setLikes(newLikes);
 
     try {
-      // Send the update to the server
       await axios.patch(`/api/commenttogglelike?commentuuid=${commentuuid}`, {
         userIP,
         isLiked,
       });
     } catch (error) {
       console.error("Error updating comment like:", error);
-      // Revert UI on error
-      setLiked(!isLiked);
-      setLikes(isLiked ? newLikes - 1 : newLikes + 1);
+      // Revert the optimistic update on error
+      setLiked(isLiked);
+      setLikes(likes);
     }
   };
 
@@ -84,9 +84,7 @@ function CommentLikeButton({ commentuuid, like }) {
     </Button>
   );
 }
-
 function CommentReplyButton({ onReplyClick }) {
-
   const buttonStyle = {
     fontSize: "0.75rem",
     padding: "2px 6px",
@@ -151,11 +149,7 @@ function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuui
     <Card className="mb-3" style={cardStyle}>
       <Card.Header style={headerStyle}>
         <Card.Title style={titleStyle}>{user}</Card.Title>
-        {showName && (
-          <Link  href={`/a/${blogid}`}>
-            {blogname}
-          </Link>
-        )}
+        {showName && <Link href={`/a/${blogid}`}>{blogname}</Link>}
         <Card.Subtitle style={subtitleStyle}>
           <span>{date}</span>
         </Card.Subtitle>
