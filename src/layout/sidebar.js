@@ -99,8 +99,7 @@ const Sidebar = () => {
       newParams.set("searchterm", trimmedSearchTerm);
     }
 
-    // Always navigate to /blog with the search term
-    router.push(`/blog?${newParams.toString()}`);
+    router.push(`/?${newParams.toString()}`);
   },
   [searchTerm, router]
 );
