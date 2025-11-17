@@ -143,7 +143,7 @@ export const connectIntroPoints = [
   </>,
   <>
     I share my thoughts on my{" "}
-    <a href="http://jimchen.me/blog" target="_blank" rel="noopener noreferrer">
+    <a href="http://jimchen.me" target="_blank" rel="noopener noreferrer">
       personal blog
     </a>
     , mostly in English and around 200k words.

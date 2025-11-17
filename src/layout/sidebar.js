@@ -47,8 +47,8 @@ const OTHER_LINKS = [
 ];
 
 const NAV_ITEMS = [
-  { href: "/", label: "About Me", icon: <FaUser /> },
-  { href: "/blog", label: "My Blog", icon: <FaBlog /> },
+  { href: "/about", label: "About Me", icon: <FaUser /> },
+  { href: "/", label: "My Blog", icon: <FaBlog /> },
   { href: "/tags", label: "All Tags", icon: <FaTags /> },
   { href: "/comments", label: "Comments", icon: <FaComments /> },
   { href: "/projects", label: "Projects", icon: <FaRProject /> },
