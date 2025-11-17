@@ -7,6 +7,7 @@ class MyDocument extends Document {
         <Head>
           <meta charset="UTF-8" />
           <meta name="author" content="Jim Chen" />
+          <meta name="robots" content="index, follow" />
           <link rel="icon" type="image/x-icon" href="/favicon.ico" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
