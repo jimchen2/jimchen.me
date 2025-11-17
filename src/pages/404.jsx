@@ -5,6 +5,20 @@ function Page404() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Add noindex meta tag
+  useEffect(() => {
+    // Create and add the noindex meta tag
+    const metaTag = document.createElement("meta");
+    metaTag.name = "robots";
+    metaTag.content = "noindex";
+    document.head.appendChild(metaTag);
+
+    // Cleanup: remove the meta tag when component unmounts
+    return () => {
+      document.head.removeChild(metaTag);
+    };
+  }, []);
+
   useEffect(() => {
     const fetchRandomImage = async () => {
       try {
@@ -21,6 +35,7 @@ function Page404() {
     fetchRandomImage();
   }, []);
 
+  // ... rest of your code remains the same
   const asciiArt404 = `
        _  _    ___    _  _   
       | || |  / _ \\  | || |  
