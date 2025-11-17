@@ -59,7 +59,7 @@ const TagsPageComponent = ({ postTypeArray }) => {
         {allTags.map((tag) => (
           <Link
             key={tag.type}
-            href={tag.type === "all" ? "/blog" : `/blog?type=${tag.type}`}
+            href={tag.type === "all" ? "/" : `/?type=${tag.type}`}
             passHref
             legacyBehavior // Recommended for styling anchor tags directly
           >
