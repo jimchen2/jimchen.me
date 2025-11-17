@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Head from "next/head"; // <-- 1. IMPORT HEAD
 import * as data from "../static/aboutData";
 
 const s = {
@@ -180,151 +181,167 @@ const Photo = ({ photo }) => {
 
 export default function AboutPage() {
   return (
-    <div style={s.page}>
-      <div style={s.container}>
-        <Card>
-          <div style={{ textAlign: "center" }}>
-            <h1
-              style={{
-                ...s.gradient,
-                fontSize: "2.5rem",
-                fontWeight: "700",
-                letterSpacing: "-0.5px",
-                marginBottom: "1.5rem",
-              }}
-            >
-              {data.introHeading}
-            </h1>
-          </div>
-          <ul
-            style={{
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-              fontSize: "1.05rem",
-              color: "#334155",
-              fontWeight: "500",
-            }}
-          >
-            {data.introductionPoints.map((p, i) => (
-              <li key={i} style={{ marginBottom: "0.5rem" }}>
-                {p}
-              </li>
-            ))}
-          </ul>
-          <hr style={{ margin: "1.5rem 0", border: "none", borderTop: "1px solid #e2e8f0" }} />
+    <>
+      {/* 2. ADD THE HEAD COMPONENT FOR SEO */}
+      <Head>
+        <title>About Jim Chen</title>
+        <meta
+          name="description"
+          content="Learn more about me, Jim Chen. Explore my hobbies, photography, tech setup, and the cultures that inspire me."
+        />
+        <meta name="robots" content="index, follow" />
+        <meta property="og:title" content="About Jim Chen" />
+        <meta property="og:description" content="A personal page about my life, interests, and work." />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SITE}/profile-image.jpg`} />
+      </Head>
 
-          {/* NEW HOBBIES SECTION */}
-          <div style={{ marginBottom: "1.5rem" }}>
-            <h5 style={{ fontWeight: "700", marginBottom: "1rem", color: "#334155" }}>Hobbies:</h5>
-            <ul
-              style={{
-                listStyle: "none",
-                padding: 0,
-                margin: 0,
-                fontSize: "1.05rem",
-                color: "#334155",
-                fontWeight: "500",
-              }}
-            >
-              {data.hobbies.map((h, i) => (
-                <li key={i} style={{ marginBottom: "0.5rem" }}>
-                  {h}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* OTHER FACTS SECTION - NOW COLLAPSIBLE */}
-          <details>
-            <summary
-              style={{
-                fontWeight: "700",
-                marginBottom: "1rem",
-                color: "#334155",
-                cursor: "pointer",
-                fontSize: "1.17em",
-              }}
-            >
-              Other Facts:
-            </summary>
-            <ul
-              style={{
-                listStyle: "none",
-                padding: 0,
-                margin: 0,
-                fontSize: "1.05rem",
-                color: "#334155",
-                fontWeight: "500",
-              }}
-            >
-              {data.otherFacts.map((f, i) => (
-                <li key={i} style={{ marginBottom: "0.5rem" }}>
-                  {f}
-                </li>
-              ))}
-            </ul>
-          </details>
-        </Card>
-
-        <Card>
-          <Header emoji="📸" title={data.photosHeading} />
-          <p style={{ marginBottom: "1.5rem", color: "#475569", fontSize: "1.05rem", fontWeight: "500" }}>
-            {data.photosDescription}
-          </p>
-          <div style={s.grid}>
-            {data.personalPhotos.map((p, i) => (
-              <Photo key={i} photo={p} />
-            ))}
-          </div>
-        </Card>
-
-        <div style={s.twoCol}>
+      <div style={s.page}>
+        <div style={s.container}>
           <Card>
-            <Header emoji="⚙️" title={data.techSetupHeading} />
-            <p style={{ marginBottom: "1.5rem", color: "#475569", fontSize: "0.98rem", fontWeight: "500" }}>
-              {data.techSetupDescription}
-            </p>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              {data.techSetup.map((item, i) => (
-                <Link key={i} item={item} />
+            <div style={{ textAlign: "center" }}>
+              <h1
+                style={{
+                  ...s.gradient,
+                  fontSize: "2.5rem",
+                  fontWeight: "700",
+                  letterSpacing: "-0.5px",
+                  marginBottom: "1.5rem",
+                }}
+              >
+                {data.introHeading}
+              </h1>
+            </div>
+            <ul
+              style={{
+                listStyle: "none",
+                padding: 0,
+                margin: 0,
+                fontSize: "1.05rem",
+                color: "#334155",
+                fontWeight: "500",
+              }}
+            >
+              {data.introductionPoints.map((p, i) => (
+                <li key={i} style={{ marginBottom: "0.5rem" }}>
+                  {p}
+                </li>
               ))}
             </ul>
+            <hr style={{ margin: "1.5rem 0", border: "none", borderTop: "1px solid #e2e8f0" }} />
+
+            {/* NEW HOBBIES SECTION */}
+            <div style={{ marginBottom: "1.5rem" }}>
+              <h5 style={{ fontWeight: "700", marginBottom: "1rem", color: "#334155" }}>Hobbies:</h5>
+              <ul
+                style={{
+                  listStyle: "none",
+                  padding: 0,
+                  margin: 0,
+                  fontSize: "1.05rem",
+                  color: "#334155",
+                  fontWeight: "500",
+                }}
+              >
+                {data.hobbies.map((h, i) => (
+                  <li key={i} style={{ marginBottom: "0.5rem" }}>
+                    {h}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* OTHER FACTS SECTION - NOW COLLAPSIBLE */}
+            <details>
+              <summary
+                style={{
+                  fontWeight: "700",
+                  marginBottom: "1rem",
+                  color: "#334155",
+                  cursor: "pointer",
+                  fontSize: "1.17em",
+                }}
+              >
+                Other Facts:
+              </summary>
+              <ul
+                style={{
+                  listStyle: "none",
+                  padding: 0,
+                  margin: 0,
+                  fontSize: "1.05rem",
+                  color: "#334155",
+                  fontWeight: "500",
+                }}
+              >
+                {data.otherFacts.map((f, i) => (
+                  <li key={i} style={{ marginBottom: "0.5rem" }}>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            </details>
           </Card>
+
           <Card>
-            <Header emoji="🌍" title={data.culturesHeading} />
-            <p style={{ marginBottom: "1.5rem", color: "#475569", fontSize: "0.98rem", fontWeight: "500" }}>
-              {data.culturesDescription}
+            <Header emoji="📸" title={data.photosHeading} />
+            <p style={{ marginBottom: "1.5rem", color: "#475569", fontSize: "1.05rem", fontWeight: "500" }}>
+              {data.photosDescription}
             </p>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              {data.globalInternet.map((item, i) => (
-                <Link key={i} item={item} />
+            <div style={s.grid}>
+              {data.personalPhotos.map((p, i) => (
+                <Photo key={i} photo={p} />
+              ))}
+            </div>
+          </Card>
+
+          <div style={s.twoCol}>
+            <Card>
+              <Header emoji="⚙️" title={data.techSetupHeading} />
+              <p style={{ marginBottom: "1.5rem", color: "#475569", fontSize: "0.98rem", fontWeight: "500" }}>
+                {data.techSetupDescription}
+              </p>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                {data.techSetup.map((item, i) => (
+                  <Link key={i} item={item} />
+                ))}
+              </ul>
+            </Card>
+            <Card>
+              <Header emoji="🌍" title={data.culturesHeading} />
+              <p style={{ marginBottom: "1.5rem", color: "#475569", fontSize: "0.98rem", fontWeight: "500" }}>
+                {data.culturesDescription}
+              </p>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                {data.globalInternet.map((item, i) => (
+                  <Link key={i} item={item} />
+                ))}
+              </ul>
+            </Card>
+          </div>
+
+          <Card>
+            <Header emoji="🔗" title={data.connectHeading} />
+            <ul
+              style={{
+                listStyle: "none",
+                padding: 0,
+                margin: 0,
+                fontSize: "1.05rem",
+                color: "#475569",
+                lineHeight: "1.6",
+                fontWeight: "500",
+              }}
+            >
+              {data.connectIntroPoints.map((p, i) => (
+                <li key={i} style={{ marginBottom: "1rem" }}>
+                  {p}
+                </li>
               ))}
             </ul>
           </Card>
         </div>
-
-        <Card>
-          <Header emoji="🔗" title={data.connectHeading} />
-          <ul
-            style={{
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-              fontSize: "1.05rem",
-              color: "#475569",
-              lineHeight: "1.6",
-              fontWeight: "500",
-            }}
-          >
-            {data.connectIntroPoints.map((p, i) => (
-              <li key={i} style={{ marginBottom: "1rem" }}>
-                {p}
-              </li>
-            ))}
-          </ul>
-        </Card>
       </div>
-    </div>
+    </>
   );
 }

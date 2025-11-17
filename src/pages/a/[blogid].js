@@ -33,6 +33,7 @@ export default function Blog({ blog, type, error }) {
       <Head>
         <title>{blog.title}</title>
         <meta name="description" content={description} />
+        <meta name="robots" content="index, follow" />
         <meta name="keywords" content={`${typeString}, ${blog.title}, blog`} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={canonicalUrl} />

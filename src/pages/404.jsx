@@ -5,20 +5,6 @@ function Page404() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Add noindex meta tag
-  useEffect(() => {
-    // Create and add the noindex meta tag
-    const metaTag = document.createElement("meta");
-    metaTag.name = "robots";
-    metaTag.content = "noindex";
-    document.head.appendChild(metaTag);
-
-    // Cleanup: remove the meta tag when component unmounts
-    return () => {
-      document.head.removeChild(metaTag);
-    };
-  }, []);
-
   useEffect(() => {
     const fetchRandomImage = async () => {
       try {
@@ -118,28 +104,37 @@ function Page404() {
     },
   };
 
+
   return (
-    <div style={styles.container}>
-      <br />
-      <br />
+    <>
+      {/* 2. Use the Head component */}
+      <Head>
+        <title>404 - Page Not Found</title>
+        <meta name="robots" content="noindex" />
+      </Head>
 
-      <pre style={styles.title}>{asciiArt404}</pre>
+      <div style={styles.container}>
+        <br />
+        <br />
 
-      <div style={styles.imageContainer}>
-        {loading && <div style={styles.loadingText}>Loading a random image...</div>}
-        {error && <div style={styles.errorText}>{error}</div>}
-        {!loading && !error && <img src={imageUrl} alt="Random 404 image" style={styles.image} />}
+        <pre style={styles.title}>{asciiArt404}</pre>
+
+        <div style={styles.imageContainer}>
+          {loading && <div style={styles.loadingText}>Loading a random image...</div>}
+          {error && <div style={styles.errorText}>{error}</div>}
+          {!loading && !error && <img src={imageUrl} alt="Random 404 image" style={styles.image} />}
+        </div>
+
+        <p style={styles.message}>Oops! Looks like you're lost in the digital wilderness.</p>
+        <a href="/" style={styles.link}>
+          Return to Home
+        </a>
+        <br />
+        <br />
+        <br />
+        <br />
       </div>
-
-      <p style={styles.message}>Oops! Looks like you're lost in the digital wilderness.</p>
-      <a href="/" style={styles.link}>
-        Return to Home
-      </a>
-      <br />
-      <br />
-      <br />
-      <br />
-    </div>
+    </>
   );
 }
 
