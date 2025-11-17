@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function Page404() {
+function Custom404() {
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,7 +21,6 @@ function Page404() {
     fetchRandomImage();
   }, []);
 
-  // ... rest of your code remains the same
   const asciiArt404 = `
        _  _    ___    _  _   
       | || |  / _ \\  | || |  
@@ -97,45 +96,33 @@ function Page404() {
       fontSize: "1rem",
       fontWeight: "500",
       transition: "background-color 0.3s ease, transform 0.2s ease",
-      ":hover": {
-        backgroundColor: "#0056b3",
-        transform: "translateY(-2px)",
-      },
+      cursor: "pointer",
     },
   };
 
-
   return (
-    <>
-      {/* 2. Use the Head component */}
-      <Head>
-        <title>404 - Page Not Found</title>
-        <meta name="robots" content="noindex" />
-      </Head>
+    <div style={styles.container}>
+      <br />
+      <br />
 
-      <div style={styles.container}>
-        <br />
-        <br />
+      <pre style={styles.title}>{asciiArt404}</pre>
 
-        <pre style={styles.title}>{asciiArt404}</pre>
-
-        <div style={styles.imageContainer}>
-          {loading && <div style={styles.loadingText}>Loading a random image...</div>}
-          {error && <div style={styles.errorText}>{error}</div>}
-          {!loading && !error && <img src={imageUrl} alt="Random 404 image" style={styles.image} />}
-        </div>
-
-        <p style={styles.message}>Oops! Looks like you're lost in the digital wilderness.</p>
-        <a href="/" style={styles.link}>
-          Return to Home
-        </a>
-        <br />
-        <br />
-        <br />
-        <br />
+      <div style={styles.imageContainer}>
+        {loading && <div style={styles.loadingText}>Loading a random image...</div>}
+        {error && <div style={styles.errorText}>{error}</div>}
+        {!loading && !error && <img src={imageUrl} alt="Random 404 image" style={styles.image} />}
       </div>
-    </>
+
+      <p style={styles.message}>Oops! Looks like you're lost in the digital wilderness.</p>
+      <a href="/" style={styles.link}>
+        Return to Home
+      </a>
+      <br />
+      <br />
+      <br />
+      <br />
+    </div>
   );
 }
 
-export default Page404;
+export default Custom404;
