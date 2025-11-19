@@ -84,7 +84,7 @@ export const techSetup = [
     description: "This website is created with Next.js framework, my previous website was created in 2022 in Wix..",
   },
   {
-    name: "Dual Subtitle on YouTube",
+    name: "Dual Subtitles on YouTube",
     url: "https://github.com/jimchen2/youtube-dual-subtitles",
     description: "A browser extension to display dual subtitles on YouTube to help language learning.",
   },
