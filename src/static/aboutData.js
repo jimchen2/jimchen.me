@@ -33,7 +33,7 @@ export const otherFacts = [
     </a>
     .
   </>,
-  "In 2022 I began seriously use a smartphone, and watch YouTube heavily in English, then in other languages.",
+  "In 2022 I began seriously use a smartphone, and watched YouTube heavily in English, then in other languages.",
 ];
 
 // --- Photos Section ---
