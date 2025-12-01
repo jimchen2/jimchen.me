@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Commentinputbox from "./commentsubmit.js";
-import { getIpAddress } from "@/layout/theme.js";
 import Card from "react-bootstrap/Card";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Link from "next/link.js";

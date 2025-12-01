@@ -11,9 +11,7 @@ const BlogViewCounter = ({ blogid }) => {
     const recordViewSequence = async () => {
       try {
         // Step 1: GET - Fetch current views and Security Token
-        const getResponse = await axios.get(
-          `${process.env.NEXT_PUBLIC_SITE}/api/blog/views?blogid=${blogid}`
-        );
+        const getResponse = await axios.get(`${process.env.NEXT_PUBLIC_SITE}/api/blog/views?blogid=${blogid}`);
 
         if (!isMounted) return;
 
@@ -24,15 +22,14 @@ const BlogViewCounter = ({ blogid }) => {
         // We check hasRecordedView to prevent double counting in React Strict Mode or re-renders
         if (token && !hasRecordedView) {
           setHasRecordedView(true); // Lock it immediately
-          
-          await axios.post(
-            `${process.env.NEXT_PUBLIC_SITE}/api/blog/views?blogid=${blogid}`,
-            { token: token }
-          ).then((postResponse) => {
-             if(isMounted) {
-               setViews(postResponse.data.views);
-             }
-          });
+
+          await axios
+            .post(`${process.env.NEXT_PUBLIC_SITE}/api/blog/views?blogid=${blogid}`, { token: token })
+            .then((postResponse) => {
+              if (isMounted) {
+                setViews(postResponse.data.views);
+              }
+            });
         }
       } catch (error) {
         console.error("View counter error:", error);
@@ -51,8 +48,8 @@ const BlogViewCounter = ({ blogid }) => {
   if (views === 0) return null; // Don't show anything until loaded
 
   return (
-    <span className="ms-2 text-muted" style={{ fontSize: "0.9em" }}>
-      • {views.toLocaleString()} views
+    <span>
+      {} • {views.toLocaleString()} views
     </span>
   );
 };
