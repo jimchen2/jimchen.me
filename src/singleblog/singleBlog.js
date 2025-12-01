@@ -5,6 +5,7 @@ import { BlogToc } from "./blogToc";
 import BlogLikeButton from "./bloglikebutton";
 import CodeBlock from "./codeBlock";
 import { generateStyles } from "./blogstylesHelper";
+import BlogViewCounter from "./blogViewCounter";
 
 // Default padding values for server-side rendering
 function calculateBlogPadding(windowWidth = null) {
@@ -25,7 +26,7 @@ function calculateBlogPadding(windowWidth = null) {
   };
 }
 
-const BlogHeader = ({ date, wordcount }) => {
+const BlogHeader = ({ date, wordcount, blogid }) => {
   console.log(date);
 
   const displayDate = date === "December 31, 9999" ? "Current" : date;
@@ -36,9 +37,9 @@ const BlogHeader = ({ date, wordcount }) => {
       <div className="d-flex justify-content-between align-items-center">
         <div>
           <small className="text">
-            {/* --- AND HERE --- */}
             {/* Use the new variable to display the date */}
             {displayDate} • {wordcount} words
+            <BlogViewCounter blogid={blogid} />
           </small>
         </div>
       </div>

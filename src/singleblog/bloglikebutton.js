@@ -1,17 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 
-// Optional: Pass initialLikes if you fetch count via getStaticProps/getServerSideProps
 function BlogLikeButton({ blogid, initialLikes = 0 }) {
   const [likes, setLikes] = useState(initialLikes);
   const [liked, setLiked] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
-  
-  // Use a ref to prevent spam-clicking sending too many requests
-  const isRequesting = useRef(false);
 
-  // 1. Fetch initial status (Does this user like this blog?)
+  // Store the security token
+  const [securityToken, setSecurityToken] = useState(null);
+
+  // 1. Fetch initial status and Security Token
   useEffect(() => {
     let isMounted = true;
     const fetchStatus = async () => {
@@ -20,46 +19,57 @@ function BlogLikeButton({ blogid, initialLikes = 0 }) {
         if (isMounted) {
           setLikes(response.data.likes);
           setLiked(response.data.liked);
+          setSecurityToken(response.data.token);
           setIsFetching(false);
         }
       } catch (error) {
         console.error("Failed to fetch like status", error);
+        // Even if initial fetch fails, allow interaction based on default props
+        if (isMounted) setIsFetching(false);
       }
     };
 
     fetchStatus();
-
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+    };
   }, [blogid]);
 
-  const handleLike = async () => {
-    // Prevent spam clicking
-    if (isRequesting.current) return;
-    
-    // 2. Optimistic Update: Update UI immediately
+  const handleLike = () => {
+    // 1. Snapshot previous state in case we need to revert
     const previousLiked = liked;
     const previousLikes = likes;
 
-    setLiked(!previousLiked);
-    setLikes((prev) => (previousLiked ? prev - 1 : prev + 1));
-    
-    isRequesting.current = true;
+    // 2. Calculate new state
+    const newLiked = !previousLiked;
+    const newLikes = newLiked ? previousLikes + 1 : previousLikes - 1;
 
-    try {
-      // 3. Send request to server
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_SITE}/api/blog/likes?blogid=${blogid}`);
-      
-      // Sync with actual server data to ensure accuracy
-      setLikes(response.data.likes);
-      setLiked(response.data.liked);
-    } catch (error) {
-      console.error("Error toggling like:", error);
-      // 4. Revert UI on error
-      setLiked(previousLiked);
-      setLikes(previousLikes);
-    } finally {
-      isRequesting.current = false;
+    // 3. UPDATE UI IMMEDIATELY (Do not wait for token or backend)
+    setLiked(newLiked);
+    setLikes(newLikes);
+
+    // 4. Send Request in Background
+    // If the token hasn't loaded yet, we update UI but skip the API call to prevent errors
+    if (!securityToken) {
+      console.log("TOKEN NOT LOADED");
+      return;
     }
+
+    axios
+      .post(`${process.env.NEXT_PUBLIC_SITE}/api/blog/likes?blogid=${blogid}`, {
+        token: securityToken,
+      })
+      .then((response) => {
+        // Optional: You can sync with server response here, but usually,
+        // trusting the optimistic update feels smoother to the user.
+        // We do NOTHING here to prevent "jumping" numbers if the user clicks fast.
+      })
+      .catch((error) => {
+        console.error("Error toggling like:", error);
+        // 5. REVERT UI ONLY ON ERROR
+        setLiked(previousLiked);
+        setLikes(previousLikes);
+      });
   };
 
   const baseStyle = {
@@ -67,24 +77,26 @@ function BlogLikeButton({ blogid, initialLikes = 0 }) {
     padding: "2px 6px",
     margin: "5px",
     transition: "background-color 0.2s, transform 0.1s",
-    // Make it look clickable immediately, even if fetching background status
-    opacity: isFetching ? 0.8 : 1, 
-    cursor: isRequesting.current ? "wait" : "pointer"
+    // Remove opacity changes during interaction to prevent "disabled" feel
+    opacity: isFetching ? 0.6 : 1,
+    cursor: "pointer",
   };
 
   const likedButtonStyle = {
     ...baseStyle,
-    backgroundColor: "#007bff", // Bootstrap primary color example
+    backgroundColor: "#007bff",
     color: "white",
-    borderColor: "#007bff"
+    borderColor: "#007bff",
   };
 
   return (
-    <Button 
+    <Button
       variant={liked ? "primary" : "outline-primary"}
-      style={liked ? likedButtonStyle : baseStyle} 
+      style={liked ? likedButtonStyle : baseStyle}
       onClick={handleLike}
-      disabled={isRequesting.current} // Optional: strictly disable button while request is flying
+      // Only disable during the very first load to prevent hydration mismatches,
+      // never disable while the user is clicking.
+      disabled={isFetching}
     >
       {liked ? "Liked" : "Like"} {likes}
     </Button>
