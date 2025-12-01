@@ -4,7 +4,6 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import {
   FaSearch,
   FaTags,
-  FaComments,
   FaUser,
   FaTelegram,
   FaYoutube,

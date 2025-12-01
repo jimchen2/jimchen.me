@@ -80,15 +80,24 @@ export default async function handler(req, res) {
         return res.status(403).json({ message: "Invalid session or IP mismatch" });
       }
 
-      // 3. Insert View (Fire and forget, or wait for result)
-      // Note: We don't check for duplicates here (unlike likes), 
-      // so every page load counts as a view.
-      await pool.query(
-        'INSERT INTO blog_views (blogid, user_ip, referrer) VALUES ($1, $2, $3)',
-        [blogid, userIp, referrer]
+      // 3. NEW: Check if this IP has already viewed this blog today
+      // We use `viewed_at::date = CURRENT_DATE` to compare only the date part in Postgres
+      const checkResult = await pool.query(
+        `SELECT id FROM blog_views 
+         WHERE blogid = $1 AND user_ip = $2 AND viewed_at::date = CURRENT_DATE`,
+        [blogid, userIp]
       );
 
-      // Return updated count
+      // 4. If no view exists for today (rowCount is 0), insert a new one
+      if (checkResult.rowCount === 0) {
+        await pool.query(
+          'INSERT INTO blog_views (blogid, user_ip, referrer) VALUES ($1, $2, $3)',
+          [blogid, userIp, referrer]
+        );
+      }
+      // If a view already exists for today, we do nothing and simply proceed.
+
+      // 5. Return the final, potentially updated, count
       const countResult = await pool.query(
         'SELECT COUNT(*) FROM blog_views WHERE blogid = $1',
         [blogid]

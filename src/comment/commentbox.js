@@ -1,169 +1,131 @@
-import React, { useState, useEffect } from "react";
-import Commentinputbox from "./commentsubmit.js";
-import Card from "react-bootstrap/Card";
+import React, { useState, createContext, useContext } from "react";
+import { Card, Button, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Link from "next/link.js";
-import { Button } from "react-bootstrap";
-import axios from "axios"; // Added missing import for the API call
+import axios from "axios";
 
-function CommentLikeButton({ commentuuid, like }) {
-  const [likes, setLikes] = useState(like.length);
-  const [liked, setLiked] = useState(false);
-  const [userIP, setUserIP] = useState("unknown");
+// --- Context for triggering comment list updates ---
+const CommentsContext = createContext();
+export const useComments = () => useContext(CommentsContext);
 
-  useEffect(() => {
-    let totalElapsedTime = 0;
-    const maxElapsedTime = 5000;
-    let delay = 500;
+export const CommentsProvider = ({ children }) => {
+  const [updateTrigger, setUpdateTrigger] = useState(0);
+  const triggerUpdate = () => setUpdateTrigger(Date.now());
+  return (
+    <CommentsContext.Provider value={{ updateTrigger, triggerUpdate }}>
+      {children}
+    </CommentsContext.Provider>
+  );
+};
 
-    const checkIP = async () => {
-      const ip = await getIpAddress();
-      if (ip && ip !== "unknown") {
-        setUserIP(ip);
-        setLiked(like.includes(ip));
-        return true;
-      }
-      return false;
-    };
+// --- Comment Input Box Component ---
+export function CommentInputBox({ commentuuid, blogid }) {
+  const { triggerUpdate } = useComments();
+  const [username, setUsername] = useState("");
+  const [message, setMessage] = useState("");
 
-    checkIP(); // Immediately attempt to check IP
+  const handleSubmitReply = async (e) => {
+    e.preventDefault();
+    if (!message.trim()) return; // Prevent empty comments
 
-    const intervalId = setInterval(async () => {
-      if ((await checkIP()) || totalElapsedTime >= maxElapsedTime) {
-        clearInterval(intervalId);
-      } else {
-        totalElapsedTime += delay;
-        delay = 1000;
-      }
-    }, delay);
-
-    return () => clearInterval(intervalId);
-  }, [like]);
-
-  const handleLike = async () => {
-    if (userIP === "unknown") {
-      console.log("Attempted to like/dislike, but user IP is unknown.");
-      return;
-    }
-
-    const isLiked = liked; // Current state before toggle
-    const newLikes = isLiked ? likes - 1 : likes + 1;
-
-    // Optimistic update - update UI immediately
-    setLiked(!isLiked);
-    setLikes(newLikes);
+    // Generate a simple client-side UUID
+    const uuid = [...Array(32)].map(() => Math.floor(Math.random() * 16).toString(16)).join("");
 
     try {
-      await axios.patch(`/api/commenttogglelike?commentuuid=${commentuuid}`, {
-        userIP,
-        isLiked,
+      await axios.post("/api/comment", {
+        user: username || "anonymous",
+        text: message,
+        blog: blogid,
+        uuid: uuid,
+        parentid: commentuuid !== "-1" ? commentuuid : null,
       });
+
+      // Clear form and trigger a refresh of the comment list
+      setUsername("");
+      setMessage("");
+      triggerUpdate();
     } catch (error) {
-      console.error("Error updating comment like:", error);
-      // Revert the optimistic update on error
-      setLiked(isLiked);
-      setLikes(likes);
+      console.error("Error submitting comment:", error);
+      // Optionally, show an error message to the user here
     }
   };
 
-  const baseStyle = {
-    fontSize: "0.75rem",
-    padding: "2px 6px",
-    margin: "5px",
-    transition: "background-color 0.3s, color 0.3s",
-  };
-
-  const likedButtonStyle = {
-    ...baseStyle,
-  };
-
   return (
-    <Button style={liked ? likedButtonStyle : baseStyle} onClick={handleLike}>
-      {liked ? "Liked" : "Like"} {likes}
-    </Button>
+    <div style={{ marginTop: "0" }}>
+      <Card>
+        <Card.Body>
+          <Form onSubmit={handleSubmitReply}>
+            <Form.Group className="mb-3">
+              <Form.Label>Name (Optional)</Form.Label>
+              <Form.Control
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Guest"
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Message</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Input your message here"
+                required
+              />
+            </Form.Group>
+            <Button variant="outline-primary" type="submit">
+              Comment
+            </Button>
+          </Form>
+        </Card.Body>
+      </Card>
+      <br />
+      <br />
+    </div>
   );
 }
-function CommentReplyButton({ onReplyClick }) {
-  const buttonStyle = {
-    fontSize: "0.75rem",
-    padding: "2px 6px",
-    margin: "5px",
-    transition: "background-color 0.3s",
-  };
 
+// --- Reply Button Component ---
+function CommentReplyButton({ onReplyClick }) {
   return (
-    <Button style={buttonStyle} onClick={onReplyClick}>
+    <Button size="sm" variant="light" onClick={onReplyClick}>
       Reply
     </Button>
   );
 }
 
-function CommentBox({ embed = 0, user, date, blogname, comment, like, commentuuid, blogid, showName }) {
+// --- Comment Display Component ---
+function CommentBox({ embed = 0, user, date, comment, commentuuid, blogid }) {
   const [showReply, setShowReply] = useState(false);
-
   const MAX_EMBED = 2;
   const ADJUST_FACTOR = 40;
-  const BASE_FONT_SIZE = 16;
-  const TITLE_FONT_SIZE = 14;
-  const SUBTITLE_FONT_SIZE = 14;
 
-  // Adjusted embed calculation remains the same
+  // Limit visual nesting to MAX_EMBED levels
   const adjustedEmbed = embed > MAX_EMBED ? MAX_EMBED - 1 : embed - 1;
 
   const cardStyle = {
     marginLeft: `${adjustedEmbed * ADJUST_FACTOR}px`,
-    fontSize: `${BASE_FONT_SIZE}px`,
   };
 
-  const headerStyle = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
-  };
-
-  const titleStyle = {
-    marginBottom: 0,
-    fontSize: `${TITLE_FONT_SIZE}px`,
-  };
-
-  const subtitleStyle = {
-    fontSize: `${SUBTITLE_FONT_SIZE}px`,
-  };
-
-  const cardTextStyle = {
-    whiteSpace: "pre-wrap",
-  };
-
-  const buttonContainerStyle = {
-    display: "flex",
-    alignItems: "center",
-  };
-
-  const toggleReply = () => {
-    setShowReply(!showReply);
-  };
+  const toggleReply = () => setShowReply(!showReply);
 
   return (
     <Card className="mb-3" style={cardStyle}>
-      <Card.Header style={headerStyle}>
-        <Card.Title style={titleStyle}>{user}</Card.Title>
-        {showName && <Link href={`/a/${blogid}`}>{blogname}</Link>}
-        <Card.Subtitle style={subtitleStyle}>
-          <span>{date}</span>
+      <Card.Header className="d-flex justify-content-between align-items-center flex-wrap">
+        <Card.Title as="h6" className="mb-0">{user}</Card.Title>
+        <Card.Subtitle as="span" className="text-muted small">
+          {date}
         </Card.Subtitle>
       </Card.Header>
       <Card.Body>
-        <Card.Text style={cardTextStyle}>{comment}</Card.Text>
-        <div style={buttonContainerStyle}>
-          <CommentLikeButton like={like} commentuuid={commentuuid} />
-          {/* --- CHANGE 2: UPDATED COMPONENT USAGE --- */}
-          {/* Now calling the simplified button. It only needs the click handler. */}
-          <CommentReplyButton onReplyClick={toggleReply} />
-        </div>
-        {/* This logic is correct. It shows the input box only when a user clicks reply. */}
-        {/* It correctly passes the `commentuuid` of this comment to the input box. */}
-        {showReply && <Commentinputbox commentuuid={commentuuid} blogid={blogid} />}
+        <Card.Text style={{ whiteSpace: "pre-wrap" }}>{comment}</Card.Text>
+        <CommentReplyButton onReplyClick={toggleReply} />
+        {showReply && (
+          <div className="mt-3">
+            <CommentInputBox commentuuid={commentuuid} blogid={blogid} />
+          </div>
+        )}
       </Card.Body>
     </Card>
   );

@@ -62,7 +62,24 @@
 
 - `blog_views_pkey` PRIMARY KEY, btree (id)
 - `blog_views_blogid_idx` btree (blogid)
+- `idx_blog_views_check` btree (blogid, user_ip, (viewed_at::date))
 
 **Foreign Keys:**
 
 - `blogid` → blogs(blogid) ON DELETE CASCADE
+
+### comment
+
+| Column     | Type                        | Collation | Nullable | Default           |
+| ---------- | --------------------------- | --------- | -------- | ----------------- |
+| uuid       | text                        |           | not null |                   |
+| user_name  | text                        |           |          |                   |
+| text       | text                        |           |          |                   |
+| blog_id    | text                        |           |          |                   |
+| uppointer  | text[]                      |           |          | '{}'::text[]      |
+| date       | timestamp without time zone |           |          | CURRENT_TIMESTAMP |
+| updated_at | timestamp without time zone |           |          | CURRENT_TIMESTAMP |
+
+**Indexes:**
+
+- "comments_pkey" PRIMARY KEY, btree (uuid)
