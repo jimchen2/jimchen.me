@@ -2,7 +2,7 @@ import React, { useEffect, useState, memo } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import parse from "html-react-parser";
 import { BlogToc } from "./blogToc";
-import BlogLikeButtonHelper from "./likebutton/bloglikebuttonhelper";
+import BlogLikeButton from "./bloglikebutton";
 import CodeBlock from "./codeBlock";
 import { generateStyles } from "./blogstylesHelper";
 
@@ -110,7 +110,7 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
               {elements}
               <style>{styles}</style>
             </div>
-            <BlogLikeButtonHelper blogid={blogid} />
+            <BlogLikeButton blogid={blogid} />
             <br />
           </div>
         </Col>

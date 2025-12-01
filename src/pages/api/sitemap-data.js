@@ -1,4 +1,4 @@
-import dbConnect from "@/db/dbConnect";
+import dbConnect from "@/lib/dbConnect";
 
 /**
  * Fetches all blog data needed for sitemap generation

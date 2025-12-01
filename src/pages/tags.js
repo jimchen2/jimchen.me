@@ -81,7 +81,7 @@ export async function getServerSideProps() {
   try {
     // We only need the filters, not the posts.
     // We call the same endpoint but will only use the 'filters' part of the response.
-    const apiUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blogpreview`;
+    const apiUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blog/preview`;
     const response = await axios.get(apiUrl);
 
     const postTypeArray = response.data.filters?.types || [];

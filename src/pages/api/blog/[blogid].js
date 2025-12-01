@@ -1,4 +1,4 @@
-import dbConnect from "@/db/dbConnect.js";
+import dbConnect from "@/lib/dbConnect.js";
 
 export default async function handler(req, res) {
   const pool = await dbConnect();

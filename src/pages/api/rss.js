@@ -1,6 +1,6 @@
 // pages/api/rss.js
 import RSS from "rss";
-import dbConnect from "../../db/dbConnect";
+import dbConnect from "../../lib/dbConnect";
 
 export default async function handler(req, res) {
   try {

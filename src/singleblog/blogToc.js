@@ -12,7 +12,22 @@ const scrollToElement = (id, offset = -70) => {
   }
 };
 const addHashLinks = () => {
-  document.querySelectorAll("h2, h3").forEach((header) => {
+  document.querySelectorAll("h2").forEach((header) => {
+    const id = header.id;
+    if (id && !header.querySelector(".hash-link")) {
+      const link = document.createElement("a");
+      link.className = "hash-link";
+      link.href = `#${id}`;
+      link.innerHTML = "#";
+      link.style.marginRight = "5px";
+      link.onclick = (e) => {
+        e.preventDefault();
+        scrollToElement(id);
+      };
+      header.prepend(link);
+    }
+  });
+  document.querySelectorAll("h3").forEach((header) => {
     const id = header.id;
     if (id && !header.querySelector(".hash-link")) {
       const link = document.createElement("a");

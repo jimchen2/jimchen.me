@@ -1,4 +1,4 @@
-import dbConnect from "@/db/dbConnect";
+import dbConnect from "@/lib/dbConnect";
 
 /**
  * Creates a relevant text snippet from a blog body based on a search term.
@@ -203,9 +203,6 @@ export async function getBlogTypesWithCounts() {
   }
 }
 
-/**
- * The main API handler for GET /api/blogpreview
- */
 export default async function handler(req, res) {
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);

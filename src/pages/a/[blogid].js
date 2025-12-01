@@ -1,4 +1,4 @@
-import dbConnect from "@/db/dbConnect";
+import dbConnect from "@/lib/dbConnect";
 import React from "react";
 import Head from "next/head";
 import SingleBlog from "@/singleblog/singleBlog";

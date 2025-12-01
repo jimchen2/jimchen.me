@@ -10,7 +10,7 @@ export async function getServerSideProps(context) {
 
   try {
     const start = (pageNumber - 1) * 10; // 10 items per page
-    let apiUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blogpreview?start=${start}&count=10`;
+    let apiUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blog/preview?start=${start}&count=10`;
 
     if (type) {
       apiUrl += `&type=${type}`;
