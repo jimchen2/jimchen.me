@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import * as data from "../static/aboutData";
+import * as data from "../layout/static/aboutData";
 
 const s = {
   page: {

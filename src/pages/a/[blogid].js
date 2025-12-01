@@ -2,7 +2,7 @@ import dbConnect from "@/config/dbConnect";
 import React from "react";
 import Head from "next/head";
 import SingleBlog from "@/singleblog/singleBlog";
-import Msg from "@/comment/leaveamessage";
+import Msg from "@/singleblog/comment/leaveamessage";
 
 export default function Blog({ blog, type, error }) {
   if (error) {

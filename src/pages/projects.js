@@ -1,6 +1,6 @@
 // Projects.js
 import React from "react";
-import projectData from "@/static/ProjectContent.js";
+import projectData from "@/layout/static/ProjectContent.js";
 
 function Projects() {
   const containerStyle = {
