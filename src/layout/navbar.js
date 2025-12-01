@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Container, Navbar, Nav } from "react-bootstrap";
-import { useGlobalColorScheme } from "../config/config.js";
+import { useGlobalColorScheme } from "./theme.js";
 
 // --- ThemeSwitcher Component ---
 const ThemeSwitcher = () => {

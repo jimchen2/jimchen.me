@@ -1,4 +1,4 @@
-import dbConnect from "@/config/dbConnect";
+import dbConnect from "@/db/dbConnect";
 
 /**
  * Creates a relevant text snippet from a blog body based on a search term.

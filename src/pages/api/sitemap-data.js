@@ -1,4 +1,4 @@
-import dbConnect from "@/config/dbConnect";
+import dbConnect from "@/db/dbConnect";
 
 /**
  * Fetches all blog data needed for sitemap generation

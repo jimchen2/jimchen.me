@@ -1,32 +1,14 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import Head from "next/head";
-import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { ColorSchemeProvider, setIpAddress } from "../config/config.js";
+import { ColorSchemeProvider } from "@/layout/theme";
 
 import MainLayout from "@/layout/MainLayout.js";
 
-// --- Helper function to fetch IP (Unchanged) ---
-const fetchIpInfo = async () => {
-  try {
-    const response = await axios.get("/api/get-ip");
-    if (response?.data?.ip) {
-      setIpAddress(response.data.ip);
-    }
-  } catch (error) {
-    console.error("Failed to fetch IP:", error);
-  }
-};
-
-
 // --- Main App Component ---
 function MyApp({ Component, pageProps }) {
-  useEffect(() => {
-    fetchIpInfo();
-  }, []);
-
   // Check if the page component has a `showSidebar` property set to false.
   // If not specified, it defaults to true.
   const showSidebar = Component.showSidebar !== false;
@@ -43,7 +25,7 @@ function MyApp({ Component, pageProps }) {
         <Component {...pageProps} />
       </MainLayout>
 
-      {/* Global styles can be placed here or in a global.css file */}
+      {/* Global styles */}
       <style jsx global>{`
         body {
           transition: background-color 0.3s ease, color 0.3s ease;

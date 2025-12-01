@@ -4,27 +4,9 @@ import React, {
   useState,
   useEffect,
   useCallback,
-  useRef, // Added useRef
+  useRef,
 } from "react";
 import Cookies from "js-cookie";
-
-// --- IP Address Module (Unchanged) ---
-const IPAddressModule = (() => {
-  let globalIpAddress = "unknown";
-  function setIpAddress(ip) {
-    globalIpAddress = ip;
-  }
-  function getIpAddress() {
-    return globalIpAddress;
-  }
-  return {
-    setIpAddress,
-    getIpAddress,
-  };
-})();
-
-export const setIpAddress = IPAddressModule.setIpAddress;
-export const getIpAddress = IPAddressModule.getIpAddress;
 
 // --- Theme Management with DarkReader ---
 const THEME_COOKIE_KEY = "themeMode";
@@ -54,7 +36,7 @@ export const useColorScheme = () => {
           console.error("Failed to load DarkReader dynamically:", err)
         );
     }
-  }, []); // Empty dependency array means it runs once on mount (client-side)
+  }, []);
 
   // Function to apply theme using DarkReader
   const applyTheme = useCallback(
@@ -73,28 +55,24 @@ export const useColorScheme = () => {
         darkReaderFunctionsRef.current.disable();
       }
     },
-    [darkReaderLoaded] // Re-create if darkReaderLoaded changes
+    [darkReaderLoaded]
   );
 
   // Effect for initial theme load from cookies and applying it
   useEffect(() => {
-    // This effect now depends on darkReaderLoaded
-    if (darkReaderLoaded) { // Ensures DarkReader is available
+    if (darkReaderLoaded) {
       const savedTheme = Cookies.get(THEME_COOKIE_KEY);
       const initialTheme =
         savedTheme === "dark" || savedTheme === "light"
           ? savedTheme
           : DEFAULT_THEME;
 
-      setThemeMode(initialTheme); // Set state first
-      applyTheme(initialTheme); // Then apply visual theme
-      setIsHydrated(true); // Now we are truly hydrated with the correct theme
+      setThemeMode(initialTheme);
+      applyTheme(initialTheme);
+      setIsHydrated(true);
     } else if (typeof window === "undefined") {
-      // For SSR, set a default themeMode so components can render.
-      // Actual DarkReader application happens client-side.
       setThemeMode(DEFAULT_THEME);
     }
-    // If darkReader isn't loaded yet on the client, this effect will re-run when darkReaderLoaded becomes true.
   }, [darkReaderLoaded, applyTheme]);
 
   const toggleThemeMode = useCallback(() => {
@@ -104,8 +82,7 @@ export const useColorScheme = () => {
     }
 
     setThemeMode((prevMode) => {
-      // Ensure prevMode is not null if component renders before hydration completes fully
-      const currentActualMode = prevMode || DEFAULT_THEME; // Use default if prevMode is null
+      const currentActualMode = prevMode || DEFAULT_THEME;
       const newMode = currentActualMode === "light" ? "dark" : "light";
       applyTheme(newMode);
       Cookies.set(THEME_COOKIE_KEY, newMode, { expires: 365 });
@@ -114,7 +91,7 @@ export const useColorScheme = () => {
   }, [applyTheme, darkReaderLoaded]);
 
   return {
-    themeMode: themeMode || DEFAULT_THEME, // Provide a fallback during initial null state or SSR
+    themeMode: themeMode || DEFAULT_THEME,
     toggleThemeMode,
     isHydrated,
   };
@@ -125,8 +102,6 @@ const ColorSchemeContext = createContext(undefined);
 export const ColorSchemeProvider = ({ children }) => {
   const colorScheme = useColorScheme();
 
-  // The provider itself just passes down the value.
-  // Consumers (like Layout) can use `isHydrated` to manage rendering if needed.
   return (
     <ColorSchemeContext.Provider value={colorScheme}>
       {children}
