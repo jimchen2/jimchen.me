@@ -24,6 +24,7 @@ export const hobbies = [
 ];
 
 export const otherFacts = [
+  "From 2010 to 2014, I played accordion.",
   "From 2014 to 2021, I participated in math competitions before entering USTC.",
   <>
     From 2016 to 2021 I liked reading English literature. See my{" "}
@@ -32,7 +33,6 @@ export const otherFacts = [
     </a>
     .
   </>,
-  "In 2022 I began seriously use a smartphone, and watched YouTube heavily in English, then in other languages.",
 ];
 
 // --- Photos Section ---
@@ -91,7 +91,7 @@ export const techSetup = [
 
 export const culturesHeading = "Exploring Internet & Cultures";
 export const culturesDescription =
-  "Besides tech, I am deeply interested in different cultures and exploring the global internet.";
+  "Besides tech, I am deeply interested in different cultures and exploring the global internet. ";
 
 export const globalInternet = [
   {
