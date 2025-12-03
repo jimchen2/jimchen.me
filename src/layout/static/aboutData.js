@@ -24,14 +24,14 @@ export const hobbies = [
 ];
 
 export const otherFacts = [
-  "From 2010 to 2014, I played accordion.",
-  "From 2014 to 2021, I participated in math competitions before entering USTC.",
   <>
-    From 2016 to 2021 I liked reading English literature. See my{" "}
+    From 2016 to 2021 I loved reading English literature. See my{" "}
     <a href="https://www.goodreads.com/user/show/154371677-jim-chen" target="_blank" rel="noopener noreferrer">
       Goodreads
     </a>
     .
+  "From 2014 to 2021, I participated in math competitions before entering USTC.",
+  "From 2010 to 2014, I played accordion.",
   </>,
 ];
 
