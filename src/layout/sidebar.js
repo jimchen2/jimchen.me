@@ -17,7 +17,7 @@ import {
   FaQq,
   FaRProject,
 } from "react-icons/fa";
-import { SiOpenstreetmap, SiGoodreads, SiHuggingface } from "react-icons/si";
+import { SiOpenstreetmap, SiGoodreads, SiHuggingface, SiGreasyfork } from "react-icons/si";
 import styles from "./sidebar.module.css";
 
 const EXTERNAL_LINKS = [
@@ -43,6 +43,13 @@ const OTHER_LINKS = [
   },
   { name: "QQ", url: "https://jimchen.me/qq.jpg", icon: FaQq, color: "#12B7F5" },
   { name: "Archive.org", url: "https://archive.org/details/@j_c561/web-archive", icon: FaArchive, color: "#333333" },
+  // Added Greasy Fork here
+  { 
+    name: "Greasy Fork", 
+    url: "https://greasyfork.org/ru/users/1430831-jimchen2", 
+    icon: SiGreasyfork, 
+    color: "#C02D28" 
+  },
 ];
 
 const NAV_ITEMS = [
