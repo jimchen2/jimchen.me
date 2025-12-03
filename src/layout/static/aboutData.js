@@ -76,19 +76,13 @@ export const techSetup = [
     name: "Computer Configs",
     url: "https://github.com/jimchen2/computer-config",
     description:
-      "My personal configurations for using Linux and browser extensions. I mostly use Fedora on my Thinkpad and have a backup Windows on Redmibook.",
+      "My personal configurations for using Linux and browser userscripts. I use Fedora on Thinkpad and have a backup Windows on Redmibook.",
   },
   {
     name: "My Website Source Code",
     url: "https://github.com/jimchen2/jimchen.me",
     description: "This website is created with Next.js framework, my previous website was created in 2022 in Wix..",
   },
-  {
-    name: "Dual Subtitles on YouTube",
-    url: "https://github.com/jimchen2/youtube-dual-subtitles",
-    description: "A browser extension to display dual subtitles on YouTube to help language learning.",
-  },
-
   {
     name: "More Projects",
     url: "https://jimchen.me/projects",
