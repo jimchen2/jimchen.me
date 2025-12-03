@@ -25,7 +25,6 @@ export const hobbies = [
 
 export const otherFacts = [
   "From 2014 to 2021, I participated in math competitions before entering USTC.",
-  "In 2016 and 2020, I was into reciting Ci poetry and memorized about a hundred poems.",
   <>
     From 2016 to 2021 I liked reading English literature. See my{" "}
     <a href="https://www.goodreads.com/user/show/154371677-jim-chen" target="_blank" rel="noopener noreferrer">
