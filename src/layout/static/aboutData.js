@@ -24,15 +24,20 @@ export const hobbies = [
 ];
 
 export const otherFacts = [
+  // Item 1: A JSX element (using a Fragment)
   <>
     From 2016 to 2022 I loved reading English literature. See my{" "}
     <a href="https://www.goodreads.com/user/show/154371677-jim-chen" target="_blank" rel="noopener noreferrer">
       Goodreads
     </a>
     .
+  </>, // The comma is now OUTSIDE, separating this item from the next.
+
+  // Item 2: A simple string
   "From 2014 to 2021, I participated in math competitions before entering USTC.",
+
+  // Item 3: Another simple string
   "From 2010 to 2014, I played accordion.",
-  </>,
 ];
 
 // --- Photos Section ---
