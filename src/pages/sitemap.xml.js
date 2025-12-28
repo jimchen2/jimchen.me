@@ -12,7 +12,7 @@ function generateSiteMap(blogs, types, baseUrl) {
          const lastmod = blog.date;
          return `
      <url>
-       <loc>${baseUrl}/blog/${blog.blogid}</loc>
+       <loc>${baseUrl}/a/${blog.blogid}</loc>
        <lastmod>${new Date(lastmod).toISOString()}</lastmod>
      </url>`;
        })
