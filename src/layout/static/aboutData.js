@@ -10,19 +10,6 @@ export const introductionPoints = [
   "I am fluent in English (primary), Mandarin (native), and Russian.",
 ];
 
-// NEW: Hobbies section data
-export const hobbies = [
-  "I enjoy walking in the city and visiting shopping malls.",
-  "I clean my room every week.",
-  <>
-    I like watching YouTube. I've collected and organized videos into{" "}
-    <a href="https://www.youtube.com/@jimchen4214/playlists" target="_blank" rel="noopener noreferrer">
-      playlists
-    </a>
-    .
-  </>,
-];
-
 export const otherFacts = [
   // Item 1: A JSX element (using a Fragment)
   <>
@@ -136,6 +123,10 @@ export const connectIntroPoints = [
     I have a{" "}
     <a href="https://www.youtube.com/@jimchen4214" target="_blank" rel="noopener noreferrer">
       YouTube channel
+    </a>{" "}
+    and I organized videos I like watching into {" "}
+    <a href="https://www.youtube.com/@jimchen4214/playlists" target="_blank" rel="noopener noreferrer">
+      playlists
     </a>
     .
   </>,

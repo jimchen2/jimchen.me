@@ -214,26 +214,6 @@ export default function AboutPage() {
           </ul>
           <hr style={{ margin: "1.5rem 0", border: "none", borderTop: "1px solid #e2e8f0" }} />
 
-          {/* NEW HOBBIES SECTION */}
-          <div style={{ marginBottom: "1.5rem" }}>
-            <h5 style={{ fontWeight: "700", marginBottom: "1rem", color: "#334155" }}>Hobbies:</h5>
-            <ul
-              style={{
-                listStyle: "none",
-                padding: 0,
-                margin: 0,
-                fontSize: "1.05rem",
-                color: "#334155",
-                fontWeight: "500",
-              }}
-            >
-              {data.hobbies.map((h, i) => (
-                <li key={i} style={{ marginBottom: "0.5rem" }}>
-                  {h}
-                </li>
-              ))}
-            </ul>
-          </div>
 
           {/* OTHER FACTS SECTION - NOW COLLAPSIBLE */}
           <details>
