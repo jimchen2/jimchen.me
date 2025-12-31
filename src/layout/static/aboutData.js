@@ -4,27 +4,34 @@ import React from "react";
 export const introHeading = "Hello there, I'm Jim Chen";
 
 export const introductionPoints = [
-  "I am from Shanghai.",
-  "I am a student in University of Science and Technology of China (USTC) in Computer Science, School of Gifted Young.",
-  "I have been to UC Berkeley for an exchange year in 2023.",
+  "I am from Shanghai. I am a student in University of Science and Technology of China (USTC) in Computer Science, School of Gifted Young. I have been to UC Berkeley for an exchange year in 2023.",
   "I am fluent in English (primary), Mandarin (native), and Russian.",
-];
-
-export const otherFacts = [
-  // Item 1: A JSX element (using a Fragment)
+    <>
+    I primarily use{" "}
+    <a href="https://t.me/jimchenme" target="_blank" rel="noopener noreferrer">
+      Telegram
+    </a>
+    ,{" "}
+    <a href="https://www.instagram.com/jimchen.me" target="_blank" rel="noopener noreferrer">
+      Instagram
+    </a>
+    , and{" "}
+    <a href="https://jimchen.me/weixin.jpg" target="_blank" rel="noopener noreferrer">
+      WeChat
+    </a>{" "}
+    for communication and updates.
+  </>,
   <>
-    From 2016 to 2022 I loved reading English literature. See my{" "}
-    <a href="https://www.goodreads.com/user/show/154371677-jim-chen" target="_blank" rel="noopener noreferrer">
-      Goodreads
+    I have a{" "}
+    <a href="https://www.youtube.com/@jimchen4214" target="_blank" rel="noopener noreferrer">
+      YouTube channel
+    </a>{" "}
+    and I organized videos I like watching into {" "}
+    <a href="https://www.youtube.com/@jimchen4214/playlists" target="_blank" rel="noopener noreferrer">
+      playlists
     </a>
     .
-  </>, // The comma is now OUTSIDE, separating this item from the next.
-
-  // Item 2: A simple string
-  "From 2014 to 2021, I participated in math competitions before entering USTC.",
-
-  // Item 3: Another simple string
-  "From 2010 to 2014, I played accordion.",
+  </>,
 ];
 
 // --- Photos Section ---
@@ -89,7 +96,6 @@ export const globalInternet = [
   {
     links: [
       { name: "Russian Culture and Media (2024-2025)", url: "https://jimchen.me/a/1580c8" },
-      { name: "German Culture and Media (2025)", url: "https://jimchen.me/a/7d67cb" },
     ],
     description:
       "Exploring modern media and culture across different regions, including music, entertainment, geography, history, news. My goal is to understand YouTube and Telegram directly and watch news, TV shows, interviews, athletes, and singers without filters.",
@@ -98,43 +104,6 @@ export const globalInternet = [
     name: "My Guide to the Global Internet (2025)",
     url: "https://jimchen.me/a/19b074",
     description:
-      "This personal guide maps out the global Internet across US, China, Russia, EU, including platforms for social media, videos, messaging, search.",
+      "This personal guide maps out the global Internet across US, China, Europe, including platforms for social media, videos, messaging, search.",
   },
-];
-// --- Connect Section ---
-export const connectHeading = "Connect With Me";
-export const connectIntroPoints = [
-  <>
-    I primarily use{" "}
-    <a href="https://t.me/jimchenme" target="_blank" rel="noopener noreferrer">
-      Telegram
-    </a>
-    ,{" "}
-    <a href="https://www.instagram.com/jimchen.me" target="_blank" rel="noopener noreferrer">
-      Instagram
-    </a>
-    , and{" "}
-    <a href="https://jimchen.me/weixin.jpg" target="_blank" rel="noopener noreferrer">
-      WeChat
-    </a>{" "}
-    for communication and updates.
-  </>,
-  <>
-    I have a{" "}
-    <a href="https://www.youtube.com/@jimchen4214" target="_blank" rel="noopener noreferrer">
-      YouTube channel
-    </a>{" "}
-    and I organized videos I like watching into {" "}
-    <a href="https://www.youtube.com/@jimchen4214/playlists" target="_blank" rel="noopener noreferrer">
-      playlists
-    </a>
-    .
-  </>,
-  <>
-    I share my thoughts on my{" "}
-    <a href="http://jimchen.me" target="_blank" rel="noopener noreferrer">
-      personal blog
-    </a>
-    , mostly in English and around 200k words.
-  </>,
 ];

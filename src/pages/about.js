@@ -214,37 +214,6 @@ export default function AboutPage() {
           </ul>
           <hr style={{ margin: "1.5rem 0", border: "none", borderTop: "1px solid #e2e8f0" }} />
 
-
-          {/* OTHER FACTS SECTION - NOW COLLAPSIBLE */}
-          <details>
-            <summary
-              style={{
-                fontWeight: "700",
-                marginBottom: "1rem",
-                color: "#334155",
-                cursor: "pointer",
-                fontSize: "1.17em",
-              }}
-            >
-              Other Facts:
-            </summary>
-            <ul
-              style={{
-                listStyle: "none",
-                padding: 0,
-                margin: 0,
-                fontSize: "1.05rem",
-                color: "#334155",
-                fontWeight: "500",
-              }}
-            >
-              {data.otherFacts.map((f, i) => (
-                <li key={i} style={{ marginBottom: "0.5rem" }}>
-                  {f}
-                </li>
-              ))}
-            </ul>
-          </details>
         </Card>
 
         <Card>
@@ -284,26 +253,6 @@ export default function AboutPage() {
           </Card>
         </div>
 
-        <Card>
-          <Header emoji="🔗" title={data.connectHeading} />
-          <ul
-            style={{
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-              fontSize: "1.05rem",
-              color: "#475569",
-              lineHeight: "1.6",
-              fontWeight: "500",
-            }}
-          >
-            {data.connectIntroPoints.map((p, i) => (
-              <li key={i} style={{ marginBottom: "1rem" }}>
-                {p}
-              </li>
-            ))}
-          </ul>
-        </Card>
       </div>
     </div>
   );
