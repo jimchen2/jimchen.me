@@ -6,11 +6,7 @@ export const introHeading = "Hello there, I'm Jim Chen";
 export const introductionPoints = [
   "I am from Shanghai. I am a student in University of Science and Technology of China (USTC) in Computer Science, School of Gifted Young. I have been to UC Berkeley for an exchange year in 2023.",
   <>
-    I am fluent in English (primary), Mandarin (native), and Russian. and I organized videos I like watching into{" "}
-    <a href="https://www.youtube.com/@jimchen4214/playlists" target="_blank" rel="noopener noreferrer">
-      YouTube playlists
-    </a>
-    .
+    I am fluent in English (primary), Mandarin (native), and Russian.
   </>,
   <>
     I primarily use{" "}
