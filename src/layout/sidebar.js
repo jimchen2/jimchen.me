@@ -34,22 +34,8 @@ const SOCIAL_MEDIA_LINKS = [
 ];
 
 const OTHER_LINKS = [
-  { name: "Umap", url: "https://umap.openstreetmap.fr/en/user/jimchen2/", icon: SiOpenstreetmap, color: "#7EBC6F" },
-  {
-    name: "Goodreads",
-    url: "https://www.goodreads.com/user/show/154371677-jim-chen",
-    icon: SiGoodreads,
-    color: "#553B08",
-  },
   { name: "QQ", url: "https://jimchen.me/qq.jpg", icon: FaQq, color: "#12B7F5" },
   { name: "Archive.org", url: "https://archive.org/details/@j_c561/web-archive", icon: FaArchive, color: "#333333" },
-  // Added Greasy Fork here
-  { 
-    name: "Greasy Fork", 
-    url: "https://greasyfork.org/ru/users/1430831-jimchen2", 
-    icon: SiGreasyfork, 
-    color: "#C02D28" 
-  },
 ];
 
 const NAV_ITEMS = [
