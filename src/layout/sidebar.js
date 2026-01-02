@@ -33,10 +33,6 @@ const SOCIAL_MEDIA_LINKS = [
   { name: "YouTube", url: "https://www.youtube.com/@jimchen4214", icon: FaYoutube, color: "#FF0000" },
 ];
 
-const OTHER_LINKS = [
-  { name: "QQ", url: "https://jimchen.me/qq.jpg", icon: FaQq, color: "#12B7F5" },
-  { name: "Archive.org", url: "https://archive.org/details/@j_c561/web-archive", icon: FaArchive, color: "#333333" },
-];
 
 const NAV_ITEMS = [
   { href: "/about", label: "About Me", icon: <FaUser /> },
@@ -134,7 +130,6 @@ const Sidebar = () => {
 
       <ConnectLinks title="Profile" links={EXTERNAL_LINKS} />
       <ConnectLinks title="Social Media" links={SOCIAL_MEDIA_LINKS} />
-      <ConnectLinks title="Other Links" links={OTHER_LINKS} />
     </aside>
   );
 };
