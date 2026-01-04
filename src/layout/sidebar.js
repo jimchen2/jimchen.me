@@ -28,11 +28,11 @@ const EXTERNAL_LINKS = [
 ];
 
 const SOCIAL_MEDIA_LINKS = [
-  { name: "Telegram", url: "https://t.me/jimchenme", icon: FaTelegram, color: "#0088cc" },
+  { name: "YouTube", url: "https://www.youtube.com/@jimchen4214", icon: FaYoutube, color: "#FF0000" },
   { name: "Instagram", url: "https://www.instagram.com/jimchen.me", icon: FaInstagram, color: "#E4405F" },
   { name: "TikTok", url: "https://www.tiktok.com/@jimchen.me", icon: FaTiktok, color: "#000000" }, // Added TikTok link
+  { name: "Telegram", url: "https://t.me/jimchenme", icon: FaTelegram, color: "#0088cc" },
   { name: "WeChat", url: "https://jimchen.me/weixin.jpg", icon: FaWeixin, color: "#07C160" },
-  { name: "YouTube", url: "https://www.youtube.com/@jimchen4214", icon: FaYoutube, color: "#FF0000" },
 ];
 
 
