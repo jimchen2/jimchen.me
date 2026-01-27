@@ -14,7 +14,7 @@ export const introductionPoints = [
       Telegram
     </a>
     ,{" "}
-    <a href="https://www.instagram.com/jimchen.me" target="_blank" rel="noopener noreferrer">
+    <a href="https://www.instagram.com/jimchen_1" target="_blank" rel="noopener noreferrer">
       Instagram
     </a>
     , and{" "}
