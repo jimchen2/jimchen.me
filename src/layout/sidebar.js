@@ -30,7 +30,7 @@ const EXTERNAL_LINKS = [
 const SOCIAL_MEDIA_LINKS = [
   { name: "Telegram", url: "https://t.me/Jimchen4214", icon: FaTelegram, color: "#0088cc" },
   { name: "TikTok", url: "https://www.tiktok.com/@jimchen.me", icon: FaTiktok, color: "#000000" }, 
-  { name: "Instagram", url: "https://www.instagram.com/jimchen.me", icon: FaInstagram, color: "#E4405F" },
+  { name: "Instagram", url: "https://www.instagram.com/jimchen_1", icon: FaInstagram, color: "#E4405F" },
   { name: "YouTube", url: "https://www.youtube.com/@jimchen4214", icon: FaYoutube, color: "#FF0000" },
   { name: "WeChat", url: "https://jimchen.me/weixin.jpg", icon: FaWeixin, color: "#07C160" },
 ];
