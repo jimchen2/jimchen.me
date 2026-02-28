@@ -4,17 +4,18 @@ import { useRouter } from "next/router";
 import BlogPreviewPage from "@/blogpreview/BlogPreviewPage";
 
 export async function getServerSideProps(context) {
-  // Extract page from query parameters instead of params
   const { page = "1", type, sort, searchterm } = context.query;
-  const pageNumber = parseInt(page) || 1; // Default to 1 if page is invalid
+  const pageNumber = parseInt(page) || 1;
+
+  // Default to "tech" if no type is specified
+  const effectiveType = type || "tech";
 
   try {
-    const start = (pageNumber - 1) * 10; // 10 items per page
+    const start = (pageNumber - 1) * 10;
     let apiUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blog/preview?start=${start}&count=10`;
 
-    if (type) {
-      apiUrl += `&type=${type}`;
-    }
+    // Always send a type — defaults to "tech"
+    apiUrl += `&type=${effectiveType}`;
 
     if (sort) {
       apiUrl += `&sort=${sort}`;
@@ -30,23 +31,17 @@ export async function getServerSideProps(context) {
     const pagination = blogResponse.data.pagination || {};
     const postTypeArray = blogResponse.data.filters?.types || [];
 
-    // If requested page is beyond total pages, redirect to last page
     if (pageNumber > 1 && pageNumber > pagination.totalPages) {
-      let redirectUrl = "/"; // Base path
+      let redirectUrl = "/";
       const queryParams = new URLSearchParams();
-      if (type) queryParams.set("type", type);
+      queryParams.set("type", effectiveType); // keep effectiveType in redirect too
       if (sort) queryParams.set("sort", sort);
       if (searchterm) queryParams.set("searchterm", searchterm);
       if (pagination.totalPages > 1) queryParams.set("page", pagination.totalPages);
 
-      const queryString = queryParams.toString();
-      if (queryString) {
-        redirectUrl += `?${queryString}`;
-      }
-
       return {
         redirect: {
-          destination: redirectUrl,
+          destination: `${redirectUrl}?${queryParams.toString()}`,
           permanent: false,
         },
       };
@@ -55,11 +50,8 @@ export async function getServerSideProps(context) {
     return {
       props: {
         data,
-        pagination: {
-          ...pagination,
-          currentPage: pageNumber, // Ensure currentPage is passed correctly
-        },
-        type: type || null,
+        pagination: { ...pagination, currentPage: pageNumber },
+        type: effectiveType, // pass effectiveType so UI reflects the active filter
         postTypeArray,
         sort: sort || null,
         searchterm: searchterm || null,
@@ -71,7 +63,7 @@ export async function getServerSideProps(context) {
       props: {
         data: [],
         pagination: {},
-        type: type || null,
+        type: effectiveType,
         postTypeArray: [],
         sort: sort || null,
         searchterm: searchterm || null,
