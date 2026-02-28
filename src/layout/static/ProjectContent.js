@@ -20,7 +20,6 @@ const projectData = [
       "Web Hoarding Attempts<br>" +
       "<a href='https://jimchen.me/a/efabac'>Project Details</a><br>" +
       "<a href='https://github.com/jimchen2/archived-scripts/tree/master/douban-scraping-main'>Douban Scraping</a><br>" +
-      "<a href='https://github.com/jimchen2/archived-scripts/tree/master/Learn-Russian/prev'>Learn Russian</a><br><br>" +
       "Bulk downloaded videos from YouTube channels. Processed 400 GB (1,360 hours) of content using OpenAI Whisper, " +
       "Helsinki NLP, and ffmpeg to embed subtitles on Vast AI, then uploaded to S3. Scraped Douban discussions for 170k comments into a searchable site."
   },

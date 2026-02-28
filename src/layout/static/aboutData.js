@@ -6,9 +6,6 @@ export const introHeading = "Hello there, I'm Jim Chen";
 export const introductionPoints = [
   "I am from Shanghai. I am a student in University of Science and Technology of China (USTC) in Computer Science, School of Gifted Young. I have been to UC Berkeley for an exchange year in 2023.",
   <>
-    I am fluent in English (primary), Mandarin (native), and Russian.
-  </>,
-  <>
     I primarily use{" "}
     <a href="https://t.me/jimchenme" target="_blank" rel="noopener noreferrer">
       Telegram
@@ -88,11 +85,6 @@ export const culturesDescription =
   "Besides tech, I am deeply interested in different cultures and exploring the global internet. ";
 
 export const globalInternet = [
-  {
-    links: [{ name: "Russian Culture and Media (2024-2025)", url: "https://jimchen.me/a/1580c8" }],
-    description:
-      "Exploring modern media and culture across different regions, including music, entertainment, geography, history, news. My goal is to understand YouTube and Telegram directly and watch news, TV shows, interviews, athletes, and singers without filters.",
-  },
   {
     name: "My Guide to the Global Internet (2025)",
     url: "https://jimchen.me/a/19b074",
