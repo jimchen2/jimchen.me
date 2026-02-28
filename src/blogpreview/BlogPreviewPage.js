@@ -124,10 +124,18 @@ function PreviewCard(props) {
   );
 }
 function BlogPreviewPage({ data, pagination, searchTerm }) {
+  // Filter out posts tagged with "tech" (case-insensitive, partial match)
+  const filteredData = data
+    ? data.filter((post) => {
+        const tags = Array.isArray(post.type) ? post.type : [post.type];
+        return !tags.some((tag) => tag && tag.toLowerCase().includes("tech"));
+      })
+    : [];
+
   return (
     <div style={{ maxWidth: "700px", margin: "0 auto" }}>
-      {data && data.length > 0 ? (
-        data.map((post, index) => (
+      {filteredData && filteredData.length > 0 ? (
+        filteredData.map((post, index) => (
           <div key={index} style={{ marginBottom: "2rem" }}>
             <PreviewCard
               blogid={post.blogid}
@@ -137,7 +145,7 @@ function BlogPreviewPage({ data, pagination, searchTerm }) {
               tags={post.type}
               wordcount={post.word_count}
               previewimage={post.preview_image}
-              searchTerm={searchTerm} // Pass searchTerm for highlighting
+              searchTerm={searchTerm}
             />
           </div>
         ))
