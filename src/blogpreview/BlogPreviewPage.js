@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Pagination from "@/blogpreview/Pagination.js";
 import { Container, Card, Row, Col } from "react-bootstrap";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { FaSearch } from "react-icons/fa"; // Imported search icon
 
 function PreviewCard(props) {
   const { searchTerm, date, blogid, previewimage, title, text, wordcount, tags } = props;
@@ -66,19 +67,10 @@ function PreviewCard(props) {
                 <Card.Body>
                   <Card.Title className="mb-3">
                     <div className="d-flex justify-content-between align-items-center mb-2">
-                      <span
-                        style={{
-                          fontSize: "0.8rem",
-                        }}
-                      >
+                      <span style={{ fontSize: "0.8rem" }}>
                         {displayDate}
                       </span>
-                      <div
-                        className="d-flex flex-wrap justify-content-end gap-2"
-                        style={{
-                          fontSize: "0.8rem",
-                        }}
-                      >
+                      <div className="d-flex flex-wrap justify-content-end gap-2" style={{ fontSize: "0.8rem" }}>
                         {wordcount} words
                       </div>
                     </div>
@@ -130,7 +122,6 @@ function PreviewCard(props) {
                       ))}
                     </div>
                   )}
-
                 </Card.Body>
               </Col>
             </Row>
@@ -145,22 +136,86 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
   const router = useRouter();
   const displayTag = router.query.type || currentType;
 
+  // --- Search State ---
+  const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm || "");
+
+  // Sync state with URL if it changes externally
+  useEffect(() => {
+    setLocalSearchTerm(searchTerm || "");
+  }, [searchTerm]);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    const trimmedTerm = localSearchTerm.trim();
+    const query = { ...router.query };
+
+    if (trimmedTerm) {
+      query.searchterm = trimmedTerm;
+    } else {
+      delete query.searchterm;
+    }
+    
+    // Reset to page 1 on search
+    delete query.page;
+
+    router.push({
+      pathname: router.pathname,
+      query: query,
+    });
+  };
+
   return (
     <div style={{ maxWidth: "700px", margin: "0 auto" }}>
       
-      {/* --- DISPLAY TAG FROM URL --- */}
-      {displayTag && (
-        <div 
-          className="mb-4 pb-2 border-bottom" 
-          style={{ 
-            fontSize: "1.2rem", 
-            fontWeight: "500",
-            color: "#495057",
-          }}
+      {/* --- HEADER ROW: TAGS ON LEFT, SEARCH ALIGNED TO THE RIGHT --- */}
+      <div className="mb-4 pb-2 border-bottom d-flex align-items-center flex-wrap gap-3">
+        {displayTag && (
+          <div 
+            style={{ 
+              fontSize: "1.2rem", 
+              fontWeight: "500",
+              color: "#495057",
+            }}
+          >
+            Tags: <span style={{ color: "blue", textDecoration: "underline" }}>#{displayTag}</span>
+          </div>
+        )}
+
+        <form 
+          onSubmit={handleSearchSubmit} 
+          className="d-flex ms-auto" 
+          style={{ maxWidth: "250px", width: "100%" }}
         >
-          Tags: <span style={{ color: "blue", textDecoration: "underline" }}>#{displayTag}</span>
-        </div>
-      )}
+          <input
+            type="search"
+            placeholder="Search posts..."
+            value={localSearchTerm}
+            onChange={(e) => setLocalSearchTerm(e.target.value)}
+            style={{
+              fontSize: "15px",
+              padding: "6px 10px",
+              border: "1px solid #ddd",
+              borderRight: "none",
+              borderRadius: "4px 0 0 4px",
+              outline: "none",
+              width: "100%",
+            }}
+          />
+          <button
+            type="submit"
+            style={{
+              padding: "6px 12px",
+              border: "1px solid #ddd",
+              backgroundColor: "#f8f9fa",
+              borderRadius: "0 4px 4px 0",
+              cursor: "pointer",
+            }}
+            aria-label="Submit search"
+          >
+            <FaSearch size={12} color="#495057" />
+          </button>
+        </form>
+      </div>
 
       {data && data.length > 0 ? (
         data.map((post, index) => (
@@ -195,7 +250,16 @@ function BlogPage({ data, pagination, type, postTypeArray, sort, searchterm }) {
     return <div>Loading...</div>;
   }
 
-  return <BlogPreviewPage currentType={type} data={data} pagination={pagination} postTypeArray={postTypeArray} currentSort={sort} searchTerm={searchterm} />;
+  return (
+    <BlogPreviewPage 
+      currentType={type} 
+      data={data} 
+      pagination={pagination} 
+      postTypeArray={postTypeArray} 
+      currentSort={sort} 
+      searchTerm={searchterm} 
+    />
+  );
 }
 
 export default BlogPage;

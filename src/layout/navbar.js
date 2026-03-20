@@ -123,8 +123,13 @@ function NavigationBar() {
             Jim Chen's Blog
           </Navbar.Brand>
 
-          {/* Add the ThemeSwitcher to the right side of the navbar */}
-          <Nav className="ms-auto d-flex align-items-center">
+          {/* Added gap-3 for spacing between nav links and the theme switcher */}
+          <Nav className="ms-auto d-flex flex-row align-items-center gap-3">
+            {/* About Link */}
+            <Nav.Link as={Link} href="/about" style={{ padding: "0" }}>
+              About
+            </Nav.Link>
+            
             <ThemeSwitcher />
           </Nav>
         </Container>

@@ -26,7 +26,7 @@ function calculateBlogPadding(windowWidth = null) {
   };
 }
 
-const BlogHeader = ({ date, wordcount, blogid }) => {
+const BlogHeader = ({ date, type, wordcount, blogid }) => {
   console.log(date);
 
   const displayDate = date === "December 31, 9999" ? "Current" : date;
