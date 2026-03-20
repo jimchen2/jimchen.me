@@ -43,7 +43,7 @@ export default function NavigationBar() {
     >
       <div
         style={{
-          maxWidth: "1100px",
+          maxWidth: "1200px",
           margin: "0 auto",
           padding: "0.85rem 1.5rem", // slightly more padding
           display: "flex",
@@ -55,7 +55,7 @@ export default function NavigationBar() {
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            gap: "1.5rem",
+            gap: "2rem",
           }}
         >
           <Link href="/" style={navLinkStyle}>
