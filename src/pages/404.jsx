@@ -38,8 +38,6 @@ function Custom404() {
       justifyContent: "center",
       minHeight: "100vh",
       padding: "20px",
-      backgroundColor: "#f7f7f7",
-      fontFamily: "'Courier New', Courier, monospace",
       textAlign: "center",
     },
     title: {
@@ -47,56 +45,38 @@ function Custom404() {
       margin: "0 0 2rem 0",
       whiteSpace: "pre",
       lineHeight: 1.2,
-      color: "#333",
-      textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
     },
     imageContainer: {
       width: "100%",
       maxWidth: "800px",
-      borderRadius: "8px",
-      overflow: "hidden",
-      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
-      backgroundColor: "#fff",
+      // Removed border-radius and box-shadow for sharp edges (Rule 2)
     },
     image: {
       width: "100%",
       height: "auto",
       display: loading ? "none" : "block",
-      transition: "opacity 0.3s ease-in",
-      opacity: loading ? 0 : 1,
+      // Removed transition for instant state changes (Rule 2)
     },
     loadingText: {
       padding: "40px",
-      backgroundColor: "#e0e0e0",
       fontSize: "1.125rem",
-      fontWeight: "600",
-      color: "#555",
       display: loading ? "block" : "none",
     },
     errorText: {
       padding: "40px",
       fontSize: "1.125rem",
-      color: "#dc3545",
-      fontWeight: "500",
     },
     message: {
       marginTop: "2rem",
       fontSize: "1.125rem",
-      color: "#666",
       lineHeight: 1.5,
     },
     link: {
       display: "inline-block",
       marginTop: "1.5rem",
-      padding: "0.75rem 1.5rem",
-      backgroundColor: "#007bff",
-      color: "#fff",
-      textDecoration: "none",
-      borderRadius: "4px",
       fontSize: "1rem",
-      fontWeight: "500",
-      transition: "background-color 0.3s ease, transform 0.2s ease",
-      cursor: "pointer",
+      // Rule 1: Removed custom color, background, hover states, padding, and text-decoration 
+      // to rely purely on the browser's natural link styling.
     },
   };
 
@@ -114,9 +94,11 @@ function Custom404() {
       </div>
 
       <p style={styles.message}>Oops! Looks like you're lost in the digital wilderness.</p>
+      
       <a href="/" style={styles.link}>
         Return to Home
       </a>
+      
       <br />
       <br />
       <br />

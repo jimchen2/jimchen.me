@@ -39,7 +39,6 @@ const SOCIAL_MEDIA_LINKS = [
 const NAV_ITEMS = [
   { href: "/about", label: "About Me", icon: <FaUser /> },
   { href: "/", label: "My Blog", icon: <FaBlog /> },
-  { href: "/tags", label: "All Tags", icon: <FaTags /> },
   { href: "/projects", label: "Projects", icon: <FaRProject /> },
 ];
 

@@ -116,8 +116,7 @@ function NavigationBar() {
             href="/"
             className="d-lg-block"
             style={{
-              fontFamily: "'Ubuntu', sans-serif",
-              fontWeight: "300",
+              fontWeight: "400",
               marginLeft: "15%",
             }}
           >

@@ -1,3 +1,9 @@
+## CSS Rules
+
+1. A link has the natural underline and color
+2. Instant State Changes, no hover, edges should be sharp,
+3. System typography only
+
 ## Platforms Used for Website
 
 - Code, Blog content: Github
