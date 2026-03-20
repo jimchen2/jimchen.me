@@ -7,17 +7,14 @@ import CodeBlock from "./codeBlock";
 import { generateStyles } from "./blogstylesHelper";
 import BlogViewCounter from "./blogViewCounter";
 
-// Default padding values for server-side rendering
 function calculateBlogPadding(windowWidth = null) {
-  // Default padding values based on screen size
   const getPaddingValues = (width) => {
     if (width >= 1200) return { left: 10, right: 20 };
     if (width >= 600) return { left: 10, right: 10 };
     return { left: 5, right: 5 };
   };
 
-  // Use provided windowWidth or fallback to a default (e.g., 1200 for SSR)
-  const width = windowWidth || 1200; // Default width for SSR
+  const width = windowWidth || 1200;
   const padding = getPaddingValues(width);
 
   return {
@@ -26,21 +23,50 @@ function calculateBlogPadding(windowWidth = null) {
   };
 }
 
+// ── BlogHeader ──────────────────────────────────────────────────────────────
 const BlogHeader = ({ date, type, wordcount, blogid }) => {
   const displayDate = date === "December 31, 9999" ? "Current" : date;
-  const types = (Array.isArray(type) ? type : type.split(",")).map((t) => t.trim());
+  const types = (Array.isArray(type) ? type : type.split(",")).map((t) =>
+    t.trim()
+  );
+
+  // Track whether we're below the 500 px breakpoint
+  const [isSmall, setIsSmall] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsSmall(window.innerWidth < 500);
+    check(); // run once on mount
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   return (
     <div className="blog-header mb-3">
       <br />
-      <div className="d-flex justify-content-between align-items-center">
+      <div
+        style={{
+          display: "flex",
+          // Stack vertically on small screens, row otherwise
+          flexDirection: isSmall ? "column" : "row",
+          justifyContent: isSmall ? "flex-start" : "space-between",
+          alignItems: isSmall ? "flex-start" : "center",
+          gap: isSmall ? "0.35rem" : 0,
+        }}
+      >
+        {/* Date · word count · view counter */}
         <small className="text">
           {displayDate} • {wordcount} words
           <BlogViewCounter blogid={blogid} />
         </small>
+
+        {/* Type tags */}
         <div>
           {types.map((t) => (
-            <a key={t} href={`/?type=${t.toLowerCase().replace(/\s+/g, "-")}`} className="text-muted text-decoration-none me-2">
+            <a
+              key={t}
+              href={`/?type=${t.toLowerCase().replace(/\s+/g, "-")}`}
+              className="text-muted text-decoration-none me-2"
+            >
               #{t.toLowerCase().replace(/\s+/g, "-")}
             </a>
           ))}
@@ -50,14 +76,16 @@ const BlogHeader = ({ date, type, wordcount, blogid }) => {
   );
 };
 
+// ── BlogTitle ───────────────────────────────────────────────────────────────
 const BlogTitle = ({ title }) => (
   <h2 className="mb-4">
     <div>{title.split("-").join(" ")}</div>
   </h2>
 );
 
+// ── SingleBlog ──────────────────────────────────────────────────────────────
 function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
-  const [paddingStyles, setPaddingStyles] = useState(calculateBlogPadding()); // Default for SSR
+  const [paddingStyles, setPaddingStyles] = useState(calculateBlogPadding());
 
   useEffect(() => {
     const handleResize = () => {
@@ -68,10 +96,13 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const processedText = text.replace(/<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs, (match, language, codeWithLang, codeWithoutLang) => {
-    const code = codeWithLang || codeWithoutLang;
-    return `<codeblock code="${code.replace(/"/g, "")}"></codeblock>`;
-  });
+  const processedText = text.replace(
+    /<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs,
+    (match, language, codeWithLang, codeWithoutLang) => {
+      const code = codeWithLang || codeWithoutLang;
+      return `<codeblock code="${code.replace(/"/g, "")}"></codeblock>`;
+    }
+  );
 
   const elements = parse(processedText, {
     replace: (domNode) => {
@@ -87,7 +118,6 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
   return (
     <Container fluid className="pb-3">
       <Row>
-        {/* The main content column now comes first */}
         <Col
           md={12}
           lg={9}
@@ -98,7 +128,14 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
           }}
         >
           <div className="mb-4">
-            <BlogHeader date={date} language={language} type={type} title={title} wordcount={wordcount} blogid={blogid} />
+            <BlogHeader
+              date={date}
+              language={language}
+              type={type}
+              title={title}
+              wordcount={wordcount}
+              blogid={blogid}
+            />
             <BlogTitle title={title} />
             <div className="blog-content">
               {elements}
