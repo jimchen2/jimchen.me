@@ -1,31 +1,3 @@
-import React from "react";
-
-// --- Introduction Section ---
-export const introHeading = "Hello there, I'm Jim Chen";
-
-export const introductionPoints = [
-  "I am from Shanghai. I am a student in University of Science and Technology of China (USTC) in Computer Science, School of Gifted Young. I have been to UC Berkeley for an exchange year in 2023.",
-  <>
-    I primarily use{" "}
-    <a href="https://t.me/jimchenme" target="_blank" rel="noopener noreferrer">
-      Telegram
-    </a>
-    ,{" "}
-    <a href="https://www.instagram.com/jimchen_1" target="_blank" rel="noopener noreferrer">
-      Instagram
-    </a>
-    , and{" "}
-    <a href="https://jimchen.me/weixin.jpg" target="_blank" rel="noopener noreferrer">
-      WeChat
-    </a>{" "}
-    for communication and updates. I have a{" "}
-    <a href="https://www.youtube.com/@jimchen4214" target="_blank" rel="noopener noreferrer">
-      YouTube channel
-    </a>
-    .
-  </>,
-];
-
 // --- Photos Section ---
 export const photosHeading = "A Glimpse Into My Life";
 export const photosDescription = "Here are a few personal photos.";

@@ -130,39 +130,6 @@ export default function AboutPage() {
     <div style={s.page}>
       <div style={s.container}>
         <Card>
-          <div style={{ textAlign: "center" }}>
-            <h1
-              style={{
-                ...s.gradient,
-                fontSize: "2.8rem",
-                fontWeight: "700",
-                letterSpacing: "-0.5px",
-                marginBottom: "1.5rem",
-              }}
-            >
-              {data.introHeading}
-            </h1>
-          </div>
-          <ul
-            style={{
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-              fontSize: "1.2rem",
-              color: "#334155",
-              fontWeight: "600",
-            }}
-          >
-            {data.introductionPoints.map((p, i) => (
-              <li key={i} style={{ marginBottom: "0.5rem" }}>
-                {p}
-              </li>
-            ))}
-          </ul>
-          <hr style={{ margin: "1.5rem 0", border: "none", borderTop: "1px solid #e2e8f0" }} />
-        </Card>
-
-        <Card>
           <Header emoji="📸" title={data.photosHeading} />
           <p style={{ marginBottom: "1.5rem", color: "#475569", fontSize: "1.2rem", fontWeight: "600" }}>
             {data.photosDescription}

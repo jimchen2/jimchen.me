@@ -28,17 +28,15 @@ const EXTERNAL_LINKS = [
 ];
 
 const SOCIAL_MEDIA_LINKS = [
-  { name: "Telegram", url: "https://t.me/Jimchen4214", icon: FaTelegram, color: "#0088cc" },
-  { name: "TikTok", url: "https://www.tiktok.com/@jimchen.me", icon: FaTiktok, color: "#000000" }, 
-  { name: "Instagram", url: "https://www.instagram.com/jimchen_1", icon: FaInstagram, color: "#E4405F" },
   { name: "YouTube", url: "https://www.youtube.com/@jimchen4214", icon: FaYoutube, color: "#FF0000" },
+  { name: "TikTok", url: "https://www.tiktok.com/@jimchen.me", icon: FaTiktok, color: "#000000" }, 
+  { name: "Telegram", url: "https://t.me/Jimchen4214", icon: FaTelegram, color: "#0088cc" },
+  { name: "Instagram", url: "https://www.instagram.com/jimchen_1", icon: FaInstagram, color: "#E4405F" },
   { name: "WeChat", url: "https://jimchen.me/weixin.jpg", icon: FaWeixin, color: "#07C160" },
 ];
 
 
 const NAV_ITEMS = [
-  { href: "/about", label: "About Me", icon: <FaUser /> },
-  { href: "/", label: "My Blog", icon: <FaBlog /> },
   { href: "/projects", label: "Projects", icon: <FaRProject /> },
 ];
 

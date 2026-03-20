@@ -57,7 +57,6 @@ export default function Blog({ blog, type, error }) {
     </>
   );
 }
-Blog.showSidebar = false;
 
 export async function getServerSideProps(context) {
   const { blogid } = context.params;
