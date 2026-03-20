@@ -167,14 +167,11 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
   return (
     <div style={{ maxWidth: "700px", margin: "0 auto" }}>
       
-      {/* --- HEADER ROW: TAGS ON LEFT, SEARCH ALIGNED TO THE RIGHT --- */}
       <div className="mb-4 pb-2 border-bottom d-flex align-items-center flex-wrap gap-3">
         {displayTag && (
           <div 
             style={{ 
-              fontSize: "1.2rem", 
               fontWeight: "500",
-              color: "#495057",
             }}
           >
             Tags: <span style={{ color: "blue", textDecoration: "underline" }}>#{displayTag}</span>

@@ -27,20 +27,23 @@ function calculateBlogPadding(windowWidth = null) {
 }
 
 const BlogHeader = ({ date, type, wordcount, blogid }) => {
-  console.log(date);
-
   const displayDate = date === "December 31, 9999" ? "Current" : date;
+  const types = (Array.isArray(type) ? type : type.split(",")).map((t) => t.trim());
 
   return (
     <div className="blog-header mb-3">
       <br />
       <div className="d-flex justify-content-between align-items-center">
+        <small className="text">
+          {displayDate} • {wordcount} words
+          <BlogViewCounter blogid={blogid} />
+        </small>
         <div>
-          <small className="text">
-            {/* Use the new variable to display the date */}
-            {displayDate} • {wordcount} words
-            <BlogViewCounter blogid={blogid} />
-          </small>
+          {types.map((t) => (
+            <a key={t} href={`/?type=${t.toLowerCase().replace(/\s+/g, "-")}`} className="text-muted text-decoration-none me-2">
+              #{t.toLowerCase().replace(/\s+/g, "-")}
+            </a>
+          ))}
         </div>
       </div>
     </div>
@@ -65,13 +68,10 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const processedText = text.replace(
-    /<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs,
-    (match, language, codeWithLang, codeWithoutLang) => {
-      const code = codeWithLang || codeWithoutLang;
-      return `<codeblock code="${code.replace(/"/g, "")}"></codeblock>`;
-    }
-  );
+  const processedText = text.replace(/<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs, (match, language, codeWithLang, codeWithoutLang) => {
+    const code = codeWithLang || codeWithoutLang;
+    return `<codeblock code="${code.replace(/"/g, "")}"></codeblock>`;
+  });
 
   const elements = parse(processedText, {
     replace: (domNode) => {
@@ -98,14 +98,7 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
           }}
         >
           <div className="mb-4">
-            <BlogHeader
-              date={date}
-              language={language}
-              type={type}
-              title={title}
-              wordcount={wordcount}
-              blogid={blogid}
-            />
+            <BlogHeader date={date} language={language} type={type} title={title} wordcount={wordcount} blogid={blogid} />
             <BlogTitle title={title} />
             <div className="blog-content">
               {elements}
