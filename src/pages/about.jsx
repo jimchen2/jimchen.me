@@ -52,6 +52,39 @@ export default function App() {
         <A href={links.youtube}>YouTube</A> &nbsp;
       </p>
 
+      {/* ── Photos ── */}
+      <div
+        style={{
+          display: "flex",
+          gap: "0.75rem",
+          marginBottom: "1.5rem",
+          height: "280px",
+        }}
+      >
+        {/* tall / portrait */}
+        <img
+          src="https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/1.jpeg"
+          alt="Portrait"
+          style={{
+            flex: 1,
+            width: 0,
+            objectFit: "cover",
+            borderRadius: "8px",
+          }}
+        />
+        {/* 16:9 / landscape */}
+        <img
+          src="https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/2.JPEG"
+          alt="Landscape"
+          style={{
+            flex: 2.5,
+            width: 0,
+            objectFit: "cover",
+            borderRadius: "8px",
+          }}
+        />
+      </div>
+
       <hr style={{ marginBottom: "1.5rem" }} />
 
       <Section title="Education">
@@ -190,4 +223,3 @@ ibus restart`}
     </div>
   );
 }
-
