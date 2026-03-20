@@ -2,154 +2,71 @@
 
 import React from "react";
 import Link from "next/link";
-import { Container, Navbar, Nav } from "react-bootstrap";
 import { useGlobalColorScheme } from "./theme.js";
 
-// --- ThemeSwitcher Component ---
+const navLinkStyle = {
+  fontSize: "1.2rem",
+  fontWeight: "500",
+  textDecoration: "none",
+  color: "inherit",
+  cursor: "pointer",
+};
+
 const ThemeSwitcher = () => {
   const { themeMode, toggleThemeMode, isHydrated } = useGlobalColorScheme();
 
-  // Render a placeholder to avoid layout shift while waiting for hydration
-  if (!isHydrated) {
-    return <div style={{ width: "125px", height: "28px" }} />; // Matches container size
-  }
+  if (!isHydrated) return <div style={{ width: "95px" }} />;
 
   return (
-    <>
-      <div className="switch-container">
-        <input
-          type="checkbox"
-          id="mode-switch"
-          className="switch-checkbox"
-          onChange={toggleThemeMode}
-          checked={themeMode === "dark"}
-          aria-label="Toggle dark mode"
-        />
-        <label htmlFor="mode-switch" className="switch-label">
-          Toggle
-        </label>
-        <span className="theme-icon">{themeMode === "dark" ? "🌙" : "☀️"}</span>
-      </div>
-
-      <style jsx>{`
-        /* The switch container */
-        .switch-container {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
-
-        /* Theme icon styling */
-        .theme-icon {
-          font-size: 20px;
-        }
-
-        /* Hide the default checkbox */
-        .switch-checkbox {
-          height: 0;
-          width: 0;
-          visibility: hidden;
-        }
-
-        /* The switch label, which is the track of the switch */
-        .switch-label {
-          cursor: pointer;
-          text-indent: -9999px; /* Hide the label text */
-          width: 50px;
-          height: 28px;
-          background: grey;
-          display: block;
-          border-radius: 100px;
-          position: relative;
-          transition: background-color 0.3s;
-          margin-bottom: 0; /* Override default bootstrap label margin */
-        }
-
-        /* The knob of the switch */
-        .switch-label:after {
-          content: "";
-          position: absolute;
-          top: 3px;
-          left: 3px;
-          width: 22px;
-          height: 22px;
-          background: #fff;
-          border-radius: 90px;
-          transition: 0.3s;
-        }
-
-        /* When the checkbox is checked, change the background of the label */
-        .switch-checkbox:checked + .switch-label {
-          background: #4caf50; /* A nice green for 'on' state */
-        }
-
-        /* When the checkbox is checked, move the knob to the right */
-        .switch-checkbox:checked + .switch-label:after {
-          /* (width of track - width of knob - 2 * left offset) */
-          /* 50px - 22px - (2 * 3px) = 22px */
-          transform: translateX(22px);
-        }
-      `}</style>
-    </>
+    <span onClick={toggleThemeMode} style={navLinkStyle}>
+      {themeMode === "dark" ? "Light Mode" : "Dark Mode"}
+    </span>
   );
 };
 
-// --- NavigationBar Component ---
-function NavigationBar() {
+export default function NavigationBar() {
   const { themeMode } = useGlobalColorScheme();
+  const isDark = themeMode === "dark";
 
   return (
-    <>
-      <Navbar
-        fixed="top"
-        variant={themeMode === "dark" ? "dark" : "light"}
-        bg={themeMode === "dark" ? "dark" : "light"}
-        expand="lg"
+    <nav
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000,
+        backgroundColor: isDark ? "#212529" : "#f8f9fa",
+        color: isDark ? "#f8f9fa" : "#212529",
+        boxShadow: "0 1px 4px rgba(0, 0, 0, 0.15)",
+      }}
+    >
+      <div
         style={{
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-          zIndex: 1000,
+          maxWidth: "1100px",
+          margin: "0 auto",
+          padding: "0.85rem 1.5rem", // slightly more padding
+          display: "flex",
+          alignItems: "center",
         }}
       >
-        <Container style={{ maxWidth: "1140px" }}>
-          <Navbar.Brand
-            as={Link}
-            href="/"
-            className="d-lg-block"
-            style={{
-              fontWeight: "400",
-              marginLeft: "15%",
-            }}
-          >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: "1.5rem",
+          }}
+        >
+          <Link href="/" style={navLinkStyle}>
             Jim Chen's Blog
-          </Navbar.Brand>
-
-          {/* Added gap-3 for spacing between nav links and the theme switcher */}
-          <Nav className="ms-auto d-flex flex-row align-items-center gap-3">
-            {/* About Link */}
-            <Nav.Link as={Link} href="/about" style={{ padding: "0" }}>
-              About
-            </Nav.Link>
-            
-            <ThemeSwitcher />
-          </Nav>
-        </Container>
-      </Navbar>
-
-      <style jsx>{`
-        @media (max-width: 991px) {
-          .custom-toggler {
-            margin-right: 15px;
-          }
-          .navbar-brand {
-            margin-left: 10px !important;
-          }
-          .navbar-collapse {
-            margin-top: 10px;
-          }
-        }
-      `}</style>
-    </>
+          </Link>
+          <Link href="/about" style={navLinkStyle}>
+            About
+          </Link>
+          <ThemeSwitcher />
+        </div>
+      </div>
+    </nav>
   );
 }
-
-export default NavigationBar;

@@ -24,7 +24,6 @@ const data = {
 
   techSetupHeading: "Tech Journey",
   // FIXED: This was empty in your snippet
-  techSetupDescription: "My configurations, workflows, and tools that I use to power my daily tasks and self-hosted environments.",
   techSetup: [
     { name: "Computer Configs", url: "https://github.com/jimchen2/computer-config", description: "My personal configurations for using Linux and browser userscripts. I use Fedora on Thinkpad and have a backup Windows on Redmibook." },
   ],
@@ -197,9 +196,6 @@ export default function AboutPage() {
           <div style={s.twoCol}>
             <Card>
               <Header emoji="⚙️" title={data.techSetupHeading} />
-              <p style={{ marginBottom: "1.5rem", color: "#475569", fontSize: "1.1rem", fontWeight: "600" }}>
-                {data.techSetupDescription}
-              </p>
               <ul style={{ listStyle: "disc", paddingLeft: "1.5rem", margin: 0 }}>
                 {data.techSetup.map((item, i) => (
                   <Link key={i} item={item} />
