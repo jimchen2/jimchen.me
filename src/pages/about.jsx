@@ -4,7 +4,6 @@ const links = {
   blog: "https://jimchen.me/",
   github: "https://github.com/jimchen2",
   linkedin: "https://www.linkedin.com/in/jim-chen-588002255/",
-  orcid: "https://orcid.org/0009-0004-1433-4818",
   telegram: "https://t.me/Jimchen4214",
   instagram: "https://www.instagram.com/jimchen_1",
   wechat: "https://jimchen.me/weixin.jpg",
