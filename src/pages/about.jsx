@@ -19,61 +19,74 @@ const A = ({ href, children }) => (
 
 export default function App() {
   return (
-    <div
-      style={{
-        maxWidth: "720px",
-        margin: "0 auto",
-        padding: "2rem 1rem",
-        fontFamily: "sans-serif",
-        minHeight: "100vh",
-      }}
-    >
-      <h1 style={{ marginBottom: "0.25rem" }}>jimchen.me</h1>
-      <p style={{ marginBottom: "0.25rem" }}>
-        <A href={links.blog}>Blog</A> (English, Chinese)
-      </p>
-      <p style={{ marginBottom: "0.25rem" }}>
-        <A href={links.github}>GitHub</A> &nbsp;·&nbsp;
-        <A href={links.linkedin}>LinkedIn</A> &nbsp;·&nbsp;
-      </p>
-      <p style={{ marginBottom: "1.5rem" }}>
-        <A href={links.telegram}>Telegram</A> &nbsp;·&nbsp;
-        <A href={links.instagram}>Instagram</A> &nbsp;·&nbsp;
-        <A href={links.wechat}>WeChat</A> &nbsp;·&nbsp;
-        <A href={links.youtube}>YouTube</A> &nbsp;·&nbsp;
-        <A href={links.tiktok}>TikTok</A>
-      </p>
+    <>
+      <style>{`
+        @media (max-width: 600px) {
+          .portfolio-img {
+            flex: 1 1 100% !important;
+            width: 100%;
+            height: auto !important;
+          }
+        }
+      `}</style>
 
       <div
         style={{
-          display: "flex",
-          flexWrap: "wrap", // Allow wrapping on small screens
-          gap: "0.75rem",
-          marginBottom: "1.5rem",
-          // Removed fixed height so it grows naturally
+          maxWidth: "720px",
+          margin: "0 auto",
+          padding: "2rem 1rem",
+          fontFamily: "sans-serif",
+          minHeight: "100vh",
         }}
       >
-        <img
-          src="https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/1.jpeg"
-          alt="Thin photo"
+        <h1 style={{ marginBottom: "0.25rem" }}>jimchen.me</h1>
+        <p style={{ marginBottom: "0.25rem" }}>
+          <A href={links.blog}>Blog</A> (English, Chinese)
+        </p>
+        <p style={{ marginBottom: "0.25rem" }}>
+          <A href={links.github}>GitHub</A> &nbsp;·&nbsp;
+          <A href={links.linkedin}>LinkedIn</A> &nbsp;·&nbsp;
+        </p>
+        <p style={{ marginBottom: "1.5rem" }}>
+          <A href={links.telegram}>Telegram</A> &nbsp;·&nbsp;
+          <A href={links.instagram}>Instagram</A> &nbsp;·&nbsp;
+          <A href={links.wechat}>WeChat</A> &nbsp;·&nbsp;
+          <A href={links.youtube}>YouTube</A> &nbsp;·&nbsp;
+          <A href={links.tiktok}>TikTok</A>
+        </p>
+
+        <div
           style={{
-            flex: "1 1 200px", // Grow, Shrink, Basis of 200px (wraps if smaller)
-            height: "280px", // Keep height consistent
-            objectFit: "cover",
-            borderRadius: "8px",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "0.75rem",
+            marginBottom: "1.5rem",
           }}
-        />
-        <img
-          src="https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/2.JPEG"
-          alt="Fat photo"
-          style={{
-            flex: "2.5 1 300px", // Grow more, Shrink, Basis of 300px
-            height: "280px", // Keep height consistent
-            objectFit: "cover",
-            borderRadius: "8px",
-          }}
-        />
+        >
+          <img
+            src="https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/1.jpeg"
+            alt="Thin photo"
+            className="portfolio-img"
+            style={{
+              flex: "1 1 200px",
+              height: "330px",
+              objectFit: "cover",
+              borderRadius: "8px",
+            }}
+          />
+          <img
+            src="https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/2.JPEG"
+            alt="Fat photo"
+            className="portfolio-img"
+            style={{
+              flex: "2.5 1 300px",
+              height: "330px",
+              objectFit: "cover",
+              borderRadius: "8px",
+            }}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
