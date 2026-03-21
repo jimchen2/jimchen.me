@@ -47,20 +47,31 @@ export default function App() {
       <div
         style={{
           display: "flex",
+          flexWrap: "wrap", // Allow wrapping on small screens
           gap: "0.75rem",
           marginBottom: "1.5rem",
-          height: "280px",
+          // Removed fixed height so it grows naturally
         }}
       >
         <img
           src="https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/1.jpeg"
           alt="Thin photo"
-          style={{ flex: 1, width: 0, objectFit: "cover", borderRadius: "8px" }}
+          style={{
+            flex: "1 1 200px", // Grow, Shrink, Basis of 200px (wraps if smaller)
+            height: "280px", // Keep height consistent
+            objectFit: "cover",
+            borderRadius: "8px",
+          }}
         />
         <img
           src="https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/2.JPEG"
           alt="Fat photo"
-          style={{ flex: 2.5, width: 0, objectFit: "cover", borderRadius: "8px" }}
+          style={{
+            flex: "2.5 1 300px", // Grow more, Shrink, Basis of 300px
+            height: "280px", // Keep height consistent
+            objectFit: "cover",
+            borderRadius: "8px",
+          }}
         />
       </div>
     </div>
