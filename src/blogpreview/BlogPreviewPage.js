@@ -3,7 +3,7 @@ import Pagination from "@/blogpreview/Pagination.js";
 import { Container, Card, Row, Col } from "react-bootstrap";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FaSearch } from "react-icons/fa"; // Imported search icon
+import { FaSearch } from "react-icons/fa";
 
 function PreviewCard(props) {
   const { searchTerm, date, blogid, previewimage, title, text, wordcount, tags } = props;
@@ -28,10 +28,9 @@ function PreviewCard(props) {
   }
 
   return (
-    <Container fluid className="my-4" style={{ maxWidth: "100%" }}>
-      <Row className="justify-content-center">
-        <Col>
-          {/* rounded-0 gives it sharp edges */}
+    <Container fluid className="my-4" style={{ maxWidth: "100%", padding: 0 }}>
+      <Row className="justify-content-center m-0">
+        <Col className="p-0">
           <Card className="border-1 rounded-0">
             <Row className="g-0">
               {/* --- IMAGE COLUMN --- */}
@@ -64,7 +63,8 @@ function PreviewCard(props) {
 
               {/* --- TEXT COLUMN --- */}
               <Col md={previewimage ? 8 : 12} className="order-md-1" style={{ minWidth: 0 }}>
-                <Card.Body>
+                {/* Changed to flex-column and h-100 to push tags to the absolute bottom */}
+                <Card.Body className="d-flex flex-column h-100">
                   <Card.Title className="mb-3">
                     <div className="d-flex justify-content-between align-items-center mb-2">
                       <span style={{ fontSize: "0.8rem" }}>
@@ -105,8 +105,9 @@ function PreviewCard(props) {
                   </Card.Text>
 
                   {/* --- TAGS SECTION --- */}
+                  {/* mt-auto pushes the tags to the bottom of the card regardless of text length */}
                   {tagsList && tagsList.length > 0 && (
-                    <div className="mt-3 d-flex flex-wrap gap-2">
+                    <div className="mt-auto pt-3 d-flex flex-wrap gap-2">
                       {tagsList.map((tag, idx) => (
                         <Link
                           key={idx}
@@ -134,7 +135,10 @@ function PreviewCard(props) {
 
 function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
   const router = useRouter();
-  const displayTag = router.query.type || currentType;
+  
+  // MODIFIED: Only fallback to the default tag ("tech") if we are NOT on a search page.
+  const isSearchPage = Boolean(searchTerm || router.query.searchterm);
+  const displayTag = router.query.type || (isSearchPage ? null : (currentType || "tech"));
 
   // --- Search State ---
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm || "");
@@ -151,6 +155,8 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
 
     if (trimmedTerm) {
       query.searchterm = trimmedTerm;
+      // MODIFIED: Remove any tag filter when submitting a new search to ensure global search
+      delete query.type; 
     } else {
       delete query.searchterm;
     }
@@ -164,79 +170,121 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
     });
   };
 
+  // Grouping tags based on your layout preference
+  const sidebarTagGroups = [
+    ["ml",  "systems", "math"],
+    ["journal"],
+    ["web-and-cloud"],
+  ];
+
   return (
-    <div style={{ maxWidth: "700px", margin: "0 auto" }}>
-      
-      <div className="mb-4 pb-2 border-bottom d-flex align-items-center flex-wrap gap-3">
-        {displayTag && (
-          <div 
-            style={{ 
-              fontWeight: "500",
-            }}
-          >
-            Tags: <span style={{ color: "blue", textDecoration: "underline" }}>#{displayTag}</span>
+    <Container style={{ maxWidth: "1000px" }} className="mb-5">
+      <Row className="justify-content-center">
+        {/* --- MAIN BLOG CONTENT --- */}
+        <Col xs={12}>
+          <div style={{ maxWidth: "700px", margin: "0 auto" }}>
+            
+            <div className="mb-4 pb-2 border-bottom d-flex align-items-center flex-wrap gap-3 mt-4 mt-md-0">
+              {displayTag && (
+                <div 
+                  style={{ 
+                    fontWeight: "500",
+                  }}
+                >
+                  Tags: <span style={{ color: "blue", textDecoration: "underline" }}>#{displayTag}</span>
+                </div>
+              )}
+
+              <form 
+                onSubmit={handleSearchSubmit} 
+                className="d-flex ms-auto" 
+                style={{ maxWidth: "250px", width: "100%" }}
+              >
+                <input
+                  type="search"
+                  placeholder="Search posts..."
+                  value={localSearchTerm}
+                  onChange={(e) => setLocalSearchTerm(e.target.value)}
+                  style={{
+                    fontSize: "15px",
+                    padding: "6px 10px",
+                    border: "1px solid #ddd",
+                    borderRight: "none",
+                    borderRadius: "4px 0 0 4px",
+                    outline: "none",
+                    width: "100%",
+                  }}
+                />
+                <button
+                  type="submit"
+                  style={{
+                    padding: "6px 12px",
+                    border: "1px solid #ddd",
+                    backgroundColor: "#f8f9fa",
+                    borderRadius: "0 4px 4px 0",
+                    cursor: "pointer",
+                  }}
+                  aria-label="Submit search"
+                >
+                  <FaSearch size={12} color="#495057" />
+                </button>
+              </form>
+            </div>
+
+            {data && data.length > 0 ? (
+              data.map((post, index) => (
+                <div key={index} style={{ marginBottom: "2rem" }}>
+                  <PreviewCard
+                    blogid={post.blogid}
+                    title={post.title}
+                    text={post.preview_text}
+                    date={post.date}
+                    tags={post.type} 
+                    wordcount={post.word_count}
+                    previewimage={post.preview_image}
+                    searchTerm={searchTerm} 
+                  />
+                </div>
+              ))
+            ) : (
+              <div style={{ textAlign: "center", margin: "5rem 0" }}>No results found.</div>
+            )}
+
+            {pagination && pagination.totalPages > 1 && (
+              <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
+            )}
+
+            {/* --- FILTER TAGS (HIDDEN ON SEARCH PAGE) --- */}
+            {!isSearchPage && (
+              <div className="mt-5 pt-4 border-top">
+                <h5 className="mb-3 text-uppercase" style={{ fontSize: "0.9rem", color: "#666", letterSpacing: "1px" }}>
+                  Filter By Tags
+                </h5>
+                
+                {sidebarTagGroups.map((group, groupIdx) => (
+                  <div key={groupIdx} className="mb-2 d-flex flex-wrap gap-2">
+                    {group.map(tag => (
+                      <Link
+                        key={tag}
+                        href={`/?type=${encodeURIComponent(tag.toLowerCase())}`} 
+                        style={{
+                          fontSize: "1rem",
+                          color: "blue",
+                          textDecoration: "underline",
+                        }}
+                      >
+                        #{tag}
+                      </Link>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
+
           </div>
-        )}
-
-        <form 
-          onSubmit={handleSearchSubmit} 
-          className="d-flex ms-auto" 
-          style={{ maxWidth: "250px", width: "100%" }}
-        >
-          <input
-            type="search"
-            placeholder="Search posts..."
-            value={localSearchTerm}
-            onChange={(e) => setLocalSearchTerm(e.target.value)}
-            style={{
-              fontSize: "15px",
-              padding: "6px 10px",
-              border: "1px solid #ddd",
-              borderRight: "none",
-              borderRadius: "4px 0 0 4px",
-              outline: "none",
-              width: "100%",
-            }}
-          />
-          <button
-            type="submit"
-            style={{
-              padding: "6px 12px",
-              border: "1px solid #ddd",
-              backgroundColor: "#f8f9fa",
-              borderRadius: "0 4px 4px 0",
-              cursor: "pointer",
-            }}
-            aria-label="Submit search"
-          >
-            <FaSearch size={12} color="#495057" />
-          </button>
-        </form>
-      </div>
-
-      {data && data.length > 0 ? (
-        data.map((post, index) => (
-          <div key={index} style={{ marginBottom: "2rem" }}>
-            <PreviewCard
-              blogid={post.blogid}
-              title={post.title}
-              text={post.preview_text}
-              date={post.date}
-              tags={post.type} 
-              wordcount={post.word_count}
-              previewimage={post.preview_image}
-              searchTerm={searchTerm} 
-            />
-          </div>
-        ))
-      ) : (
-        <div style={{ textAlign: "center", margin: "5rem 0" }}>No results found.</div>
-      )}
-
-      {pagination && pagination.totalPages > 1 && (
-        <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
-      )}
-    </div>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

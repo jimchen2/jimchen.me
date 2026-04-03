@@ -7,15 +7,21 @@ export async function getServerSideProps(context) {
   const { page = "1", type, sort, searchterm } = context.query;
   const pageNumber = parseInt(page) || 1;
 
-  // Default to "tech" if no type is specified
-  const effectiveType = type || "tech";
+  // Set effectiveType to URL's 'type' if present. 
+  // If no type AND no searchterm are present (standard homepage), default to "tech".
+  let effectiveType = type;
+  if (!type && !searchterm) {
+    effectiveType = "tech";
+  }
 
   try {
     const start = (pageNumber - 1) * 10;
     let apiUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blog/preview?start=${start}&count=10`;
 
-    // Always send a type — defaults to "tech"
-    apiUrl += `&type=${effectiveType}`;
+    // Only append type to the API URL if we have an effectiveType
+    if (effectiveType) {
+      apiUrl += `&type=${effectiveType}`;
+    }
 
     if (sort) {
       apiUrl += `&sort=${sort}`;
@@ -34,7 +40,9 @@ export async function getServerSideProps(context) {
     if (pageNumber > 1 && pageNumber > pagination.totalPages) {
       let redirectUrl = "/";
       const queryParams = new URLSearchParams();
-      queryParams.set("type", effectiveType); // keep effectiveType in redirect too
+      
+      // Conditionally append query parameters
+      if (effectiveType) queryParams.set("type", effectiveType); 
       if (sort) queryParams.set("sort", sort);
       if (searchterm) queryParams.set("searchterm", searchterm);
       if (pagination.totalPages > 1) queryParams.set("page", pagination.totalPages);
@@ -51,7 +59,7 @@ export async function getServerSideProps(context) {
       props: {
         data,
         pagination: { ...pagination, currentPage: pageNumber },
-        type: effectiveType, // pass effectiveType so UI reflects the active filter
+        type: effectiveType || null, // Pass null if undefined so Next.js doesn't error on serializing
         postTypeArray,
         sort: sort || null,
         searchterm: searchterm || null,
@@ -63,7 +71,7 @@ export async function getServerSideProps(context) {
       props: {
         data: [],
         pagination: {},
-        type: effectiveType,
+        type: effectiveType || null,
         postTypeArray: [],
         sort: sort || null,
         searchterm: searchterm || null,
@@ -80,7 +88,16 @@ function BlogPage({ data, pagination, type, postTypeArray, sort, searchterm }) {
     return <div>Loading...</div>;
   }
 
-  return <BlogPreviewPage currentType={type} data={data} pagination={pagination} postTypeArray={postTypeArray} currentSort={sort} searchTerm={searchterm} />;
+  return (
+    <BlogPreviewPage 
+      currentType={type} 
+      data={data} 
+      pagination={pagination} 
+      postTypeArray={postTypeArray} 
+      currentSort={sort} 
+      searchTerm={searchterm} 
+    />
+  );
 }
 
 export default BlogPage;

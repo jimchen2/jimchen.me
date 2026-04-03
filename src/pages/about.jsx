@@ -43,7 +43,7 @@ export default function App() {
         <p style={{ marginBottom: "0.25rem" }}>
           <A href={links.blog}>Blog</A> &nbsp;·&nbsp;
           <A href={links.github}>GitHub</A> &nbsp;·&nbsp;
-          <A href={links.linkedin}>LinkedIn</A> &nbsp;·&nbsp;
+          <A href={links.linkedin}>LinkedIn</A> 
         </p>
         <p style={{ marginBottom: "1.5rem" }}>
           <A href={links.telegram}>Telegram</A> &nbsp;·&nbsp;
