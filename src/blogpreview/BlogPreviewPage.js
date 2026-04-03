@@ -174,7 +174,6 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
   const sidebarTagGroups = [
     ["ml",  "systems", "math"],
     ["journal"],
-    ["web-and-cloud"],
   ];
 
   return (
