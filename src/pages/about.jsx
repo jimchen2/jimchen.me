@@ -1,7 +1,6 @@
 import React from "react";
 
 const links = {
-  blog: "https://jimchen.me/",
   github: "https://github.com/jimchen2",
   linkedin: "https://www.linkedin.com/in/jim-chen-588002255/",
   telegram: "https://t.me/Jimchen4214",
