@@ -4,7 +4,7 @@ const links = {
   github: "https://github.com/jimchen2",
   linkedin: "https://www.linkedin.com/in/jim-chen-588002255/",
   telegram: "https://t.me/Jimchen4214",
-  instagram: "https://www.instagram.com/jimchen_1",
+  instagram: "https://www.instagram.com/jimchenalaska/",
   wechat: "https://jimchen.me/weixin.jpg",
   youtube: "https://www.youtube.com/@jimchen4214",
   tiktok: "https://www.tiktok.com/@jimchen.me",
