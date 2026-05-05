@@ -5,6 +5,7 @@ const links = {
   linkedin: "https://www.linkedin.com/in/jim-chen-588002255/",
   telegram: "https://t.me/Jimchen4214",
   instagram: "https://www.instagram.com/hijimchen/",
+  wechat: "https://jimchen.me/weixin.jpg",
   youtube: "https://www.youtube.com/@jimchen4214",
   tiktok: "https://www.tiktok.com/@jimchen.me",
 };
@@ -40,11 +41,12 @@ export default function App() {
         <h1 style={{ marginBottom: "0.25rem" }}>jimchen.me</h1>
         <p style={{ marginBottom: "0.25rem" }}>
           <A href={links.github}>GitHub</A> &nbsp;·&nbsp;
-          <A href={links.linkedin}>LinkedIn</A> 
+          <A href={links.linkedin}>LinkedIn</A>
         </p>
         <p style={{ marginBottom: "1.5rem" }}>
           <A href={links.telegram}>Telegram</A> &nbsp;·&nbsp;
           <A href={links.instagram}>Instagram</A> &nbsp;·&nbsp;
+          <A href={links.wechat}>WeChat</A> &nbsp;·&nbsp;
           <A href={links.youtube}>YouTube</A> &nbsp;·&nbsp;
           <A href={links.tiktok}>TikTok</A>
         </p>
