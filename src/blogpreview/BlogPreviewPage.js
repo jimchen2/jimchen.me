@@ -136,9 +136,10 @@ function PreviewCard(props) {
 function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
   const router = useRouter();
   
-  // MODIFIED: Only fallback to the default tag ("tech") if we are NOT on a search page.
   const isSearchPage = Boolean(searchTerm || router.query.searchterm);
-  const displayTag = router.query.type || (isSearchPage ? null : (currentType || "tech"));
+  
+  // MODIFIED: Removed the "tech" fallback. Now it displays the type ONLY if it's explicitly set.
+  const displayTag = router.query.type || currentType || null;
 
   // --- Search State ---
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm || "");
@@ -155,7 +156,7 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
 
     if (trimmedTerm) {
       query.searchterm = trimmedTerm;
-      // MODIFIED: Remove any tag filter when submitting a new search to ensure global search
+      // Remove any tag filter when submitting a new search to ensure global search
       delete query.type; 
     } else {
       delete query.searchterm;
@@ -172,7 +173,7 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
 
   // Grouping tags based on your layout preference
   const sidebarTagGroups = [
-    ["ml",  "systems", "math"],
+    ["ml", "systems", "math"], 
     ["journal"],
   ];
 
@@ -184,7 +185,7 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
           <div style={{ maxWidth: "700px", margin: "0 auto" }}>
             
             <div className="mb-4 pb-2 border-bottom d-flex align-items-center flex-wrap gap-3 mt-4 mt-md-0">
-              {displayTag && (
+              {displayTag && !isSearchPage && (
                 <div 
                   style={{ 
                     fontWeight: "500",

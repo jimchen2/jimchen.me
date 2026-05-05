@@ -7,18 +7,14 @@ export async function getServerSideProps(context) {
   const { page = "1", type, sort, searchterm } = context.query;
   const pageNumber = parseInt(page) || 1;
 
-  // Set effectiveType to URL's 'type' if present. 
-  // If no type AND no searchterm are present (standard homepage), default to "tech".
-  let effectiveType = type;
-  if (!type && !searchterm) {
-    effectiveType = "tech";
-  }
+  // MODIFIED: Removed the "tech" fallback. Now effectiveType is exactly what comes from the URL.
+  let effectiveType = type || null;
 
   try {
     const start = (pageNumber - 1) * 10;
     let apiUrl = `${process.env.NEXT_PUBLIC_SITE}/api/blog/preview?start=${start}&count=10`;
 
-    // Only append type to the API URL if we have an effectiveType
+    // Only append type to the API URL if we have an explicit effectiveType
     if (effectiveType) {
       apiUrl += `&type=${effectiveType}`;
     }
@@ -59,7 +55,7 @@ export async function getServerSideProps(context) {
       props: {
         data,
         pagination: { ...pagination, currentPage: pageNumber },
-        type: effectiveType || null, // Pass null if undefined so Next.js doesn't error on serializing
+        type: effectiveType, // Already strictly defined or null
         postTypeArray,
         sort: sort || null,
         searchterm: searchterm || null,
@@ -71,7 +67,7 @@ export async function getServerSideProps(context) {
       props: {
         data: [],
         pagination: {},
-        type: effectiveType || null,
+        type: effectiveType,
         postTypeArray: [],
         sort: sort || null,
         searchterm: searchterm || null,
