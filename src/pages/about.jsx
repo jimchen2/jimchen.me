@@ -3,6 +3,7 @@ import React from "react";
 const links = {
   github: "https://github.com/jimchen2",
   linkedin: "https://www.linkedin.com/in/jim-chen-588002255/",
+  email: "mailto:jimchen4214@gmail.com",
   telegram: "https://t.me/Jimchen4214",
   instagram: "https://www.instagram.com/hijimchen/",
   wechat: "https://jimchen.me/weixin.jpg",
@@ -43,7 +44,8 @@ export default function App() {
         {/* First Line */}
         <p style={{ marginBottom: "0.25rem" }}>
           <A href={links.github}>GitHub</A> &nbsp;·&nbsp;
-          <A href={links.linkedin}>LinkedIn</A>
+          <A href={links.linkedin}>LinkedIn</A> &nbsp;·&nbsp;
+          <A href={links.email}>jimchen4214@gmail.com</A>
         </p>
 
         {/* Second Line */}
