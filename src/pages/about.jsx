@@ -39,16 +39,24 @@ export default function App() {
         }}
       >
         <h1 style={{ marginBottom: "0.25rem" }}>jimchen.me</h1>
+        
+        {/* First Line */}
         <p style={{ marginBottom: "0.25rem" }}>
           <A href={links.github}>GitHub</A> &nbsp;·&nbsp;
           <A href={links.linkedin}>LinkedIn</A>
         </p>
+
+        {/* Second Line */}
+        <p style={{ marginBottom: "0.25rem" }}>
+          <A href={links.youtube}>YouTube</A> &nbsp;·&nbsp;
+          <A href={links.tiktok}>TikTok</A>
+        </p>
+
+        {/* Third Line */}
         <p style={{ marginBottom: "1.5rem" }}>
           <A href={links.telegram}>Telegram</A> &nbsp;·&nbsp;
           <A href={links.instagram}>Instagram</A> &nbsp;·&nbsp;
-          <A href={links.wechat}>WeChat</A> &nbsp;·&nbsp;
-          <A href={links.youtube}>YouTube</A> &nbsp;·&nbsp;
-          <A href={links.tiktok}>TikTok</A>
+          <A href={links.wechat}>WeChat</A>
         </p>
 
         <div
