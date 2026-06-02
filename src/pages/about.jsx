@@ -70,7 +70,7 @@ export default function App() {
           }}
         >
           <img
-            src="https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/1.jpeg"
+            src="https://pub-646444a9d5fd4db98749a2f45bb0d992.r2.dev/profile/6091230C-A9C0-4E20-81D4-E4DD82B7150B.jpeg"
             alt="Thin photo"
             className="portfolio-img"
             style={{
@@ -81,7 +81,7 @@ export default function App() {
             }}
           />
           <img
-            src="https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/portfolio/2.JPEG"
+            src="https://pub-646444a9d5fd4db98749a2f45bb0d992.r2.dev/profile/2.jpeg"
             alt="Fat photo"
             className="portfolio-img"
             style={{
