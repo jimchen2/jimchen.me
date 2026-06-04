@@ -60,38 +60,6 @@ export default function App() {
           <A href={links.instagram}>Instagram</A> &nbsp;·&nbsp;
           <A href={links.wechat}>WeChat</A>
         </p>
-
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "0.75rem",
-            marginBottom: "1.5rem",
-          }}
-        >
-          <img
-            src="https://pub-646444a9d5fd4db98749a2f45bb0d992.r2.dev/profile/6091230C-A9C0-4E20-81D4-E4DD82B7150B.jpeg"
-            alt="Thin photo"
-            className="portfolio-img"
-            style={{
-              flex: "1 1 200px",
-              height: "330px",
-              objectFit: "cover",
-              borderRadius: "8px",
-            }}
-          />
-          <img
-            src="https://pub-646444a9d5fd4db98749a2f45bb0d992.r2.dev/profile/2.jpeg"
-            alt="Fat photo"
-            className="portfolio-img"
-            style={{
-              flex: "2.5 1 300px",
-              height: "330px",
-              objectFit: "cover",
-              borderRadius: "8px",
-            }}
-          />
-        </div>
       </div>
     </>
   );
