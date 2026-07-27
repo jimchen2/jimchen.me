@@ -174,7 +174,7 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
   // Grouping tags based on your layout preference
   const sidebarTagGroups = [
     ["ml", "systems", "math"], 
-    ["journal"],
+    ["journal", "reading"],
   ];
 
   return (
