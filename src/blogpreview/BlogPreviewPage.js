@@ -14,7 +14,13 @@ function PreviewCard(props) {
     }
     const parts = text.split(new RegExp(`(${highlight})`, "gi"));
     return parts.map((part, i) =>
-      part.toLowerCase() === highlight.toLowerCase() ? <span key={i} style={{ backgroundColor: "yellow" }}>{part}</span> : part
+      part.toLowerCase() === highlight.toLowerCase() ? (
+        <span key={i} style={{ backgroundColor: "yellow" }}>
+          {part}
+        </span>
+      ) : (
+        part
+      ),
     );
   };
 
@@ -24,7 +30,10 @@ function PreviewCard(props) {
   if (Array.isArray(tags)) {
     tagsList = tags;
   } else if (typeof tags === "string") {
-    tagsList = tags.split(",").map(t => t.trim()).filter(Boolean);
+    tagsList = tags
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
   }
 
   return (
@@ -67,9 +76,7 @@ function PreviewCard(props) {
                 <Card.Body className="d-flex flex-column h-100">
                   <Card.Title className="mb-3">
                     <div className="d-flex justify-content-between align-items-center mb-2">
-                      <span style={{ fontSize: "0.8rem" }}>
-                        {displayDate}
-                      </span>
+                      <span style={{ fontSize: "0.8rem" }}>{displayDate}</span>
                       <div className="d-flex flex-wrap justify-content-end gap-2" style={{ fontSize: "0.8rem" }}>
                         {wordcount} words
                       </div>
@@ -95,7 +102,7 @@ function PreviewCard(props) {
                       lineHeight: "1.5",
                       fontStyle: "italic",
                       whiteSpace: "normal",
-                      overflowWrap: "anywhere", 
+                      overflowWrap: "anywhere",
                       wordBreak: "break-all",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
@@ -111,7 +118,7 @@ function PreviewCard(props) {
                       {tagsList.map((tag, idx) => (
                         <Link
                           key={idx}
-                          href={`/?type=${encodeURIComponent(tag.toLowerCase())}`} 
+                          href={`/?type=${encodeURIComponent(tag.toLowerCase())}`}
                           style={{
                             fontSize: "0.85rem",
                             color: "blue",
@@ -135,9 +142,9 @@ function PreviewCard(props) {
 
 function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
   const router = useRouter();
-  
+
   const isSearchPage = Boolean(searchTerm || router.query.searchterm);
-  
+
   // MODIFIED: Removed the "tech" fallback. Now it displays the type ONLY if it's explicitly set.
   const displayTag = router.query.type || currentType || null;
 
@@ -157,11 +164,11 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
     if (trimmedTerm) {
       query.searchterm = trimmedTerm;
       // Remove any tag filter when submitting a new search to ensure global search
-      delete query.type; 
+      delete query.type;
     } else {
       delete query.searchterm;
     }
-    
+
     // Reset to page 1 on search
     delete query.page;
 
@@ -173,8 +180,8 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
 
   // Grouping tags based on your layout preference
   const sidebarTagGroups = [
-    ["ml", "systems", "math"], 
-    ["journal", "culture"],
+    ["ml", "systems", "journal"],
+    ["culture", "web", "math"],
   ];
 
   return (
@@ -183,11 +190,10 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
         {/* --- MAIN BLOG CONTENT --- */}
         <Col xs={12}>
           <div style={{ maxWidth: "700px", margin: "0 auto" }}>
-            
             <div className="mb-4 pb-2 border-bottom d-flex align-items-center flex-wrap gap-3 mt-4 mt-md-0">
               {displayTag && !isSearchPage && (
-                <div 
-                  style={{ 
+                <div
+                  style={{
                     fontWeight: "500",
                   }}
                 >
@@ -195,11 +201,7 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
                 </div>
               )}
 
-              <form 
-                onSubmit={handleSearchSubmit} 
-                className="d-flex ms-auto" 
-                style={{ maxWidth: "250px", width: "100%" }}
-              >
+              <form onSubmit={handleSearchSubmit} className="d-flex ms-auto" style={{ maxWidth: "250px", width: "100%" }}>
                 <input
                   type="search"
                   placeholder="Search posts..."
@@ -239,10 +241,10 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
                     title={post.title}
                     text={post.preview_text}
                     date={post.date}
-                    tags={post.type} 
+                    tags={post.type}
                     wordcount={post.word_count}
                     previewimage={post.preview_image}
-                    searchTerm={searchTerm} 
+                    searchTerm={searchTerm}
                   />
                 </div>
               ))
@@ -250,9 +252,7 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
               <div style={{ textAlign: "center", margin: "5rem 0" }}>No results found.</div>
             )}
 
-            {pagination && pagination.totalPages > 1 && (
-              <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
-            )}
+            {pagination && pagination.totalPages > 1 && <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />}
 
             {/* --- FILTER TAGS (HIDDEN ON SEARCH PAGE) --- */}
             {!isSearchPage && (
@@ -260,13 +260,13 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
                 <h5 className="mb-3 text-uppercase" style={{ fontSize: "0.9rem", color: "#666", letterSpacing: "1px" }}>
                   Filter By Tags
                 </h5>
-                
+
                 {sidebarTagGroups.map((group, groupIdx) => (
                   <div key={groupIdx} className="mb-2 d-flex flex-wrap gap-2">
-                    {group.map(tag => (
+                    {group.map((tag) => (
                       <Link
                         key={tag}
-                        href={`/?type=${encodeURIComponent(tag.toLowerCase())}`} 
+                        href={`/?type=${encodeURIComponent(tag.toLowerCase())}`}
                         style={{
                           fontSize: "1rem",
                           color: "blue",
@@ -280,7 +280,6 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
                 ))}
               </div>
             )}
-
           </div>
         </Col>
       </Row>
@@ -295,16 +294,7 @@ function BlogPage({ data, pagination, type, postTypeArray, sort, searchterm }) {
     return <div>Loading...</div>;
   }
 
-  return (
-    <BlogPreviewPage 
-      currentType={type} 
-      data={data} 
-      pagination={pagination} 
-      postTypeArray={postTypeArray} 
-      currentSort={sort} 
-      searchTerm={searchterm} 
-    />
-  );
+  return <BlogPreviewPage currentType={type} data={data} pagination={pagination} postTypeArray={postTypeArray} currentSort={sort} searchTerm={searchterm} />;
 }
 
 export default BlogPage;
