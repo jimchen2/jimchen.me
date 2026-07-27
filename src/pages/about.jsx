@@ -1,12 +1,6 @@
 import React from "react";
-import { MapPin, Mail, Phone, ExternalLink } from "lucide-react";
-import {
-  FaGithub,
-  FaLinkedin,
-  FaYoutube,
-  FaTiktok,
-  FaInstagram,
-} from "react-icons/fa";
+import { MapPin, Mail, Phone, ExternalLink, GraduationCap } from "lucide-react";
+import { FaGithub, FaLinkedin, FaYoutube, FaTiktok, FaInstagram } from "react-icons/fa";
 
 const links = {
   github: "https://github.com/jimchen2",
@@ -19,10 +13,8 @@ const links = {
 };
 
 const images = {
-  vertical1:
-    "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/public_images/profile/profile_image_resized.jpg",
-  horizontal:
-    "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/public_images/profile/2.jpeg",
+  vertical1: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/public_images/profile/profile_image_resized.jpg",
+  horizontal: "https://pub-0be4bc99725a45ac9b3be7ebcdc45895.r2.dev/public_images/profile/2.jpeg",
 };
 
 const SocialLink = ({ href, label, icon: Icon }) => (
@@ -159,8 +151,13 @@ export default function App() {
           <div className="meta-item">
             <MapPin size={18} />
             <span>
-              Fayetteville, AR 
+              Fayetteville, AR <br></br> (From Shanghai, China)
             </span>
+          </div>
+
+          <div className="meta-item">
+            <GraduationCap size={18} />
+            <span>Undergrad: USTC (Hefei, China)</span>
           </div>
 
           <div className="meta-item">
