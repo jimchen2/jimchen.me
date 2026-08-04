@@ -10,6 +10,12 @@ const links = {
   instagram: "https://www.instagram.com/hijimchen/",
   youtube: "https://www.youtube.com/@jimchen4214",
   tiktok: "https://www.tiktok.com/@jimchen.me",
+  languages: "https://jimchen.me/?type=languages",
+  reading: "https://jimchen.me/?type=reading",
+  hefei: "https://jimchen.me/?type=hefei",
+  shanghai: "https://jimchen.me/?type=shanghai",
+  alaska: "https://jimchen.me/?type=alaska",
+  bayarea: "https://jimchen.me/?type=bayarea",
 };
 
 const images = {
@@ -29,7 +35,7 @@ export default function App() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
         * { box-sizing: border-box; }
 
@@ -48,7 +54,15 @@ export default function App() {
         h1 {
           font-family: 'Caveat', cursive;
           font-size: 4.25rem;
-          margin: 0 0 2rem;
+          margin: 0 0 0.5rem;
+        }
+
+        .bio {
+          font-size: 1.2rem;
+          font-weight: 500;
+          line-height: 1.5;
+          margin-bottom: 2rem;
+          opacity: 0.95;
         }
 
         .meta-grid {
@@ -87,16 +101,22 @@ export default function App() {
 
         .chips-wrapper {
           display: flex;
-          flex-wrap: wrap;
-          gap: 0.6rem;
+          flex-direction: column;
+          gap: 0.75rem;
           margin-bottom: 3rem;
+        }
+
+        .chips-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
         }
 
         .social-chip {
           display: inline-flex;
           align-items: center;
-          gap: 0.5rem;
-          padding: 0.5rem 0.9rem;
+          gap: 0.6rem;
+          padding: 0.65rem 1.35rem;
           border: 1px solid currentColor;
           border-radius: 10px;
           color: inherit;
@@ -108,6 +128,45 @@ export default function App() {
 
         .social-chip:hover {
           transform: translateY(-2px);
+        }
+
+        /* Blogs Section Finetuning */
+        .blog-list {
+          list-style: none;
+          padding: 0;
+          margin: 0 0 3.5rem 0;
+          display: flex;
+          flex-direction: column;
+          gap: 0.85rem;
+        }
+
+        .blog-list li {
+          font-size: 1.05rem;
+          font-weight: 400;
+          line-height: 1.6;
+          display: flex;
+          align-items: baseline;
+          gap: 0.6rem;
+        }
+
+        .blog-list li::before {
+          content: "•";
+          font-size: 1.2rem;
+          opacity: 0.5;
+        }
+
+        .blog-list a {
+          color: inherit;
+          font-weight: 600;
+          text-decoration: underline;
+          text-decoration-color: rgba(0, 0, 0, 0.3);
+          text-underline-offset: 4px;
+          transition: text-decoration-color 0.2s ease, opacity 0.2s ease;
+        }
+
+        .blog-list a:hover {
+          text-decoration-color: currentColor;
+          opacity: 0.8;
         }
 
         .gallery {
@@ -145,19 +204,25 @@ export default function App() {
       <div className="page-container">
         <header>
           <h1>jim chen</h1>
+          <br />
+          <p className="bio">
+            Shanghai native and CS grad student at the University of Arkansas (AR-kən-saw). Before that, I spent a year on an exchange program at UC Berkeley, backpacked through Russia and Belarus,
+            and spent a summer at HKUST in Hong Kong. I am passionate about blogging, media, traveling, language learning, and meeting new people. Other side hobbies: cooking, outdoors, listening to
+            folk music, or reading poetry.
+          </p>
         </header>
 
         <div className="meta-grid">
           <div className="meta-item">
             <MapPin size={18} />
-            <span>
-              Fayetteville, AR <br></br> (From Shanghai, China)
-            </span>
+            <span>Fayetteville, AR</span>
           </div>
 
           <div className="meta-item">
             <GraduationCap size={18} />
-            <span>Undergrad: USTC (Hefei, China)</span>
+            <span>
+              Undergrad: USTC (Hefei, China) <br /> School of the Gifted Young
+            </span>
           </div>
 
           <div className="meta-item">
@@ -178,12 +243,70 @@ export default function App() {
         <section>
           <div className="section-title">Work and Social Media</div>
           <div className="chips-wrapper">
-            <SocialLink href={links.github} label="GitHub" icon={FaGithub} />
-            <SocialLink href={links.linkedin} label="LinkedIn" icon={FaLinkedin} />
-            <SocialLink href={links.youtube} label="YouTube" icon={FaYoutube} />
-            <SocialLink href={links.tiktok} label="TikTok" icon={FaTiktok} />
-            <SocialLink href={links.instagram} label="Instagram" icon={FaInstagram} />
+            <div className="chips-row">
+              <SocialLink href={links.github} label="GitHub" icon={FaGithub} />
+              <SocialLink href={links.linkedin} label="LinkedIn" icon={FaLinkedin} />
+            </div>
+            <div className="chips-row">
+              <SocialLink href={links.youtube} label="YouTube" icon={FaYoutube} />
+              <SocialLink href={links.tiktok} label="TikTok" icon={FaTiktok} />
+              <SocialLink href={links.instagram} label="Instagram" icon={FaInstagram} />
+            </div>
           </div>
+        </section>
+
+        <section>
+          <div className="section-title">Blogs & Writing</div>
+          <ul className="blog-list">
+            <li>
+              <span>
+                Check out my{" "}
+                <a href={links.languages} target="_blank" rel="noreferrer">
+                  language blogs about Spanish and Russian
+                </a>
+              </span>
+            </li>
+            <li>
+              <span>
+                <a href={links.hefei} target="_blank" rel="noreferrer">
+                  Walking around in Hefei
+                </a>
+                , where I spent my undergrad years
+              </span>
+            </li>
+            <li>
+              <span>
+                <a href={links.alaska} target="_blank" rel="noreferrer">
+                  Solo Trip to Alaska
+                </a>
+              </span>
+            </li>
+            <li>
+              <span>
+                Exchange year in Berkeley and exploring the{" "}
+                <a href={links.bayarea} target="_blank" rel="noreferrer">
+                  Bay Area
+                </a>
+              </span>
+            </li>
+            <li>
+              <span>
+                Walking around in my native{" "}
+                <a href={links.shanghai} target="_blank" rel="noreferrer">
+                  Shanghai
+                </a>
+              </span>
+            </li>
+            <li>
+              <span>
+                My{" "}
+                <a href={links.reading} target="_blank" rel="noreferrer">
+                  YA book reviews
+                </a>{" "}
+                from middle school
+              </span>
+            </li>
+          </ul>
         </section>
 
         <div className="gallery">
