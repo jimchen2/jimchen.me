@@ -284,16 +284,16 @@ export default function App() {
             </li>
             <li>
               <span>
-                <a href={links.alaska} target="_blank" rel="noreferrer">
-                  Solo Trip to Alaska
+                My brief summer in{" "}
+                <a href={links.hongkong} target="_blank" rel="noreferrer">
+                  Hong Kong
                 </a>
               </span>
             </li>
             <li>
               <span>
-                My brief summer in{" "}
-                <a href={links.hongkong} target="_blank" rel="noreferrer">
-                  Hong Kong
+                <a href={links.alaska} target="_blank" rel="noreferrer">
+                  Solo Trip to Alaska
                 </a>
               </span>
             </li>
