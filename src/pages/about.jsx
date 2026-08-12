@@ -15,7 +15,9 @@ const links = {
   hefei: "https://jimchen.me/?type=hefei",
   shanghai: "https://jimchen.me/?type=shanghai",
   alaska: "https://jimchen.me/?type=alaska",
+  hongkong: "https://jimchen.me/?type=hong-kong",
   bayarea: "https://jimchen.me/?type=bayarea",
+  russia: "https://jimchen.me/?type=trip-ru-25",
 };
 
 const images = {
@@ -206,8 +208,7 @@ export default function App() {
           <h1>jim chen</h1>
           <br />
           <p className="bio">
-            Shanghai native and CS grad student at the University of Arkansas (AR-kən-saw). Before that, I spent a year on an exchange program at UC Berkeley, backpacked through Russia and Belarus,
-            and spent a summer at HKUST in Hong Kong. I am passionate about blogging, media, traveling, language learning, and meeting new people. Other side hobbies: cooking, outdoors, listening to
+            Shanghai native and CS grad student at the University of Arkansas (AR-kən-saw). I am passionate about blogging, media, traveling, language learning, and meeting new people. Other side hobbies: cooking, outdoors, listening to
             folk music, or reading poetry.
           </p>
         </header>
@@ -262,7 +263,7 @@ export default function App() {
               <span>
                 Check out my{" "}
                 <a href={links.languages} target="_blank" rel="noreferrer">
-                  language blogs about Spanish and Russian
+                  language learning blogs about Spanish and Russian
                 </a>
               </span>
             </li>
@@ -276,8 +277,23 @@ export default function App() {
             </li>
             <li>
               <span>
+                <a href={links.russia} target="_blank" rel="noreferrer">
+                  Solo Backpacking in Russia and Belarus
+                </a>
+              </span>
+            </li>
+            <li>
+              <span>
                 <a href={links.alaska} target="_blank" rel="noreferrer">
                   Solo Trip to Alaska
+                </a>
+              </span>
+            </li>
+            <li>
+              <span>
+                My brief summer in{" "}
+                <a href={links.hongkong} target="_blank" rel="noreferrer">
+                  Hong Kong
                 </a>
               </span>
             </li>
