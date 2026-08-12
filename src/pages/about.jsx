@@ -209,7 +209,7 @@ export default function App() {
           <br />
           <p className="bio">
             Shanghai native and CS grad student at the University of Arkansas (AR-kən-saw). I am passionate about blogging, media, traveling, language learning, and meeting new people. Other side hobbies: cooking, outdoors, listening to
-            folk music, or reading poetry.
+            folk music, and reading poetry.
           </p>
         </header>
 
