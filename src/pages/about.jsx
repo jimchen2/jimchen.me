@@ -263,7 +263,7 @@ export default function App() {
               <span>
                 Check out my{" "}
                 <a href={links.languages} target="_blank" rel="noreferrer">
-                  language learning blogs about Spanish and Russian
+                  language learning blogs
                 </a>
               </span>
             </li>
