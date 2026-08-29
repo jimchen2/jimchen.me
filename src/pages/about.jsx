@@ -6,7 +6,6 @@ const links = {
   github: "https://github.com/jimchen2",
   linkedin: "https://www.linkedin.com/in/jim-chen-588002255/",
   email: "mailto:jimchen4214@gmail.com",
-  phone: "tel:4793169630",
   instagram: "https://www.instagram.com/hijimchen/",
   youtube: "https://www.youtube.com/@jimchen4214",
   tiktok: "https://www.tiktok.com/@jimchen.me",
@@ -230,13 +229,6 @@ export default function App() {
             <Mail size={18} />
             <a href={links.email} className="contact-link">
               jimchen4214@gmail.com
-            </a>
-          </div>
-
-          <div className="meta-item">
-            <Phone size={18} />
-            <a href={links.phone} className="contact-link">
-              (479) 316-9630
             </a>
           </div>
         </div>
