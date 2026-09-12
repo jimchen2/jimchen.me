@@ -1,46 +1,45 @@
-// dbConnect.js
-const { Pool } = require("pg");
+import { Pool } from "pg";
 
 const PG_URI = process.env.POSTGRESQL_URL;
 
-// Initialize cached connection object once
-let cached = global.postgres || (global.postgres = { pool: null });
+// The pool is cached on `global` so hot reloads (and warm serverless
+// invocations) reuse the same connections.
+const cached = global.postgres || (global.postgres = { pool: null });
 
 async function dbConnect() {
-  // Return existing pool if available
+  if (!PG_URI) {
+    throw new Error("POSTGRESQL_URL is not configured");
+  }
+
   if (cached.pool) {
     return cached.pool;
   }
 
-  // Create a new pool with better error handling
   const pool = new Pool({
     connectionString: PG_URI,
+    max: Number(process.env.POSTGRESQL_POOL_MAX) || 5,
+    idleTimeoutMillis: 30_000,
+    connectionTimeoutMillis: 10_000,
   });
 
-  // Add error handler to pool
   pool.on("error", (err) => {
     console.error("Unexpected error on idle PostgreSQL client", err);
-    // On critical error, clear the cached pool so a new one can be created
+    // Drop the cached pool so the next request can build a fresh one.
     cached.pool = null;
   });
 
+  // Fail fast (and loudly) if the connection string is wrong.
+  const client = await pool.connect();
   try {
-    // Test the connection
-    const client = await pool.connect();
-    try {
-      await client.query("SELECT NOW()");
-      console.log("Connected to PostgreSQL successfully");
-      cached.pool = pool;
-      return pool;
-    } finally {
-      // Release the client back to the pool
-      client.release();
-    }
+    await client.query("SELECT NOW()");
+    cached.pool = pool;
+    return pool;
   } catch (error) {
-    console.error("Failed to connect to PostgreSQL:", error);
-    // Better error handling
+    pool.end().catch(() => {});
     throw new Error(`Database connection failed: ${error.message}`);
+  } finally {
+    client.release();
   }
 }
 
-module.exports = dbConnect;
+export default dbConnect;

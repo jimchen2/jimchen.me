@@ -1,192 +1,102 @@
-import React, { useState, useEffect } from "react";
-import { Accordion, Card, Col } from "react-bootstrap";
+import React, { useEffect, useMemo, useState } from "react";
 
-const scrollToElement = (id, offset = -70) => {
-  const element = document.getElementById(id);
-  if (element) {
-    window.scrollTo({
-      top: element.getBoundingClientRect().top + window.pageYOffset + offset,
-      behavior: "smooth",
-    });
-    window.history.pushState(null, "", `#${id}`);
+/** Groups a flat heading list into `h2 -> [h3]` for rendering. */
+function buildTree(headings) {
+  const tree = [];
+  let currentParent = null;
+
+  for (const heading of headings) {
+    if (heading.level === 2 || !currentParent) {
+      currentParent = { ...heading, children: [] };
+      tree.push(currentParent);
+    } else {
+      currentParent.children.push(heading);
+    }
   }
-};
-const addHashLinks = () => {
-  document.querySelectorAll("h2").forEach((header) => {
-    const id = header.id;
-    if (id && !header.querySelector(".hash-link")) {
-      const link = document.createElement("a");
-      link.className = "hash-link";
-      link.href = `#${id}`;
-      link.innerHTML = "#";
-      link.style.marginRight = "5px";
-      link.onclick = (e) => {
-        e.preventDefault();
-        scrollToElement(id);
-      };
-      header.prepend(link);
-    }
-  });
-  document.querySelectorAll("h3").forEach((header) => {
-    const id = header.id;
-    if (id && !header.querySelector(".hash-link")) {
-      const link = document.createElement("a");
-      link.className = "hash-link";
-      link.href = `#${id}`;
-      link.innerHTML = "#";
-      link.style.marginRight = "5px";
-      link.onclick = (e) => {
-        e.preventDefault();
-        scrollToElement(id);
-      };
-      header.prepend(link);
-    }
-  });
-};
 
-const CustomToggle = ({ children, eventKey, setActiveKey, isActive }) => {
-  const handleClick = () => {
-    const newKey = isActive ? null : eventKey;
-    setActiveKey(newKey);
-    scrollToElement(eventKey);
-  };
+  return tree;
+}
 
-  return (
-    <Card.Header
-      onClick={handleClick}
-      style={{
-        cursor: "pointer",
-        backgroundColor: isActive ? "black" : "white",
-        color: isActive ? "white" : "black",
-        maxWidth: "300px", // Adjust this value as needed
-        wordWrap: "break-word",
-        whiteSpace: "normal",
-        lineHeight: "1.3",
-      }}
-    >
-      <span
-        style={{
-          fontWeight: 500,
-          display: "block",
-          wordBreak: "break-word",
-        }}
-      >
-        {children}
-      </span>
-    </Card.Header>
-  );
-};
-const useTableOfContents = (setActiveKey) => {
-  const [tocItems, setTocItems] = useState([]);
+/**
+ * Sticky "on this page" navigation. Heading ids are assigned while the post HTML
+ * is parsed, so this works without DOM scanning and matches the server output.
+ */
+export default function BlogToc({ headings = [] }) {
+  const tree = useMemo(() => buildTree(headings), [headings]);
+  const [activeId, setActiveId] = useState(headings[0]?.id ?? null);
 
   useEffect(() => {
-    const headers = Array.from(document.querySelectorAll("h2, h3"));
-    const items = [];
-    let lastH2Key = null;
+    if (headings.length === 0) return undefined;
 
-    headers.forEach((header) => {
-      const id = header.id;
-      if (!id) return;
+    let frame = 0;
 
-      const text = header.textContent.replace(/^#\s+/, "").trim();
-      const isH2 = header.tagName === "H2";
-
-      if (isH2) {
-        lastH2Key = id;
-        items.push({
-          key: id,
-          content: (
-            <CustomToggle eventKey={id} setActiveKey={setActiveKey}>
-              {text}
-            </CustomToggle>
-          ),
-          children: [],
-          hasChildren: false,
-        });
-      } else if (lastH2Key) {
-        const parent = items.find((item) => item.key === lastH2Key);
-        if (parent) {
-          parent.children.push(
-            <div
-              key={`child-${id}`}
-              onClick={() => scrollToElement(id)}
-              style={{
-                padding: "0.5rem 0.5rem 0.5rem 1rem",
-                cursor: "pointer",
-                maxWidth: "300px",
-                wordWrap: "break-word",
-                whiteSpace: "normal",
-                lineHeight: "1.3",
-                wordBreak: "break-word",
-                overflow: "hidden",
-              }}
-              className="hover:bg-gray-100 hover:underline"
-            >
-              {text}
-            </div>
-          );
-          parent.hasChildren = true;
+    const updateActive = () => {
+      frame = 0;
+      let current = headings[0].id;
+      for (const heading of headings) {
+        const element = document.getElementById(heading.id);
+        if (!element) continue;
+        if (element.getBoundingClientRect().top <= 120) {
+          current = heading.id;
+        } else {
+          break;
         }
       }
-    });
+      setActiveId((previous) => (previous === current ? previous : current));
+    };
 
-    setTocItems(items);
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(updateActive);
+    };
 
-    const hash = window.location.hash.slice(1);
-    if (hash) {
-      setTimeout(() => {
-        scrollToElement(hash);
-        const header = document.getElementById(hash);
-        if (header?.tagName === "H3") {
-          let prev = header.previousElementSibling;
-          while (prev && prev.tagName !== "H2") prev = prev.previousElementSibling;
-          if (prev?.id) setActiveKey(prev.id);
-        } else if (header?.tagName === "H2") {
-          setActiveKey(hash);
-        }
-      }, 150);
-    }
+    updateActive();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
 
-    addHashLinks();
-  }, [setActiveKey]);
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [headings]);
 
-  return tocItems;
-};
-
-const BlogToc = () => {
-  const [activeKey, setActiveKey] = useState(null);
-  const tocItems = useTableOfContents(setActiveKey);
+  if (tree.length === 0) return null;
 
   return (
-    <Col
-      lg={2.5}
-      xl={2.5}
-      style={{
-        position: "fixed",
-        top: "70px",
-        right: "20px",
-        height: "calc(100vh - 70px)",
-        overflowY: "auto",
-        padding: "10px",
-      }}
-    >
-      <Accordion activeKey={activeKey}>
-        {tocItems.map((item) => (
-          <Card key={item.key}>
-            {React.cloneElement(item.content, {
-              isActive: activeKey === item.key,
-              setActiveKey,
-            })}
-            {item.hasChildren && (
-              <Accordion.Collapse eventKey={item.key}>
-                <Card.Body>{item.children}</Card.Body>
-              </Accordion.Collapse>
+    <nav className="blog-toc" aria-label="Table of contents">
+      <p className="blog-toc-title">On this page</p>
+      <ul className="blog-toc-list">
+        {tree.map((item) => (
+          <li key={item.id}>
+            <a
+              href={`#${item.id}`}
+              className={activeId === item.id ? "blog-toc-link is-active" : "blog-toc-link"}
+              onClick={() => setActiveId(item.id)}
+            >
+              {item.text}
+            </a>
+            {item.children.length > 0 && (
+              <ul className="blog-toc-sublist">
+                {item.children.map((child) => (
+                  <li key={child.id}>
+                    <a
+                      href={`#${child.id}`}
+                      className={activeId === child.id ? "blog-toc-link is-active" : "blog-toc-link"}
+                      onClick={() => setActiveId(child.id)}
+                    >
+                      {child.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             )}
-          </Card>
+          </li>
         ))}
-      </Accordion>
-    </Col>
+      </ul>
+      <a className="blog-toc-top" href="#top">
+        Back to top
+      </a>
+    </nav>
   );
-};
-
-export { BlogToc };
+}

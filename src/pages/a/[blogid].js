@@ -1,59 +1,72 @@
-import dbConnect from "@/lib/dbConnect";
-import React from "react";
 import Head from "next/head";
+import React from "react";
+
+// KaTeX styles ship with the package (previously a version-mismatched CDN link).
+import "katex/dist/katex.min.css";
+
+import CommentSection from "@/comment/commentsection";
 import SingleBlog from "@/singleblog/singleBlog";
-import Msg from "@/comment/commentsection";
+import { getPost, isDemoMode, resolveSiteUrl } from "@/lib/blogData";
+import { formatPostDate, formatTitle, stripHtml, truncate } from "@/lib/format";
 
-export default function Blog({ blog, type, error }) {
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+export default function BlogPost({ blog, demo, siteUrl }) {
+  const description = truncate(stripHtml(blog.body), 160);
+  const tags = Array.isArray(blog.type) ? blog.type : [];
+  const canonicalUrl = `${siteUrl}/a/${blog.blogid}`;
+  const title = formatTitle(blog.title);
+  const iso = blog.date ? new Date(blog.date).toISOString() : null;
 
-  if (!blog) {
-    return <div>Blog not found</div>;
-  }
-
-  // Create a description from the blog body (first 160 characters)
-  const description = blog.body.substring(0, 160).trim() + (blog.body.length > 160 ? "..." : "");
-
-  // Join the type array into a string for keywords (e.g., "tag1, tag2, tag3")
-  const typeString = Array.isArray(type) ? type.join(", ") : type || "blog";
-
-  // Define the canonical URL based on the /a/[blogid] route
-  const canonicalUrl = `${process.env.NEXT_PUBLIC_SITE}/a/${blog.blogid}`;
-
-  const displayDate = new Date(blog.date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: title,
+    description,
+    datePublished: iso,
+    dateModified: iso,
+    url: canonicalUrl,
+    author: { "@type": "Person", name: "Jim Chen", url: siteUrl },
+    keywords: tags.join(", "),
+    ...(blog.preview_image ? { image: blog.preview_image } : {}),
+  };
 
   return (
     <>
       <Head>
-        <title>{blog.title}</title>
+        <title>{`${title} — Jim Chen's Blog`}</title>
         <meta name="description" content={description} />
+        <meta name="keywords" content={[...tags, "blog"].join(", ")} />
         <meta name="robots" content="index, follow" />
-        <meta name="keywords" content={`${typeString}, ${blog.title}, blog`} />
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:title" content={blog.title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SITE}/default-blog-image.jpg`} />
         <link rel="canonical" href={canonicalUrl} />
+
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonicalUrl} />
+        {blog.preview_image ? <meta property="og:image" content={blog.preview_image} /> : null}
+        {iso ? <meta property="article:published_time" content={iso} /> : null}
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger -- static, generated data
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
       </Head>
 
-      <div>
-        <SingleBlog
-          title={blog.title}
-          text={blog.body}
-          type={typeString} // Pass type as a string
-          blogid={blog.blogid}
-          date={displayDate}
-          wordcount={blog.word_count}
-        />
-        <Msg blogid={blog.blogid} blogname={blog.title} />
-      </div>
+      <SingleBlog
+        title={title}
+        text={blog.body}
+        type={tags}
+        blogid={blog.blogid}
+        wordcount={blog.word_count}
+        demo={demo}
+        date={iso ? { iso, label: formatPostDate(blog.date, "long") } : null}
+      />
+
+      {!demo && <CommentSection blogid={blog.blogid} />}
     </>
   );
 }
@@ -62,46 +75,33 @@ export async function getServerSideProps(context) {
   const { blogid } = context.params;
 
   try {
-    const pool = await dbConnect();
+    const blog = await getPost(blogid);
 
-    const query = `
-      SELECT blogid, type, title, body, date, word_count
-      FROM blogs
-      WHERE blogid = $1
-    `;
-    const result = await pool.query(query, [blogid]);
-
-    if (result.rows.length === 0) {
-      return {
-        notFound: true,
-      };
+    if (!blog) {
+      return { notFound: true };
     }
 
-    // Get the raw blog data from the database
-    const blogData = result.rows[0];
-
-    // Create a new object that is JSON serializable
-    // by converting the Date object to a string.
-    const blog = {
-      ...blogData,
-      date: blogData.date.toISOString(), // <-- THE FIX
-    };
+    if (context.res) {
+      context.res.setHeader("Cache-Control", "public, s-maxage=60, stale-while-revalidate=600");
+    }
 
     return {
       props: {
-        blog, // Pass the serializable blog object
-        type: blog.type,
-        error: null,
+        demo: isDemoMode(),
+        siteUrl: resolveSiteUrl(context.req),
+        blog: {
+          blogid: blog.blogid,
+          title: blog.title,
+          body: blog.body,
+          date: blog.date instanceof Date ? blog.date.toISOString() : blog.date,
+          type: Array.isArray(blog.type) ? blog.type : blog.type ? [blog.type] : [],
+          word_count: blog.word_count ?? 0,
+          preview_image: blog.preview_image || null,
+        },
       },
     };
   } catch (error) {
     console.error("Error fetching blog data:", error);
-    return {
-      props: {
-        blog: null,
-        type: null,
-        error: "Failed to fetch blog data",
-      },
-    };
+    return { notFound: true };
   }
 }

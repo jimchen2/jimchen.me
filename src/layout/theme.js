@@ -13,7 +13,7 @@ const THEME_COOKIE_KEY = "themeMode";
 const DEFAULT_THEME = "light"; // 'light' or 'dark'
 
 export const useColorScheme = () => {
-  const [themeMode, setThemeMode] = useState(null); // Initial state is null
+  const [themeMode, setThemeMode] = useState(DEFAULT_THEME);
   const [isHydrated, setIsHydrated] = useState(false);
 
   // Refs to store DarkReader functions once loaded
@@ -60,19 +60,15 @@ export const useColorScheme = () => {
 
   // Effect for initial theme load from cookies and applying it
   useEffect(() => {
-    if (darkReaderLoaded) {
-      const savedTheme = Cookies.get(THEME_COOKIE_KEY);
-      const initialTheme =
-        savedTheme === "dark" || savedTheme === "light"
-          ? savedTheme
-          : DEFAULT_THEME;
+    if (!darkReaderLoaded) return;
 
-      setThemeMode(initialTheme);
-      applyTheme(initialTheme);
-      setIsHydrated(true);
-    } else if (typeof window === "undefined") {
-      setThemeMode(DEFAULT_THEME);
-    }
+    const savedTheme = Cookies.get(THEME_COOKIE_KEY);
+    const initialTheme =
+      savedTheme === "dark" || savedTheme === "light" ? savedTheme : DEFAULT_THEME;
+
+    setThemeMode(initialTheme);
+    applyTheme(initialTheme);
+    setIsHydrated(true);
   }, [darkReaderLoaded, applyTheme]);
 
   const toggleThemeMode = useCallback(() => {
@@ -91,7 +87,7 @@ export const useColorScheme = () => {
   }, [applyTheme, darkReaderLoaded]);
 
   return {
-    themeMode: themeMode || DEFAULT_THEME,
+    themeMode,
     toggleThemeMode,
     isHydrated,
   };

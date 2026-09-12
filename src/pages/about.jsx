@@ -1,3 +1,4 @@
+import Head from "next/head";
 import React from "react";
 import { MapPin, Mail, Phone, ExternalLink, GraduationCap } from "lucide-react";
 import { FaGithub, FaLinkedin, FaYoutube, FaTiktok, FaInstagram } from "react-icons/fa";
@@ -35,30 +36,36 @@ const SocialLink = ({ href, label, icon: Icon }) => (
 export default function App() {
   return (
     <>
+      <Head>
+        <title>About — Jim Chen&apos;s Blog</title>
+        <meta
+          name="description"
+          content="Jim Chen — CS PhD student at the University of Arkansas, from Shanghai. Blogging, media, travel, languages and more."
+        />
+        <link rel="canonical" href={`${process.env.NEXT_PUBLIC_SITE || "https://jimchen.me"}/about`} />
+      </Head>
+
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-
-        * { box-sizing: border-box; }
-
-        body {
+        .about-page {
           margin: 0;
           font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
           line-height: 1.6;
         }
 
-        .page-container {
+        .about-page .page-container {
           max-width: 680px;
           margin: 0 auto;
           padding: 5rem 1.5rem;
         }
 
-        h1 {
+        .about-page h1 {
           font-family: 'Caveat', cursive;
           font-size: 4.25rem;
           margin: 0 0 0.5rem;
         }
 
-        .bio {
+        .about-page .bio {
           font-size: 1.2rem;
           font-weight: 500;
           line-height: 1.5;
@@ -66,7 +73,7 @@ export default function App() {
           opacity: 0.95;
         }
 
-        .meta-grid {
+        .about-page .meta-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
           gap: 1.25rem;
@@ -76,22 +83,22 @@ export default function App() {
           border: 1px solid currentColor;
         }
 
-        .meta-item {
+        .about-page .meta-item {
           display: flex;
           align-items: center;
           gap: 0.75rem;
           font-size: 0.95rem;
         }
 
-        .meta-item svg, .arrow-icon { flex-shrink: 0; }
+        .about-page .meta-item svg, .arrow-icon { flex-shrink: 0; }
 
-        .contact-link {
+        .about-page .contact-link {
           color: inherit;
           text-decoration: none;
           font-weight: 500;
         }
 
-        .section-title {
+        .about-page .section-title {
           font-size: 0.8rem;
           text-transform: uppercase;
           letter-spacing: 0.08em;
@@ -100,20 +107,20 @@ export default function App() {
           opacity: 0.7;
         }
 
-        .chips-wrapper {
+        .about-page .chips-wrapper {
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
           margin-bottom: 3rem;
         }
 
-        .chips-row {
+        .about-page .chips-row {
           display: flex;
           flex-wrap: wrap;
           gap: 0.75rem;
         }
 
-        .social-chip {
+        .about-page .social-chip {
           display: inline-flex;
           align-items: center;
           gap: 0.6rem;
@@ -127,12 +134,12 @@ export default function App() {
           transition: transform 0.2s ease;
         }
 
-        .social-chip:hover {
+        .about-page .social-chip:hover {
           transform: translateY(-2px);
         }
 
         /* Blogs Section Finetuning */
-        .blog-list {
+        .about-page .blog-list {
           list-style: none;
           padding: 0;
           margin: 0 0 3.5rem 0;
@@ -141,7 +148,7 @@ export default function App() {
           gap: 0.85rem;
         }
 
-        .blog-list li {
+        .about-page .blog-list li {
           font-size: 1.05rem;
           font-weight: 400;
           line-height: 1.6;
@@ -150,13 +157,13 @@ export default function App() {
           gap: 0.6rem;
         }
 
-        .blog-list li::before {
+        .about-page .blog-list li::before {
           content: "•";
           font-size: 1.2rem;
           opacity: 0.5;
         }
 
-        .blog-list a {
+        .about-page .blog-list a {
           color: inherit;
           font-weight: 600;
           text-decoration: underline;
@@ -165,25 +172,25 @@ export default function App() {
           transition: text-decoration-color 0.2s ease, opacity 0.2s ease;
         }
 
-        .blog-list a:hover {
+        .about-page .blog-list a:hover {
           text-decoration-color: currentColor;
           opacity: 0.8;
         }
 
-        .gallery {
+        .about-page .gallery {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
         }
 
-        .gallery-item {
+        .about-page .gallery-item {
           overflow: hidden;
           border-radius: 20px;
           border: 1px solid currentColor;
           width: 100%;
         }
 
-        .gallery-item img {
+        .about-page .gallery-item img {
           width: 100%;
           height: 100%;
           object-fit: cover;
@@ -191,137 +198,139 @@ export default function App() {
           transition: transform 0.5s ease;
         }
 
-        .gallery-item:hover img { transform: scale(1.025); }
+        .about-page .gallery-item:hover img { transform: scale(1.025); }
 
-        .aspect-16-9 { aspect-ratio: 16 / 9; }
-        .aspect-9-16 { aspect-ratio: 9 / 16; max-width: 420px; margin: 0 auto; }
+        .about-page .aspect-16-9 { aspect-ratio: 16 / 9; }
+        .about-page .aspect-9-16 { aspect-ratio: 9 / 16; max-width: 420px; margin: 0 auto; }
 
         @media (max-width: 600px) {
-          .page-container { padding: 3rem 1.25rem; }
-          h1 { font-size: 3.5rem; }
+          .about-page .page-container { padding: 3rem 1.25rem; }
+          .about-page h1 { font-size: 3.5rem; }
         }
       `}</style>
 
-      <div className="page-container">
-        <header>
-          <h1>jim chen</h1>
-          <br />
-          <p className="bio">
-            CS PhD student at the University of Arkansas (AR-kən-saw) from Shanghai. I am passionate about blogging, media, traveling, language learning, and meeting new people. Other side hobbies: dancing, cooking, outdoors, folk music, and reading poetry.
-          </p>
-        </header>
+      <div className="about-page">
+        <div className="page-container">
+          <header>
+            <h1>jim chen</h1>
+            <br />
+            <p className="bio">
+              CS PhD student at the University of Arkansas (AR-kən-saw) from Shanghai. I am passionate about blogging, media, traveling, language learning, and meeting new people. Other side hobbies: dancing, cooking, outdoors, folk music, and reading poetry.
+            </p>
+          </header>
 
-        <div className="meta-grid">
-          <div className="meta-item">
-            <MapPin size={18} />
-            <span>Fayetteville, AR</span>
-          </div>
-
-          <div className="meta-item">
-            <GraduationCap size={18} />
-            <span>
-              Undergrad: USTC (Hefei, China) <br /> School of the Gifted Young
-            </span>
-          </div>
-
-          <div className="meta-item">
-            <Mail size={18} />
-            <a href={links.email} className="contact-link">
-              jimchen4214@gmail.com
-            </a>
-          </div>
-        </div>
-
-        <section>
-          <div className="section-title">Work and Social Media</div>
-          <div className="chips-wrapper">
-            <div className="chips-row">
-              <SocialLink href={links.github} label="GitHub" icon={FaGithub} />
-              <SocialLink href={links.linkedin} label="LinkedIn" icon={FaLinkedin} />
+          <div className="meta-grid">
+            <div className="meta-item">
+              <MapPin size={18} />
+              <span>Fayetteville, AR</span>
             </div>
-            <div className="chips-row">
-              <SocialLink href={links.youtube} label="YouTube" icon={FaYoutube} />
-              <SocialLink href={links.tiktok} label="TikTok" icon={FaTiktok} />
-              <SocialLink href={links.instagram} label="Instagram" icon={FaInstagram} />
+
+            <div className="meta-item">
+              <GraduationCap size={18} />
+              <span>
+                Undergrad: USTC (Hefei, China) <br /> School of the Gifted Young
+              </span>
+            </div>
+
+            <div className="meta-item">
+              <Mail size={18} />
+              <a href={links.email} className="contact-link">
+                jimchen4214@gmail.com
+              </a>
             </div>
           </div>
-        </section>
 
-        <section>
-          <div className="section-title">Blogs & Writing</div>
-          <ul className="blog-list">
-            <li>
-              <span>
-                Check out my{" "}
-                <a href={links.languages} target="_blank" rel="noreferrer">
-                  language learning blogs
-                </a>
-              </span>
-            </li>
-            <li>
-              <span>
-                <a href={links.hefei} target="_blank" rel="noreferrer">
-                  Walking around in Hefei
-                </a>
-                , where I spent my undergrad years
-              </span>
-            </li>
-            <li>
-              <span>
-                <a href={links.russia} target="_blank" rel="noreferrer">
-                  Solo Backpacking in Russia and Belarus
-                </a>
-              </span>
-            </li>
-            <li>
-              <span>
-                My brief summer in{" "}
-                <a href={links.hongkong} target="_blank" rel="noreferrer">
-                  Hong Kong
-                </a>
-              </span>
-            </li>
-            <li>
-              <span>
-                <a href={links.alaska} target="_blank" rel="noreferrer">
-                  Solo Trip to Alaska
-                </a>
-              </span>
-            </li>
-            <li>
-              <span>
-                Exchange year in Berkeley and exploring the{" "}
-                <a href={links.bayarea} target="_blank" rel="noreferrer">
-                  Bay Area
-                </a>
-              </span>
-            </li>
-            <li>
-              <span>
-                Walking around in my native{" "}
-                <a href={links.shanghai} target="_blank" rel="noreferrer">
-                  Shanghai
-                </a>
-              </span>
-            </li>
-            <li>
-              <span>
-                My{" "}
-                <a href={links.reading} target="_blank" rel="noreferrer">
-                  YA book reviews
-                </a>{" "}
-                from middle school
-              </span>
-            </li>
-          </ul>
-        </section>
+          <section>
+            <div className="section-title">Work and Social Media</div>
+            <div className="chips-wrapper">
+              <div className="chips-row">
+                <SocialLink href={links.github} label="GitHub" icon={FaGithub} />
+                <SocialLink href={links.linkedin} label="LinkedIn" icon={FaLinkedin} />
+              </div>
+              <div className="chips-row">
+                <SocialLink href={links.youtube} label="YouTube" icon={FaYoutube} />
+                <SocialLink href={links.tiktok} label="TikTok" icon={FaTiktok} />
+                <SocialLink href={links.instagram} label="Instagram" icon={FaInstagram} />
+              </div>
+            </div>
+          </section>
 
-        <div className="gallery">
-          <div className="gallery-item aspect-9-16">
-            <img src={images.vertical1} alt="Jim Chen Vertical" />
-          </div>
-          <div className="gallery-item aspect-16-9">
-            <img src={images.horizontal} alt="Jim Chen Horizontal" />
+          <section>
+            <div className="section-title">Blogs & Writing</div>
+            <ul className="blog-list">
+              <li>
+                <span>
+                  Check out my{" "}
+                  <a href={links.languages} target="_blank" rel="noreferrer">
+                    language learning blogs
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span>
+                  <a href={links.hefei} target="_blank" rel="noreferrer">
+                    Walking around in Hefei
+                  </a>
+                  , where I spent my undergrad years
+                </span>
+              </li>
+              <li>
+                <span>
+                  <a href={links.russia} target="_blank" rel="noreferrer">
+                    Solo Backpacking in Russia and Belarus
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span>
+                  My brief summer in{" "}
+                  <a href={links.hongkong} target="_blank" rel="noreferrer">
+                    Hong Kong
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span>
+                  <a href={links.alaska} target="_blank" rel="noreferrer">
+                    Solo Trip to Alaska
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span>
+                  Exchange year in Berkeley and exploring the{" "}
+                  <a href={links.bayarea} target="_blank" rel="noreferrer">
+                    Bay Area
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span>
+                  Walking around in my native{" "}
+                  <a href={links.shanghai} target="_blank" rel="noreferrer">
+                    Shanghai
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span>
+                  My{" "}
+                  <a href={links.reading} target="_blank" rel="noreferrer">
+                    YA book reviews
+                  </a>{" "}
+                  from middle school
+                </span>
+              </li>
+            </ul>
+          </section>
+
+          <div className="gallery">
+            <div className="gallery-item aspect-9-16">
+              <img src={images.vertical1} alt="Jim Chen" loading="lazy" decoding="async" />
+            </div>
+            <div className="gallery-item aspect-16-9">
+              <img src={images.horizontal} alt="Jim Chen" loading="lazy" decoding="async" />
+            </div>
           </div>
         </div>
       </div>

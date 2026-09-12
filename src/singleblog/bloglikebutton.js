@@ -1,106 +1,99 @@
-import React, { useState, useEffect } from "react";
-import { Button } from "react-bootstrap";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 
-function BlogLikeButton({ blogid, initialLikes = 0 }) {
-  const [likes, setLikes] = useState(initialLikes);
+const SESSION_PREFIX = "jc:liked:";
+
+/**
+ * Like button with an optimistic update.
+ *
+ * The count is fetched once, a click flips the UI immediately, and the request
+ * is rolled back if the API rejects it. Hidden entirely when the site is
+ * running on local example content (no database).
+ */
+export default function BlogLikeButton({ blogid }) {
+  const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
-  const [isFetching, setIsFetching] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [hidden, setHidden] = useState(false);
+  const [token, setToken] = useState(null);
 
-  // Store the security token
-  const [securityToken, setSecurityToken] = useState(null);
-
-  // 1. Fetch initial status and Security Token
   useEffect(() => {
-    let isMounted = true;
-    const fetchStatus = async () => {
-      try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_SITE}/api/blog/likes?blogid=${blogid}`);
-        if (isMounted) {
-          setLikes(response.data.likes);
-          setLiked(response.data.liked);
-          setSecurityToken(response.data.token);
-          setIsFetching(false);
-        }
-      } catch (error) {
-        console.error("Failed to fetch like status", error);
-        // Even if initial fetch fails, allow interaction based on default props
-        if (isMounted) setIsFetching(false);
-      }
-    };
+    if (!blogid) return undefined;
 
-    fetchStatus();
+    let active = true;
+    const controller = new AbortController();
+
+    fetch(`/api/blog/likes?blogid=${encodeURIComponent(blogid)}`, { signal: controller.signal })
+      .then((response) => (response.ok ? response.json() : Promise.reject(new Error(`HTTP ${response.status}`))))
+      .then((data) => {
+        if (!active) return;
+        if (data.demo) {
+          setHidden(true);
+          return;
+        }
+        setLikes(Number(data.likes) || 0);
+        setLiked(Boolean(data.liked));
+        setToken(data.token || null);
+      })
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          console.warn("Likes unavailable:", error.message);
+          if (active) setHidden(true);
+        }
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
     return () => {
-      isMounted = false;
+      active = false;
+      controller.abort();
     };
   }, [blogid]);
 
-  const handleLike = () => {
-    // 1. Snapshot previous state in case we need to revert
+  const handleClick = async () => {
     const previousLiked = liked;
     const previousLikes = likes;
+    const nextLiked = !previousLiked;
 
-    // 2. Calculate new state
-    const newLiked = !previousLiked;
-    const newLikes = newLiked ? previousLikes + 1 : previousLikes - 1;
+    setLiked(nextLiked);
+    setLikes(Math.max(previousLikes + (nextLiked ? 1 : -1), 0));
 
-    // 3. UPDATE UI IMMEDIATELY (Do not wait for token or backend)
-    setLiked(newLiked);
-    setLikes(newLikes);
+    try {
+      try {
+        window.sessionStorage.setItem(`${SESSION_PREFIX}${blogid}`, nextLiked ? "1" : "0");
+      } catch {
+        /* ignore */
+      }
 
-    // 4. Send Request in Background
-    // If the token hasn't loaded yet, we update UI but skip the API call to prevent errors
-    if (!securityToken) {
-      console.log("TOKEN NOT LOADED");
-      return;
-    }
-
-    axios
-      .post(`${process.env.NEXT_PUBLIC_SITE}/api/blog/likes?blogid=${blogid}`, {
-        token: securityToken,
-      })
-      .then((response) => {
-        // Optional: You can sync with server response here, but usually,
-        // trusting the optimistic update feels smoother to the user.
-        // We do NOTHING here to prevent "jumping" numbers if the user clicks fast.
-      })
-      .catch((error) => {
-        console.error("Error toggling like:", error);
-        // 5. REVERT UI ONLY ON ERROR
-        setLiked(previousLiked);
-        setLikes(previousLikes);
+      const response = await fetch(`/api/blog/likes?blogid=${encodeURIComponent(blogid)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
       });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const data = await response.json();
+      if (typeof data.likes === "number") setLikes(data.likes);
+      if (typeof data.liked === "boolean") setLiked(data.liked);
+    } catch (error) {
+      console.warn("Could not save like:", error.message);
+      setLiked(previousLiked);
+      setLikes(previousLikes);
+    }
   };
 
-  const baseStyle = {
-    fontSize: "0.75rem",
-    padding: "2px 6px",
-    margin: "5px",
-    transition: "background-color 0.2s, transform 0.1s",
-    // Remove opacity changes during interaction to prevent "disabled" feel
-    opacity: isFetching ? 0.6 : 1,
-    cursor: "pointer",
-  };
-
-  const likedButtonStyle = {
-    ...baseStyle,
-    backgroundColor: "#007bff",
-    color: "white",
-    borderColor: "#007bff",
-  };
+  if (hidden) return null;
 
   return (
-    <Button
-      variant={liked ? "primary" : "outline-primary"}
-      style={liked ? likedButtonStyle : baseStyle}
-      onClick={handleLike}
-      // Only disable during the very first load to prevent hydration mismatches,
-      // never disable while the user is clicking.
-      disabled={isFetching}
+    <button
+      type="button"
+      className={liked ? "blog-like-button is-liked" : "blog-like-button"}
+      onClick={handleClick}
+      disabled={loading}
+      aria-pressed={liked}
     >
-      {liked ? "Liked" : "Like"} {likes}
-    </Button>
+      {liked ? "Liked" : "Like"}
+      <span className="blog-like-count">{likes}</span>
+    </button>
   );
 }
-
-export default BlogLikeButton;

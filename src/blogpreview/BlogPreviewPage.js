@@ -1,300 +1,217 @@
-import React, { useState, useEffect } from "react";
-import Pagination from "@/blogpreview/Pagination.js";
-import { Container, Card, Row, Col } from "react-bootstrap";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FaSearch } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
 
-function PreviewCard(props) {
-  const { searchTerm, date, blogid, previewimage, title, text, wordcount, tags } = props;
+import Pagination from "./Pagination";
+import styles from "./BlogPreviewPage.module.css";
+import { formatTitle } from "@/lib/format";
 
-  const getHighlightedText = (text, highlight) => {
-    if (!highlight || !text) {
-      return text;
-    }
-    const parts = text.split(new RegExp(`(${highlight})`, "gi"));
-    return parts.map((part, i) =>
-      part.toLowerCase() === highlight.toLowerCase() ? (
-        <span key={i} style={{ backgroundColor: "yellow" }}>
-          {part}
-        </span>
-      ) : (
-        part
-      ),
-    );
-  };
+const SORT_OPTIONS = [
+  { value: "date_latest", label: "Newest first" },
+  { value: "date_oldest", label: "Oldest first" },
+  { value: "most_words", label: "Longest" },
+  { value: "least_words", label: "Shortest" },
+];
 
-  const displayDate = date === "Dec 31, 9999" ? "Current" : date;
+const escapeRegExp = (value) => String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-  let tagsList = [];
-  if (Array.isArray(tags)) {
-    tagsList = tags;
-  } else if (typeof tags === "string") {
-    tagsList = tags
-      .split(",")
-      .map((t) => t.trim())
-      .filter(Boolean);
-  }
+/** Highlights the active search term inside a preview snippet. */
+function HighlightedText({ text = "", term }) {
+  if (!term) return text;
 
-  return (
-    <Container fluid className="my-4" style={{ maxWidth: "100%", padding: 0 }}>
-      <Row className="justify-content-center m-0">
-        <Col className="p-0">
-          <Card className="border-1 rounded-0">
-            <Row className="g-0">
-              {/* --- IMAGE COLUMN --- */}
-              {previewimage && (
-                <Col xs={12} md={4} className="order-md-2">
-                  <Card.Img
-                    src={previewimage}
-                    alt={title}
-                    className="d-none d-md-block rounded-0"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      maxWidth: "640px",
-                      maxHeight: "320px",
-                      objectFit: "cover",
-                    }}
-                  />
-                  <Card.Img
-                    src={previewimage}
-                    alt={title}
-                    className="d-block d-md-none rounded-0"
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                      objectFit: "cover",
-                    }}
-                  />
-                </Col>
-              )}
+  const parts = String(text).split(new RegExp(`(${escapeRegExp(term)})`, "gi"));
 
-              {/* --- TEXT COLUMN --- */}
-              <Col md={previewimage ? 8 : 12} className="order-md-1" style={{ minWidth: 0 }}>
-                {/* Changed to flex-column and h-100 to push tags to the absolute bottom */}
-                <Card.Body className="d-flex flex-column h-100">
-                  <Card.Title className="mb-3">
-                    <div className="d-flex justify-content-between align-items-center mb-2">
-                      <span style={{ fontSize: "0.8rem" }}>{displayDate}</span>
-                      <div className="d-flex flex-wrap justify-content-end gap-2" style={{ fontSize: "0.8rem" }}>
-                        {wordcount} words
-                      </div>
-                    </div>
-                    {/* Natural link styling, no hover zoom */}
-                    <Link
-                      href={`/a/${blogid}`}
-                      style={{
-                        fontSize: "1.5rem",
-                        fontWeight: "600",
-                        display: "inline-block",
-                        color: "blue",
-                        textDecoration: "underline",
-                      }}
-                    >
-                      {title.split("-").join(" ")}
-                    </Link>
-                  </Card.Title>
-
-                  <Card.Text
-                    style={{
-                      fontSize: "0.9rem",
-                      lineHeight: "1.5",
-                      fontStyle: "italic",
-                      whiteSpace: "normal",
-                      overflowWrap: "anywhere",
-                      wordBreak: "break-all",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    {getHighlightedText(text, searchTerm)}
-                  </Card.Text>
-
-                  {/* --- TAGS SECTION --- */}
-                  {/* mt-auto pushes the tags to the bottom of the card regardless of text length */}
-                  {tagsList && tagsList.length > 0 && (
-                    <div className="mt-auto pt-3 d-flex flex-wrap gap-2">
-                      {tagsList.map((tag, idx) => (
-                        <Link
-                          key={idx}
-                          href={`/?type=${encodeURIComponent(tag.toLowerCase())}`}
-                          style={{
-                            fontSize: "0.85rem",
-                            color: "blue",
-                            textDecoration: "underline",
-                          }}
-                        >
-                          #{tag}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </Card.Body>
-              </Col>
-            </Row>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+  return parts.map((part, index) =>
+    part.toLowerCase() === String(term).toLowerCase() ? (
+      // eslint-disable-next-line react/no-array-index-key -- parts come from a split, order is stable
+      <mark key={index}>{part}</mark>
+    ) : (
+      part
+    ),
   );
 }
 
-function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
+function PreviewCard({ post, searchTerm }) {
+  const tags = Array.isArray(post.type)
+    ? post.type
+    : String(post.type || "")
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean);
+
+  return (
+    <li className={styles.card}>
+      {post.preview_image && (
+        // eslint-disable-next-line @next/next/no-img-element -- preview images live on an external bucket
+        <img
+          className={styles.cardThumb}
+          src={post.preview_image}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          width={400}
+          height={250}
+        />
+      )}
+
+      <div className={styles.cardBody}>
+        <p className={styles.cardMeta}>
+          <span>{post.date}</span>
+          {post.word_count ? <span>{post.word_count} words</span> : null}
+        </p>
+
+        <h2 className={styles.cardTitle}>
+          <Link href={`/a/${post.blogid}`}>{formatTitle(post.title)}</Link>
+        </h2>
+
+        <p className={styles.cardText}>
+          <HighlightedText text={post.preview_text} term={searchTerm} />
+        </p>
+
+        {tags.length > 0 && (
+          <p className={styles.cardTags}>
+            {tags.map((tag) => (
+              <Link
+                key={tag}
+                className={styles.cardTag}
+                href={`/?type=${encodeURIComponent(String(tag).toLowerCase())}`}
+              >
+                #{tag}
+              </Link>
+            ))}
+          </p>
+        )}
+      </div>
+    </li>
+  );
+}
+
+export default function BlogPreviewPage({
+  currentType,
+  data = [],
+  pagination = {},
+  postTypeArray = [],
+  currentSort,
+  searchTerm,
+  demo = false,
+}) {
   const router = useRouter();
 
-  const isSearchPage = Boolean(searchTerm || router.query.searchterm);
-
-  // MODIFIED: Removed the "tech" fallback. Now it displays the type ONLY if it's explicitly set.
-  const displayTag = router.query.type || currentType || null;
-
-  // --- Search State ---
+  const isSearchPage = Boolean(searchTerm);
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm || "");
 
-  // Sync state with URL if it changes externally
   useEffect(() => {
     setLocalSearchTerm(searchTerm || "");
   }, [searchTerm]);
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    const trimmedTerm = localSearchTerm.trim();
-    const query = { ...router.query };
-
-    if (trimmedTerm) {
-      query.searchterm = trimmedTerm;
-      // Remove any tag filter when submitting a new search to ensure global search
-      delete query.type;
-    } else {
-      delete query.searchterm;
-    }
-
-    // Reset to page 1 on search
-    delete query.page;
-
-    router.push({
-      pathname: router.pathname,
-      query: query,
+  const pushQuery = (changes) => {
+    const query = { ...router.query, ...changes };
+    Object.keys(query).forEach((key) => {
+      if (query[key] === undefined || query[key] === null || query[key] === "") delete query[key];
     });
+    delete query.page;
+    router.push({ pathname: router.pathname, query });
   };
 
-  // Grouping tags based on your layout preference
-  const sidebarTagGroups = [
-    ["ml", "systems", "journal"],
-    ["culture", "web", "math"],
-  ];
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    const term = localSearchTerm.trim();
+    // A new search always clears the tag filter so results are global.
+    pushQuery({ searchterm: term || undefined, type: undefined });
+  };
 
   return (
-    <Container style={{ maxWidth: "1000px" }} className="mb-5">
-      <Row className="justify-content-center">
-        {/* --- MAIN BLOG CONTENT --- */}
-        <Col xs={12}>
-          <div style={{ maxWidth: "700px", margin: "0 auto" }}>
-            <div className="mb-4 pb-2 border-bottom d-flex align-items-center flex-wrap gap-3 mt-4 mt-md-0">
-              {displayTag && !isSearchPage && (
-                <div
-                  style={{
-                    fontWeight: "500",
-                  }}
-                >
-                  Tags: <span style={{ color: "blue", textDecoration: "underline" }}>#{displayTag}</span>
-                </div>
-              )}
+    <div className={styles.page}>
+      <h1 className="visually-hidden">Jim Chen&apos;s Blog</h1>
 
-              <form onSubmit={handleSearchSubmit} className="d-flex ms-auto" style={{ maxWidth: "250px", width: "100%" }}>
-                <input
-                  type="search"
-                  placeholder="Search posts..."
-                  value={localSearchTerm}
-                  onChange={(e) => setLocalSearchTerm(e.target.value)}
-                  style={{
-                    fontSize: "15px",
-                    padding: "6px 10px",
-                    border: "1px solid #ddd",
-                    borderRight: "none",
-                    borderRadius: "4px 0 0 4px",
-                    outline: "none",
-                    width: "100%",
-                  }}
-                />
-                <button
-                  type="submit"
-                  style={{
-                    padding: "6px 12px",
-                    border: "1px solid #ddd",
-                    backgroundColor: "#f8f9fa",
-                    borderRadius: "0 4px 4px 0",
-                    cursor: "pointer",
-                  }}
-                  aria-label="Submit search"
-                >
-                  <FaSearch size={12} color="#495057" />
-                </button>
-              </form>
-            </div>
+      {demo && (
+        <p className={styles.notice}>
+          Showing example posts from <code>content/posts</code>. Add a <code>POSTGRESQL_URL</code>{" "}
+          environment variable to load posts from the database instead.
+        </p>
+      )}
 
-            {data && data.length > 0 ? (
-              data.map((post, index) => (
-                <div key={index} style={{ marginBottom: "2rem" }}>
-                  <PreviewCard
-                    blogid={post.blogid}
-                    title={post.title}
-                    text={post.preview_text}
-                    date={post.date}
-                    tags={post.type}
-                    wordcount={post.word_count}
-                    previewimage={post.preview_image}
-                    searchTerm={searchTerm}
-                  />
-                </div>
-              ))
-            ) : (
-              <div style={{ textAlign: "center", margin: "5rem 0" }}>No results found.</div>
-            )}
+      <div className={styles.toolbar}>
+        {currentType && !isSearchPage ? (
+          <p className={styles.toolbarLabel}>
+            Tag: <strong>#{currentType}</strong>{" "}
+            <Link href="/" className={styles.filterLink}>
+              (clear)
+            </Link>
+          </p>
+        ) : (
+          <p className={styles.toolbarLabel}>
+            {pagination.totalItems ? `${pagination.totalItems} posts` : "Posts"}
+          </p>
+        )}
 
-            {pagination && pagination.totalPages > 1 && <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />}
+        <div className={styles.tools}>
+          <label className="visually-hidden" htmlFor="post-search">
+            Search posts
+          </label>
+          <form className={styles.search} onSubmit={handleSearchSubmit} role="search">
+            <input
+              id="post-search"
+              className={styles.searchInput}
+              type="search"
+              placeholder="Search posts…"
+              value={localSearchTerm}
+              onChange={(event) => setLocalSearchTerm(event.target.value)}
+            />
+            <button className={styles.searchButton} type="submit" aria-label="Search">
+              <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a6.5 6.5 0 0 1-.017.016ZM6.5 11a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z" />
+              </svg>
+            </button>
+          </form>
 
-            {/* --- FILTER TAGS (HIDDEN ON SEARCH PAGE) --- */}
-            {!isSearchPage && (
-              <div className="mt-5 pt-4 border-top">
-                <h5 className="mb-3 text-uppercase" style={{ fontSize: "0.9rem", color: "#666", letterSpacing: "1px" }}>
-                  Filter By Tags
-                </h5>
+          <label className="visually-hidden" htmlFor="post-sort">
+            Sort posts
+          </label>
+          <select
+            id="post-sort"
+            className={styles.sortSelect}
+            value={currentSort || "date_latest"}
+            onChange={(event) => pushQuery({ sort: event.target.value })}
+          >
+            {SORT_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
 
-                {sidebarTagGroups.map((group, groupIdx) => (
-                  <div key={groupIdx} className="mb-2 d-flex flex-wrap gap-2">
-                    {group.map((tag) => (
-                      <Link
-                        key={tag}
-                        href={`/?type=${encodeURIComponent(tag.toLowerCase())}`}
-                        style={{
-                          fontSize: "1rem",
-                          color: "blue",
-                          textDecoration: "underline",
-                        }}
-                      >
-                        #{tag}
-                      </Link>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            )}
+      {data.length > 0 ? (
+        <ul className={styles.list}>
+          {data.map((post) => (
+            <PreviewCard key={post.blogid} post={post} searchTerm={searchTerm} />
+          ))}
+        </ul>
+      ) : (
+        <p className={styles.empty}>No posts found.</p>
+      )}
+
+      <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
+
+      {!isSearchPage && postTypeArray.length > 0 && (
+        <section className={styles.filters} aria-label="Filter by tag">
+          <h2 className={styles.filtersTitle}>Filter by tag</h2>
+          <div className={styles.filterRow}>
+            {postTypeArray.map((entry) => (
+              <Link
+                key={entry.type}
+                className={styles.filterLink}
+                href={`/?type=${encodeURIComponent(entry.type)}`}
+              >
+                #{entry.type}
+                {entry.count ? <span className={styles.filterCount}>{entry.count}</span> : null}
+              </Link>
+            ))}
           </div>
-        </Col>
-      </Row>
-    </Container>
+        </section>
+      )}
+    </div>
   );
 }
-
-function BlogPage({ data, pagination, type, postTypeArray, sort, searchterm }) {
-  const router = useRouter();
-
-  if (router.isFallback) {
-    return <div>Loading...</div>;
-  }
-
-  return <BlogPreviewPage currentType={type} data={data} pagination={pagination} postTypeArray={postTypeArray} currentSort={sort} searchTerm={searchterm} />;
-}
-
-export default BlogPage;

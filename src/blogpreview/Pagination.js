@@ -1,88 +1,73 @@
-
-import React from "react";
 import Link from "next/link";
-import { Pagination as BSPagination } from "react-bootstrap";
 import { useRouter } from "next/router";
+import React, { useMemo } from "react";
 
-const Pagination = ({ currentPage, totalPages, basePath = "" }) => {
+import styles from "./Pagination.module.css";
+
+function buildPageList(currentPage, totalPages) {
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_value, index) => index + 1);
+  }
+
+  const pages = [1];
+  const start = Math.max(2, currentPage - 1);
+  const end = Math.min(totalPages - 1, currentPage + 1);
+
+  if (start > 2) pages.push("start-ellipsis");
+  for (let page = start; page <= end; page += 1) pages.push(page);
+  if (end < totalPages - 1) pages.push("end-ellipsis");
+
+  pages.push(totalPages);
+  return pages;
+}
+
+export default function Pagination({ currentPage = 1, totalPages = 1 }) {
   const router = useRouter();
 
-  // Extract query parameters from current URL
-  const { query } = router;
-  const currentQuery = { ...query };
+  const pages = useMemo(() => buildPageList(currentPage, totalPages), [currentPage, totalPages]);
 
-  // Function to generate URL with preserved query params
-  const getPageUrl = (pageNum) => {
-    const newQuery = { ...currentQuery, page: pageNum };
-    
-    if (pageNum === 1) {
-      delete newQuery.page;
+  if (totalPages <= 1) return null;
+
+  const hrefFor = (page) => {
+    const query = { ...router.query };
+    if (page <= 1) {
+      delete query.page;
+    } else {
+      query.page = String(page);
     }
-
-    // Convert query object to string
-    const queryString = Object.entries(newQuery)
-      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-      .join("&");
-
-    return `${basePath}${queryString ? `?${queryString}` : ""}`;
+    return { pathname: router.pathname, query };
   };
 
-  const pageNumbers = [];
-  pageNumbers.push(1);
-
-  // Calculate range of pages to show
-  let startPage = Math.max(2, currentPage - 1);
-  let endPage = Math.min(totalPages - 1, currentPage + 1);
-
-  // Add ellipsis after first page if needed
-  if (startPage > 2) {
-    pageNumbers.push("...");
-  }
-
-  // Add pages in the middle
-  for (let i = startPage; i <= endPage; i++) {
-    pageNumbers.push(i);
-  }
-
-  // Add ellipsis before last page if needed
-  if (endPage < totalPages - 1 && totalPages > 1) {
-    pageNumbers.push("...");
-  }
-
-  // Always show last page if it exists
-  if (totalPages > 1) {
-    pageNumbers.push(totalPages);
-  }
-
   return (
-    <BSPagination className="justify-content-center my-4">
+    <nav className={styles.pagination} aria-label="Pagination">
       {currentPage > 1 && (
-        <Link href={getPageUrl(currentPage - 1)} passHref legacyBehavior>
-          <BSPagination.Prev as="a">&lt;</BSPagination.Prev>
+        <Link className={styles.link} href={hrefFor(currentPage - 1)} rel="prev">
+          ← Previous
         </Link>
       )}
 
-      {pageNumbers.map((page, index) => {
-        if (page === "...") {
-          return <BSPagination.Ellipsis key={`ellipsis-${index}`} disabled />;
-        }
-
-        return (
-          <Link key={page} href={getPageUrl(page)} passHref legacyBehavior>
-            <BSPagination.Item as="a" active={page === currentPage}>
-              {page}
-            </BSPagination.Item>
+      {pages.map((page) =>
+        typeof page === "number" ? (
+          <Link
+            key={page}
+            className={page === currentPage ? `${styles.link} ${styles.active}` : styles.link}
+            href={hrefFor(page)}
+            aria-current={page === currentPage ? "page" : undefined}
+          >
+            {page}
           </Link>
-        );
-      })}
+        ) : (
+          <span key={page} className={styles.ellipsis} aria-hidden="true">
+            …
+          </span>
+        ),
+      )}
 
       {currentPage < totalPages && (
-        <Link href={getPageUrl(currentPage + 1)} passHref legacyBehavior>
-          <BSPagination.Next as="a">&gt;</BSPagination.Next>
+        <Link className={styles.link} href={hrefFor(currentPage + 1)} rel="next">
+          Next →
         </Link>
       )}
-    </BSPagination>
+    </nav>
   );
-};
-
-export default Pagination;
+}

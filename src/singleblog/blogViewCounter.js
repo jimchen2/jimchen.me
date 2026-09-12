@@ -1,57 +1,83 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 
-const BlogViewCounter = ({ blogid }) => {
-  const [views, setViews] = useState(0);
-  const [hasRecordedView, setHasRecordedView] = useState(false);
+const SESSION_PREFIX = "jc:viewed:";
+
+/**
+ * Post view counter.
+ *
+ * Reads the current count (and a short-lived token) from `/api/blog/views`, then
+ * records at most one view per browser session per post. The counter is
+ * best-effort: if the API is unavailable the page simply does not show it.
+ */
+export default function BlogViewCounter({ blogid }) {
+  const [views, setViews] = useState(null);
 
   useEffect(() => {
-    let isMounted = true;
+    if (!blogid) return undefined;
 
-    const recordViewSequence = async () => {
+    let active = true;
+    const controller = new AbortController();
+
+    const load = async () => {
       try {
-        // Step 1: GET - Fetch current views and Security Token
-        const getResponse = await axios.get(`${process.env.NEXT_PUBLIC_SITE}/api/blog/views?blogid=${blogid}`);
+        const response = await fetch(`/api/blog/views?blogid=${encodeURIComponent(blogid)}`, {
+          signal: controller.signal,
+        });
+        if (!response.ok) return;
 
-        if (!isMounted) return;
+        const data = await response.json();
+        if (!active) return;
+        if (typeof data.views === "number") setViews(data.views);
 
-        setViews(getResponse.data.views);
-        const token = getResponse.data.token;
+        if (data.demo || !data.token) return;
 
-        // Step 2: POST - Automatically use token to record a new view
-        // We check hasRecordedView to prevent double counting in React Strict Mode or re-renders
-        if (token && !hasRecordedView) {
-          setHasRecordedView(true); // Lock it immediately
+        let recorded = false;
+        try {
+          recorded = window.sessionStorage.getItem(`${SESSION_PREFIX}${blogid}`) === "1";
+        } catch {
+          recorded = false;
+        }
+        if (recorded) return;
 
-          await axios
-            .post(`${process.env.NEXT_PUBLIC_SITE}/api/blog/views?blogid=${blogid}`, { token: token })
-            .then((postResponse) => {
-              if (isMounted) {
-                setViews(postResponse.data.views);
-              }
-            });
+        const postResponse = await fetch(`/api/blog/views?blogid=${encodeURIComponent(blogid)}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: data.token }),
+          signal: controller.signal,
+        });
+        if (!postResponse.ok) return;
+
+        const after = await postResponse.json();
+        if (active && typeof after.views === "number") setViews(after.views);
+
+        try {
+          window.sessionStorage.setItem(`${SESSION_PREFIX}${blogid}`, "1");
+        } catch {
+          /* private mode — not worth failing over */
         }
       } catch (error) {
-        console.error("View counter error:", error);
+        if (error.name !== "AbortError") {
+          console.warn("View counter unavailable:", error.message);
+        }
       }
     };
 
-    if (blogid) {
-      recordViewSequence();
-    }
+    load();
 
     return () => {
-      isMounted = false;
+      active = false;
+      controller.abort();
     };
-  }, [blogid]); // Dependency array ensures this runs once per blogid load
+  }, [blogid]);
 
-  if (views === 0) return null; // Don't show anything until loaded
+  if (!views) return null;
 
   return (
-    <span>
-      {} • {views.toLocaleString()} views
-    </span>
+    <>
+      <span className="blog-meta-sep" aria-hidden="true">
+        •
+      </span>
+      <span>{views.toLocaleString()} views</span>
+    </>
   );
-};
-
-export default BlogViewCounter;
+}
