@@ -1,4 +1,5 @@
 import React, { useEffect, useState, memo } from "react";
+import Link from "next/link";
 import { Container, Row, Col } from "react-bootstrap";
 import parse from "html-react-parser";
 import { BlogToc } from "./blogToc";
@@ -26,9 +27,9 @@ function calculateBlogPadding(windowWidth = null) {
 // ── BlogHeader ──────────────────────────────────────────────────────────────
 const BlogHeader = ({ date, type, wordcount, blogid }) => {
   const displayDate = date === "December 31, 9999" ? "Current" : date;
-  const types = (Array.isArray(type) ? type : type.split(",")).map((t) =>
-    t.trim()
-  );
+  const types = (Array.isArray(type) ? type : String(type).split(","))
+    .map((t) => t.trim())
+    .filter(Boolean);
 
   // Track whether we're below the 500 px breakpoint
   const [isSmall, setIsSmall] = useState(false);
@@ -61,15 +62,18 @@ const BlogHeader = ({ date, type, wordcount, blogid }) => {
 
         {/* Type tags */}
         <div>
-          {types.map((t) => (
-            <a
-              key={t}
-              href={`/?type=${t.toLowerCase().replace(/\s+/g, "-")}`}
-              className="text-muted text-decoration-none me-2"
-            >
-              #{t.toLowerCase().replace(/\s+/g, "-")}
-            </a>
-          ))}
+          {types.map((t) => {
+            const slug = t.toLowerCase().replace(/\s+/g, "-");
+            return (
+              <Link
+                key={t}
+                href={`/?type=${slug}`}
+                className="text-muted text-decoration-none me-2"
+              >
+                #{slug}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -82,6 +86,13 @@ const BlogTitle = ({ title }) => (
     <div>{title.split("-").join(" ")}</div>
   </h2>
 );
+
+/** Extracts the text of a <code> DOM node from html-react-parser. */
+const codeTextOf = (node) => {
+  if (!node) return "";
+  if (node.type === "text") return node.data || "";
+  return (node.children || []).map(codeTextOf).join("");
+};
 
 // ── SingleBlog ──────────────────────────────────────────────────────────────
 function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
@@ -96,24 +107,39 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const processedText = text.replace(
-    /<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs,
-    (match, language, codeWithLang, codeWithoutLang) => {
-      const code = codeWithLang || codeWithoutLang;
-      return `<codeblock code="${code.replace(/"/g, "")}"></codeblock>`;
-    }
-  );
-
-  const elements = parse(processedText, {
+  // Parse the stored HTML. Code fences become <CodeBlock> components straight
+  // from the DOM tree — no regex surgery on the HTML string, which used to
+  // strip every double quote inside code samples.
+  const elements = parse(text || "", {
     replace: (domNode) => {
-      if (domNode.name === "codeblock") {
-        const { code } = domNode.attribs;
-        return <CodeBlock code={code.replace(/"/g, '"')} />;
+      if (domNode.type !== "tag") return undefined;
+
+      if (domNode.name === "pre") {
+        const codeNode = (domNode.children || []).find(
+          (child) => child.type === "tag" && child.name === "code"
+        );
+        if (!codeNode) return undefined;
+        const className = (codeNode.attribs && codeNode.attribs.class) || "";
+        const langMatch = className.match(/language-([\w+#-]+)/);
+        return (
+          <CodeBlock
+            code={codeTextOf(codeNode)}
+            language={langMatch ? langMatch[1] : null}
+          />
+        );
       }
+
+      // Legacy marker kept for old cached bodies, if any ever resurface.
+      if (domNode.name === "codeblock") {
+        const raw = (domNode.attribs && domNode.attribs.code) || "";
+        return <CodeBlock code={raw.replace(/&quot;/g, '"')} language={null} />;
+      }
+
+      return undefined;
     },
   });
 
-  const styles = [generateStyles()].join(" ");
+  const styles = generateStyles();
 
   return (
     <Container fluid className="pb-3">

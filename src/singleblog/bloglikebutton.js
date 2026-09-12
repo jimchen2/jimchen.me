@@ -6,6 +6,7 @@ function BlogLikeButton({ blogid, initialLikes = 0 }) {
   const [likes, setLikes] = useState(initialLikes);
   const [liked, setLiked] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
+  const [available, setAvailable] = useState(true);
 
   // Store the security token
   const [securityToken, setSecurityToken] = useState(null);
@@ -15,17 +16,24 @@ function BlogLikeButton({ blogid, initialLikes = 0 }) {
     let isMounted = true;
     const fetchStatus = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_SITE}/api/blog/likes?blogid=${blogid}`);
+        const response = await axios.get(`/api/blog/likes?blogid=${blogid}`);
         if (isMounted) {
+          if (response.data.available === false) {
+            setAvailable(false);
+            setIsFetching(false);
+            return;
+          }
           setLikes(response.data.likes);
           setLiked(response.data.liked);
           setSecurityToken(response.data.token);
           setIsFetching(false);
         }
       } catch (error) {
-        console.error("Failed to fetch like status", error);
-        // Even if initial fetch fails, allow interaction based on default props
-        if (isMounted) setIsFetching(false);
+        // Likes are decorative: hide the button instead of breaking the page.
+        if (isMounted) {
+          setAvailable(false);
+          setIsFetching(false);
+        }
       }
     };
 
@@ -44,28 +52,19 @@ function BlogLikeButton({ blogid, initialLikes = 0 }) {
     const newLiked = !previousLiked;
     const newLikes = newLiked ? previousLikes + 1 : previousLikes - 1;
 
-    // 3. UPDATE UI IMMEDIATELY (Do not wait for token or backend)
+    // 3. UPDATE UI IMMEDIATELY (optimistic)
     setLiked(newLiked);
     setLikes(newLikes);
 
-    // 4. Send Request in Background
-    // If the token hasn't loaded yet, we update UI but skip the API call to prevent errors
+    // 4. Send the request in the background; without a token we cannot
+    //    authenticate the toggle, so just keep the optimistic state.
     if (!securityToken) {
-      console.log("TOKEN NOT LOADED");
       return;
     }
 
     axios
-      .post(`${process.env.NEXT_PUBLIC_SITE}/api/blog/likes?blogid=${blogid}`, {
-        token: securityToken,
-      })
-      .then((response) => {
-        // Optional: You can sync with server response here, but usually,
-        // trusting the optimistic update feels smoother to the user.
-        // We do NOTHING here to prevent "jumping" numbers if the user clicks fast.
-      })
-      .catch((error) => {
-        console.error("Error toggling like:", error);
+      .post(`/api/blog/likes?blogid=${blogid}`, { token: securityToken })
+      .catch(() => {
         // 5. REVERT UI ONLY ON ERROR
         setLiked(previousLiked);
         setLikes(previousLikes);
@@ -76,7 +75,6 @@ function BlogLikeButton({ blogid, initialLikes = 0 }) {
     fontSize: "0.75rem",
     padding: "2px 6px",
     margin: "5px",
-    transition: "background-color 0.2s, transform 0.1s",
     // Remove opacity changes during interaction to prevent "disabled" feel
     opacity: isFetching ? 0.6 : 1,
     cursor: "pointer",
@@ -89,6 +87,8 @@ function BlogLikeButton({ blogid, initialLikes = 0 }) {
     borderColor: "#007bff",
   };
 
+  if (!available) return null;
+
   return (
     <Button
       variant={liked ? "primary" : "outline-primary"}
@@ -97,6 +97,7 @@ function BlogLikeButton({ blogid, initialLikes = 0 }) {
       // Only disable during the very first load to prevent hydration mismatches,
       // never disable while the user is clicking.
       disabled={isFetching}
+      aria-pressed={liked}
     >
       {liked ? "Liked" : "Like"} {likes}
     </Button>

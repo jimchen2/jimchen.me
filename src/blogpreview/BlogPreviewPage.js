@@ -5,22 +5,29 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { FaSearch } from "react-icons/fa";
 
-function PreviewCard(props) {
-  const { searchTerm, date, blogid, previewimage, title, text, wordcount, tags } = props;
+/** Escapes user input so it can be embedded in a RegExp safely. */
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-  const getHighlightedText = (text, highlight) => {
-    if (!highlight || !text) {
-      return text;
+function PreviewCard(props) {
+  const { searchTerm, date, blogid, previewimage, title, text, wordcount, tags } =
+    props;
+
+  const getHighlightedText = (source, highlight) => {
+    if (!highlight || !source) return source;
+    let parts;
+    try {
+      parts = source.split(new RegExp(`(${escapeRegExp(highlight)})`, "gi"));
+    } catch {
+      return source;
     }
-    const parts = text.split(new RegExp(`(${highlight})`, "gi"));
     return parts.map((part, i) =>
       part.toLowerCase() === highlight.toLowerCase() ? (
-        <span key={i} style={{ backgroundColor: "yellow" }}>
+        <mark key={i} style={{ backgroundColor: "yellow", color: "inherit" }}>
           {part}
-        </span>
+        </mark>
       ) : (
         part
-      ),
+      )
     );
   };
 
@@ -42,42 +49,33 @@ function PreviewCard(props) {
         <Col className="p-0">
           <Card className="border-1 rounded-0">
             <Row className="g-0">
-              {/* --- IMAGE COLUMN --- */}
+              {/* --- IMAGE COLUMN (single responsive image) --- */}
               {previewimage && (
                 <Col xs={12} md={4} className="order-md-2">
-                  <Card.Img
+                  <img
                     src={previewimage}
-                    alt={title}
-                    className="d-none d-md-block rounded-0"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      maxWidth: "640px",
-                      maxHeight: "320px",
-                      objectFit: "cover",
-                    }}
-                  />
-                  <Card.Img
-                    src={previewimage}
-                    alt={title}
-                    className="d-block d-md-none rounded-0"
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                      objectFit: "cover",
-                    }}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="preview-card-img rounded-0"
                   />
                 </Col>
               )}
 
               {/* --- TEXT COLUMN --- */}
-              <Col md={previewimage ? 8 : 12} className="order-md-1" style={{ minWidth: 0 }}>
-                {/* Changed to flex-column and h-100 to push tags to the absolute bottom */}
+              <Col
+                md={previewimage ? 8 : 12}
+                className="order-md-1"
+                style={{ minWidth: 0 }}
+              >
                 <Card.Body className="d-flex flex-column h-100">
                   <Card.Title className="mb-3">
                     <div className="d-flex justify-content-between align-items-center mb-2">
                       <span style={{ fontSize: "0.8rem" }}>{displayDate}</span>
-                      <div className="d-flex flex-wrap justify-content-end gap-2" style={{ fontSize: "0.8rem" }}>
+                      <div
+                        className="d-flex flex-wrap justify-content-end gap-2"
+                        style={{ fontSize: "0.8rem" }}
+                      >
                         {wordcount} words
                       </div>
                     </div>
@@ -97,27 +95,22 @@ function PreviewCard(props) {
                   </Card.Title>
 
                   <Card.Text
+                    className="preview-text"
                     style={{
                       fontSize: "0.9rem",
                       lineHeight: "1.5",
                       fontStyle: "italic",
-                      whiteSpace: "normal",
-                      overflowWrap: "anywhere",
-                      wordBreak: "break-all",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
                     }}
                   >
                     {getHighlightedText(text, searchTerm)}
                   </Card.Text>
 
-                  {/* --- TAGS SECTION --- */}
-                  {/* mt-auto pushes the tags to the bottom of the card regardless of text length */}
-                  {tagsList && tagsList.length > 0 && (
+                  {/* --- TAGS SECTION (mt-auto pins them to the card bottom) --- */}
+                  {tagsList.length > 0 && (
                     <div className="mt-auto pt-3 d-flex flex-wrap gap-2">
-                      {tagsList.map((tag, idx) => (
+                      {tagsList.map((tag) => (
                         <Link
-                          key={idx}
+                          key={tag}
                           href={`/?type=${encodeURIComponent(tag.toLowerCase())}`}
                           style={{
                             fontSize: "0.85rem",
@@ -140,18 +133,36 @@ function PreviewCard(props) {
   );
 }
 
-function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
+/** Groups the tag list into rows of three, like the original layout. */
+function chunkTags(types, size = 3) {
+  const groups = [];
+  for (let i = 0; i < types.length; i += size) {
+    groups.push(types.slice(i, i + size));
+  }
+  return groups;
+}
+
+const DEFAULT_TAG_GROUPS = [
+  ["ml", "systems", "journal"],
+  ["culture", "web", "math"],
+];
+
+function BlogPreviewPage({
+  currentType,
+  data,
+  pagination,
+  postTypeArray = [],
+  searchTerm,
+  error,
+}) {
   const router = useRouter();
 
   const isSearchPage = Boolean(searchTerm || router.query.searchterm);
-
-  // MODIFIED: Removed the "tech" fallback. Now it displays the type ONLY if it's explicitly set.
   const displayTag = router.query.type || currentType || null;
 
   // --- Search State ---
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm || "");
 
-  // Sync state with URL if it changes externally
   useEffect(() => {
     setLocalSearchTerm(searchTerm || "");
   }, [searchTerm]);
@@ -163,46 +174,69 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
 
     if (trimmedTerm) {
       query.searchterm = trimmedTerm;
-      // Remove any tag filter when submitting a new search to ensure global search
+      // New searches are global: drop any active tag filter.
       delete query.type;
     } else {
       delete query.searchterm;
     }
+    delete query.page; // reset to page 1 on search
 
-    // Reset to page 1 on search
-    delete query.page;
-
-    router.push({
-      pathname: router.pathname,
-      query: query,
-    });
+    router.push({ pathname: router.pathname, query });
   };
 
-  // Grouping tags based on your layout preference
-  const sidebarTagGroups = [
-    ["ml", "systems", "journal"],
-    ["culture", "web", "math"],
-  ];
+  const tagGroups =
+    postTypeArray && postTypeArray.length > 0
+      ? chunkTags(postTypeArray)
+      : DEFAULT_TAG_GROUPS.map((group) => group.map((type) => ({ type })));
 
   return (
     <Container style={{ maxWidth: "1000px" }} className="mb-5">
+      <style jsx>{`
+        .preview-card-img {
+          width: 100%;
+          height: auto;
+          object-fit: cover;
+          display: block;
+        }
+        @media (min-width: 768px) {
+          .preview-card-img {
+            height: 100%;
+            max-height: 320px;
+          }
+        }
+        .preview-text {
+          display: -webkit-box;
+          -webkit-line-clamp: 4;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          overflow-wrap: break-word;
+          white-space: normal;
+        }
+      `}</style>
       <Row className="justify-content-center">
-        {/* --- MAIN BLOG CONTENT --- */}
         <Col xs={12}>
           <div style={{ maxWidth: "700px", margin: "0 auto" }}>
             <div className="mb-4 pb-2 border-bottom d-flex align-items-center flex-wrap gap-3 mt-4 mt-md-0">
               {displayTag && !isSearchPage && (
-                <div
-                  style={{
-                    fontWeight: "500",
-                  }}
-                >
-                  Tags: <span style={{ color: "blue", textDecoration: "underline" }}>#{displayTag}</span>
+                <div style={{ fontWeight: "500" }}>
+                  Tags:{" "}
+                  <span style={{ color: "blue", textDecoration: "underline" }}>
+                    #{displayTag}
+                  </span>
                 </div>
               )}
 
-              <form onSubmit={handleSearchSubmit} className="d-flex ms-auto" style={{ maxWidth: "250px", width: "100%" }}>
+              <form
+                onSubmit={handleSearchSubmit}
+                role="search"
+                className="d-flex ms-auto"
+                style={{ maxWidth: "250px", width: "100%" }}
+              >
+                <label htmlFor="blog-search" className="visually-hidden">
+                  Search posts
+                </label>
                 <input
+                  id="blog-search"
                   type="search"
                   placeholder="Search posts..."
                   value={localSearchTerm}
@@ -233,9 +267,19 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
               </form>
             </div>
 
+            {error && (
+              <div
+                className="alert alert-warning rounded-0"
+                role="alert"
+                style={{ border: "1px solid currentColor" }}
+              >
+                {error} Showing what could be loaded.
+              </div>
+            )}
+
             {data && data.length > 0 ? (
-              data.map((post, index) => (
-                <div key={index} style={{ marginBottom: "2rem" }}>
+              data.map((post) => (
+                <div key={post.blogid} style={{ marginBottom: "2rem" }}>
                   <PreviewCard
                     blogid={post.blogid}
                     title={post.title}
@@ -249,33 +293,61 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
                 </div>
               ))
             ) : (
-              <div style={{ textAlign: "center", margin: "5rem 0" }}>No results found.</div>
+              <div style={{ textAlign: "center", margin: "5rem 0" }}>
+                {isSearchPage
+                  ? `No results for “${searchTerm}”.`
+                  : "No posts here yet."}
+              </div>
             )}
 
-            {pagination && pagination.totalPages > 1 && <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />}
+            {pagination && pagination.totalPages > 1 && (
+              <Pagination
+                currentPage={pagination.currentPage}
+                totalPages={pagination.totalPages}
+              />
+            )}
 
-            {/* --- FILTER TAGS (HIDDEN ON SEARCH PAGE) --- */}
+            {/* --- FILTER TAGS (hidden on search pages) --- */}
             {!isSearchPage && (
               <div className="mt-5 pt-4 border-top">
-                <h5 className="mb-3 text-uppercase" style={{ fontSize: "0.9rem", color: "#666", letterSpacing: "1px" }}>
+                <h5
+                  className="mb-3 text-uppercase"
+                  style={{ fontSize: "0.9rem", color: "#666", letterSpacing: "1px" }}
+                >
                   Filter By Tags
                 </h5>
 
-                {sidebarTagGroups.map((group, groupIdx) => (
-                  <div key={groupIdx} className="mb-2 d-flex flex-wrap gap-2">
-                    {group.map((tag) => (
-                      <Link
-                        key={tag}
-                        href={`/?type=${encodeURIComponent(tag.toLowerCase())}`}
-                        style={{
-                          fontSize: "1rem",
-                          color: "blue",
-                          textDecoration: "underline",
-                        }}
-                      >
-                        #{tag}
-                      </Link>
-                    ))}
+                {tagGroups.map((group, groupIdx) => (
+                  <div key={groupIdx} className="mb-2 d-flex flex-wrap gap-3">
+                    {group.map((entry) => {
+                      const tag = typeof entry === "string" ? entry : entry.type;
+                      const count = typeof entry === "string" ? null : entry.count;
+                      return (
+                        <Link
+                          key={tag}
+                          href={`/?type=${encodeURIComponent(tag.toLowerCase())}`}
+                          style={{
+                            fontSize: "1rem",
+                            color: "blue",
+                            textDecoration: "underline",
+                          }}
+                        >
+                          #{tag}
+                          {count != null && (
+                            <span
+                              style={{
+                                color: "#888",
+                                textDecoration: "none",
+                                fontSize: "0.8rem",
+                                marginLeft: "0.25rem",
+                              }}
+                            >
+                              {count}
+                            </span>
+                          )}
+                        </Link>
+                      );
+                    })}
                   </div>
                 ))}
               </div>
@@ -287,14 +359,4 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
   );
 }
 
-function BlogPage({ data, pagination, type, postTypeArray, sort, searchterm }) {
-  const router = useRouter();
-
-  if (router.isFallback) {
-    return <div>Loading...</div>;
-  }
-
-  return <BlogPreviewPage currentType={type} data={data} pagination={pagination} postTypeArray={postTypeArray} currentSort={sort} searchTerm={searchterm} />;
-}
-
-export default BlogPage;
+export default BlogPreviewPage;

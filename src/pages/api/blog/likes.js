@@ -2,6 +2,7 @@
 import dbConnect from '@/lib/dbConnect';
 import { getClientIp } from '@/lib/get-ip';
 import { generateSignature, validateSignature } from '@/lib/security';
+import { isDbAvailable } from '@/lib/blogStore';
 
 // Simple in-memory rate limit (For serverless, use Redis/Vercel KV for better results)
 const rateLimitMap = new Map();
@@ -39,6 +40,15 @@ export default async function handler(req, res) {
     return res.status(429).json({ message: "Too many requests. Please slow down." });
   }
 
+  // Graceful degradation: without a database the like widget is simply off
+  // instead of the whole page erroring out.
+  if (!(await isDbAvailable())) {
+    if (req.method === 'GET') {
+      return res.status(200).json({ available: false, likes: 0, liked: false, token: null });
+    }
+    return res.status(503).json({ message: 'Likes are unavailable right now' });
+  }
+
   const pool = await dbConnect();
 
   // --- GET REQUEST ---
@@ -62,6 +72,7 @@ export default async function handler(req, res) {
       const token = generateSignature(blogid, userIp);
 
       return res.status(200).json({ 
+        available: true,
         likes: totalLikes, 
         liked: hasLiked,
         token: token // Send token to frontend

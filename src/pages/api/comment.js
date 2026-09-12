@@ -1,6 +1,23 @@
 import dbConnect from "@/lib/dbConnect";
+import { isDbAvailable } from "@/lib/blogStore";
 
 export default async function handler(req, res) {
+  // Comments need writes; without a database we report them as unavailable
+  // instead of returning 500s to every reader.
+  const dbUp = await isDbAvailable();
+  if (!dbUp) {
+    if (req.method === "GET") {
+      return res.status(200).json({ available: false, comments: [] });
+    }
+    if (req.method === "POST") {
+      return res
+        .status(503)
+        .json({ error: "Comments are unavailable right now. Please try again later." });
+    }
+    res.setHeader("Allow", ["GET", "POST"]);
+    return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
+  }
+
   try {
     const pool = await dbConnect();
 
@@ -9,7 +26,8 @@ export default async function handler(req, res) {
       const { blogid, limit } = req.query;
 
       try {
-        let query = "SELECT uuid, user_name, text, blog_id, uppointer, date FROM comments";
+        let query =
+          "SELECT uuid, user_name, text, blog_id, uppointer, date FROM comments";
         const queryParams = [];
 
         if (blogid && blogid !== "0") {
@@ -17,7 +35,7 @@ export default async function handler(req, res) {
           queryParams.push(blogid);
         }
 
-        query += " ORDER BY date DESC";
+        query += " ORDER BY date ASC";
 
         if (limit) {
           query += ` LIMIT $${queryParams.length + 1}`;
@@ -46,7 +64,7 @@ export default async function handler(req, res) {
           };
         });
 
-        res.status(200).json(commentsWithFormattedDate);
+        res.status(200).json({ available: true, comments: commentsWithFormattedDate });
       } catch (err) {
         console.error("Error fetching comments:", err);
         res.status(500).json({ error: "Error fetching comments" });
@@ -62,7 +80,13 @@ export default async function handler(req, res) {
           return res.status(400).json({ error: "Missing required fields" });
         }
 
-        const blogValidationResult = await pool.query("SELECT 1 FROM blogs WHERE blogid = $1", [blog]);
+        const cleanName = String(user || "anonymous").slice(0, 60);
+        const cleanText = String(text).slice(0, 5000);
+
+        const blogValidationResult = await pool.query(
+          "SELECT 1 FROM blogs WHERE blogid = $1",
+          [blog]
+        );
         if (blogValidationResult.rows.length === 0) {
           return res.status(400).json({ error: "Invalid blog ID" });
         }
@@ -71,18 +95,24 @@ export default async function handler(req, res) {
         if (!uuidRegex.test(uuid)) {
           return res.status(400).json({ error: "Invalid UUID format" });
         }
-        
-        const uuidCheckResult = await pool.query("SELECT 1 FROM comments WHERE uuid = $1", [uuid]);
+
+        const uuidCheckResult = await pool.query(
+          "SELECT 1 FROM comments WHERE uuid = $1",
+          [uuid]
+        );
         if (uuidCheckResult.rows.length > 0) {
           return res.status(400).json({ error: "Duplicate UUID detected" });
         }
 
-        if (text.length > 5000) {
+        if (cleanText.length > 5000) {
           return res.status(400).json({ error: "Comment text too long" });
         }
 
         if (parentid) {
-          const parentCheckResult = await pool.query("SELECT 1 FROM comments WHERE uuid = $1", [parentid]);
+          const parentCheckResult = await pool.query(
+            "SELECT 1 FROM comments WHERE uuid = $1",
+            [parentid]
+          );
           if (parentCheckResult.rows.length === 0) {
             return res.status(400).json({ error: "Invalid parent comment ID" });
           }
@@ -96,8 +126,8 @@ export default async function handler(req, res) {
         `;
         const insertValues = [
           uuid,
-          user || "anonymous",
-          text,
+          cleanName,
+          cleanText,
           blog,
           [], // Default empty uppointer array
         ];
@@ -109,12 +139,13 @@ export default async function handler(req, res) {
         if (parentid) {
           const getParentQuery = "SELECT uppointer FROM comments WHERE uuid = $1";
           const parentResult = await pool.query(getParentQuery, [parentid]);
-          
+
           if (parentResult.rows.length > 0) {
             const currentPointers = parentResult.rows[0].uppointer || [];
             const newPointers = [...currentPointers, uuid];
 
-            const updateParentQuery = "UPDATE comments SET uppointer = $1, updated_at = CURRENT_TIMESTAMP WHERE uuid = $2";
+            const updateParentQuery =
+              "UPDATE comments SET uppointer = $1, updated_at = CURRENT_TIMESTAMP WHERE uuid = $2";
             await pool.query(updateParentQuery, [newPointers, parentid]);
           }
         }

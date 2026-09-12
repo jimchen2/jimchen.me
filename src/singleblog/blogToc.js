@@ -56,8 +56,8 @@ const CustomToggle = ({ children, eventKey, setActiveKey, isActive }) => {
       onClick={handleClick}
       style={{
         cursor: "pointer",
-        backgroundColor: isActive ? "black" : "white",
-        color: isActive ? "white" : "black",
+        backgroundColor: "transparent",
+        color: "inherit",
         maxWidth: "300px", // Adjust this value as needed
         wordWrap: "break-word",
         whiteSpace: "normal",
@@ -66,7 +66,8 @@ const CustomToggle = ({ children, eventKey, setActiveKey, isActive }) => {
     >
       <span
         style={{
-          fontWeight: 500,
+          fontWeight: isActive ? 700 : 500,
+          textDecoration: isActive ? "underline" : "none",
           display: "block",
           wordBreak: "break-word",
         }}
@@ -120,7 +121,6 @@ const useTableOfContents = (setActiveKey) => {
                 wordBreak: "break-word",
                 overflow: "hidden",
               }}
-              className="hover:bg-gray-100 hover:underline"
             >
               {text}
             </div>

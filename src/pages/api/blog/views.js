@@ -2,6 +2,7 @@
 import dbConnect from '@/lib/dbConnect';
 import { getClientIp } from '@/lib/get-ip';
 import { generateSignature, validateSignature } from '@/lib/security';
+import { isDbAvailable } from '@/lib/blogStore';
 
 // In-memory rate limiting (same as your likes API)
 const rateLimitMap = new Map();
@@ -36,6 +37,14 @@ export default async function handler(req, res) {
     return res.status(429).json({ message: "Too many requests" });
   }
 
+  // Graceful degradation: without a database the view counter is simply off.
+  if (!(await isDbAvailable())) {
+    if (req.method === 'GET') {
+      return res.status(200).json({ available: false, views: 0, token: null });
+    }
+    return res.status(503).json({ message: 'View counting is unavailable right now' });
+  }
+
   const pool = await dbConnect();
 
   // --- GET: Fetch Count & Generate Token ---
@@ -53,6 +62,7 @@ export default async function handler(req, res) {
       const token = generateSignature(blogid, userIp);
 
       return res.status(200).json({ 
+        available: true,
         views: totalViews, 
         token: token 
       });

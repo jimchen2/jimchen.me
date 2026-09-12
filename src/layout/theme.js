@@ -12,20 +12,41 @@ import Cookies from "js-cookie";
 const THEME_COOKIE_KEY = "themeMode";
 const DEFAULT_THEME = "light"; // 'light' or 'dark'
 
+const readCookieTheme = () => {
+  if (typeof window === "undefined") return DEFAULT_THEME;
+  try {
+    const saved = Cookies.get(THEME_COOKIE_KEY);
+    return saved === "dark" || saved === "light" ? saved : DEFAULT_THEME;
+  } catch {
+    return DEFAULT_THEME;
+  }
+};
+
 export const useColorScheme = () => {
-  const [themeMode, setThemeMode] = useState(null); // Initial state is null
+  // Read the cookie synchronously on the client so the switcher and the
+  // navbar render the right theme on the very first client paint.
+  const [themeMode, setThemeMode] = useState(readCookieTheme);
   const [isHydrated, setIsHydrated] = useState(false);
 
   // Refs to store DarkReader functions once loaded
   const darkReaderFunctionsRef = useRef({ enable: null, disable: null });
   const [darkReaderLoaded, setDarkReaderLoaded] = useState(false);
 
+  // Keep a CSS hook in sync so global styles can react before DarkReader
+  // finishes loading (avoids a white flash on dark-mode reloads).
+  useEffect(() => {
+    if (typeof document !== "undefined" && themeMode) {
+      document.documentElement.setAttribute("data-theme", themeMode);
+    }
+  }, [themeMode]);
+
   // Effect to dynamically load DarkReader on the client
   useEffect(() => {
-    // This effect runs only on the client
+    let cancelled = false;
     if (typeof window !== "undefined") {
       import("darkreader")
         .then((DarkReader) => {
+          if (cancelled) return;
           darkReaderFunctionsRef.current = {
             enable: DarkReader.enable,
             disable: DarkReader.disable,
@@ -36,12 +57,19 @@ export const useColorScheme = () => {
           console.error("Failed to load DarkReader dynamically:", err)
         );
     }
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // Function to apply theme using DarkReader
   const applyTheme = useCallback(
     (mode) => {
-      if (!darkReaderLoaded || !darkReaderFunctionsRef.current.enable || !darkReaderFunctionsRef.current.disable) {
+      if (
+        !darkReaderLoaded ||
+        !darkReaderFunctionsRef.current.enable ||
+        !darkReaderFunctionsRef.current.disable
+      ) {
         // DarkReader not loaded yet, or failed to load
         return;
       }
@@ -58,20 +86,13 @@ export const useColorScheme = () => {
     [darkReaderLoaded]
   );
 
-  // Effect for initial theme load from cookies and applying it
+  // Apply the stored theme once DarkReader is ready
   useEffect(() => {
     if (darkReaderLoaded) {
-      const savedTheme = Cookies.get(THEME_COOKIE_KEY);
-      const initialTheme =
-        savedTheme === "dark" || savedTheme === "light"
-          ? savedTheme
-          : DEFAULT_THEME;
-
-      setThemeMode(initialTheme);
-      applyTheme(initialTheme);
+      const current = readCookieTheme();
+      setThemeMode(current);
+      applyTheme(current);
       setIsHydrated(true);
-    } else if (typeof window === "undefined") {
-      setThemeMode(DEFAULT_THEME);
     }
   }, [darkReaderLoaded, applyTheme]);
 
@@ -85,7 +106,11 @@ export const useColorScheme = () => {
       const currentActualMode = prevMode || DEFAULT_THEME;
       const newMode = currentActualMode === "light" ? "dark" : "light";
       applyTheme(newMode);
-      Cookies.set(THEME_COOKIE_KEY, newMode, { expires: 365 });
+      try {
+        Cookies.set(THEME_COOKIE_KEY, newMode, { expires: 365 });
+      } catch {
+        /* private mode etc. */
+      }
       return newMode;
     });
   }, [applyTheme, darkReaderLoaded]);

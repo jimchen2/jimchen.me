@@ -1,39 +1,40 @@
 // pages/api/rss.js
 import RSS from "rss";
-import dbConnect from "../../lib/dbConnect";
+import { recentBlogs } from "@/lib/blogStore";
+import { stripHtml } from "@/lib/blogFormat";
 
 export default async function handler(req, res) {
   try {
-    const pool = await dbConnect();
+    const protocol = req.headers["x-forwarded-proto"] || "https";
+    const host = req.headers["host"];
+    const siteUrl = process.env.NEXT_PUBLIC_SITE || `${protocol}://${host}`;
 
     const feed = new RSS({
       title: "Jim Chen's Blog",
       description: "Daily Journals and Tech Notes",
-      feed_url: "https://jimchen.me/api/rss",
-      site_url: "https://jimchen.me",
+      feed_url: `${siteUrl}/api/rss`,
+      site_url: siteUrl,
       language: "en",
       pubDate: new Date(),
-      image_url: "https://jimchen.me/site-icon.png",
+      image_url: `${siteUrl}/image.png`,
     });
 
-    // Get blogs sorted by date, limited to 15 most recent
-    const blogsResult = await pool.query(
-      "SELECT * FROM blogs ORDER BY date DESC LIMIT 15"
-    );
-    const blogs = blogsResult.rows;
+    const blogs = await recentBlogs(15);
 
     blogs.forEach((blog) => {
+      const plain = stripHtml(blog.preview_text || blog.body || "");
       feed.item({
         title: blog.title,
-        description: blog.body,
-        url: `https://jimchen.me/${blog.language}/${blog.type}/${blog.title}`,
-        categories: [blog.type],
+        description: plain.length > 500 ? `${plain.slice(0, 500)}...` : plain,
+        url: `${siteUrl}/a/${blog.blogid}`,
+        guid: `${siteUrl}/a/${blog.blogid}`,
+        categories: Array.isArray(blog.type) ? blog.type : [],
         date: new Date(blog.date),
-        language: blog.language,
       });
     });
 
-    res.setHeader("Content-Type", "application/xml");
+    res.setHeader("Content-Type", "application/xml; charset=utf-8");
+    res.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate");
     res.status(200).send(feed.xml());
   } catch (error) {
     console.error("RSS feed generation error:", error);

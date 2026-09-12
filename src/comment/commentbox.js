@@ -1,6 +1,5 @@
 import React, { useState, createContext, useContext } from "react";
 import { Card, Button, Form } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 
 // --- Context for triggering comment list updates ---
@@ -18,24 +17,39 @@ export const CommentsProvider = ({ children }) => {
 };
 
 // --- Comment Input Box Component ---
+/** 32-hex-char client-side id, matching the server's uuid format check. */
+function makeUuid() {
+  const bytes = new Uint8Array(16);
+  if (typeof crypto !== "undefined" && crypto.getRandomValues) {
+    crypto.getRandomValues(bytes);
+  } else {
+    for (let i = 0; i < 16; i += 1) {
+      bytes[i] = Math.floor(Math.random() * 256);
+    }
+  }
+  return [...bytes].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 export function CommentInputBox({ commentuuid, blogid }) {
   const { triggerUpdate } = useComments();
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
+  const [submitError, setSubmitError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubmitReply = async (e) => {
     e.preventDefault();
-    if (!message.trim()) return; // Prevent empty comments
+    if (!message.trim() || submitting) return; // Prevent empty comments
 
-    // Generate a simple client-side UUID
-    const uuid = [...Array(32)].map(() => Math.floor(Math.random() * 16).toString(16)).join("");
+    setSubmitting(true);
+    setSubmitError(null);
 
     try {
       await axios.post("/api/comment", {
         user: username || "anonymous",
         text: message,
         blog: blogid,
-        uuid: uuid,
+        uuid: makeUuid(),
         parentid: commentuuid !== "-1" ? commentuuid : null,
       });
 
@@ -45,7 +59,12 @@ export function CommentInputBox({ commentuuid, blogid }) {
       triggerUpdate();
     } catch (error) {
       console.error("Error submitting comment:", error);
-      // Optionally, show an error message to the user here
+      const serverMessage = error.response?.data?.error;
+      setSubmitError(
+        serverMessage || "Could not post your comment. Please try again."
+      );
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -74,9 +93,18 @@ export function CommentInputBox({ commentuuid, blogid }) {
                 required
               />
             </Form.Group>
-            <Button variant="outline-primary" type="submit">
-              Comment
+            <Button variant="outline-primary" type="submit" disabled={submitting}>
+              {submitting ? "Posting..." : "Comment"}
             </Button>
+            {submitError && (
+              <div
+                className="mt-2 small"
+                role="alert"
+                style={{ color: "#b02a37" }}
+              >
+                {submitError}
+              </div>
+            )}
           </Form>
         </Card.Body>
       </Card>

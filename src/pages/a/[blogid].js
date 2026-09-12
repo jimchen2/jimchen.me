@@ -1,32 +1,37 @@
-import dbConnect from "@/lib/dbConnect";
 import React from "react";
 import Head from "next/head";
 import SingleBlog from "@/singleblog/singleBlog";
 import Msg from "@/comment/commentsection";
+import { getBlog } from "@/lib/blogStore";
+import { stripHtml } from "@/lib/blogFormat";
 
 export default function Blog({ blog, type, error }) {
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div style={{ padding: "3rem 1rem", textAlign: "center" }}>Error: {error}</div>;
   }
 
   if (!blog) {
-    return <div>Blog not found</div>;
+    return <div style={{ padding: "3rem 1rem", textAlign: "center" }}>Blog not found</div>;
   }
 
-  // Create a description from the blog body (first 160 characters)
-  const description = blog.body.substring(0, 160).trim() + (blog.body.length > 160 ? "..." : "");
+  // Description from the stored preview text, falling back to the body.
+  const rawDescription = blog.preview_text || stripHtml(blog.body);
+  const description =
+    rawDescription.substring(0, 160).trim() +
+    (rawDescription.length > 160 ? "..." : "");
 
-  // Join the type array into a string for keywords (e.g., "tag1, tag2, tag3")
   const typeString = Array.isArray(type) ? type.join(", ") : type || "blog";
 
-  // Define the canonical URL based on the /a/[blogid] route
-  const canonicalUrl = `${process.env.NEXT_PUBLIC_SITE}/a/${blog.blogid}`;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE || "";
+  const canonicalUrl = `${siteUrl}/a/${blog.blogid}`;
 
-  const displayDate = new Date(blog.date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const displayDate = blog.date
+    ? new Date(blog.date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "";
 
   return (
     <>
@@ -39,7 +44,10 @@ export default function Blog({ blog, type, error }) {
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:title" content={blog.title} />
         <meta property="og:description" content={description} />
-        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SITE}/default-blog-image.jpg`} />
+        <meta
+          property="og:image"
+          content={blog.preview_image || `${siteUrl}/image.png`}
+        />
         <link rel="canonical" href={canonicalUrl} />
       </Head>
 
@@ -47,7 +55,7 @@ export default function Blog({ blog, type, error }) {
         <SingleBlog
           title={blog.title}
           text={blog.body}
-          type={typeString} // Pass type as a string
+          type={typeString}
           blogid={blog.blogid}
           date={displayDate}
           wordcount={blog.word_count}
@@ -62,34 +70,28 @@ export async function getServerSideProps(context) {
   const { blogid } = context.params;
 
   try {
-    const pool = await dbConnect();
+    const blogData = await getBlog(blogid);
 
-    const query = `
-      SELECT blogid, type, title, body, date, word_count
-      FROM blogs
-      WHERE blogid = $1
-    `;
-    const result = await pool.query(query, [blogid]);
-
-    if (result.rows.length === 0) {
-      return {
-        notFound: true,
-      };
+    if (!blogData) {
+      return { notFound: true };
     }
 
-    // Get the raw blog data from the database
-    const blogData = result.rows[0];
-
-    // Create a new object that is JSON serializable
-    // by converting the Date object to a string.
+    // JSON-serializable copy of the row (Date -> ISO string).
     const blog = {
       ...blogData,
-      date: blogData.date.toISOString(), // <-- THE FIX
+      date: blogData.date ? new Date(blogData.date).toISOString() : null,
     };
+    delete blog.plain_text;
+    delete blog.snippet_source;
+
+    context.res.setHeader(
+      "Cache-Control",
+      "public, s-maxage=300, stale-while-revalidate=3600"
+    );
 
     return {
       props: {
-        blog, // Pass the serializable blog object
+        blog,
         type: blog.type,
         error: null,
       },

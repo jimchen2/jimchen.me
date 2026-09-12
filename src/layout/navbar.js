@@ -15,12 +15,22 @@ const navLinkStyle = {
 const ThemeSwitcher = () => {
   const { themeMode, toggleThemeMode, isHydrated } = useGlobalColorScheme();
 
-  if (!isHydrated) return <div style={{ width: "95px" }} />;
+  if (!isHydrated) return <div style={{ width: "95px" }} aria-hidden="true" />;
 
   return (
-    <span onClick={toggleThemeMode} style={navLinkStyle}>
+    <button
+      type="button"
+      onClick={toggleThemeMode}
+      aria-pressed={themeMode === "dark"}
+      style={{
+        ...navLinkStyle,
+        background: "none",
+        border: "none",
+        padding: 0,
+      }}
+    >
       {themeMode === "dark" ? "Light Mode" : "Dark Mode"}
-    </span>
+    </button>
   );
 };
 

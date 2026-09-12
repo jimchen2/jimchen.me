@@ -1,66 +1,72 @@
 /**
- * Generates dynamic XML sitemap for the blog
- * Access at: https://yourdomain.com/sitemap.xml
+ * Generates the XML sitemap for the blog.
+ * Access at: /sitemap.xml
  */
+import { sitemapBlogs } from "@/lib/blogStore";
 
-function generateSiteMap(blogs, types, baseUrl) {
+const escapeXml = (value) =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+
+function generateSiteMap(blogs, staticUrls, baseUrl) {
+  const blogUrls = blogs
+    .map((blog) => {
+      const lastmod = blog.date ? new Date(blog.date).toISOString() : null;
+      return `
+   <url>
+     <loc>${escapeXml(`${baseUrl}/a/${blog.blogid}`)}</loc>${
+       lastmod ? `\n     <lastmod>${lastmod}</lastmod>` : ""
+     }
+   </url>`;
+    })
+    .join("");
+
+  const statics = staticUrls
+    .map(
+      (url) => `
+   <url>
+     <loc>${escapeXml(`${baseUrl}${url}`)}</loc>
+     <changefreq>weekly</changefreq>
+   </url>`
+    )
+    .join("");
+
   return `<?xml version="1.0" encoding="UTF-8"?>
-   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-     ${blogs
-       .map((blog) => {
-         const lastmod = blog.date;
-         return `
-     <url>
-       <loc>${baseUrl}/a/${blog.blogid}</loc>
-       <lastmod>${new Date(lastmod).toISOString()}</lastmod>
-     </url>`;
-       })
-       .join("")}
-
-   </urlset>
- `;
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${statics}${blogUrls}
+</urlset>
+`;
 }
 
 export async function getServerSideProps({ req, res }) {
-  // Set proper headers for XML
-  res.setHeader("Content-Type", "text/xml");
-  res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate");
+  res.setHeader("Content-Type", "text/xml; charset=utf-8");
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=86400, stale-while-revalidate=604800"
+  );
 
   try {
-    // Determine base URL
-    const protocol = req.headers["x-forwarded-proto"] || "http";
+    const protocol = req.headers["x-forwarded-proto"] || "https";
     const host = req.headers["host"];
     const baseUrl = `${protocol}://${host}`;
 
-    // Fetch sitemap data from our API
-    const response = await fetch(`${baseUrl}/api/sitemap-data`);
-    
-    if (!response.ok) {
-      throw new Error("Failed to fetch sitemap data");
-    }
+    const blogs = await sitemapBlogs();
+    const sitemap = generateSiteMap(blogs, ["/", "/about"], baseUrl);
 
-    const { blogs, types } = await response.json();
-
-    // Generate the XML sitemap
-    const sitemap = generateSiteMap(blogs, types, baseUrl);
-
-    // Send the XML
     res.write(sitemap);
     res.end();
-
-    return {
-      props: {},
-    };
   } catch (error) {
     console.error("Error generating sitemap:", error);
-    
+    res.write(
+      `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>\n`
+    );
     res.end();
-
-    return {
-      props: {},
-    };
   }
+
+  return { props: {} };
 }
 
 // This page doesn't render anything - it only generates XML
