@@ -1,43 +1,42 @@
-// pages/api/rss.js
 import RSS from "rss";
-import dbConnect from "../../lib/dbConnect";
+import { listAllBlogMeta } from "@/lib/blogRepo";
+import { displayTitle } from "@/lib/display";
 
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE || "https://jimchen.me").replace(/\/$/, "");
+
+/** GET /api/rss — the 15 most recent posts. */
 export default async function handler(req, res) {
   try {
-    const pool = await dbConnect();
-
     const feed = new RSS({
       title: "Jim Chen's Blog",
-      description: "Daily Journals and Tech Notes",
-      feed_url: "https://jimchen.me/api/rss",
-      site_url: "https://jimchen.me",
+      description: "Journals, travel notes and technical writing",
+      feed_url: `${SITE_URL}/api/rss`,
+      site_url: SITE_URL,
       language: "en",
       pubDate: new Date(),
-      image_url: "https://jimchen.me/site-icon.png",
     });
 
-    // Get blogs sorted by date, limited to 15 most recent
-    const blogsResult = await pool.query(
-      "SELECT * FROM blogs ORDER BY date DESC LIMIT 15"
-    );
-    const blogs = blogsResult.rows;
+    const blogs = await listAllBlogMeta(15);
 
-    blogs.forEach((blog) => {
+    for (const blog of blogs) {
       feed.item({
-        title: blog.title,
-        description: blog.body,
-        url: `https://jimchen.me/${blog.language}/${blog.type}/${blog.title}`,
-        categories: [blog.type],
-        date: new Date(blog.date),
-        language: blog.language,
+        title: displayTitle(blog.title),
+        description: blog.preview_text || "",
+        url: `${SITE_URL}/a/${blog.blogid}`,
+        guid: blog.blogid,
+        // `type` is an array; RSS categories must be flat strings.
+        categories: (blog.type || []).map(String),
+        date: blog.date ? new Date(blog.date) : undefined,
+        author: "Jim Chen",
       });
-    });
+    }
 
-    res.setHeader("Content-Type", "application/xml");
-    res.status(200).send(feed.xml());
+    res.setHeader("Content-Type", "application/rss+xml; charset=UTF-8");
+    res.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=86400");
+    return res.status(200).send(feed.xml({ indent: true }));
   } catch (error) {
     console.error("RSS feed generation error:", error);
-    res.status(500).json({
+    return res.status(500).json({
       message: "Error generating RSS feed",
       error: error.message,
     });

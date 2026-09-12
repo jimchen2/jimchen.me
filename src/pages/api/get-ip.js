@@ -1,5 +1,7 @@
+import { getClientIp } from "@/lib/get-ip";
+
+/** GET /api/get-ip — debug helper that echoes the caller's IP. */
 export default function handler(req, res) {
-  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress || "Unknown";
-  console.log(ip);
-  res.status(200).json({ ip });
+  res.setHeader("Cache-Control", "no-store");
+  res.status(200).json({ ip: getClientIp(req) });
 }

@@ -1,11 +1,11 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import parse from "html-react-parser";
 import { BlogToc } from "./blogToc";
 import BlogLikeButton from "./bloglikebutton";
-import CodeBlock from "./codeBlock";
-import { generateStyles } from "./blogstylesHelper";
 import BlogViewCounter from "./blogViewCounter";
+import BlogContent from "./blogContent";
+import { displayTitle } from "@/lib/display";
+// Blog content styles are global CSS and live in _app.js (pages-router rule).
 
 function calculateBlogPadding(windowWidth = null) {
   const getPaddingValues = (width) => {
@@ -14,8 +14,7 @@ function calculateBlogPadding(windowWidth = null) {
     return { left: 5, right: 5 };
   };
 
-  const width = windowWidth || 1200;
-  const padding = getPaddingValues(width);
+  const padding = getPaddingValues(windowWidth || 1200);
 
   return {
     paddingLeft: `${padding.left}%`,
@@ -23,22 +22,25 @@ function calculateBlogPadding(windowWidth = null) {
   };
 }
 
-// ── BlogHeader ──────────────────────────────────────────────────────────────
-const BlogHeader = ({ date, type, wordcount, blogid }) => {
-  const displayDate = date === "December 31, 9999" ? "Current" : date;
-  const types = (Array.isArray(type) ? type : type.split(",")).map((t) =>
-    t.trim()
-  );
-
-  // Track whether we're below the 500 px breakpoint
-  const [isSmall, setIsSmall] = useState(false);
+function useIsNarrow(breakpoint = 500) {
+  const [isNarrow, setIsNarrow] = useState(false);
 
   useEffect(() => {
-    const check = () => setIsSmall(window.innerWidth < 500);
-    check(); // run once on mount
+    const check = () => setIsNarrow(window.innerWidth < breakpoint);
+    check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
-  }, []);
+  }, [breakpoint]);
+
+  return isNarrow;
+}
+
+const BlogHeader = ({ date, type, wordcount, blogid }) => {
+  const types = (Array.isArray(type) ? type : String(type ?? "").split(","))
+    .map((t) => String(t).trim())
+    .filter(Boolean);
+
+  const isSmall = useIsNarrow();
 
   return (
     <div className="blog-header mb-3">
@@ -46,74 +48,49 @@ const BlogHeader = ({ date, type, wordcount, blogid }) => {
       <div
         style={{
           display: "flex",
-          // Stack vertically on small screens, row otherwise
           flexDirection: isSmall ? "column" : "row",
           justifyContent: isSmall ? "flex-start" : "space-between",
           alignItems: isSmall ? "flex-start" : "center",
           gap: isSmall ? "0.35rem" : 0,
         }}
       >
-        {/* Date · word count · view counter */}
         <small className="text">
-          {displayDate} • {wordcount} words
+          {date} • {wordcount} words
           <BlogViewCounter blogid={blogid} />
         </small>
 
-        {/* Type tags */}
         <div>
-          {types.map((t) => (
-            <a
-              key={t}
-              href={`/?type=${t.toLowerCase().replace(/\s+/g, "-")}`}
-              className="text-muted text-decoration-none me-2"
-            >
-              #{t.toLowerCase().replace(/\s+/g, "-")}
-            </a>
-          ))}
+          {types.map((t) => {
+            const slug = t.toLowerCase().replace(/\s+/g, "-");
+            return (
+              <a
+                key={slug}
+                href={`/?type=${encodeURIComponent(slug)}`}
+                className="text-muted text-decoration-none me-2"
+              >
+                #{slug}
+              </a>
+            );
+          })}
         </div>
       </div>
     </div>
   );
 };
 
-// ── BlogTitle ───────────────────────────────────────────────────────────────
 const BlogTitle = ({ title }) => (
-  <h2 className="mb-4">
-    <div>{title.split("-").join(" ")}</div>
-  </h2>
+  <h1 className="blog-title mb-4">{displayTitle(title)}</h1>
 );
 
-// ── SingleBlog ──────────────────────────────────────────────────────────────
-function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
-  const [paddingStyles, setPaddingStyles] = useState(calculateBlogPadding());
+function SingleBlog({ date, text, title, type, blogid, wordcount, headings }) {
+  const [paddingStyles, setPaddingStyles] = useState(() => calculateBlogPadding());
 
   useEffect(() => {
-    const handleResize = () => {
-      setPaddingStyles(calculateBlogPadding(window.innerWidth));
-    };
-    setPaddingStyles(calculateBlogPadding(window.innerWidth));
+    const handleResize = () => setPaddingStyles(calculateBlogPadding(window.innerWidth));
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const processedText = text.replace(
-    /<pre><code class="(language-\w+)">(.*?)<\/code><\/pre>|<pre><code>(.*?)<\/code><\/pre>/gs,
-    (match, language, codeWithLang, codeWithoutLang) => {
-      const code = codeWithLang || codeWithoutLang;
-      return `<codeblock code="${code.replace(/"/g, "")}"></codeblock>`;
-    }
-  );
-
-  const elements = parse(processedText, {
-    replace: (domNode) => {
-      if (domNode.name === "codeblock") {
-        const { code } = domNode.attribs;
-        return <CodeBlock code={code.replace(/"/g, '"')} />;
-      }
-    },
-  });
-
-  const styles = [generateStyles()].join(" ");
 
   return (
     <Container fluid className="pb-3">
@@ -127,10 +104,9 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
             paddingRight: paddingStyles.paddingRight,
           }}
         >
-          <div className="mb-4">
+          <article className="mb-4">
             <BlogHeader
               date={date}
-              language={language}
               type={type}
               title={title}
               wordcount={wordcount}
@@ -138,15 +114,13 @@ function SingleBlog({ date, text, title, language, type, blogid, wordcount }) {
             />
             <BlogTitle title={title} />
             <div className="blog-content">
-              {elements}
-              <style>{styles}</style>
-            </div>
-            <BlogLikeButton blogid={blogid} />
+              <BlogContent html={text} />
+            </div>            <BlogLikeButton blogid={blogid} />
             <br />
-          </div>
+          </article>
         </Col>
         <Col className="d-none d-lg-block">
-          <BlogToc />
+          <BlogToc blogid={blogid} headings={headings} />
         </Col>
       </Row>
     </Container>

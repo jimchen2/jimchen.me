@@ -1,46 +1,60 @@
-// dbConnect.js
-const { Pool } = require("pg");
+// src/lib/dbConnect.js
+// Shared `pg` connection pool.
+//
+// The pool is cached on globalThis so Next.js hot reloads in development do not
+// leak a new pool per request.
 
-const PG_URI = process.env.POSTGRESQL_URL;
+import { Pool } from "pg";
 
-// Initialize cached connection object once
-let cached = global.postgres || (global.postgres = { pool: null });
+const cached = (globalThis.__postgres ??= { pool: null, connecting: null });
 
 async function dbConnect() {
-  // Return existing pool if available
-  if (cached.pool) {
-    return cached.pool;
+  const connectionString = process.env.POSTGRESQL_URL;
+
+  if (!connectionString) {
+    throw new Error(
+      "POSTGRESQL_URL is not configured. Set it in .env.local to use the Postgres backend.",
+    );
   }
 
-  // Create a new pool with better error handling
-  const pool = new Pool({
-    connectionString: PG_URI,
-  });
+  if (cached.pool) return cached.pool;
+  if (cached.connecting) return cached.connecting;
 
-  // Add error handler to pool
-  pool.on("error", (err) => {
-    console.error("Unexpected error on idle PostgreSQL client", err);
-    // On critical error, clear the cached pool so a new one can be created
-    cached.pool = null;
-  });
+  cached.connecting = (async () => {
+    const pool = new Pool({
+      connectionString,
+      // Neon closes idle connections; keep the pool small and let it retry.
+      max: 10,
+      idleTimeoutMillis: 30_000,
+      connectionTimeoutMillis: 10_000,
+    });
+
+    pool.on("error", (err) => {
+      console.error("Unexpected error on idle PostgreSQL client", err);
+      cached.pool = null;
+    });
+
+    try {
+      const client = await pool.connect();
+      try {
+        await client.query("SELECT 1");
+      } finally {
+        client.release();
+      }
+    } catch (error) {
+      await pool.end().catch(() => {});
+      throw new Error(`Database connection failed: ${error.message}`);
+    }
+
+    cached.pool = pool;
+    return pool;
+  })();
 
   try {
-    // Test the connection
-    const client = await pool.connect();
-    try {
-      await client.query("SELECT NOW()");
-      console.log("Connected to PostgreSQL successfully");
-      cached.pool = pool;
-      return pool;
-    } finally {
-      // Release the client back to the pool
-      client.release();
-    }
-  } catch (error) {
-    console.error("Failed to connect to PostgreSQL:", error);
-    // Better error handling
-    throw new Error(`Database connection failed: ${error.message}`);
+    return await cached.connecting;
+  } finally {
+    cached.connecting = null;
   }
 }
 
-module.exports = dbConnect;
+export default dbConnect;

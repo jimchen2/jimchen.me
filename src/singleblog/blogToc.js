@@ -1,192 +1,172 @@
-import React, { useState, useEffect } from "react";
-import { Accordion, Card, Col } from "react-bootstrap";
+import React, { useCallback, useEffect, useState } from "react";
 
-const scrollToElement = (id, offset = -70) => {
+const HEADER_OFFSET = 70;
+
+function scrollToId(id) {
   const element = document.getElementById(id);
-  if (element) {
-    window.scrollTo({
-      top: element.getBoundingClientRect().top + window.pageYOffset + offset,
-      behavior: "smooth",
+  if (!element) return;
+  window.scrollTo({
+    top: element.getBoundingClientRect().top + window.pageYOffset - HEADER_OFFSET,
+    behavior: "smooth",
+  });
+  window.history.pushState(null, "", `#${id}`);
+}
+
+/** Adds a "#" anchor in front of every h2/h3 inside the post body. */
+function addHashLinks() {
+  document.querySelectorAll(".blog-content h2, .blog-content h3").forEach((header) => {
+    const id = header.id;
+    if (!id || header.querySelector(".hash-link")) return;
+
+    const link = document.createElement("a");
+    link.className = "hash-link";
+    link.href = `#${id}`;
+    link.textContent = "#";
+    link.setAttribute("aria-label", `Link to section ${header.textContent.trim()}`);
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      scrollToId(id);
     });
-    window.history.pushState(null, "", `#${id}`);
+    header.prepend(link);
+  });
+}
+
+/** Collects h2/h3 pairs from the rendered post into a two-level tree. */
+export function collectHeadingsFromDom() {
+  const headers = Array.from(document.querySelectorAll(".blog-content h2, .blog-content h3"));
+  const items = [];
+
+  for (const header of headers) {
+    if (!header.id) continue;
+
+    const text = header.textContent.replace(/^#\s+/, "").trim();
+    if (!text) continue;
+
+    if (header.tagName === "H2") {
+      items.push({ id: header.id, text, children: [] });
+    } else if (items.length > 0) {
+      items[items.length - 1].children.push({ id: header.id, text });
+    }
   }
-};
-const addHashLinks = () => {
-  document.querySelectorAll("h2").forEach((header) => {
-    const id = header.id;
-    if (id && !header.querySelector(".hash-link")) {
-      const link = document.createElement("a");
-      link.className = "hash-link";
-      link.href = `#${id}`;
-      link.innerHTML = "#";
-      link.style.marginRight = "5px";
-      link.onclick = (e) => {
-        e.preventDefault();
-        scrollToElement(id);
-      };
-      header.prepend(link);
-    }
-  });
-  document.querySelectorAll("h3").forEach((header) => {
-    const id = header.id;
-    if (id && !header.querySelector(".hash-link")) {
-      const link = document.createElement("a");
-      link.className = "hash-link";
-      link.href = `#${id}`;
-      link.innerHTML = "#";
-      link.style.marginRight = "5px";
-      link.onclick = (e) => {
-        e.preventDefault();
-        scrollToElement(id);
-      };
-      header.prepend(link);
-    }
-  });
+
+  return items;
+}
+
+const headerStyle = (isActive) => ({
+  cursor: "pointer",
+  backgroundColor: isActive ? "black" : "white",
+  color: isActive ? "white" : "black",
+  border: "none",
+  width: "100%",
+  textAlign: "left",
+  padding: "0.5rem 0.75rem",
+  fontWeight: 500,
+  lineHeight: "1.3",
+  wordBreak: "break-word",
+});
+
+const childStyle = {
+  display: "block",
+  width: "100%",
+  textAlign: "left",
+  background: "none",
+  border: "none",
+  padding: "0.5rem 0.5rem 0.5rem 1rem",
+  cursor: "pointer",
+  lineHeight: "1.3",
+  wordBreak: "break-word",
 };
 
-const CustomToggle = ({ children, eventKey, setActiveKey, isActive }) => {
-  const handleClick = () => {
-    const newKey = isActive ? null : eventKey;
-    setActiveKey(newKey);
-    scrollToElement(eventKey);
-  };
-
-  return (
-    <Card.Header
-      onClick={handleClick}
-      style={{
-        cursor: "pointer",
-        backgroundColor: isActive ? "black" : "white",
-        color: isActive ? "white" : "black",
-        maxWidth: "300px", // Adjust this value as needed
-        wordWrap: "break-word",
-        whiteSpace: "normal",
-        lineHeight: "1.3",
-      }}
-    >
-      <span
-        style={{
-          fontWeight: 500,
-          display: "block",
-          wordBreak: "break-word",
-        }}
-      >
-        {children}
-      </span>
-    </Card.Header>
-  );
-};
-const useTableOfContents = (setActiveKey) => {
-  const [tocItems, setTocItems] = useState([]);
+export function BlogToc({ blogid, headings }) {
+  // Headings are extracted on the server, so the outline is in the initial HTML
+  // and does not pop in after hydration.
+  const [items, setItems] = useState(() => headings || []);
+  const [activeKey, setActiveKey] = useState(null);
 
   useEffect(() => {
-    const headers = Array.from(document.querySelectorAll("h2, h3"));
-    const items = [];
-    let lastH2Key = null;
-
-    headers.forEach((header) => {
-      const id = header.id;
-      if (!id) return;
-
-      const text = header.textContent.replace(/^#\s+/, "").trim();
-      const isH2 = header.tagName === "H2";
-
-      if (isH2) {
-        lastH2Key = id;
-        items.push({
-          key: id,
-          content: (
-            <CustomToggle eventKey={id} setActiveKey={setActiveKey}>
-              {text}
-            </CustomToggle>
-          ),
-          children: [],
-          hasChildren: false,
-        });
-      } else if (lastH2Key) {
-        const parent = items.find((item) => item.key === lastH2Key);
-        if (parent) {
-          parent.children.push(
-            <div
-              key={`child-${id}`}
-              onClick={() => scrollToElement(id)}
-              style={{
-                padding: "0.5rem 0.5rem 0.5rem 1rem",
-                cursor: "pointer",
-                maxWidth: "300px",
-                wordWrap: "break-word",
-                whiteSpace: "normal",
-                lineHeight: "1.3",
-                wordBreak: "break-word",
-                overflow: "hidden",
-              }}
-              className="hover:bg-gray-100 hover:underline"
-            >
-              {text}
-            </div>
-          );
-          parent.hasChildren = true;
-        }
-      }
-    });
-
-    setTocItems(items);
+    if (headings && headings.length > 0) {
+      setItems(headings);
+    } else {
+      setItems(collectHeadingsFromDom());
+    }
+    addHashLinks();
 
     const hash = window.location.hash.slice(1);
-    if (hash) {
-      setTimeout(() => {
-        scrollToElement(hash);
-        const header = document.getElementById(hash);
-        if (header?.tagName === "H3") {
-          let prev = header.previousElementSibling;
-          while (prev && prev.tagName !== "H2") prev = prev.previousElementSibling;
-          if (prev?.id) setActiveKey(prev.id);
-        } else if (header?.tagName === "H2") {
-          setActiveKey(hash);
+    if (!hash) return;
+
+    const timer = setTimeout(() => {
+      const header = document.getElementById(hash);
+      if (!header) return;
+      scrollToId(hash);
+      if (header.tagName === "H2") {
+        setActiveKey(hash);
+      } else {
+        // Walk back to the nearest preceding h2 so its section opens.
+        let previous = header.previousElementSibling;
+        while (previous && previous.tagName !== "H2") {
+          previous = previous.previousElementSibling;
         }
-      }, 150);
-    }
+        if (previous?.id) setActiveKey(previous.id);
+      }
+    }, 150);
 
-    addHashLinks();
-  }, [setActiveKey]);
+    return () => clearTimeout(timer);
+  }, [blogid, headings]);
 
-  return tocItems;
-};
+  const toggle = useCallback(
+    (id) => {
+      setActiveKey((current) => (current === id ? null : id));
+      scrollToId(id);
+    },
+    [],
+  );
 
-const BlogToc = () => {
-  const [activeKey, setActiveKey] = useState(null);
-  const tocItems = useTableOfContents(setActiveKey);
+  if (items.length === 0) return null;
 
   return (
-    <Col
-      lg={2.5}
-      xl={2.5}
+    <nav
+      aria-label="Table of contents"
       style={{
         position: "fixed",
         top: "70px",
         right: "20px",
-        height: "calc(100vh - 70px)",
+        width: "240px",
+        maxHeight: "calc(100vh - 90px)",
         overflowY: "auto",
         padding: "10px",
       }}
     >
-      <Accordion activeKey={activeKey}>
-        {tocItems.map((item) => (
-          <Card key={item.key}>
-            {React.cloneElement(item.content, {
-              isActive: activeKey === item.key,
-              setActiveKey,
-            })}
-            {item.hasChildren && (
-              <Accordion.Collapse eventKey={item.key}>
-                <Card.Body>{item.children}</Card.Body>
-              </Accordion.Collapse>
-            )}
-          </Card>
-        ))}
-      </Accordion>
-    </Col>
-  );
-};
+      {items.map((item) => {
+        const isActive = activeKey === item.id;
+        return (
+          <div className="card mb-1" key={item.id}>
+            <button
+              type="button"
+              className="card-header"
+              style={headerStyle(isActive)}
+              aria-expanded={isActive}
+              onClick={() => toggle(item.id)}
+            >
+              {item.text}
+            </button>
 
-export { BlogToc };
+            {item.children.length > 0 && isActive && (
+              <div className="card-body p-0">
+                {item.children.map((child) => (
+                  <button
+                    type="button"
+                    key={child.id}
+                    style={childStyle}
+                    onClick={() => scrollToId(child.id)}
+                  >
+                    {child.text}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </nav>
+  );
+}

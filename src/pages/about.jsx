@@ -1,5 +1,6 @@
 import React from "react";
-import { MapPin, Mail, Phone, ExternalLink, GraduationCap } from "lucide-react";
+import Head from "next/head";
+import { MapPin, Mail, ExternalLink, GraduationCap } from "lucide-react";
 import { FaGithub, FaLinkedin, FaYoutube, FaTiktok, FaInstagram } from "react-icons/fa";
 
 const links = {
@@ -9,14 +10,15 @@ const links = {
   instagram: "https://www.instagram.com/hijimchen/",
   youtube: "https://www.youtube.com/@jimchen4214",
   tiktok: "https://www.tiktok.com/@jimchen.me",
-  languages: "https://jimchen.me/?type=languages",
-  reading: "https://jimchen.me/?type=reading",
-  hefei: "https://jimchen.me/?type=hefei",
-  shanghai: "https://jimchen.me/?type=shanghai",
-  alaska: "https://jimchen.me/?type=alaska",
-  hongkong: "https://jimchen.me/?type=hong-kong",
-  bayarea: "https://jimchen.me/?type=bayarea",
-  russia: "https://jimchen.me/?type=trip-ru-25",
+  // Relative so tag pages work on any deployment, not just production.
+  languages: "/?type=languages",
+  reading: "/?type=reading",
+  hefei: "/?type=hefei",
+  shanghai: "/?type=shanghai",
+  alaska: "/?type=alaska",
+  hongkong: "/?type=hong-kong",
+  bayarea: "/?type=bayarea",
+  russia: "/?type=trip-ru-25",
 };
 
 const images = {
@@ -35,13 +37,21 @@ const SocialLink = ({ href, label, icon: Icon }) => (
 export default function App() {
   return (
     <>
+      <Head>
+        <title>About — Jim Chen</title>
+        <meta
+          name="description"
+          content="Jim Chen — CS PhD student at the University of Arkansas, from Shanghai. Writing about languages, travel, and software."
+        />
+        <meta property="og:title" content="About — Jim Chen" />
+      </Head>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        /* Caveat and Plus Jakarta Sans are loaded from <head> (see _document.js)
+           so they do not block the first paint of this page. */
 
         * { box-sizing: border-box; }
 
         body {
-          margin: 0;
           font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
           line-height: 1.6;
         }
@@ -253,14 +263,14 @@ export default function App() {
             <li>
               <span>
                 Check out my{" "}
-                <a href={links.languages} target="_blank" rel="noreferrer">
+                <a href={links.languages}>
                   language learning blogs
                 </a>
               </span>
             </li>
             <li>
               <span>
-                <a href={links.hefei} target="_blank" rel="noreferrer">
+                <a href={links.hefei}>
                   Walking around in Hefei
                 </a>
                 , where I spent my undergrad years
@@ -268,7 +278,7 @@ export default function App() {
             </li>
             <li>
               <span>
-                <a href={links.russia} target="_blank" rel="noreferrer">
+                <a href={links.russia}>
                   Solo Backpacking in Russia and Belarus
                 </a>
               </span>
@@ -276,14 +286,14 @@ export default function App() {
             <li>
               <span>
                 My brief summer in{" "}
-                <a href={links.hongkong} target="_blank" rel="noreferrer">
+                <a href={links.hongkong}>
                   Hong Kong
                 </a>
               </span>
             </li>
             <li>
               <span>
-                <a href={links.alaska} target="_blank" rel="noreferrer">
+                <a href={links.alaska}>
                   Solo Trip to Alaska
                 </a>
               </span>
@@ -291,7 +301,7 @@ export default function App() {
             <li>
               <span>
                 Exchange year in Berkeley and exploring the{" "}
-                <a href={links.bayarea} target="_blank" rel="noreferrer">
+                <a href={links.bayarea}>
                   Bay Area
                 </a>
               </span>
@@ -299,7 +309,7 @@ export default function App() {
             <li>
               <span>
                 Walking around in my native{" "}
-                <a href={links.shanghai} target="_blank" rel="noreferrer">
+                <a href={links.shanghai}>
                   Shanghai
                 </a>
               </span>
@@ -307,7 +317,7 @@ export default function App() {
             <li>
               <span>
                 My{" "}
-                <a href={links.reading} target="_blank" rel="noreferrer">
+                <a href={links.reading}>
                   YA book reviews
                 </a>{" "}
                 from middle school

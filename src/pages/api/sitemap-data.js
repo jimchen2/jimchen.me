@@ -1,8 +1,6 @@
-import dbConnect from "@/lib/dbConnect";
+import { listAllBlogMeta } from "@/lib/blogRepo";
 
-/**
- * Fetches all blog data needed for sitemap generation
- */
+/** GET /api/sitemap-data — the raw blog list used to build the sitemap. */
 export default async function handler(req, res) {
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
@@ -10,24 +8,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    const pool = await dbConnect();
-
-    // Fetch all blogs with relevant sitemap data
-    const blogsQuery = `
-      SELECT blogid, date 
-      FROM blogs 
-      ORDER BY date DESC
-    `;
-    
-    const blogsResult = await pool.query(blogsQuery);
-    res.status(200).json({
-      blogs: blogsResult.rows,
-    });
+    const blogs = await listAllBlogMeta();
+    return res.status(200).json({ blogs });
   } catch (err) {
     console.error("Error fetching sitemap data:", err);
-    res.status(500).json({ 
-      message: "Error fetching sitemap data", 
-      error: err.message 
-    });
+    return res
+      .status(500)
+      .json({ message: "Error fetching sitemap data", error: err.message });
   }
 }

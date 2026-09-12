@@ -65,7 +65,10 @@ export const useColorScheme = () => {
       const initialTheme =
         savedTheme === "dark" || savedTheme === "light"
           ? savedTheme
-          : DEFAULT_THEME;
+          : // No stored preference yet: follow the OS.
+            window.matchMedia?.("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : DEFAULT_THEME;
 
       setThemeMode(initialTheme);
       applyTheme(initialTheme);

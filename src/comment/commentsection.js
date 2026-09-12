@@ -1,89 +1,91 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import CommentBox, { CommentInputBox, CommentsProvider, useComments } from "./commentbox";
 
-const GetComments = ({ blogid, paddl = 30, paddr = 30, limit }) => {
+const GetComments = ({ blogid, limit }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const { updateTrigger } = useComments();
 
   useEffect(() => {
+    if (!blogid || blogid === "0") {
+      setIsLoading(false);
+      return undefined;
+    }
+
+    const controller = new AbortController();
+
     const getComments = async () => {
       setIsLoading(true);
+      setError(null);
       try {
-        let apiUrl = `/api/comment/?blogid=${blogid}`;
-        if (limit) {
-          apiUrl += `&limit=${limit}`;
-        }
-        const response = await axios.get(apiUrl);
-        setData(response.data);
+        let apiUrl = `/api/comment?blogid=${encodeURIComponent(blogid)}`;
+        if (limit) apiUrl += `&limit=${limit}`;
+
+        const response = await axios.get(apiUrl, { signal: controller.signal });
+        setData(Array.isArray(response.data) ? response.data : []);
       } catch (err) {
-        setError(err);
+        if (err?.name !== "CanceledError") {
+          console.error("Error loading comments:", err);
+          setError("Could not load comments.");
+        }
       } finally {
-        setIsLoading(false);
+        if (!controller.signal.aborted) setIsLoading(false);
       }
     };
+
     getComments();
+    return () => controller.abort();
   }, [blogid, updateTrigger, limit]);
 
   if (isLoading) return <div>Loading comments...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (error) return <div role="alert">{error}</div>;
+  if (data.length === 0) {
+    return <div className="text-muted small">No comments yet. Be the first.</div>;
+  }
 
-  // Recursive function to render nested comments
+  // Renders a comment and, recursively, everything that replies to it.
   const renderComments = (allComments, parentId, depth, parentUser = null) => {
-    // Find the specific comment to render
-    const commentToRender = allComments.find(c => c.uuid === parentId);
-    if (!commentToRender) return null;
+    const comment = allComments.find((c) => c.uuid === parentId);
+    if (!comment) return null;
 
-    // Prepend "Replying to @user" if it's a reply
-    const modifiedText = parentUser
-      ? `Replying to @${parentUser}\n${commentToRender.text}`
-      : commentToRender.text;
+    const text = parentUser
+      ? `Replying to @${parentUser}\n${comment.text}`
+      : comment.text;
 
     return (
-      <div className="GroupCommentBox" key={commentToRender.uuid}>
+      <div className="GroupCommentBox" key={comment.uuid}>
         <CommentBox
-          user={commentToRender.user}
-          comment={modifiedText}
-          date={commentToRender.date}
-          commentuuid={commentToRender.uuid}
-          blogid={commentToRender.blog}
+          user={comment.user}
+          comment={text}
+          date={comment.date}
+          commentuuid={comment.uuid}
+          blogid={comment.blog}
           embed={depth}
         />
-        {/* Recursively render children */}
-        {commentToRender.pointer.map((childId) =>
-          renderComments(allComments, childId, depth + 1, commentToRender.user)
+        {(comment.pointer || []).map((childId) =>
+          renderComments(allComments, childId, depth + 1, comment.user),
         )}
       </div>
     );
   };
 
-  const allChildIds = data.flatMap((comment) => comment.pointer);
+  const allChildIds = data.flatMap((comment) => comment.pointer || []);
   const rootComments = data.filter((comment) => !allChildIds.includes(comment.uuid));
 
-  return (
-    <div style={{ paddingLeft: paddl, paddingRight: paddr }}>
-      {rootComments.map((comment) =>
-        renderComments(data, comment.uuid, 1, null)
-      )}
-    </div>
-  );
+  return <div>{rootComments.map((comment) => renderComments(data, comment.uuid, 1, null))}</div>;
 };
 
-// Main export component
 const CommentSection = ({ blogid }) => {
   return (
     <CommentsProvider>
-      <Container fluid style={{ overflowX: "hidden", overflowY: "hidden" }}>
-        <Row className="my-4">
-          <Col md={{ span: 8, offset: 2 }} style={{ padding: "0 15%" }}>
-            {blogid !== "0" && (
-              <CommentInputBox commentuuid="-1" blogid={blogid} />
-            )}
-          </Col>
-          <Col md={{ span: 6, offset: 3 }}>
+      <Container fluid style={{ overflow: "hidden" }}>
+        <Row className="my-4 justify-content-center">
+          <Col md={{ span: 8, offset: 2 }} xs={12}>
+            <h2 className="h5 mb-3">Comments</h2>
+            {blogid !== "0" && <CommentInputBox commentuuid="-1" blogid={blogid} />}
             <GetComments blogid={blogid} />
           </Col>
         </Row>

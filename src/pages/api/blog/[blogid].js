@@ -1,30 +1,24 @@
-import dbConnect from "@/lib/dbConnect.js";
+import { getBlogByBlogid } from "@/lib/blogRepo";
 
+/** GET /api/blog/:blogid — full post as JSON. */
 export default async function handler(req, res) {
-  const pool = await dbConnect();
-
-  if (req.method === "GET") {
-    const { blogid } = req.query;
-
-    try {
-      const query = `
-        SELECT * FROM blogs 
-        WHERE blogid = $1 
-      `;
-      const values = [blogid];
-
-      const result = await pool.query(query, values);
-
-      if (!result.rows || result.rows.length === 0) {
-        return res.status(404).json({ message: "Blog not found" });
-      }
-
-      res.json(result);
-    } catch (err) {
-      res.status(500).json({ message: "Error fetching blog", error: err.message });
-    }
-  } else {
+  if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+    return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
+  }
+
+  const { blogid } = req.query;
+
+  try {
+    const blog = await getBlogByBlogid(blogid);
+
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    return res.status(200).json(blog);
+  } catch (err) {
+    console.error("Error fetching blog:", err);
+    return res.status(500).json({ message: "Error fetching blog", error: err.message });
   }
 }

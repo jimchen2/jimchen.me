@@ -12,15 +12,30 @@ const navLinkStyle = {
   cursor: "pointer",
 };
 
+const textButtonStyle = {
+  ...navLinkStyle,
+  background: "none",
+  border: "none",
+  padding: 0,
+  font: "inherit",
+  color: "inherit",
+};
+
 const ThemeSwitcher = () => {
   const { themeMode, toggleThemeMode, isHydrated } = useGlobalColorScheme();
 
-  if (!isHydrated) return <div style={{ width: "95px" }} />;
+  // Fixed-size placeholder so the nav does not jump when DarkReader loads.
+  if (!isHydrated) return <div style={{ width: "95px" }} aria-hidden="true" />;
 
   return (
-    <span onClick={toggleThemeMode} style={navLinkStyle}>
+    <button
+      type="button"
+      onClick={toggleThemeMode}
+      style={textButtonStyle}
+      aria-label={themeMode === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+    >
       {themeMode === "dark" ? "Light Mode" : "Dark Mode"}
-    </span>
+    </button>
   );
 };
 
@@ -74,6 +89,7 @@ export default function NavigationBar() {
 
   return (
     <nav
+      aria-label="Main navigation"
       style={{
         position: "fixed",
         top: 0,
