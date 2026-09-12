@@ -17,6 +17,7 @@ const links = {
   hongkong: "https://jimchen.me/?type=hong-kong",
   bayarea: "https://jimchen.me/?type=bayarea",
   russia: "https://jimchen.me/?type=trip-ru-25",
+  chromeExtension: "https://chromewebstore.google.com/detail/youtube-dual-subtitles/kicgaahncmjpbgokkckmgglblgpjokmb",
 };
 
 const images = {
