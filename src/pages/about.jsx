@@ -255,6 +255,10 @@ export default function App() {
                 Check out my{" "}
                 <a href={links.languages} target="_blank" rel="noreferrer">
                   language learning blogs
+                </a>{" "}
+                and my{" "}
+                <a href={links.chromeExtension} target="_blank" rel="noreferrer">
+                  YouTube Chrome extension
                 </a>
               </span>
             </li>
