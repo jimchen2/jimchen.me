@@ -6,7 +6,6 @@ const links = {
   github: "https://github.com/jimchen2",
   linkedin: "https://www.linkedin.com/in/jim-chen-588002255/",
   email: "mailto:jimchen4214@gmail.com",
-  phone: "tel:4793169630",
   instagram: "https://www.instagram.com/hijimchen/",
   youtube: "https://www.youtube.com/@jimchen4214",
   tiktok: "https://www.tiktok.com/@jimchen.me",
@@ -18,6 +17,7 @@ const links = {
   hongkong: "https://jimchen.me/?type=hong-kong",
   bayarea: "https://jimchen.me/?type=bayarea",
   russia: "https://jimchen.me/?type=trip-ru-25",
+  chromeExtension: "https://chromewebstore.google.com/detail/youtube-dual-subtitles/kicgaahncmjpbgokkckmgglblgpjokmb",
 };
 
 const images = {
@@ -208,8 +208,7 @@ export default function App() {
           <h1>jim chen</h1>
           <br />
           <p className="bio">
-            CS grad student at the University of Arkansas (AR-kən-saw) from Shanghai. I am passionate about blogging, media, traveling, language learning, and meeting new people. Other side hobbies: cooking, outdoors, listening to
-            folk music, and reading poetry.
+            I am a CS PhD student at the University of Arkansas from Shanghai.
           </p>
         </header>
 
@@ -230,13 +229,6 @@ export default function App() {
             <Mail size={18} />
             <a href={links.email} className="contact-link">
               jimchen4214@gmail.com
-            </a>
-          </div>
-
-          <div className="meta-item">
-            <Phone size={18} />
-            <a href={links.phone} className="contact-link">
-              (479) 316-9630
             </a>
           </div>
         </div>
@@ -261,9 +253,9 @@ export default function App() {
           <ul className="blog-list">
             <li>
               <span>
-                Check out my{" "}
-                <a href={links.languages} target="_blank" rel="noreferrer">
-                  language learning blogs about Spanish and Russian
+                Check out my {" "}
+                <a href={links.chromeExtension} target="_blank" rel="noreferrer">
+                  YouTube Chrome extension
                 </a>
               </span>
             </li>

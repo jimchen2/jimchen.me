@@ -254,32 +254,6 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
 
             {pagination && pagination.totalPages > 1 && <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />}
 
-            {/* --- FILTER TAGS (HIDDEN ON SEARCH PAGE) --- */}
-            {!isSearchPage && (
-              <div className="mt-5 pt-4 border-top">
-                <h5 className="mb-3 text-uppercase" style={{ fontSize: "0.9rem", color: "#666", letterSpacing: "1px" }}>
-                  Filter By Tags
-                </h5>
-
-                {sidebarTagGroups.map((group, groupIdx) => (
-                  <div key={groupIdx} className="mb-2 d-flex flex-wrap gap-2">
-                    {group.map((tag) => (
-                      <Link
-                        key={tag}
-                        href={`/?type=${encodeURIComponent(tag.toLowerCase())}`}
-                        style={{
-                          fontSize: "1rem",
-                          color: "blue",
-                          textDecoration: "underline",
-                        }}
-                      >
-                        #{tag}
-                      </Link>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         </Col>
       </Row>
