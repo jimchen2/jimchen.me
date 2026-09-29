@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import BlogPreviewPage from "@/blogpreview/BlogPreviewPage";
 
@@ -85,14 +86,22 @@ function BlogPage({ data, pagination, type, postTypeArray, sort, searchterm }) {
   }
 
   return (
-    <BlogPreviewPage 
-      currentType={type} 
-      data={data} 
-      pagination={pagination} 
-      postTypeArray={postTypeArray} 
-      currentSort={sort} 
-      searchTerm={searchterm} 
-    />
+    <>
+      <Head>
+        <meta
+          name="description"
+          content="Jim Chen's personal blog — posts about tech, machine learning, systems, math, cooking, and travel journals."
+        />
+      </Head>
+      <BlogPreviewPage 
+        currentType={type} 
+        data={data} 
+        pagination={pagination} 
+        postTypeArray={postTypeArray} 
+        currentSort={sort} 
+        searchTerm={searchterm} 
+      />
+    </>
   );
 }
 

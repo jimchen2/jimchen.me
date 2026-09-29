@@ -78,9 +78,9 @@ const BlogHeader = ({ date, type, wordcount, blogid }) => {
 
 // ── BlogTitle ───────────────────────────────────────────────────────────────
 const BlogTitle = ({ title }) => (
-  <h2 className="mb-4">
+  <h1 className="mb-4">
     <div>{title.split("-").join(" ")}</div>
-  </h2>
+  </h1>
 );
 
 // ── SingleBlog ──────────────────────────────────────────────────────────────

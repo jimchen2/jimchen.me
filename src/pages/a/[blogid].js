@@ -39,7 +39,7 @@ export default function Blog({ blog, type, error }) {
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:title" content={blog.title} />
         <meta property="og:description" content={description} />
-        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SITE}/default-blog-image.jpg`} />
+        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SITE}/image.png`} />
         <link rel="canonical" href={canonicalUrl} />
       </Head>
 
