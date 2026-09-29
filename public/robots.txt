@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://jimchen.me/sitemap.xml

@@ -17,6 +17,10 @@ function MyApp({ Component, pageProps }) {
     <ColorSchemeProvider>
       <Head>
         <title>Jim Chen's Blog</title>
+        <meta
+          name="description"
+          content="Jim Chen's personal blog about tech, AI, languages, reading, cooking and travel journals."
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       
