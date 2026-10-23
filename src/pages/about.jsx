@@ -211,34 +211,13 @@ export default function App() {
             I am a CS PhD student at the University of Arkansas from Shanghai.
           </p>
         </header>
-
-        <div className="meta-grid">
-          <div className="meta-item">
-            <MapPin size={18} />
-            <span>Fayetteville, AR</span>
-          </div>
-
-          <div className="meta-item">
-            <GraduationCap size={18} />
-            <span>
-              Undergrad: USTC (Hefei, China) <br /> School of the Gifted Young
-            </span>
-          </div>
-
-          <div className="meta-item">
-            <Mail size={18} />
-            <a href={links.email} className="contact-link">
-              jimchen4214@gmail.com
-            </a>
-          </div>
-        </div>
-
         <section>
           <div className="section-title">Work and Social Media</div>
           <div className="chips-wrapper">
             <div className="chips-row">
               <SocialLink href={links.github} label="GitHub" icon={FaGithub} />
               <SocialLink href={links.linkedin} label="LinkedIn" icon={FaLinkedin} />
+              <SocialLink href={links.email} label="jimchen4214@gmail.com" icon={Mail} />
             </div>
             <div className="chips-row">
               <SocialLink href={links.youtube} label="YouTube" icon={FaYoutube} />
