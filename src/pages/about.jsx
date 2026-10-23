@@ -241,7 +241,7 @@ export default function App() {
             <li>
               <span>
                 <a href={links.hefei} target="_blank" rel="noreferrer">
-                  Walking around in Hefei
+                  Exploring USTC and the city of Hefei
                 </a>
                 , where I spent my undergrad years
               </span>
@@ -249,7 +249,7 @@ export default function App() {
             <li>
               <span>
                 <a href={links.russia} target="_blank" rel="noreferrer">
-                  Solo Backpacking in Russia and Belarus
+                  Backpacking in Russia and Belarus
                 </a>
               </span>
             </li>
@@ -263,16 +263,13 @@ export default function App() {
             </li>
             <li>
               <span>
-                <a href={links.alaska} target="_blank" rel="noreferrer">
-                  Solo Trip to Alaska
-                </a>
-              </span>
-            </li>
-            <li>
-              <span>
-                Exchange year in Berkeley and exploring the{" "}
+                Exchange year in Berkeley, exploring the{" "}
                 <a href={links.bayarea} target="_blank" rel="noreferrer">
                   Bay Area
+                </a>{" "}
+                and my{" "}
+                <a href={links.alaska} target="_blank" rel="noreferrer">
+                 trip to Alaska
                 </a>
               </span>
             </li>
