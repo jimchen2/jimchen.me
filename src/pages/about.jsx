@@ -5,7 +5,6 @@ import { FaGithub, FaLinkedin, FaYoutube, FaTiktok, FaInstagram } from "react-ic
 const links = {
   github: "https://github.com/jimchen2",
   linkedin: "https://www.linkedin.com/in/jim-chen-588002255/",
-  email: "mailto:jimchen4214@gmail.com",
   instagram: "https://www.instagram.com/hijimchen/",
   youtube: "https://www.youtube.com/@jimchen4214",
   tiktok: "https://www.tiktok.com/@jimchen.me",
@@ -217,7 +216,7 @@ export default function App() {
             <div className="chips-row">
               <SocialLink href={links.github} label="GitHub" icon={FaGithub} />
               <SocialLink href={links.linkedin} label="LinkedIn" icon={FaLinkedin} />
-              <SocialLink href={links.email} label="jimchen4214@gmail.com" icon={Mail} />
+              <SocialLink label="jimchen4214@gmail.com" icon={Mail} />
             </div>
             <div className="chips-row">
               <SocialLink href={links.youtube} label="YouTube" icon={FaYoutube} />
