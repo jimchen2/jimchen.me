@@ -245,16 +245,13 @@ export default function App() {
                 , where I spent my undergrad years
               </span>
             </li>
+
             <li>
               <span>
                 <a href={links.russia} target="_blank" rel="noreferrer">
                   Backpacking in Russia and Belarus
-                </a>
-              </span>
-            </li>
-            <li>
-              <span>
-                My brief summer in{" "}
+                </a>{" "}
+                and my brief summer in{" "}
                 <a href={links.hongkong} target="_blank" rel="noreferrer">
                   Hong Kong
                 </a>
