@@ -1,16 +1,10 @@
+Vercel, (Domain/CDN) Cloudflare
+
 ## CSS Rules
 
 1. A link has the natural underline and color
 2. Instant State Changes, no hover, edges should be sharp,
 3. System typography only
-
-## Platforms Used for Website
-
-- Code, Blog content: Github
-- Hosting: Vercel(PAAS)
-- Database: Neon Postgres(for CI/CD from Github)
-- Hosting Photos: Cloudflare R2
-- Domain: Cloudflare
 
 ## Schema
 
