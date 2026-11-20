@@ -65,21 +65,27 @@ export async function fetchBlogPreviews(
     query += ` WHERE ${conditions.join(" AND ")}`;
   }
 
-  // Define sort criteria
+  // Define sort criteria.
+  // IMPORTANT: every ORDER BY needs a unique tie-breaker (`id`).
+  // Without it, rows that tie on `date` / `word_count` have no defined
+  // order, so PostgreSQL may order them differently between the
+  // page-1 and page-2 queries. With LIMIT/OFFSET pagination that makes
+  // the page boundary shift and the same post can appear on two pages
+  // (e.g. /a/085502 on both ?page=1 and ?page=2).
   let sortQuery;
   if (searchterm) {
     // If searching, prioritize results where the title matches.
     const searchIndex = queryParams.findIndex((p) => p.includes(searchterm));
     sortQuery = `ORDER BY CASE WHEN REPLACE(title, '-', ' ') ILIKE $${
       searchIndex + 1
-    } THEN 0 ELSE 1 END, date DESC`;
+    } THEN 0 ELSE 1 END, date DESC, id DESC`;
   } else {
     // Standard sorting options
     const sortCriteria = {
-      date_oldest: "date ASC",
-      most_words: "word_count DESC",
-      least_words: "word_count ASC",
-      date_latest: "date DESC",
+      date_oldest: "date ASC, id ASC",
+      most_words: "word_count DESC, id DESC",
+      least_words: "word_count ASC, id ASC",
+      date_latest: "date DESC, id DESC",
     };
     sortQuery = `ORDER BY ${sortCriteria[sort] || sortCriteria.date_latest}`;
   }
