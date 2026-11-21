@@ -1,0 +1,120 @@
+.theme-switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.theme-switcher select {
+  max-width: 100%;
+  padding: 0.35rem 1.75rem 0.35rem 0.5rem;
+  border: 1px solid #777;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #212529;
+  cursor: pointer;
+  font: inherit;
+}
+
+.theme-switcher select:focus-visible {
+  outline: 2px solid #315bff;
+  outline-offset: 2px;
+}
+
+/* A deliberately raw, high-contrast alternative to the standard themes. */
+html[data-theme="brutalist"] body {
+  background: #f4f0e5;
+  color: #111;
+  font-family: Arial, Helvetica, sans-serif !important;
+  transition: none;
+}
+
+html[data-theme="brutalist"] .site-nav {
+  background: #ffe600 !important;
+  color: #111 !important;
+  border-bottom: 4px solid #111;
+  box-shadow: none !important;
+}
+
+html[data-theme="brutalist"] .site-nav a {
+  font-weight: 900 !important;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+}
+
+html[data-theme="brutalist"] .mobile-menu {
+  background: #fff !important;
+  border: 3px solid #111;
+  border-radius: 0 !important;
+  box-shadow: 5px 5px 0 #111 !important;
+}
+
+html[data-theme="brutalist"] .theme-switcher {
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+html[data-theme="brutalist"] .theme-switcher select {
+  background-color: #fff;
+  border: 2px solid #111;
+  border-radius: 0;
+  color: #111;
+  font-weight: 700;
+}
+
+html[data-theme="brutalist"] .card {
+  background: #fff;
+  border: 3px solid #111 !important;
+  border-radius: 0 !important;
+  box-shadow: 6px 6px 0 #111;
+}
+
+html[data-theme="brutalist"] .card-title a {
+  color: #111 !important;
+  font-weight: 900 !important;
+  text-decoration-thickness: 3px !important;
+  text-underline-offset: 3px;
+}
+
+html[data-theme="brutalist"] h1,
+html[data-theme="brutalist"] h2,
+html[data-theme="brutalist"] h3 {
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+html[data-theme="brutalist"] input,
+html[data-theme="brutalist"] textarea,
+html[data-theme="brutalist"] button,
+html[data-theme="brutalist"] .page-link,
+html[data-theme="brutalist"] .social-chip,
+html[data-theme="brutalist"] .meta-grid {
+  border-radius: 0 !important;
+}
+
+html[data-theme="brutalist"] input,
+html[data-theme="brutalist"] textarea,
+html[data-theme="brutalist"] .page-link,
+html[data-theme="brutalist"] .social-chip,
+html[data-theme="brutalist"] .meta-grid {
+  border: 2px solid #111 !important;
+}
+
+html[data-theme="brutalist"] form button {
+  background: #ffe600 !important;
+  border: 2px solid #111 !important;
+  color: #111;
+}
+
+html[data-theme="brutalist"] .page-item.active .page-link {
+  background: #111;
+  color: #fff;
+}
+
+html[data-theme="brutalist"] .social-chip:hover {
+  transform: none;
+  background: #ffe600;
+}
