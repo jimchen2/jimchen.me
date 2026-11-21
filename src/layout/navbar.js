@@ -120,14 +120,14 @@ export default function NavigationBar() {
         }}
       >
         {/* Always-visible brand */}
-        <Link href="/" style={navLinkStyle} onClick={handleLinkClick}>
+        <Link href="/" className="site-brand" style={navLinkStyle} onClick={handleLinkClick}>
           Jim Chen&apos;s Blog
         </Link>
 
         {/* ── Desktop nav ── */}
         {!isMobile && (
           <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
-            <Link href="/about" style={navLinkStyle}>
+            <Link href="/about" className="site-nav-link" style={navLinkStyle}>
               About
             </Link>
             <ThemeSwitcher />
@@ -173,6 +173,7 @@ export default function NavigationBar() {
               >
                 <Link
                   href="/about"
+                  className="site-nav-link"
                   style={{
                     ...navLinkStyle,
                     padding: "0.65rem 1.25rem",
