@@ -3,6 +3,7 @@
 import React from "react";
 import Head from "next/head";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "@/layout/themes.css";
 import { ColorSchemeProvider } from "@/layout/theme";
 
 import MainLayout from "@/layout/MainLayout.js";

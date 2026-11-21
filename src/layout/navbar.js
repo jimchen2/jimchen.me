@@ -13,14 +13,22 @@ const navLinkStyle = {
 };
 
 const ThemeSwitcher = () => {
-  const { themeMode, toggleThemeMode, isHydrated } = useGlobalColorScheme();
-
-  if (!isHydrated) return <div style={{ width: "95px" }} />;
+  const { themeMode, changeThemeMode, isHydrated } = useGlobalColorScheme();
 
   return (
-    <span onClick={toggleThemeMode} style={navLinkStyle}>
-      {themeMode === "dark" ? "Light Mode" : "Dark Mode"}
-    </span>
+    <label className="theme-switcher">
+      <span>Theme</span>
+      <select
+        aria-label="Theme"
+        value={themeMode}
+        onChange={(event) => changeThemeMode(event.target.value)}
+        disabled={!isHydrated}
+      >
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+        <option value="brutalist">Brutalist</option>
+      </select>
+    </label>
   );
 };
 
@@ -74,6 +82,7 @@ export default function NavigationBar() {
 
   return (
     <nav
+      className="site-nav"
       style={{
         position: "fixed",
         top: 0,
@@ -132,6 +141,7 @@ export default function NavigationBar() {
 
             {menuOpen && (
               <div
+                className="mobile-menu"
                 style={{
                   position: "absolute",
                   top: "calc(100% + 0.75rem)",
@@ -140,7 +150,7 @@ export default function NavigationBar() {
                   boxShadow: "0 4px 16px rgba(0,0,0,0.18)",
                   borderRadius: "0.5rem",
                   padding: "0.4rem 0",
-                  minWidth: "170px",
+                  minWidth: "220px",
                   zIndex: 1001,
                   display: "flex",
                   flexDirection: "column",
