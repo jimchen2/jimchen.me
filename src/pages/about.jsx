@@ -203,9 +203,9 @@ export default function App() {
         }
       `}</style>
 
-      <div className="page-container">
+      <div className="page-container about-page">
         <header>
-          <h1>jim chen</h1>
+          <h1 className="about-title">jim chen</h1>
           <br />
           <p className="bio">
             I am a CS PhD student at the University of Arkansas from Shanghai.

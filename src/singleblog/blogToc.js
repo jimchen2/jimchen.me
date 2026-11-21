@@ -54,6 +54,7 @@ const CustomToggle = ({ children, eventKey, setActiveKey, isActive }) => {
   return (
     <Card.Header
       onClick={handleClick}
+      className={`toc-toggle${isActive ? " is-active" : ""}`}
       style={{
         cursor: "pointer",
         backgroundColor: isActive ? "black" : "white",

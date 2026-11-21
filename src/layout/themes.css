@@ -38,97 +38,688 @@ html[data-theme="dark"] .theme-switcher-btn:hover:not(:disabled) {
   background-color: rgba(255, 255, 255, 0.08);
 }
 
-/* A deliberately raw, high-contrast alternative to the standard themes. */
-html[data-theme="brutalist"] body {
-  background: #f4f0e5;
-  color: #111;
-  font-family: Arial, Helvetica, sans-serif !important;
-  transition: none;
+/* ==========================================================================
+   BRUTALIST
+   A deliberately raw, high-contrast alternative to the standard themes.
+   Everything — type, edges, controls, article bodies, comments — switches.
+   ========================================================================== */
+
+html[data-theme="brutalist"] {
+  --br-ink: #0b0b0b;
+  --br-paper: #f2eee3;
+  --br-white: #ffffff;
+  --br-yellow: #ffe600;
+  --br-display: "Arial Black", "Helvetica Neue", Impact, sans-serif;
+  --br-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --br-mono: "Courier New", Courier, monospace;
+  color-scheme: light;
 }
 
+/* ── Base canvas & type ─────────────────────────────────────────────────── */
+
+/* Sharp corners and instant state changes everywhere in this theme. */
+html[data-theme="brutalist"] *,
+html[data-theme="brutalist"] *::before,
+html[data-theme="brutalist"] *::after {
+  border-radius: 0 !important;
+  transition: none !important;
+}
+
+html[data-theme="brutalist"] body {
+  background: var(--br-paper);
+  color: var(--br-ink);
+  font-family: var(--br-body) !important;
+  font-size: 17px;
+  line-height: 1.6;
+  transition: none !important;
+}
+
+html[data-theme="brutalist"] ::selection {
+  background: var(--br-yellow);
+  color: var(--br-ink);
+}
+
+html[data-theme="brutalist"] h1,
+html[data-theme="brutalist"] h2,
+html[data-theme="brutalist"] h3,
+html[data-theme="brutalist"] h4,
+html[data-theme="brutalist"] h5,
+html[data-theme="brutalist"] h6,
+html[data-theme="brutalist"] .h1,
+html[data-theme="brutalist"] .h2,
+html[data-theme="brutalist"] .h3,
+html[data-theme="brutalist"] .h4,
+html[data-theme="brutalist"] .h5,
+html[data-theme="brutalist"] .h6,
+html[data-theme="brutalist"] .card-title {
+  font-family: var(--br-display) !important;
+  font-weight: 900 !important;
+  text-transform: uppercase;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  color: var(--br-ink);
+}
+
+html[data-theme="brutalist"] a {
+  color: var(--br-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+html[data-theme="brutalist"] a:focus-visible,
+html[data-theme="brutalist"] button:focus-visible,
+html[data-theme="brutalist"] input:focus-visible,
+html[data-theme="brutalist"] select:focus-visible,
+html[data-theme="brutalist"] textarea:focus-visible {
+  outline: 3px solid var(--br-ink);
+  outline-offset: 3px;
+}
+
+html[data-theme="brutalist"] hr {
+  border: none;
+  border-top: 3px solid var(--br-ink) !important;
+  opacity: 1;
+}
+
+/* ── Navigation ─────────────────────────────────────────────────────────── */
+
 html[data-theme="brutalist"] .site-nav {
-  background: #ffe600 !important;
-  color: #111 !important;
-  border-bottom: 4px solid #111;
+  background: var(--br-yellow) !important;
+  color: var(--br-ink) !important;
+  border-bottom: 4px solid var(--br-ink);
   box-shadow: none !important;
 }
 
 html[data-theme="brutalist"] .site-nav a {
   font-weight: 900 !important;
   text-transform: uppercase;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
 }
 
-html[data-theme="brutalist"] .mobile-menu {
-  background: #fff !important;
-  border: 3px solid #111;
-  border-radius: 0 !important;
-  box-shadow: 5px 5px 0 #111 !important;
+html[data-theme="brutalist"] .site-brand {
+  background: var(--br-ink);
+  color: var(--br-yellow) !important;
+  padding: 0.35rem 0.6rem;
+  font-family: var(--br-display) !important;
+  font-size: 1.05rem !important;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-decoration: none !important;
+}
+
+html[data-theme="brutalist"] .site-nav-link {
+  font-family: var(--br-mono) !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 0.08em;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
 }
 
 html[data-theme="brutalist"] .theme-switcher-btn {
-  border-radius: 0;
-  color: #111;
-  background-color: #fff;
-  border: 2px solid #111;
-  transition: none;
+  border-radius: 0 !important;
+  color: var(--br-ink);
+  background-color: var(--br-white);
+  border: 2px solid var(--br-ink) !important;
+  transition: none !important;
 }
 
 html[data-theme="brutalist"] .theme-switcher-btn:hover:not(:disabled) {
-  background-color: #ffe600;
+  background-color: var(--br-yellow);
 }
 
-html[data-theme="brutalist"] .card {
-  background: #fff;
-  border: 3px solid #111 !important;
+html[data-theme="brutalist"] .theme-switcher-btn svg {
+  flex-shrink: 0;
+}
+
+html[data-theme="brutalist"] .mobile-menu {
+  background: var(--br-white) !important;
+  border: 3px solid var(--br-ink);
   border-radius: 0 !important;
-  box-shadow: 6px 6px 0 #111;
+  box-shadow: 6px 6px 0 var(--br-ink) !important;
 }
 
-html[data-theme="brutalist"] .card-title a {
-  color: #111 !important;
-  font-weight: 900 !important;
-  text-decoration-thickness: 3px !important;
-  text-underline-offset: 3px;
+html[data-theme="brutalist"] .mobile-menu a {
+  font-family: var(--br-mono) !important;
 }
 
-html[data-theme="brutalist"] h1,
-html[data-theme="brutalist"] h2,
-html[data-theme="brutalist"] h3 {
-  font-family: Arial, Helvetica, sans-serif !important;
-  font-weight: 900;
+/* ── Blog index ─────────────────────────────────────────────────────────── */
+
+html[data-theme="brutalist"] .blog-index__header {
+  border-bottom: 4px solid var(--br-ink) !important;
+}
+
+html[data-theme="brutalist"] .blog-index__tag {
+  font-family: var(--br-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+html[data-theme="brutalist"] .blog-index__tag span {
+  color: var(--br-ink) !important;
+  background: var(--br-yellow);
+  padding: 0 0.3rem;
+  text-decoration-thickness: 2px;
+}
+
+html[data-theme="brutalist"] .blog-index__empty {
+  font-family: var(--br-display) !important;
+  font-size: 2rem;
+  text-transform: uppercase;
   letter-spacing: -0.03em;
 }
 
-html[data-theme="brutalist"] input,
-html[data-theme="brutalist"] textarea,
-html[data-theme="brutalist"] button,
-html[data-theme="brutalist"] .page-link,
-html[data-theme="brutalist"] .social-chip,
-html[data-theme="brutalist"] .meta-grid {
+html[data-theme="brutalist"] .search-input {
+  background: var(--br-white) !important;
+  border: 3px solid var(--br-ink) !important;
+  border-right: none !important;
+  border-radius: 0 !important;
+  color: var(--br-ink) !important;
+  font-family: var(--br-mono) !important;
+  font-size: 0.82rem !important;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0.4rem 0.6rem !important;
+}
+
+html[data-theme="brutalist"] .search-input::placeholder {
+  color: #555;
+  text-transform: uppercase;
+}
+
+html[data-theme="brutalist"] .search-input:focus {
+  outline: 3px solid var(--br-ink);
+  outline-offset: 2px;
+  background: #fffbe0 !important;
+}
+
+html[data-theme="brutalist"] .search-button {
+  background: var(--br-yellow) !important;
+  border: 3px solid var(--br-ink) !important;
+  border-left: none !important;
   border-radius: 0 !important;
 }
 
-html[data-theme="brutalist"] input,
-html[data-theme="brutalist"] textarea,
-html[data-theme="brutalist"] .page-link,
-html[data-theme="brutalist"] .social-chip,
-html[data-theme="brutalist"] .meta-grid {
-  border: 2px solid #111 !important;
+html[data-theme="brutalist"] .search-button svg {
+  color: var(--br-ink);
+  fill: var(--br-ink);
 }
 
-html[data-theme="brutalist"] form button {
-  background: #ffe600 !important;
-  border: 2px solid #111 !important;
-  color: #111;
+/* ── Post cards ─────────────────────────────────────────────────────────── */
+
+html[data-theme="brutalist"] .post-card {
+  background: var(--br-white) !important;
+  border: 3px solid var(--br-ink) !important;
+  border-radius: 0 !important;
+  box-shadow: 8px 8px 0 var(--br-ink) !important;
+}
+
+html[data-theme="brutalist"] .post-card__image {
+  border-radius: 0 !important;
+  border-left: 3px solid var(--br-ink);
+  filter: grayscale(1) contrast(1.05);
+}
+
+@media (max-width: 767.98px) {
+  html[data-theme="brutalist"] .post-card__image {
+    border-left: none;
+    border-bottom: 3px solid var(--br-ink);
+  }
+}
+
+html[data-theme="brutalist"] .post-card__body {
+  padding: 1.5rem !important;
+}
+
+html[data-theme="brutalist"] .post-card__meta {
+  font-family: var(--br-mono) !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+html[data-theme="brutalist"] .post-card__title {
+  color: var(--br-ink) !important;
+  font-family: var(--br-display) !important;
+  font-size: clamp(1.45rem, 2.4vw, 1.95rem) !important;
+  font-weight: 900 !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  text-decoration-thickness: 4px !important;
+  text-underline-offset: 4px;
+}
+
+html[data-theme="brutalist"] .post-card__excerpt {
+  color: var(--br-ink) !important;
+  font-family: var(--br-body) !important;
+  font-size: 1rem !important;
+  font-style: normal !important;
+  line-height: 1.55 !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+}
+
+html[data-theme="brutalist"] .post-card__tags {
+  border-top: 2px solid var(--br-ink) !important;
+  padding-top: 0.9rem !important;
+  margin-top: 1rem !important;
+}
+
+html[data-theme="brutalist"] .post-card__tag {
+  background: var(--br-yellow);
+  border: 2px solid var(--br-ink);
+  color: var(--br-ink) !important;
+  font-family: var(--br-mono) !important;
+  font-size: 0.7rem !important;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1.6;
+  padding: 0.05rem 0.4rem;
+  text-decoration: none !important;
+  text-transform: uppercase;
+}
+
+/* ── Buttons, forms, pagination ─────────────────────────────────────────── */
+
+html[data-theme="brutalist"] .btn {
+  border: 3px solid var(--br-ink) !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 var(--br-ink);
+  font-family: var(--br-mono) !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: none !important;
+}
+
+html[data-theme="brutalist"] .btn-primary {
+  background-color: var(--br-ink) !important;
+  border-color: var(--br-ink) !important;
+  color: var(--br-yellow) !important;
+}
+
+html[data-theme="brutalist"] .btn-outline-primary,
+html[data-theme="brutalist"] .btn-light {
+  background-color: var(--br-yellow) !important;
+  border-color: var(--br-ink) !important;
+  color: var(--br-ink) !important;
+}
+
+html[data-theme="brutalist"] .form-control {
+  background: var(--br-white);
+  border: 3px solid var(--br-ink) !important;
+  border-radius: 0 !important;
+  color: var(--br-ink);
+  font-family: var(--br-body);
+}
+
+html[data-theme="brutalist"] .form-control:focus {
+  border-color: var(--br-ink) !important;
+  box-shadow: 4px 4px 0 var(--br-yellow);
+}
+
+html[data-theme="brutalist"] .form-label {
+  font-family: var(--br-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+html[data-theme="brutalist"] .pagination {
+  gap: 0.4rem;
+}
+
+html[data-theme="brutalist"] .page-link {
+  background: var(--br-white) !important;
+  border: 3px solid var(--br-ink) !important;
+  border-radius: 0 !important;
+  color: var(--br-ink) !important;
+  font-family: var(--br-mono) !important;
+  font-weight: 700;
+  padding: 0.3rem 0.6rem;
 }
 
 html[data-theme="brutalist"] .page-item.active .page-link {
-  background: #111;
-  color: #fff;
+  background: var(--br-ink) !important;
+  color: var(--br-yellow) !important;
+}
+
+html[data-theme="brutalist"] .page-item.disabled .page-link {
+  background: transparent !important;
+  border-color: #8a8578 !important;
+  color: #8a8578 !important;
+}
+
+/* ── Generic cards (comments, inputs) ───────────────────────────────────── */
+
+html[data-theme="brutalist"] .card {
+  background: var(--br-white);
+  border: 3px solid var(--br-ink) !important;
+  border-radius: 0 !important;
+  box-shadow: 6px 6px 0 var(--br-ink);
+}
+
+html[data-theme="brutalist"] .card-header {
+  background: var(--br-yellow) !important;
+  border-bottom: 3px solid var(--br-ink) !important;
+  color: var(--br-ink);
+  font-family: var(--br-mono) !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+html[data-theme="brutalist"] .GroupCommentBox .card {
+  box-shadow: 4px 4px 0 var(--br-ink);
+}
+
+html[data-theme="brutalist"] .GroupCommentBox .GroupCommentBox .card {
+  box-shadow: 3px 3px 0 var(--br-ink);
+}
+
+html[data-theme="brutalist"] .card-text {
+  white-space: pre-wrap;
+}
+
+/* ── Single post ────────────────────────────────────────────────────────── */
+
+html[data-theme="brutalist"] .blog-title {
+  font-size: clamp(2.4rem, 5vw, 4rem) !important;
+  line-height: 0.9 !important;
+  letter-spacing: -0.045em !important;
+  margin-bottom: 1.5rem !important;
+}
+
+html[data-theme="brutalist"] .blog-meta {
+  font-family: var(--br-mono) !important;
+  font-size: 0.72rem !important;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+html[data-theme="brutalist"] .blog-tag {
+  background: var(--br-yellow);
+  border: 2px solid var(--br-ink);
+  color: var(--br-ink) !important;
+  font-family: var(--br-mono) !important;
+  font-size: 0.68rem !important;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0.05rem 0.4rem;
+  text-decoration: none !important;
+  text-transform: uppercase;
+}
+
+html[data-theme="brutalist"] .blog-content {
+  font-family: var(--br-body);
+}
+
+html[data-theme="brutalist"] .blog-content h1 {
+  font-size: clamp(2rem, 4vw, 3rem) !important;
+  line-height: 0.95 !important;
+}
+
+html[data-theme="brutalist"] .blog-content h2 {
+  font-size: clamp(1.55rem, 3vw, 2.15rem) !important;
+  line-height: 1 !important;
+  margin-top: 2em !important;
+  padding-bottom: 0.3rem;
+  border-bottom: 3px solid var(--br-ink);
+}
+
+html[data-theme="brutalist"] .blog-content h3 {
+  font-size: clamp(1.25rem, 2vw, 1.5rem) !important;
+  line-height: 1.05 !important;
+  margin-top: 1.8em !important;
+}
+
+html[data-theme="brutalist"] .blog-content p {
+  font-family: var(--br-body) !important;
+  font-size: 1.03rem !important;
+  line-height: 1.7 !important;
+}
+
+html[data-theme="brutalist"] .blog-content blockquote {
+  background: var(--br-yellow);
+  border: 3px solid var(--br-ink) !important;
+  border-left: 10px solid var(--br-ink) !important;
+  border-radius: 0 !important;
+  box-shadow: 5px 5px 0 var(--br-ink);
+  font-style: normal !important;
+  margin: 2rem 0 !important;
+  padding: 1rem 1.25rem !important;
+}
+
+html[data-theme="brutalist"] .blog-content blockquote p {
+  font-family: var(--br-body) !important;
+  font-weight: 600;
+}
+
+html[data-theme="brutalist"] .blog-content ul,
+html[data-theme="brutalist"] .blog-content ol {
+  font-family: var(--br-body) !important;
+  font-size: 1rem !important;
+}
+
+html[data-theme="brutalist"] .blog-content li::marker {
+  font-weight: 900;
+}
+
+html[data-theme="brutalist"] .blog-content code {
+  background: var(--br-ink);
+  border-radius: 0 !important;
+  color: var(--br-yellow);
+  font-family: var(--br-mono) !important;
+  font-size: 0.9em !important;
+  padding: 0.1em 0.35em;
+}
+
+html[data-theme="brutalist"] .blog-content pre,
+html[data-theme="brutalist"] .code-block pre {
+  background: var(--br-ink) !important;
+  border: 3px solid var(--br-ink);
+  border-radius: 0 !important;
+  box-shadow: 5px 5px 0 var(--br-yellow);
+  color: #f4f0e5 !important;
+  font-family: var(--br-mono) !important;
+  padding: 1.1rem 1.25rem !important;
+}
+
+html[data-theme="brutalist"] .blog-content pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+html[data-theme="brutalist"] .copy-button {
+  background: var(--br-yellow);
+  border: 2px solid var(--br-ink) !important;
+  border-radius: 0 !important;
+  color: var(--br-ink);
+  font-family: var(--br-mono) !important;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+html[data-theme="brutalist"] .copied-notification {
+  background: var(--br-yellow) !important;
+  border: 2px solid var(--br-ink);
+  border-radius: 0 !important;
+  color: var(--br-ink) !important;
+  font-family: var(--br-mono) !important;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+html[data-theme="brutalist"] .blog-content img,
+html[data-theme="brutalist"] .blog-content video,
+html[data-theme="brutalist"] .blog-content iframe {
+  border: 3px solid var(--br-ink);
+  border-radius: 0 !important;
+  box-shadow: 6px 6px 0 var(--br-ink);
+}
+
+html[data-theme="brutalist"] .blog-content table {
+  border: 3px solid var(--br-ink);
+  border-collapse: collapse;
+  font-family: var(--br-mono) !important;
+}
+
+html[data-theme="brutalist"] .blog-content table th {
+  background: var(--br-ink);
+  color: var(--br-yellow);
+  font-family: var(--br-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+html[data-theme="brutalist"] .blog-content table th,
+html[data-theme="brutalist"] .blog-content table td {
+  border: 2px solid var(--br-ink) !important;
+}
+
+html[data-theme="brutalist"] .blog-content details {
+  background: var(--br-white);
+  border: 3px solid var(--br-ink);
+  border-radius: 0 !important;
+  font-family: var(--br-body) !important;
+}
+
+html[data-theme="brutalist"] .blog-content a {
+  color: var(--br-ink);
+  text-decoration-thickness: 2px;
+}
+
+/* ── Table of contents ──────────────────────────────────────────────────── */
+
+html[data-theme="brutalist"] .accordion .card {
+  background: transparent;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="brutalist"] .accordion .card-header.toc-toggle {
+  background: var(--br-white) !important;
+  border: 3px solid var(--br-ink) !important;
+  box-shadow: 3px 3px 0 var(--br-ink);
+  color: var(--br-ink) !important;
+  font-family: var(--br-mono) !important;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+html[data-theme="brutalist"] .accordion .card-header.toc-toggle.is-active {
+  background: var(--br-ink) !important;
+  color: var(--br-yellow) !important;
+}
+
+html[data-theme="brutalist"] .accordion .card-body {
+  background: var(--br-white);
+  border: 3px solid var(--br-ink);
+  border-top: none;
+  font-family: var(--br-mono);
+  font-size: 0.78rem;
+}
+
+/* ── About page ─────────────────────────────────────────────────────────── */
+
+html[data-theme="brutalist"] .page-container {
+  max-width: 760px;
+}
+
+html[data-theme="brutalist"] .about-title {
+  font-family: var(--br-display) !important;
+  font-size: clamp(3.2rem, 11vw, 6.5rem) !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.055em;
+  line-height: 0.82 !important;
+  text-transform: uppercase;
+}
+
+html[data-theme="brutalist"] .bio {
+  border-left: 8px solid var(--br-ink);
+  font-family: var(--br-body) !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  line-height: 1.45 !important;
+  padding-left: 1rem;
+}
+
+html[data-theme="brutalist"] .section-title {
+  background: var(--br-ink);
+  color: var(--br-yellow);
+  display: inline-block;
+  font-family: var(--br-mono) !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.14em;
+  margin-bottom: 1rem !important;
+  opacity: 1 !important;
+  padding: 0.25rem 0.55rem;
+}
+
+html[data-theme="brutalist"] .meta-grid {
+  background: var(--br-white);
+  border: 3px solid var(--br-ink) !important;
+  border-radius: 0 !important;
+  box-shadow: 6px 6px 0 var(--br-ink);
+}
+
+html[data-theme="brutalist"] .social-chip {
+  background: var(--br-white);
+  border: 3px solid var(--br-ink) !important;
+  border-radius: 0 !important;
+  box-shadow: 3px 3px 0 var(--br-ink);
+  font-family: var(--br-mono) !important;
+  font-size: 0.76rem !important;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  transition: none !important;
 }
 
 html[data-theme="brutalist"] .social-chip:hover {
   transform: none;
-  background: #ffe600;
+  background: var(--br-yellow);
+}
+
+html[data-theme="brutalist"] .blog-list li::before {
+  content: "→";
+  font-family: var(--br-mono);
+  font-size: 1.1rem;
+  opacity: 1;
+}
+
+html[data-theme="brutalist"] .blog-list a {
+  font-weight: 700;
+  text-decoration-color: var(--br-ink);
+  text-decoration-thickness: 2px;
+  transition: none;
+}
+
+html[data-theme="brutalist"] .gallery-item {
+  border: 3px solid var(--br-ink);
+  border-radius: 0 !important;
+  box-shadow: 8px 8px 0 var(--br-ink);
+}
+
+html[data-theme="brutalist"] .gallery-item img {
+  filter: grayscale(1) contrast(1.05);
+  transition: none !important;
+}
+
+html[data-theme="brutalist"] .gallery-item:hover img {
+  transform: none;
 }
