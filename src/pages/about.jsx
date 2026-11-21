@@ -1,11 +1,12 @@
 import React from "react";
 import { MapPin, Mail, Phone, ExternalLink, GraduationCap } from "lucide-react";
-import { FaGithub, FaLinkedin, FaYoutube, FaTiktok, FaInstagram } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaYoutube, FaTiktok, FaInstagram, FaTelegram } from "react-icons/fa";
 
 const links = {
   github: "https://github.com/jimchen2",
   linkedin: "https://www.linkedin.com/in/jim-chen-588002255/",
   instagram: "https://www.instagram.com/hijimchen/",
+  telegram: "https://t.me/hijimchen",
   youtube: "https://www.youtube.com/@jimchen4214",
   tiktok: "https://www.tiktok.com/@jimchen.me",
   languages: "https://jimchen.me/?type=languages",
@@ -222,6 +223,7 @@ export default function App() {
               <SocialLink href={links.youtube} label="YouTube" icon={FaYoutube} />
               <SocialLink href={links.tiktok} label="TikTok" icon={FaTiktok} />
               <SocialLink href={links.instagram} label="Instagram" icon={FaInstagram} />
+              <SocialLink href={links.telegram} label="Telegram" icon={FaTelegram} />
             </div>
           </div>
         </section>
