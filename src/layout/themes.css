@@ -1,12 +1,18 @@
+/* Small icon-only trigger + dropdown, like a normal site's theme picker. */
+.theme-menu {
+  position: relative;
+  display: inline-flex;
+}
+
 .theme-switcher-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  width: 1.75rem;
+  height: 1.75rem;
   padding: 0;
   border: none;
-  border-radius: 50%;
+  border-radius: 6px;
   background: transparent;
   color: #555;
   line-height: 1;
@@ -21,7 +27,13 @@
 
 .theme-switcher-btn:focus-visible {
   outline: 2px solid #315bff;
-  outline-offset: 2px;
+  outline-offset: 1px;
+}
+
+/* Trigger stays subtly lit while its menu is open. */
+.theme-switcher-btn[aria-expanded="true"] {
+  color: #111;
+  background-color: rgba(0, 0, 0, 0.06);
 }
 
 .theme-switcher-btn:disabled {
@@ -29,13 +41,27 @@
   cursor: default;
 }
 
+.theme-menu__item:hover:not(.is-active) {
+  background-color: rgba(0, 0, 0, 0.045) !important;
+}
+
+.theme-menu__item:focus-visible {
+  outline: 2px solid #315bff;
+  outline-offset: -2px;
+}
+
 html[data-theme="dark"] .theme-switcher-btn {
   color: #adb5bd;
 }
 
-html[data-theme="dark"] .theme-switcher-btn:hover:not(:disabled) {
+html[data-theme="dark"] .theme-switcher-btn:hover:not(:disabled),
+html[data-theme="dark"] .theme-switcher-btn[aria-expanded="true"] {
   color: #f8f9fa;
   background-color: rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"] .theme-menu__item:hover:not(.is-active) {
+  background-color: rgba(255, 255, 255, 0.08) !important;
 }
 
 /* ==========================================================================
@@ -156,20 +182,65 @@ html[data-theme="brutalist"] .site-nav-link {
   text-underline-offset: 4px;
 }
 
+/* Theme picker: kept small and plain — border only, no fills or big shadows. */
 html[data-theme="brutalist"] .theme-switcher-btn {
+  width: 1.75rem;
+  height: 1.75rem;
   border-radius: 0 !important;
   color: var(--br-ink);
-  background-color: var(--br-white);
+  background-color: transparent;
   border: 2px solid var(--br-ink) !important;
   transition: none !important;
 }
 
-html[data-theme="brutalist"] .theme-switcher-btn:hover:not(:disabled) {
-  background-color: var(--br-yellow);
+html[data-theme="brutalist"] .theme-switcher-btn:hover:not(:disabled),
+html[data-theme="brutalist"] .theme-switcher-btn[aria-expanded="true"] {
+  background-color: var(--br-white);
+}
+
+html[data-theme="brutalist"] .theme-switcher-btn:focus-visible,
+html[data-theme="brutalist"] .theme-menu__item:focus-visible {
+  outline: 2px solid var(--br-ink);
+  outline-offset: 2px;
 }
 
 html[data-theme="brutalist"] .theme-switcher-btn svg {
   flex-shrink: 0;
+}
+
+html[data-theme="brutalist"] .theme-menu__panel {
+  min-width: 8.5rem !important;
+  padding: 3px !important;
+  gap: 1px !important;
+  background-color: var(--br-white) !important;
+  border: 2px solid var(--br-ink) !important;
+  border-radius: 0 !important;
+  box-shadow: 3px 3px 0 var(--br-ink) !important;
+}
+
+html[data-theme="brutalist"] .theme-menu__item {
+  padding: 0.35rem 0.45rem !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+  color: var(--br-ink) !important;
+  font-family: var(--br-mono) !important;
+  font-size: 0.72rem !important;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+html[data-theme="brutalist"] .theme-menu__item:hover:not(.is-active) {
+  background-color: rgba(11, 11, 11, 0.07) !important;
+}
+
+html[data-theme="brutalist"] .theme-menu__item.is-active {
+  background-color: var(--br-yellow) !important;
+}
+
+html[data-theme="brutalist"] .mobile-menu__theme-label {
+  color: var(--br-ink) !important;
+  font-family: var(--br-mono) !important;
 }
 
 html[data-theme="brutalist"] .mobile-menu {
