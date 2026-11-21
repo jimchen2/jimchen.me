@@ -1,26 +1,70 @@
 .theme-switcher {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
-  font-weight: 500;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 9999px;
+  background-color: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   white-space: nowrap;
 }
 
-.theme-switcher select {
-  max-width: 100%;
-  padding: 0.35rem 1.75rem 0.35rem 0.5rem;
-  border: 1px solid #777;
-  border-radius: 4px;
-  background-color: #fff;
-  color: #212529;
+.theme-switcher-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  color: #555;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.2;
   cursor: pointer;
-  font: inherit;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.theme-switcher select:focus-visible {
+.theme-switcher-btn:hover:not(:disabled):not(.is-active) {
+  color: #111;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.theme-switcher-btn.is-active {
+  background-color: #ffffff;
+  color: #111;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.theme-switcher-btn:focus-visible {
   outline: 2px solid #315bff;
   outline-offset: 2px;
+}
+
+.theme-switcher-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+html[data-theme="dark"] .theme-switcher {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+html[data-theme="dark"] .theme-switcher-btn {
+  color: #adb5bd;
+}
+
+html[data-theme="dark"] .theme-switcher-btn:hover:not(:disabled):not(.is-active) {
+  color: #f8f9fa;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+html[data-theme="dark"] .theme-switcher-btn.is-active {
+  background-color: #343a40;
+  color: #f8f9fa;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 }
 
 /* A deliberately raw, high-contrast alternative to the standard themes. */
@@ -52,16 +96,30 @@ html[data-theme="brutalist"] .mobile-menu {
 }
 
 html[data-theme="brutalist"] .theme-switcher {
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-html[data-theme="brutalist"] .theme-switcher select {
+  padding: 0;
+  gap: 0;
+  border-radius: 0;
   background-color: #fff;
   border: 2px solid #111;
+}
+
+html[data-theme="brutalist"] .theme-switcher-btn {
   border-radius: 0;
   color: #111;
-  font-weight: 700;
+  font-weight: 800;
+  text-transform: uppercase;
+  transition: none;
+  border-right: 2px solid #111;
+}
+
+html[data-theme="brutalist"] .theme-switcher-btn:last-child {
+  border-right: none;
+}
+
+html[data-theme="brutalist"] .theme-switcher-btn.is-active {
+  background-color: #111;
+  color: #ffe600;
+  box-shadow: none;
 }
 
 html[data-theme="brutalist"] .card {
