@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Sun, Moon, Square } from "lucide-react";
+import { Sun, Moon, Square, Check } from "lucide-react";
 import { useGlobalColorScheme } from "./theme.js";
 
 const navLinkStyle = {
@@ -19,27 +19,145 @@ const THEME_OPTIONS = [
   { id: "brutalist", label: "Brutalist", Icon: Square },
 ];
 
-const ThemeSwitcher = () => {
+/* Compact icon button that opens a small "pick a theme" menu. */
+const ThemeSwitcher = ({ onSelect }) => {
   const { themeMode, changeThemeMode, isHydrated } = useGlobalColorScheme();
+  const isDark = themeMode === "dark";
 
-  const currentIndex = Math.max(
-    0,
-    THEME_OPTIONS.findIndex((t) => t.id === themeMode)
-  );
-  const current = THEME_OPTIONS[currentIndex];
-  const next = THEME_OPTIONS[(currentIndex + 1) % THEME_OPTIONS.length];
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef(null);
+  const triggerRef = useRef(null);
+
+  const current =
+    THEME_OPTIONS.find((t) => t.id === themeMode) || THEME_OPTIONS[0];
+  const ActiveIcon = current.Icon;
+
+  // Close on outside click / Escape, and move focus with arrow keys.
+  useEffect(() => {
+    if (!open) return undefined;
+
+    const handleOutsideClick = (e) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false);
+    };
+    const handleKey = (e) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        triggerRef.current?.focus();
+        return;
+      }
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        const items = Array.from(
+          wrapRef.current?.querySelectorAll('[role="menuitemradio"]') || []
+        );
+        if (!items.length) return;
+        e.preventDefault();
+        const at = items.indexOf(document.activeElement);
+        const step = e.key === "ArrowDown" ? 1 : -1;
+        const nextAt = at === -1 ? 0 : (at + step + items.length) % items.length;
+        items[nextAt]?.focus();
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [open]);
+
+  // Land focus on the current choice when the menu opens.
+  useEffect(() => {
+    if (!open) return;
+    const items = wrapRef.current?.querySelectorAll('[role="menuitemradio"]');
+    const checked = wrapRef.current?.querySelector('[aria-checked="true"]');
+    (checked || items?.[0])?.focus();
+  }, [open]);
+
+  const choose = (id) => {
+    changeThemeMode(id);
+    setOpen(false);
+    onSelect?.();
+  };
+
+  const panelStyle = {
+    position: "absolute",
+    top: "calc(100% + 6px)",
+    right: 0,
+    minWidth: "9.5rem",
+    padding: "4px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "2px",
+    backgroundColor: isDark ? "#2c3035" : "#ffffff",
+    border: `1px solid ${isDark ? "#41474d" : "rgba(0, 0, 0, 0.12)"}`,
+    borderRadius: "8px",
+    boxShadow: isDark
+      ? "0 6px 18px rgba(0, 0, 0, 0.45)"
+      : "0 6px 18px rgba(0, 0, 0, 0.12)",
+    zIndex: 1002,
+  };
+
+  const itemStyle = (isActive) => ({
+    display: "flex",
+    alignItems: "center",
+    gap: "0.55rem",
+    width: "100%",
+    padding: "0.4rem 0.5rem",
+    border: "none",
+    borderRadius: "6px",
+    backgroundColor: isActive
+      ? isDark
+        ? "rgba(255, 255, 255, 0.12)"
+        : "rgba(0, 0, 0, 0.055)"
+      : "transparent",
+    color: isDark ? "#f1f3f5" : "#212529",
+    fontSize: "0.875rem",
+    fontWeight: isActive ? 600 : 400,
+    lineHeight: 1.2,
+    textAlign: "left",
+    cursor: "pointer",
+  });
 
   return (
-    <button
-      type="button"
-      aria-label={`Switch to ${next.label} theme`}
-      title={`Switch to ${next.label} theme`}
-      disabled={!isHydrated}
-      onClick={() => changeThemeMode(next.id)}
-      className="theme-switcher-btn"
-    >
-      <current.Icon size={18} strokeWidth={2} aria-hidden="true" />
-    </button>
+    <div ref={wrapRef} className="theme-menu">
+      <button
+        ref={triggerRef}
+        type="button"
+        className="theme-switcher-btn"
+        aria-label="Change theme"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        title="Change theme"
+        disabled={!isHydrated}
+        onClick={() => setOpen((prev) => !prev)}
+      >
+        <ActiveIcon size={17} strokeWidth={2} aria-hidden="true" />
+      </button>
+
+      {open && (
+        <div className="theme-menu__panel" role="menu" aria-label="Theme" style={panelStyle}>
+          {THEME_OPTIONS.map(({ id, label, Icon }) => {
+            const isActive = id === current.id;
+            return (
+              <button
+                key={id}
+                type="button"
+                role="menuitemradio"
+                aria-checked={isActive}
+                className={`theme-menu__item${isActive ? " is-active" : ""}`}
+                style={itemStyle(isActive)}
+                onClick={() => choose(id)}
+              >
+                <Icon size={14} strokeWidth={2} aria-hidden="true" />
+                <span style={{ flex: 1 }}>{label}</span>
+                {isActive && <Check size={14} strokeWidth={2.5} aria-hidden="true" />}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -189,8 +307,29 @@ export default function NavigationBar() {
                   }}
                 />
 
-                <div style={{ padding: "0.65rem 1.25rem" }}>
-                  <ThemeSwitcher />
+                <div
+                  className="mobile-menu__theme-row"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: "0.75rem",
+                    padding: "0.5rem 1.25rem 0.6rem",
+                  }}
+                >
+                  <span
+                    className="mobile-menu__theme-label"
+                    style={{
+                      fontSize: "0.72rem",
+                      fontWeight: 600,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      color: isDark ? "#adb5bd" : "#6c757d",
+                    }}
+                  >
+                    Theme
+                  </span>
+                  <ThemeSwitcher onSelect={handleLinkClick} />
                 </div>
               </div>
             )}
