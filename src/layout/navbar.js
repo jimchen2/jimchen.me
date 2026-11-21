@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { Sun, Moon, Square } from "lucide-react";
 import { useGlobalColorScheme } from "./theme.js";
 
 const navLinkStyle = {
@@ -12,23 +13,37 @@ const navLinkStyle = {
   cursor: "pointer",
 };
 
+const THEME_OPTIONS = [
+  { id: "light", label: "Light", Icon: Sun },
+  { id: "dark", label: "Dark", Icon: Moon },
+  { id: "brutalist", label: "Brutalist", Icon: Square },
+];
+
 const ThemeSwitcher = () => {
   const { themeMode, changeThemeMode, isHydrated } = useGlobalColorScheme();
 
   return (
-    <label className="theme-switcher">
-      <span>Theme</span>
-      <select
-        aria-label="Theme"
-        value={themeMode}
-        onChange={(event) => changeThemeMode(event.target.value)}
-        disabled={!isHydrated}
-      >
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-        <option value="brutalist">Brutalist</option>
-      </select>
-    </label>
+    <div className="theme-switcher" role="radiogroup" aria-label="Theme">
+      {THEME_OPTIONS.map(({ id, label, Icon }) => {
+        const isActive = themeMode === id;
+        return (
+          <button
+            key={id}
+            type="button"
+            role="radio"
+            aria-checked={isActive}
+            aria-label={`${label} theme`}
+            title={`${label} theme`}
+            disabled={!isHydrated}
+            onClick={() => changeThemeMode(id)}
+            className={`theme-switcher-btn${isActive ? " is-active" : ""}`}
+          >
+            <Icon size={14} strokeWidth={2.2} aria-hidden="true" />
+            <span>{label}</span>
+          </button>
+        );
+      })}
+    </div>
   );
 };
 
