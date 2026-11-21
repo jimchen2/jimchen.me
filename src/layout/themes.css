@@ -1,40 +1,22 @@
-.theme-switcher {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  padding: 3px;
-  border-radius: 9999px;
-  background-color: rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  white-space: nowrap;
-}
-
 .theme-switcher-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.3rem 0.65rem;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
   border: none;
-  border-radius: 9999px;
+  border-radius: 50%;
   background: transparent;
   color: #555;
-  font-size: 0.85rem;
-  font-weight: 500;
-  line-height: 1.2;
+  line-height: 1;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.theme-switcher-btn:hover:not(:disabled):not(.is-active) {
+.theme-switcher-btn:hover:not(:disabled) {
   color: #111;
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-.theme-switcher-btn.is-active {
-  background-color: #ffffff;
-  color: #111;
-  font-weight: 600;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  background-color: rgba(0, 0, 0, 0.06);
 }
 
 .theme-switcher-btn:focus-visible {
@@ -47,24 +29,13 @@
   cursor: default;
 }
 
-html[data-theme="dark"] .theme-switcher {
-  background-color: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
 html[data-theme="dark"] .theme-switcher-btn {
   color: #adb5bd;
 }
 
-html[data-theme="dark"] .theme-switcher-btn:hover:not(:disabled):not(.is-active) {
+html[data-theme="dark"] .theme-switcher-btn:hover:not(:disabled) {
   color: #f8f9fa;
-  background-color: rgba(255, 255, 255, 0.06);
-}
-
-html[data-theme="dark"] .theme-switcher-btn.is-active {
-  background-color: #343a40;
-  color: #f8f9fa;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
 /* ==========================================================================
@@ -185,45 +156,16 @@ html[data-theme="brutalist"] .site-nav-link {
   text-underline-offset: 4px;
 }
 
-html[data-theme="brutalist"] .theme-switcher {
-  padding: 0;
-  gap: 0;
-  border-radius: 0 !important;
-  background-color: var(--br-white);
-  border: 3px solid var(--br-ink) !important;
-  font-family: var(--br-mono);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
 html[data-theme="brutalist"] .theme-switcher-btn {
-  padding: 0.3rem 0.5rem;
-  border: none;
-  border-right: 3px solid var(--br-ink);
   border-radius: 0 !important;
-  background: transparent;
   color: var(--br-ink);
-  font-family: var(--br-mono);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  background-color: var(--br-white);
+  border: 2px solid var(--br-ink) !important;
+  transition: none !important;
 }
 
-html[data-theme="brutalist"] .theme-switcher-btn:hover:not(:disabled):not(.is-active) {
-  background: var(--br-yellow);
-  color: var(--br-ink);
-}
-
-html[data-theme="brutalist"] .theme-switcher-btn.is-active {
-  background: var(--br-ink);
-  color: var(--br-yellow);
-  box-shadow: none;
-}
-
-html[data-theme="brutalist"] .theme-switcher-btn:last-child {
-  border-right: none;
+html[data-theme="brutalist"] .theme-switcher-btn:hover:not(:disabled) {
+  background-color: var(--br-yellow);
 }
 
 html[data-theme="brutalist"] .theme-switcher-btn svg {

@@ -22,28 +22,24 @@ const THEME_OPTIONS = [
 const ThemeSwitcher = () => {
   const { themeMode, changeThemeMode, isHydrated } = useGlobalColorScheme();
 
+  const currentIndex = Math.max(
+    0,
+    THEME_OPTIONS.findIndex((t) => t.id === themeMode)
+  );
+  const current = THEME_OPTIONS[currentIndex];
+  const next = THEME_OPTIONS[(currentIndex + 1) % THEME_OPTIONS.length];
+
   return (
-    <div className="theme-switcher" role="radiogroup" aria-label="Theme">
-      {THEME_OPTIONS.map(({ id, label, Icon }) => {
-        const isActive = themeMode === id;
-        return (
-          <button
-            key={id}
-            type="button"
-            role="radio"
-            aria-checked={isActive}
-            aria-label={`${label} theme`}
-            title={`${label} theme`}
-            disabled={!isHydrated}
-            onClick={() => changeThemeMode(id)}
-            className={`theme-switcher-btn${isActive ? " is-active" : ""}`}
-          >
-            <Icon size={14} strokeWidth={2.2} aria-hidden="true" />
-            <span>{label}</span>
-          </button>
-        );
-      })}
-    </div>
+    <button
+      type="button"
+      aria-label={`Switch to ${next.label} theme`}
+      title={`Switch to ${next.label} theme`}
+      disabled={!isHydrated}
+      onClick={() => changeThemeMode(next.id)}
+      className="theme-switcher-btn"
+    >
+      <current.Icon size={18} strokeWidth={2} aria-hidden="true" />
+    </button>
   );
 };
 
