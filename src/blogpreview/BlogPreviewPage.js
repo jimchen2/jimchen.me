@@ -40,7 +40,7 @@ function PreviewCard(props) {
     <Container fluid className="my-4" style={{ maxWidth: "100%", padding: 0 }}>
       <Row className="justify-content-center m-0">
         <Col className="p-0">
-          <Card className="border-1 rounded-0">
+          <Card className="post-card border-1 rounded-0">
             <Row className="g-0">
               {/* --- IMAGE COLUMN --- */}
               {previewimage && (
@@ -48,7 +48,7 @@ function PreviewCard(props) {
                   <Card.Img
                     src={previewimage}
                     alt={title}
-                    className="d-none d-md-block rounded-0"
+                    className="post-card__image d-none d-md-block rounded-0"
                     style={{
                       width: "100%",
                       height: "100%",
@@ -60,7 +60,7 @@ function PreviewCard(props) {
                   <Card.Img
                     src={previewimage}
                     alt={title}
-                    className="d-block d-md-none rounded-0"
+                    className="post-card__image d-block d-md-none rounded-0"
                     style={{
                       width: "100%",
                       height: "auto",
@@ -73,17 +73,18 @@ function PreviewCard(props) {
               {/* --- TEXT COLUMN --- */}
               <Col md={previewimage ? 8 : 12} className="order-md-1" style={{ minWidth: 0 }}>
                 {/* Changed to flex-column and h-100 to push tags to the absolute bottom */}
-                <Card.Body className="d-flex flex-column h-100">
+                <Card.Body className="post-card__body d-flex flex-column h-100">
                   <Card.Title className="mb-3">
                     <div className="d-flex justify-content-between align-items-center mb-2">
-                      <span style={{ fontSize: "0.8rem" }}>{displayDate}</span>
-                      <div className="d-flex flex-wrap justify-content-end gap-2" style={{ fontSize: "0.8rem" }}>
+                      <span className="post-card__meta" style={{ fontSize: "0.8rem" }}>{displayDate}</span>
+                      <div className="post-card__meta d-flex flex-wrap justify-content-end gap-2" style={{ fontSize: "0.8rem" }}>
                         {wordcount} words
                       </div>
                     </div>
                     {/* Natural link styling, no hover zoom */}
                     <Link
                       href={`/a/${blogid}`}
+                      className="post-card__title"
                       style={{
                         fontSize: "1.5rem",
                         fontWeight: "600",
@@ -97,6 +98,7 @@ function PreviewCard(props) {
                   </Card.Title>
 
                   <Card.Text
+                    className="post-card__excerpt"
                     style={{
                       fontSize: "0.9rem",
                       lineHeight: "1.5",
@@ -114,11 +116,12 @@ function PreviewCard(props) {
                   {/* --- TAGS SECTION --- */}
                   {/* mt-auto pushes the tags to the bottom of the card regardless of text length */}
                   {tagsList && tagsList.length > 0 && (
-                    <div className="mt-auto pt-3 d-flex flex-wrap gap-2">
+                    <div className="post-card__tags mt-auto pt-3 d-flex flex-wrap gap-2">
                       {tagsList.map((tag, idx) => (
                         <Link
                           key={idx}
                           href={`/?type=${encodeURIComponent(tag.toLowerCase())}`}
+                          className="post-card__tag"
                           style={{
                             fontSize: "0.85rem",
                             color: "blue",
@@ -185,14 +188,15 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
   ];
 
   return (
-    <Container style={{ maxWidth: "1000px" }} className="mb-5">
+    <Container style={{ maxWidth: "1000px" }} className="blog-index mb-5">
       <Row className="justify-content-center">
         {/* --- MAIN BLOG CONTENT --- */}
         <Col xs={12}>
           <div style={{ maxWidth: "700px", margin: "0 auto" }}>
-            <div className="mb-4 pb-2 border-bottom d-flex align-items-center flex-wrap gap-3 mt-4 mt-md-0">
+            <div className="blog-index__header mb-4 pb-2 border-bottom d-flex align-items-center flex-wrap gap-3 mt-4 mt-md-0">
               {displayTag && !isSearchPage && (
                 <div
+                  className="blog-index__tag"
                   style={{
                     fontWeight: "500",
                   }}
@@ -201,9 +205,10 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
                 </div>
               )}
 
-              <form onSubmit={handleSearchSubmit} className="d-flex ms-auto" style={{ maxWidth: "250px", width: "100%" }}>
+              <form onSubmit={handleSearchSubmit} className="search-form d-flex ms-auto" style={{ maxWidth: "250px", width: "100%" }}>
                 <input
                   type="search"
+                  className="search-input"
                   placeholder="Search posts..."
                   value={localSearchTerm}
                   onChange={(e) => setLocalSearchTerm(e.target.value)}
@@ -219,6 +224,7 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
                 />
                 <button
                   type="submit"
+                  className="search-button"
                   style={{
                     padding: "6px 12px",
                     border: "1px solid #ddd",
@@ -249,7 +255,7 @@ function BlogPreviewPage({ currentType, data, pagination, searchTerm }) {
                 </div>
               ))
             ) : (
-              <div style={{ textAlign: "center", margin: "5rem 0" }}>No results found.</div>
+              <div className="blog-index__empty" style={{ textAlign: "center", margin: "5rem 0" }}>No results found.</div>
             )}
 
             {pagination && pagination.totalPages > 1 && <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />}

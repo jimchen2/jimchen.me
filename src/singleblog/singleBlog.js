@@ -54,7 +54,7 @@ const BlogHeader = ({ date, type, wordcount, blogid }) => {
         }}
       >
         {/* Date · word count · view counter */}
-        <small className="text">
+        <small className="blog-meta text">
           {displayDate} • {wordcount} words
           <BlogViewCounter blogid={blogid} />
         </small>
@@ -65,7 +65,7 @@ const BlogHeader = ({ date, type, wordcount, blogid }) => {
             <a
               key={t}
               href={`/?type=${t.toLowerCase().replace(/\s+/g, "-")}`}
-              className="text-muted text-decoration-none me-2"
+              className="blog-tag text-muted text-decoration-none me-2"
             >
               #{t.toLowerCase().replace(/\s+/g, "-")}
             </a>
@@ -78,7 +78,7 @@ const BlogHeader = ({ date, type, wordcount, blogid }) => {
 
 // ── BlogTitle ───────────────────────────────────────────────────────────────
 const BlogTitle = ({ title }) => (
-  <h2 className="mb-4">
+  <h2 className="blog-title mb-4">
     <div>{title.split("-").join(" ")}</div>
   </h2>
 );
