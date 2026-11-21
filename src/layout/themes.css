@@ -1,40 +1,22 @@
-.theme-switcher {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  padding: 3px;
-  border-radius: 9999px;
-  background-color: rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  white-space: nowrap;
-}
-
 .theme-switcher-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.3rem 0.65rem;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
   border: none;
-  border-radius: 9999px;
+  border-radius: 50%;
   background: transparent;
   color: #555;
-  font-size: 0.85rem;
-  font-weight: 500;
-  line-height: 1.2;
+  line-height: 1;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.theme-switcher-btn:hover:not(:disabled):not(.is-active) {
+.theme-switcher-btn:hover:not(:disabled) {
   color: #111;
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-.theme-switcher-btn.is-active {
-  background-color: #ffffff;
-  color: #111;
-  font-weight: 600;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  background-color: rgba(0, 0, 0, 0.06);
 }
 
 .theme-switcher-btn:focus-visible {
@@ -47,24 +29,13 @@
   cursor: default;
 }
 
-html[data-theme="dark"] .theme-switcher {
-  background-color: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
 html[data-theme="dark"] .theme-switcher-btn {
   color: #adb5bd;
 }
 
-html[data-theme="dark"] .theme-switcher-btn:hover:not(:disabled):not(.is-active) {
+html[data-theme="dark"] .theme-switcher-btn:hover:not(:disabled) {
   color: #f8f9fa;
-  background-color: rgba(255, 255, 255, 0.06);
-}
-
-html[data-theme="dark"] .theme-switcher-btn.is-active {
-  background-color: #343a40;
-  color: #f8f9fa;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
 /* A deliberately raw, high-contrast alternative to the standard themes. */
@@ -95,31 +66,16 @@ html[data-theme="brutalist"] .mobile-menu {
   box-shadow: 5px 5px 0 #111 !important;
 }
 
-html[data-theme="brutalist"] .theme-switcher {
-  padding: 0;
-  gap: 0;
-  border-radius: 0;
-  background-color: #fff;
-  border: 2px solid #111;
-}
-
 html[data-theme="brutalist"] .theme-switcher-btn {
   border-radius: 0;
   color: #111;
-  font-weight: 800;
-  text-transform: uppercase;
+  background-color: #fff;
+  border: 2px solid #111;
   transition: none;
-  border-right: 2px solid #111;
 }
 
-html[data-theme="brutalist"] .theme-switcher-btn:last-child {
-  border-right: none;
-}
-
-html[data-theme="brutalist"] .theme-switcher-btn.is-active {
-  background-color: #111;
-  color: #ffe600;
-  box-shadow: none;
+html[data-theme="brutalist"] .theme-switcher-btn:hover:not(:disabled) {
+  background-color: #ffe600;
 }
 
 html[data-theme="brutalist"] .card {
